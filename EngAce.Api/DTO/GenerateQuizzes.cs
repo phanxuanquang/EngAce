@@ -1,8 +1,8 @@
-﻿using Gemini_API_Helper;
+﻿using Gemini;
 
-namespace EngAce.DTO
+namespace EngAce.Api.DTO
 {
-    public class GenerateQuizzesRequest
+    public class GenerateQuizzes
     {
         public string Topics { get; set; } = "Hello";
         public bool UseJson { get; set; } = true;

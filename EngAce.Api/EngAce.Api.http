@@ -1,0 +1,6 @@
+@EngAce.Api_HostAddress = http://localhost:5283
+
+GET {{EngAce.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

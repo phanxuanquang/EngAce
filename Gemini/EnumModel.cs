@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
 
-namespace Gemini_API_Helper
+namespace Gemini
 {
     public enum EnumModel
     {

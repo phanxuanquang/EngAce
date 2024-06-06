@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Entities\Entities.csproj" />
-    <ProjectReference Include="..\Gemini API Helper\Gemini.csproj" />
+    <ProjectReference Include="..\Gemini\Gemini.csproj" />
   </ItemGroup>
 
 </Project>

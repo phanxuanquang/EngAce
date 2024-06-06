@@ -1,5 +1,5 @@
 ﻿using Entities;
-using Gemini_API_Helper;
+using Gemini;
 using Newtonsoft.Json;
 
 namespace Functions

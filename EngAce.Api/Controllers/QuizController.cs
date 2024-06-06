@@ -1,13 +1,11 @@
-using EngAce.DTO;
-using EngAce.Filters;
+using EngAce.Api.DTO;
 using Entities;
 using Functions;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EngAce.Controllers
+namespace EngAce.Api.Controllers
 {
     [ApiController]
-    [AutoStatusCodes]
     [Route("api/[controller]")]
     public class QuizController : ControllerBase
     {
@@ -17,7 +15,7 @@ namespace EngAce.Controllers
         /// <param name="request"></param>
         /// <returns>A list of quizes coresponding to the input parameters</returns>
         [HttpPost("Generate")]
-        public async Task<List<Quiz>> Generate([FromBody] GenerateQuizzesRequest request)
+        public async Task<List<Quiz>> Generate([FromBody] GenerateQuizzes request)
         {
             try
             {
@@ -29,5 +27,4 @@ namespace EngAce.Controllers
             }
         }
     }
-
 }

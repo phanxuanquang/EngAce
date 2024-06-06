@@ -1,10 +1,9 @@
 ﻿using Newtonsoft.Json;
 
-namespace Gemini_API_Helper.DTO
+namespace Gemini.DTO
 {
     public class ResponseForOneShot
     {
-        // Response myDeserializedClass = JsonConvert.DeserializeObject<Response>(myJsonResponse);
         public class Candidate
         {
             [JsonProperty("content")]

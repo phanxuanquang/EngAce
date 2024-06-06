@@ -1,20 +1,12 @@
 ﻿using Newtonsoft.Json;
 using System.Text;
-using static Gemini_API_Helper.DTO.ResponseForOneShot;
+using static Gemini.DTO.ResponseForOneShot;
 
-namespace Gemini_API_Helper
+namespace Gemini
 {
     public static class Helper
     {
         private static string ApiKey = "AIzaSyDTxvJEdHMG5a8b9z8SCuus4jgnL91_yi4";
-        /// <summary>
-        /// Generate content following the input values
-        /// </summary>
-        /// <param name="input"></param>
-        /// <param name="useJson"></param>
-        /// <param name="creativeLevel"></param>
-        /// <param name="model"></param>
-        /// <returns></returns>
         public static async Task<string> GenerateContent(string input, bool useJson = true, double creativeLevel = 25, EnumModel model = EnumModel.Gemini_10_Pro)
         {
             var client = new HttpClient();
