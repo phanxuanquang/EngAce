@@ -56,6 +56,7 @@ namespace Gemini
 
                 var responseData = await response.Content.ReadAsStringAsync();
                 var dto = JsonConvert.DeserializeObject<Response>(responseData);
+
                 return dto.Candidates[0].Content.Parts[0].Text;
             }
             catch (HttpRequestException e)

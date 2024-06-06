@@ -12,19 +12,29 @@ namespace EngAce.Api.Controllers
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="request"></param>
-        /// <returns>A list of quizes coresponding to the input parameters</returns>
+        /// <param name="request">The request containing the parameters for generating quizzes.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the list of generated quizzes.</returns>
+        /// <response code="200">Returns the list of generated quizzes.</response>
+        /// <response code="400">If the request is invalid.</response>
+        /// <response code="500">If an internal server error occurs.</response>
         [HttpPost("Generate")]
-        public async Task<List<Quiz>> Generate([FromBody] GenerateQuizzes request)
+        public async Task<ActionResult<List<Quiz>>> Generate([FromBody] GenerateQuizzes request)
         {
+            if (request == null)
+            {
+                return BadRequest("Invalid Request");
+            }
+
             try
             {
-                return await QuizScope.GenerateQuizes(request.Topics, request.UseJson, request.CreativeLevel, request.Model);
+                var quizzes = await QuizScope.GenerateQuizes(request.Topics, request.UseJson = true, request.CreativeLevel, request.Model);
+                return Ok(quizzes);
             }
-            catch
+            catch (Exception ex)
             {
-                throw;
+                return StatusCode(400, ex.Message);
             }
         }
+
     }
 }
