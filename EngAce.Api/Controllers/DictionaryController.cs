@@ -1,7 +1,6 @@
 ﻿using EngAce.Api.DTO;
 using Entities;
 using Functions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EngAce.Api.Controllers
@@ -10,8 +9,13 @@ namespace EngAce.Api.Controllers
     [ApiController]
     public class DictionaryController : ControllerBase
     {
+        /// <summary>
+        /// Search the explanation of an English word in the specific context
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost("Search")]
-        public async Task<ActionResult<List<Quiz>>> Generate([FromBody] GenerateQuizzes request, EnumLevel englishLevelOfUser = EnumLevel.Intermediate, int creativeLevel = 25, short totalQuestions = 10)
+        public async Task<ActionResult<List<Quiz>>> Generate([FromBody] SearchContent request)
         {
             if (request == null)
             {
@@ -20,7 +24,7 @@ namespace EngAce.Api.Controllers
 
             try
             {
-                var quizzes = await QuizScope.GenerateQuizes(request.ApiKey, request.Topic, request.QuizzTypes, englishLevelOfUser, totalQuestions);
+                var quizzes = await SearchScope.Search(request.ApiKey, request.Keyword, request.Context);
                 return Ok(quizzes);
             }
             catch (Exception ex)

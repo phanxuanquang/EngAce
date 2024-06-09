@@ -8,7 +8,6 @@ namespace Gemini
 {
     public static class Helper
     {
-        private static string ApiKey = "AIzaSyDTxvJEdHMG5a8b9z8SCuus4jgnL91_yi4";
         public static async Task<string> GenerateContent(string apiKey, string input, bool useJson = true, double creativeLevel = 25, EnumModel model = EnumModel.Gemini_10_Pro)
         {
             var client = new HttpClient();
