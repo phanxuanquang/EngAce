@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using Entities;
+using Helper;
+using Newtonsoft.Json;
 using System.Text;
 using static Gemini.DTO.ResponseForOneShot;
 
@@ -7,11 +9,11 @@ namespace Gemini
     public static class Helper
     {
         private static string ApiKey = "AIzaSyDTxvJEdHMG5a8b9z8SCuus4jgnL91_yi4";
-        public static async Task<string> GenerateContent(string input, bool useJson = true, double creativeLevel = 25, EnumModel model = EnumModel.Gemini_10_Pro)
+        public static async Task<string> GenerateContent(string apiKey, string input, bool useJson = true, double creativeLevel = 25, EnumModel model = EnumModel.Gemini_10_Pro)
         {
             var client = new HttpClient();
             var modelName = EnumHelper.GetEnumDescription(model);
-            var apiUrl = $"https://generativelanguage.googleapis.com/v1beta/models/{modelName}:generateContent?key={ApiKey}";
+            var apiUrl = $"https://generativelanguage.googleapis.com/v1beta/models/{modelName}:generateContent?key={apiKey}";
 
             var requestData = new
             {

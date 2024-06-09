@@ -4,7 +4,7 @@
     {
         public string question { get; set; }
         public List<string> options { get; set; }
-        public short right_answer_index { get; set; }
-        public string explanation { get; set; }
+        public short rightOptionIndex { get; set; }
+        public string explanationInVietnamese { get; set; }
     }
 }
