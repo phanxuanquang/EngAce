@@ -11,7 +11,7 @@ namespace Functions
             {
                 prompt += $"biết rằng ngữ cảnh là '{context}', ";
             }
-            prompt += "cách trình bày giải thích của bạn nên giống trang web Oxford Dictionary hoặc Cambridge Dictionary.";
+            prompt += "cách trình bày giải thích của bạn nên giống trang web Oxford Dictionary hoặc Cambridge Dictionary và bạn phải sử dụng tiếng Việt để giải thích để người Việt đọc.";
 
             try
             {
