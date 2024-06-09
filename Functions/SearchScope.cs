@@ -1,4 +1,5 @@
 ﻿using Entities;
+using Markdig;
 
 namespace Functions
 {
@@ -6,6 +7,8 @@ namespace Functions
     {
         public static async Task<string> Search(string apiKey, string keyword, string context)
         {
+            MarkdownPipeline pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
+
             var prompt = $@"Bạn là một giáo viên dạy tiếng Anh với hơn 20 năm kinh nghiệm và cũng là một nhà nghiên cứu chuyên sâu về ngôn ngữ tiếng Anh. Hãy giải thích một cách thật dễ hiểu nghĩa của '{keyword}', ";
             if (!string.IsNullOrEmpty(context))
             {
@@ -16,7 +19,7 @@ namespace Functions
             try
             {
                 var result = await Gemini.Helper.GenerateContent(apiKey, prompt, false, 30, EnumModel.Gemini_15_Flash);
-                return result;
+                return Markdown.ToHtml(result, pipeline);
             }
             catch (Exception ex)
             {
