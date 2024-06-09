@@ -15,9 +15,9 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "Backend APIs Documentation",
+        Title = "EngAce APIs Documentation",
         Version = "v1.0.0",
-        Description = "Current CORS (Cross-Origin Resource Sharing) configuration remove all default security restrictions for the request when connecting to the backend server via these APIs. Therefore, please make sure that the CORS policies in the 'Program.cs' file matched to the production usages, otherwise, they may cause some security problems."
+        Description = "Developed by Phan Xuan Quang."
     });
 
     c.UseAllOfToExtendReferenceSchemas();
@@ -34,6 +34,7 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
+app.UseDeveloperExceptionPage();
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
