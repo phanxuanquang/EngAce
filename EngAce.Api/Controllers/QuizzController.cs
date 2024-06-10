@@ -40,14 +40,24 @@ namespace EngAce.Api.Controllers
                 return BadRequest("Invalid Request");
             }
 
+            if (string.IsNullOrWhiteSpace(apiKey))
+            {
+                return BadRequest("Invalid API Key");
+            }
+
+            if (string.IsNullOrWhiteSpace(request.Topic) || request.QuizzTypes == null || request.QuizzTypes.Count == 0 || totalQuestions < 1)
+            {
+                return BadRequest("Invalid Request Parameters");
+            }
+
             try
             {
                 var quizzes = await QuizzScope.GenerateQuizes(apiKey.ToString(), request.Topic, request.QuizzTypes, englishLevel, totalQuestions);
-                return Ok(quizzes);
+                return Created("Success", quizzes);
             }
             catch (Exception ex)
             {
-                return StatusCode(400, ex.Message);
+                return StatusCode(500, ex.Message);
             }
         }
 

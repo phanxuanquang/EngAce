@@ -26,9 +26,14 @@ namespace EngAce.Api.Controllers
                 return BadRequest("Invalid Request");
             }
 
+            if (string.IsNullOrWhiteSpace(request.Keyword))
+            {
+                return BadRequest("The keyword must not be empty");
+            }
+
             try
             {
-                var quizzes = await SearchScope.Search(apiKey.ToString(), request.Keyword, request.Context);
+                var quizzes = await SearchScope.Search(apiKey.ToString(), request.Keyword.Trim(), request.Context.Trim());
                 return Ok(quizzes);
             }
             catch (Exception ex)
