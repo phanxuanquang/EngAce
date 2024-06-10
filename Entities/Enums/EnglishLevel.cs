@@ -2,7 +2,7 @@
 
 namespace Entities.Enums
 {
-    public enum Level
+    public enum EnglishLevel
     {
         [Description("Beginner: Trình độ có thể tương đương IELST band 3.0 trở xuống")]
         Beginner = 1,

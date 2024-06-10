@@ -8,11 +8,21 @@ namespace Gemini
 {
     public static class Helper
     {
-        public static async Task<string> GenerateContent(string apiKey, string input, bool useJson = true, double creativeLevel = 25, GenerativeModel model = GenerativeModel.Gemini_10_Pro)
+        private static readonly HttpClient _httpClient = new HttpClient();
+
+        /// <summary>
+        /// Generate content from the query parameters
+        /// </summary>
+        /// <param name="apiKey">The API Key of Gemini</param>
+        /// <param name="query">The query of the user</param>
+        /// <param name="useJson">Use JSON format for the output</param>
+        /// <param name="creativeLevel">The creativity of the generative model</param>
+        /// <param name="model">The generative model to be used</param>
+        /// <returns></returns>
+        public static async Task<string> GenerateContent(string apiKey, string query, bool useJson = true, double creativeLevel = 25, GenerativeModel model = GenerativeModel.Gemini_15_Flash)
         {
-            var client = new HttpClient();
             var modelName = EnumHelper.GetEnumDescription(model);
-            var apiUrl = $"https://generativelanguage.googleapis.com/v1beta/models/{modelName}:generateContent?key={apiKey}";
+            var endpoint = $"https://generativelanguage.googleapis.com/v1beta/models/{modelName}:generateContent?key={apiKey}";
 
             var requestData = new
             {
@@ -24,7 +34,7 @@ namespace Gemini
                         {
                             new
                             {
-                                text = input
+                                text = query
                             }
                         }
                     }
@@ -39,7 +49,7 @@ namespace Gemini
                 },
                 generationConfig = new
                 {
-                    temperature = (double)creativeLevel / 100,
+                    temperature = creativeLevel / 100,
                     topP = 0.8,
                     topK = 10,
                     responseMimeType = useJson ? "application/json" : "text/plain"
@@ -48,21 +58,22 @@ namespace Gemini
 
             try
             {
-                var jsonContent = JsonConvert.SerializeObject(requestData);
-                var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+                var content = JsonConvert.SerializeObject(requestData);
 
-                HttpResponseMessage response = await client.PostAsync(apiUrl, content);
+                using (var request = new StringContent(content, Encoding.UTF8, "application/json"))
+                {
+                    HttpResponseMessage response = await _httpClient.PostAsync(endpoint, request).ConfigureAwait(false);
+                    response.EnsureSuccessStatusCode();
 
-                response.EnsureSuccessStatusCode();
+                    var responseData = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                    var result = JsonConvert.DeserializeObject<Response>(responseData);
 
-                var responseData = await response.Content.ReadAsStringAsync();
-                var dto = JsonConvert.DeserializeObject<Response>(responseData);
-
-                return dto.Candidates[0].Content.Parts[0].Text;
+                    return result.Candidates[0].Content.Parts[0].Text;
+                }
             }
-            catch (HttpRequestException e)
+            catch (Exception ex)
             {
-                return $"Request error: {requestData}\n{e.Message}";
+                return $"Cannot generate quizzes. {ex.Message}";
             }
         }
     }

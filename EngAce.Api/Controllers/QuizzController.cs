@@ -28,7 +28,7 @@ namespace EngAce.Api.Controllers
         /// <response code="400">If the request is null or an error occurs during quiz generation.</response>
         /// <response code="401">Missing Gemini API Key.</response>
         [HttpPost("Generate")]
-        public async Task<ActionResult<List<Quizz>>> Generate([FromBody] GenerateQuizzes request, Level englishLevel = Level.Intermediate, int creativeLevel = 25, short totalQuestions = 10)
+        public async Task<ActionResult<List<Quizz>>> Generate([FromBody] GenerateQuizzes request, EnglishLevel englishLevel = EnglishLevel.Intermediate, int creativeLevel = 25, short totalQuestions = 10)
         {
             if (!HttpContext.Request.Headers.TryGetValue("Authentication", out var apiKey))
             {
@@ -60,11 +60,11 @@ namespace EngAce.Api.Controllers
         [HttpGet("GetEnglishLevels")]
         public ActionResult<Dictionary<int, string>> GetEnglishLevels()
         {
-            var levels = new List<Level>()
+            var levels = new List<EnglishLevel>()
             {
-                Level.Beginner,
-                Level.Intermediate,
-                Level.Advanced
+                EnglishLevel.Beginner,
+                EnglishLevel.Intermediate,
+                EnglishLevel.Advanced
             };
 
             var levelNames = levels.ToDictionary(

@@ -1,5 +1,5 @@
 ﻿using Entities.Enums;
-using Markdig;
+using System.Text;
 
 namespace Functions
 {
@@ -7,19 +7,23 @@ namespace Functions
     {
         public static async Task<string> Search(string apiKey, string keyword, string context)
         {
-            MarkdownPipeline pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
+            if (string.IsNullOrWhiteSpace(apiKey) || string.IsNullOrWhiteSpace(keyword))
+            {
+                throw new ArgumentException("Invalid input parameters.");
+            }
 
-            var prompt = $@"Bạn là một giáo viên dạy tiếng Anh với hơn 20 năm kinh nghiệm và cũng là một nhà nghiên cứu chuyên sâu về ngôn ngữ tiếng Anh. Hãy giải thích một cách thật dễ hiểu nghĩa của '{keyword}', ";
+            var promptBuilder = new StringBuilder();
+            promptBuilder.Append("Bạn là một giáo viên dạy tiếng Anh với hơn 20 năm kinh nghiệm và cũng là một nhà nghiên cứu chuyên sâu về ngôn ngữ tiếng Anh");
+            promptBuilder.Append($"Hãy giải thích một cách thật dễ hiểu nghĩa của '{keyword}'");
             if (!string.IsNullOrEmpty(context))
             {
-                prompt += $"biết rằng ngữ cảnh là '{context}', ";
+                promptBuilder.Append($", biết rằng ngữ cảnh là '{context}' ");
             }
-            prompt += "cách trình bày giải thích của bạn nên giống trang web Oxford Dictionary hoặc Cambridge Dictionary và bạn phải sử dụng tiếng Việt để giải thích để người Việt đọc.";
+            promptBuilder.Append("\nCách trình bày giải thích của bạn nên giống trang web Oxford Dictionary hoặc Cambridge Dictionary, và bạn phải sử dụng tiếng Việt để giải thích vì người đọc chính là người Việt Nam.");
 
             try
             {
-                var result = await Gemini.Helper.GenerateContent(apiKey, prompt, false, 30, GenerativeModel.Gemini_15_Flash);
-                return Markdown.ToHtml(result, pipeline);
+                return await Gemini.Helper.GenerateContent(apiKey, promptBuilder.ToString(), false, 30, GenerativeModel.Gemini_15_Flash);
             }
             catch (Exception ex)
             {
