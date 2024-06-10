@@ -1,4 +1,4 @@
-﻿using Entities;
+﻿using Entities.Enums;
 using Markdig;
 
 namespace Functions
@@ -18,7 +18,7 @@ namespace Functions
 
             try
             {
-                var result = await Gemini.Helper.GenerateContent(apiKey, prompt, false, 30, EnumModel.Gemini_15_Flash);
+                var result = await Gemini.Helper.GenerateContent(apiKey, prompt, false, 30, GenerativeModel.Gemini_15_Flash);
                 return Markdown.ToHtml(result, pipeline);
             }
             catch (Exception ex)

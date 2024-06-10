@@ -15,8 +15,13 @@ namespace EngAce.Api.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost("Search")]
-        public async Task<ActionResult<List<Quiz>>> Generate([FromBody] SearchContent request)
+        public async Task<ActionResult<string>> Generate([FromBody] Search request)
         {
+            if (!HttpContext.Request.Headers.TryGetValue("Authentication", out var apiKey))
+            {
+                return Unauthorized("Missing Gemini API Key");
+            }
+
             if (request == null)
             {
                 return BadRequest("Invalid Request");
@@ -24,7 +29,7 @@ namespace EngAce.Api.Controllers
 
             try
             {
-                var quizzes = await SearchScope.Search(request.ApiKey, request.Keyword, request.Context);
+                var quizzes = await SearchScope.Search(apiKey.ToString(), request.Keyword, request.Context);
                 return Ok(quizzes);
             }
             catch (Exception ex)

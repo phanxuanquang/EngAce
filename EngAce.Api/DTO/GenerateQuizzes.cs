@@ -1,11 +1,10 @@
-﻿using Entities;
+﻿using Entities.Enums;
 
 namespace EngAce.Api.DTO
 {
     public class GenerateQuizzes
     {
         public required string Topic { get; set; }
-        public required List<EnumQuizzType> QuizzTypes { get; set; }
-        public required string ApiKey { get; set; }
+        public required List<QuizzType> QuizzTypes { get; set; }
     }
 }

@@ -4,12 +4,11 @@ using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddSwaggerGen(c =>
 {
@@ -18,6 +17,28 @@ builder.Services.AddSwaggerGen(c =>
         Title = "EngAce APIs Documentation",
         Version = "v1.0.0",
         Description = "Developed by Phan Xuan Quang."
+    });
+
+    c.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Name = "Authentication",
+        Type = SecuritySchemeType.ApiKey,
+        Description = "The API key to access Gemini services"
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "ApiKey"
+                }
+            },
+            Array.Empty<string>()
+        }
     });
 
     c.UseAllOfToExtendReferenceSchemas();

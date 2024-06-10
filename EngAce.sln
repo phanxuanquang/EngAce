@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EngAce.Api", "EngAce.Api\En
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "engace.web", "EngAce.Web\engace.web.esproj", "{38501101-9199-4CB4-86B0-0BF062CA2CF2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helper", "Helper\Helper.csproj", "{9D0845A2-6BCC-421D-B0D6-06CF0F29799E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Helper", "Helper\Helper.csproj", "{9D0845A2-6BCC-421D-B0D6-06CF0F29799E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

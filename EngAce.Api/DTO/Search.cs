@@ -1,9 +1,8 @@
 ﻿namespace EngAce.Api.DTO
 {
-    public class SearchContent
+    public class Search
     {
         public required string Keyword { get; set; }
         public string Context { get; set; }
-        public required string ApiKey { get; set; }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel;
 
-namespace Entities
+namespace Entities.Enums
 {
-    public enum EnumQuizzType
+    public enum QuizzType
     {
         [Description("Câu hỏi dạng chọn câu đúng (Sentence Correction Questions)")]
         SentenceCorrection = 1,

@@ -1,4 +1,4 @@
-﻿using Entities;
+﻿using Entities.Enums;
 using Helper;
 using Newtonsoft.Json;
 using System.Text;
@@ -8,7 +8,7 @@ namespace Gemini
 {
     public static class Helper
     {
-        public static async Task<string> GenerateContent(string apiKey, string input, bool useJson = true, double creativeLevel = 25, EnumModel model = EnumModel.Gemini_10_Pro)
+        public static async Task<string> GenerateContent(string apiKey, string input, bool useJson = true, double creativeLevel = 25, GenerativeModel model = GenerativeModel.Gemini_10_Pro)
         {
             var client = new HttpClient();
             var modelName = EnumHelper.GetEnumDescription(model);

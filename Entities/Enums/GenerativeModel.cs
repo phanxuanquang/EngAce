@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel;
 
-namespace Entities
+namespace Entities.Enums
 {
-    public enum EnumModel
+    public enum GenerativeModel
     {
         [Description("gemini-1.0-pro")]
         Gemini_10_Pro = 1,
