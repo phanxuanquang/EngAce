@@ -13,22 +13,20 @@ namespace EngAce.Api.Controllers
     {
         /// <summary>
         /// </summary>
-        /// <param name="request">The request containing the details for quiz generation.</param>
+        /// <param name="request">The parameters used for quiz generation</param>
         /// <param name="englishLevel">
         /// The English proficiency levels of the user:
         /// 1. Beginner
         /// 2. Intermediate
         /// 3. Advanced
         /// </param>
-        /// <param name="creativeLevel">
-        /// The creativity of the AI for quiz generation. The value must be in the range of 0-100.</param>
-        /// <param name="totalQuestions">The total questions to generate.</param>
+        /// <param name="totalQuestions">The total questions to generate</param>
         /// <returns>The list of generated quizzes</returns>
-        /// <response code="201">The list of generated quizzes.</response>
-        /// <response code="400">If the request is null or an error occurs during quiz generation.</response>
-        /// <response code="401">Missing Gemini API Key.</response>
+        /// <response code="201">The list of generated quizzes</response>
+        /// <response code="400">If the request is null or an error occurs during quiz generation</response>
+        /// <response code="401">Missing Gemini API Key</response>
         [HttpPost("Generate")]
-        public async Task<ActionResult<List<Quizz>>> Generate([FromBody] GenerateQuizzes request, EnglishLevel englishLevel = EnglishLevel.Intermediate, int creativeLevel = 25, short totalQuestions = 10)
+        public async Task<ActionResult<List<Quizz>>> Generate([FromBody] GenerateQuizzes request, EnglishLevel englishLevel = EnglishLevel.Intermediate, short totalQuestions = 10)
         {
             if (!HttpContext.Request.Headers.TryGetValue("Authentication", out var apiKey))
             {
@@ -40,14 +38,19 @@ namespace EngAce.Api.Controllers
                 return BadRequest("Invalid Request");
             }
 
-            if (string.IsNullOrWhiteSpace(apiKey))
+            if (string.IsNullOrWhiteSpace(request.Topic))
             {
-                return BadRequest("Invalid API Key");
+                return BadRequest("The topic must not be empty");
             }
 
-            if (string.IsNullOrWhiteSpace(request.Topic) || request.QuizzTypes == null || request.QuizzTypes.Count == 0 || totalQuestions < 1)
+            if (totalQuestions < 1 || totalQuestions > 30)
             {
-                return BadRequest("Invalid Request Parameters");
+                return BadRequest("The total questions must be between 1 and 30");
+            }
+
+            if (request.QuizzTypes == null || request.QuizzTypes.Count == 0 || request.QuizzTypes.Count > 7)
+            {
+                return BadRequest("Invalid Quizz Types");
             }
 
             try
@@ -64,7 +67,7 @@ namespace EngAce.Api.Controllers
         /// <summary>
         /// Get the levels of English proficiency
         /// </summary>
-        /// <returns>The list of English proficiency levels.</returns>
+        /// <returns>The list of English proficiency levels</returns>
         /// <response code="200">The English proficiency levels.</response>
         /// <response code="500">Internal Server Error.</response>
         [HttpGet("GetEnglishLevels")]
@@ -77,20 +80,20 @@ namespace EngAce.Api.Controllers
                 EnglishLevel.Advanced
             };
 
-            var levelNames = levels.ToDictionary(
+            var desciptions = levels.ToDictionary(
                 level => (int)level,
                 level => EnumHelper.GetEnumDescription(level)
             );
 
-            return Ok(levelNames);
+            return Ok(desciptions);
         }
 
         /// <summary>
         /// Get the types of quizz
         /// </summary>
         /// <returns>The quiz types with their descriptions.</returns>
-        /// <response code="200">The quiz types.</response>
-        /// <response code="500">Internal Server Error.</response>
+        /// <response code="200">The quiz types</response>
+        /// <response code="500">Internal Server Error</response>
         [HttpGet("GetQuizzTypes")]
         public ActionResult<Dictionary<int, string>> GetQuizzTypes()
         {
@@ -105,12 +108,12 @@ namespace EngAce.Api.Controllers
                 QuizzType.Grammar
             };
 
-            var typeNames = types.ToDictionary(
-                level => (int)level,
-                level => EnumHelper.GetEnumDescription(level)
+            var descriptions = types.ToDictionary(
+                type => (int)type,
+                type => EnumHelper.GetEnumDescription(type)
             );
 
-            return Ok(typeNames);
+            return Ok(descriptions);
         }
     }
 }

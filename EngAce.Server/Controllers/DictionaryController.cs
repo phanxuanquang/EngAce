@@ -1,8 +1,9 @@
-﻿using EngAce.Api.DTO;
+using EngAce.Server.DTO;
+using Entities;
 using Functions;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EngAce.Api.Controllers
+namespace EngAce.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -14,26 +15,16 @@ namespace EngAce.Api.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost("Search")]
-        public async Task<ActionResult<string>> Search([FromBody] Search request)
+        public async Task<ActionResult<List<Quizz>>> Generate([FromBody] SearchContent request)
         {
-            if (!HttpContext.Request.Headers.TryGetValue("Authentication", out var apiKey))
-            {
-                return Unauthorized("Missing Gemini API Key");
-            }
-
             if (request == null)
             {
                 return BadRequest("Invalid Request");
             }
 
-            if (string.IsNullOrWhiteSpace(request.Keyword))
-            {
-                return BadRequest("The keyword must not be empty");
-            }
-
             try
             {
-                var quizzes = await SearchScope.Search(apiKey.ToString(), request.Keyword.Trim(), request.Context.Trim());
+                var quizzes = await SearchScope.Search(request.ApiKey, request.Keyword, request.Context);
                 return Ok(quizzes);
             }
             catch (Exception ex)

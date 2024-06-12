@@ -8,13 +8,8 @@ namespace Functions
 {
     public static class QuizzScope
     {
-        public static async Task<List<Quizz>> GenerateQuizes(string apiKey, string topic, List<QuizzType> quizzTypes, EnglishLevel level, short questionsCount)
+        public static async Task<List<Quizz>?> GenerateQuizes(string apiKey, string topic, List<QuizzType> quizzTypes, EnglishLevel level, short questionsCount)
         {
-            if (string.IsNullOrWhiteSpace(apiKey) || string.IsNullOrWhiteSpace(topic) || quizzTypes == null || quizzTypes.Count == 0 || questionsCount < 1)
-            {
-                throw new ArgumentException("Invalid input parameters.");
-            }
-
             var promptBuilder = new StringBuilder();
             var userLevel = EnumHelper.GetEnumDescription(level);
             var types = string.Join(", ", quizzTypes.Select(type => EnumHelper.GetEnumDescription(type)).ToList());
@@ -30,7 +25,7 @@ namespace Functions
             promptBuilder.AppendLine("    string question; // Nội dung câu hỏi bằng tiếng Anh");
             promptBuilder.AppendLine("    List<string> options; // 4 lựa chọn cho người dùng chọn");
             promptBuilder.AppendLine("    short rightOptionIndex; // Index của lựa chọn đúng trong mảng options");
-            promptBuilder.AppendLine("    string explanationInVietnamese; // Lời giải thích bằng tiếng Việt thật dễ hiểu");
+            promptBuilder.AppendLine("    string explanationInVietnamese; // Lời giải thích bằng thật dễ hiểu");
             promptBuilder.AppendLine("}");
 
             try

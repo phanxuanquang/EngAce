@@ -1,0 +1,6 @@
+@EngAce.Server_HostAddress = http://localhost:5097
+
+GET {{EngAce.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
