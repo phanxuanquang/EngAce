@@ -65,6 +65,31 @@ namespace EngAce.Api.Controllers
         }
 
         /// <summary>
+        /// Suggest topics to choose
+        /// </summary>
+        /// <returns>10 suggested topics</returns>
+        /// <response code="201">The list of 10 suggested topics</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpPost("SuggestTopics")]
+        public async Task<ActionResult<List<string>>> SuggestTopics(EnglishLevel englishLevel = EnglishLevel.Intermediate)
+        {
+            if (!HttpContext.Request.Headers.TryGetValue("Authentication", out var apiKey))
+            {
+                return Unauthorized("Missing Gemini API Key");
+            }
+
+            try
+            {
+                var topics = await QuizzScope.SuggestTopcis(apiKey.ToString(), englishLevel);
+                return Created("Success", topics);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Get the levels of English proficiency
         /// </summary>
         /// <returns>The list of English proficiency levels</returns>

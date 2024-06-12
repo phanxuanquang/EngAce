@@ -1,4 +1,4 @@
-﻿namespace EngAce.Api.DTO
+﻿namespace Entities
 {
     public class Search
     {
