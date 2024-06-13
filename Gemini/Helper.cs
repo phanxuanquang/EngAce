@@ -68,13 +68,15 @@ namespace Gemini
                     response.EnsureSuccessStatusCode();
 
                     var responseData = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                    var result = JsonConvert.DeserializeObject<Response>(responseData);
+                    var dto = JsonConvert.DeserializeObject<Response>(responseData);
 
-                    return result.Candidates[0].Content.Parts[0].Text;
+                    var result = dto.Candidates[0].Content.Parts[0].Text;
+                    return dto.Candidates[0].Content.Parts[0].Text;
                 }
             }
             catch (Exception ex)
             {
+                Terminal.Println(ex.Message, ConsoleColor.Red);
                 return $"Cannot generate quizzes. {ex.Message}";
             }
         }

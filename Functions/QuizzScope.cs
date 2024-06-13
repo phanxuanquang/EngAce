@@ -30,11 +30,23 @@ namespace Functions
 
             try
             {
+                Terminal.Println("--------------------------------------------", ConsoleColor.White);
+                Terminal.Println("Generate Quizz:", ConsoleColor.Cyan);
+                Terminal.Println($"- Topic: {topic}", ConsoleColor.DarkCyan);
+                Terminal.Println($"- English level: {level.ToString()}", ConsoleColor.DarkCyan);
+                Terminal.Println($"- Quizz types: {string.Join(", ", quizzTypes.Select(type => type.ToString()))}", ConsoleColor.DarkCyan);
+                Terminal.Println($"- Total questions: {questionsCount}", ConsoleColor.DarkCyan);
+
                 var response = await Gemini.Helper.GenerateContent(apiKey, promptBuilder.ToString(), true, 75, model);
-                return JsonConvert.DeserializeObject<List<Quizz>>(response);
+                var quizzes = JsonConvert.DeserializeObject<List<Quizz>>(response);
+
+                Terminal.Println(JsonConvert.SerializeObject(quizzes, Formatting.Indented));
+
+                return quizzes;
             }
             catch (Exception ex)
             {
+                Terminal.Println(ex.Message, ConsoleColor.Red);
                 throw new Exception($"Cannot generate quizz. {ex.Message}");
             }
         }
@@ -51,19 +63,21 @@ namespace Functions
 
             try
             {
+                Terminal.Println("--------------------------------------------", ConsoleColor.White);
+                Terminal.Println("Suggest Topcis:", ConsoleColor.Cyan);
+                Terminal.Println($"- English level: {level.ToString()}", ConsoleColor.DarkCyan);
+
                 var response = await Gemini.Helper.GenerateContent(apiKey, promptBuilder.ToString(), true, 100);
                 var topics = JsonConvert.DeserializeObject<List<string>>(response);
 
-                if (topics == null)
-                {
-                    throw new Exception($"Cannot generate quizz.");
-                }
+                Terminal.Println(string.Join("\n", topics));
 
                 var random = new Random();
                 return topics.OrderBy(topic => random.Next()).Take(10).ToList();
             }
             catch (Exception ex)
             {
+                Terminal.Println(ex.Message, ConsoleColor.Red);
                 throw new Exception($"Cannot generate quizz. {ex.Message}");
             }
         }
