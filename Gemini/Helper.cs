@@ -67,10 +67,7 @@ namespace Gemini
                 var responseData = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 var dto = JsonConvert.DeserializeObject<Response>(responseData);
 
-                var result = dto.Candidates[0].Content.Parts[0].Text;
-                Terminal.Println(result, ConsoleColor.Green);
-
-                return result;
+                return dto.Candidates[0].Content.Parts[0].Text;
             }
             catch (Exception ex)
             {
