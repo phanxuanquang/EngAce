@@ -19,9 +19,9 @@ namespace Gemini
         /// <param name="creativeLevel">The creativity of the generative model</param>
         /// <param name="model">The generative model to be used</param>
         /// <returns></returns>
-        public static async Task<string> GenerateContent(string apiKey, string query, bool useJson = true, double creativeLevel = 25, GenerativeModel model = GenerativeModel.Gemini_15_Flash)
+        public static async Task<string> GenerateContent(string apiKey, string query, bool useJson = true, double creativeLevel = 50, GenerativeModel model = GenerativeModel.Gemini_15_Flash)
         {
-            apiKey = apiKey.StartsWith("AIza") ? apiKey : Environment.GetEnvironmentVariable("GEMINI_API_KEY"); 
+            apiKey = apiKey.StartsWith("AIza") ? apiKey : Environment.GetEnvironmentVariable("GEMINI_API_KEY");
 
             var modelName = EnumHelper.GetEnumDescription(model);
             var endpoint = $"https://generativelanguage.googleapis.com/v1beta/models/{modelName}:generateContent?key={apiKey}";

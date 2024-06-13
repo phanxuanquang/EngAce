@@ -1,5 +1,4 @@
-﻿using Entities.Enums;
-using System.Text;
+﻿using System.Text;
 
 namespace Functions
 {
@@ -31,7 +30,7 @@ namespace Functions
 
             try
             {
-                return await Gemini.Helper.GenerateContent(apiKey, promptBuilder.ToString(), false, 30, GenerativeModel.Gemini_15_Flash);
+                return await Gemini.Helper.GenerateContent(apiKey, promptBuilder.ToString(), false);
             }
             catch (Exception ex)
             {

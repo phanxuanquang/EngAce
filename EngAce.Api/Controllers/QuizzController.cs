@@ -20,7 +20,7 @@ namespace EngAce.Api.Controllers
         /// 2. Intermediate
         /// 3. Advanced
         /// </param>
-        /// <param name="totalQuestions">The total questions to generate</param>
+        /// <param name="totalQuestions">The total questions to generate (maximum value is 30)</param>
         /// <returns>The list of generated quizzes</returns>
         /// <response code="201">The list of generated quizzes</response>
         /// <response code="400">If the request is null or an error occurs during quiz generation</response>
