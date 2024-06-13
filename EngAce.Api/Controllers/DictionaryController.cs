@@ -68,7 +68,7 @@ namespace EngAce.Api.Controllers
                 }
             }
 
-            var cacheKey = $"{apiKey}-{request.Keyword}-{request.Context}-{useEnglishToExplain}";
+            var cacheKey = $"Search: {request.Keyword.ToLower().Trim()}-{request.Context.ToLower().Trim()}-{useEnglishToExplain}";
             if (_cache.TryGetValue(cacheKey, out string cachedResult))
             {
                 return Ok(cachedResult);
@@ -77,12 +77,12 @@ namespace EngAce.Api.Controllers
             try
             {
                 var result = await SearchScope.Search(apiKey.ToString(), useEnglishToExplain, request.Keyword.Trim(), request.Context.Trim());
-                _cache.Set(cacheKey, result, TimeSpan.FromMinutes(5));
+                _cache.Set(cacheKey, result, TimeSpan.FromMinutes(15));
                 return Ok(result);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Keyword: {request.Keyword} - Context: {request.Context} - Use English: {useEnglishToExplain.ToString()}");
+                _logger.LogError(ex, "Cannot find the explanation");
                 return StatusCode(400, ex.Message);
             }
         }

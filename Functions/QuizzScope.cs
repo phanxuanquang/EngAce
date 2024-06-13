@@ -58,7 +58,7 @@ namespace Functions
 
             promptBuilder.AppendLine($"Bạn là một giáo viên dạy tiếng Anh với hơn 20 năm kinh nghiệm và bạn đang giảng dạy tại Việt Nam. Tôi là một người đang học tiếng Anh, trình độ hiện tại của tôi là {userLevel}.");
             promptBuilder.Append($"Tôi đang tìm kiếm những chủ đề thú vị để luyện tập tiếng Anh phù hợp với trình độ hiện tại của bản thân, đồng thời cũng muốn có thêm hứng thú để học tập.");
-            promptBuilder.AppendLine("Hãy đề xuất cho tôi khoảng 20 đến 40 chủ đề ngắn mà bạn cảm thấy phù hợp nhất và thú vị nhất.");
+            promptBuilder.AppendLine("Hãy đề xuất cho tôi khoảng 100 topic ngắn mà bạn cảm thấy phù hợp nhất và thú vị nhất.");
             promptBuilder.Append("Danh sách chủ đề mà bạn đề xuất phải là một mảng đối lượng JSON tương ứng với kiểu dữ liệu List<string> trong ngôn ngữ C#.");
 
             try
@@ -67,13 +67,8 @@ namespace Functions
                 Terminal.Println("Suggest Topcis:", ConsoleColor.Cyan);
                 Terminal.Println($"- English level: {level.ToString()}", ConsoleColor.DarkCyan);
 
-                var response = await Gemini.Helper.GenerateContent(apiKey, promptBuilder.ToString(), true, 100);
-                var topics = JsonConvert.DeserializeObject<List<string>>(response);
-
-                Terminal.Println(string.Join("\n", topics));
-
-                var random = new Random();
-                return topics.OrderBy(topic => random.Next()).Take(10).ToList();
+                var response = await Gemini.Helper.GenerateContent(apiKey, promptBuilder.ToString(), true, 100, GenerativeModel.Gemini_15_Pro);
+                return JsonConvert.DeserializeObject<List<string>>(response);
             }
             catch (Exception ex)
             {

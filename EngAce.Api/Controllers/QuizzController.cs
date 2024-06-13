@@ -5,6 +5,7 @@ using Functions;
 using Helper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using System;
 
 namespace EngAce.Api.Controllers
 {
@@ -63,7 +64,7 @@ namespace EngAce.Api.Controllers
                 return BadRequest("Invalid Quizz Types");
             }
 
-            var cacheKey = $"{apiKey}-{request.Topic}-{string.Join(",", request.QuizzTypes)}-{englishLevel}-{totalQuestions}";
+            var cacheKey = $"GenerateQuizzes-{request.Topic.ToLower().Trim()}-{string.Join(string.Empty, request.QuizzTypes)}-{englishLevel}-{totalQuestions}";
             if (_cache.TryGetValue(cacheKey, out List<Quizz> cachedQuizzes))
             {
                 return Ok(cachedQuizzes);
@@ -72,13 +73,13 @@ namespace EngAce.Api.Controllers
             try
             {
                 var quizzes = await QuizzScope.GenerateQuizes(apiKey.ToString(), request.Topic, request.QuizzTypes, englishLevel, totalQuestions);
-                _cache.Set(cacheKey, quizzes, totalQuestions > 10 ? TimeSpan.FromMinutes(10) : TimeSpan.FromMinutes(5));
+                _cache.Set(cacheKey, quizzes, TimeSpan.FromMinutes(20));
 
                 return Created("Success", quizzes);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Cannot generate quizzes.");
+                _logger.LogError(ex, "Cannot generate quizzes");
                 return StatusCode(500, ex.Message);
             }
         }
@@ -97,21 +98,27 @@ namespace EngAce.Api.Controllers
                 return Unauthorized("Missing Gemini API Key");
             }
 
-            var cacheKey = $"{apiKey}-SuggestedTopics-{englishLevel}";
+            var cacheKey = $"SuggestedTopics-{englishLevel}";
+            var random = new Random();
+
             if (_cache.TryGetValue(cacheKey, out List<string> cachedTopics))
             {
-                return Ok(cachedTopics);
+                return Ok(cachedTopics.OrderBy(topic => random.Next()).Take(10).ToList());
             }
 
             try
             {
                 var topics = await QuizzScope.SuggestTopcis(apiKey.ToString(), englishLevel);
-                _cache.Set(cacheKey, topics, TimeSpan.FromMinutes(3));
-                return Created("Success", topics);
+
+                var selectedTopics = topics.OrderBy(topic => random.Next()).Take(10).ToList();
+                _cache.Set(cacheKey, topics, TimeSpan.FromDays(7));
+
+                Terminal.Println(string.Join("\n", selectedTopics));
+                return Created("Success", selectedTopics);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Cannot suggest topics");
+                _logger.LogError(ex, "Cannot suggest topics");
                 return StatusCode(500, ex.Message);
             }
         }
