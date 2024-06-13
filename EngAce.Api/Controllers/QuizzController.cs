@@ -90,27 +90,28 @@ namespace EngAce.Api.Controllers
         /// <returns>10 suggested topics</returns>
         /// <response code="201">The list of 10 suggested topics</response>
         /// <response code="500">Internal Server Error</response>
-        [HttpPost("SuggestTopics")]
+        [HttpGet("SuggestTopics")]
         public async Task<ActionResult<List<string>>> SuggestTopics(EnglishLevel englishLevel = EnglishLevel.Intermediate)
         {
-            if (!HttpContext.Request.Headers.TryGetValue("Authentication", out var apiKey))
-            {
-                return Unauthorized("Missing Gemini API Key");
-            }
-
             var cacheKey = $"SuggestedTopics-{englishLevel}";
             var random = new Random();
+            var totalTopics = random.Next(5, 10);
 
             if (_cache.TryGetValue(cacheKey, out List<string> cachedTopics))
             {
-                return Ok(cachedTopics.OrderBy(topic => random.Next()).Take(10).ToList());
+                return Ok(cachedTopics.OrderBy(topic => random.Next()).Take(totalTopics).ToList());
+            }
+
+            if (!HttpContext.Request.Headers.TryGetValue("Authentication", out var apiKey))
+            {
+                return Unauthorized("Missing Gemini API Key");
             }
 
             try
             {
                 var topics = await QuizzScope.SuggestTopcis(apiKey.ToString(), englishLevel);
 
-                var selectedTopics = topics.OrderBy(topic => random.Next()).Take(10).ToList();
+                var selectedTopics = topics.OrderBy(topic => random.Next()).Take(totalTopics).ToList();
                 _cache.Set(cacheKey, topics, TimeSpan.FromDays(7));
 
                 Terminal.Println(string.Join("\n", selectedTopics));
