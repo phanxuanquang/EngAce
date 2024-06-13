@@ -4,6 +4,7 @@ using Entities.Enums;
 using Functions;
 using Helper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace EngAce.Api.Controllers
 {
@@ -11,6 +12,15 @@ namespace EngAce.Api.Controllers
     [Route("api/[controller]")]
     public class QuizzController : ControllerBase
     {
+        private readonly IMemoryCache _cache;
+        private readonly ILogger<DictionaryController> _logger;
+
+        public QuizzController(IMemoryCache cache, ILogger<DictionaryController> logger)
+        {
+            _cache = cache;
+            _logger = logger;
+        }
+
         /// <summary>
         /// </summary>
         /// <param name="request">The parameters used for quiz generation</param>
@@ -53,13 +63,22 @@ namespace EngAce.Api.Controllers
                 return BadRequest("Invalid Quizz Types");
             }
 
+            var cacheKey = $"{apiKey}-{request.Topic}-{string.Join(",", request.QuizzTypes)}-{englishLevel}-{totalQuestions}";
+            if (_cache.TryGetValue(cacheKey, out List<Quizz> cachedQuizzes))
+            {
+                return Ok(cachedQuizzes);
+            }
+
             try
             {
                 var quizzes = await QuizzScope.GenerateQuizes(apiKey.ToString(), request.Topic, request.QuizzTypes, englishLevel, totalQuestions);
+                _cache.Set(cacheKey, quizzes, totalQuestions > 10 ? TimeSpan.FromMinutes(10) : TimeSpan.FromMinutes(5));
+
                 return Created("Success", quizzes);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, $"Cannot generate quizzes.");
                 return StatusCode(500, ex.Message);
             }
         }
@@ -78,13 +97,21 @@ namespace EngAce.Api.Controllers
                 return Unauthorized("Missing Gemini API Key");
             }
 
+            var cacheKey = $"{apiKey}-SuggestedTopics-{englishLevel}";
+            if (_cache.TryGetValue(cacheKey, out List<string> cachedTopics))
+            {
+                return Ok(cachedTopics);
+            }
+
             try
             {
                 var topics = await QuizzScope.SuggestTopcis(apiKey.ToString(), englishLevel);
+                _cache.Set(cacheKey, topics, TimeSpan.FromMinutes(3));
                 return Created("Success", topics);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, $"Cannot suggest topics");
                 return StatusCode(500, ex.Message);
             }
         }
@@ -98,19 +125,26 @@ namespace EngAce.Api.Controllers
         [HttpGet("GetEnglishLevels")]
         public ActionResult<Dictionary<int, string>> GetEnglishLevels()
         {
-            var levels = new List<EnglishLevel>()
+            const string cacheKey = "EnglishLevels";
+            if (_cache.TryGetValue(cacheKey, out Dictionary<int, string> cachedLevels))
+            {
+                return Ok(cachedLevels);
+            }
+
+            var levels = new List<EnglishLevel>
             {
                 EnglishLevel.Beginner,
                 EnglishLevel.Intermediate,
                 EnglishLevel.Advanced
             };
 
-            var desciptions = levels.ToDictionary(
+            var descriptions = levels.ToDictionary(
                 level => (int)level,
                 level => EnumHelper.GetEnumDescription(level)
             );
 
-            return Ok(desciptions);
+            _cache.Set(cacheKey, descriptions, TimeSpan.FromDays(30));
+            return Ok(descriptions);
         }
 
         /// <summary>
@@ -122,6 +156,12 @@ namespace EngAce.Api.Controllers
         [HttpGet("GetQuizzTypes")]
         public ActionResult<Dictionary<int, string>> GetQuizzTypes()
         {
+            const string cacheKey = "QuizzTypes";
+            if (_cache.TryGetValue(cacheKey, out Dictionary<int, string> cachedTypes))
+            {
+                return Ok(cachedTypes);
+            }
+
             List<QuizzType> types = new List<QuizzType>
             {
                 QuizzType.SentenceCorrection,
@@ -138,6 +178,7 @@ namespace EngAce.Api.Controllers
                 type => EnumHelper.GetEnumDescription(type)
             );
 
+            _cache.Set(cacheKey, descriptions, TimeSpan.FromDays(15));
             return Ok(descriptions);
         }
     }

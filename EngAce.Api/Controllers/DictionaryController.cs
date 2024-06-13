@@ -1,6 +1,7 @@
 ﻿using Entities;
 using Functions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using System.Globalization;
 using System.Text;
 
@@ -10,6 +11,15 @@ namespace EngAce.Api.Controllers
     [ApiController]
     public class DictionaryController : ControllerBase
     {
+        private readonly IMemoryCache _cache;
+        private readonly ILogger<DictionaryController> _logger;
+
+        public DictionaryController(IMemoryCache cache, ILogger<DictionaryController> logger)
+        {
+            _cache = cache;
+            _logger = logger;
+        }
+
         /// <summary>
         /// Search the explanation of an English word in the specific context
         /// </summary>
@@ -58,13 +68,21 @@ namespace EngAce.Api.Controllers
                 }
             }
 
+            var cacheKey = $"{apiKey}-{request.Keyword}-{request.Context}-{useEnglishToExplain}";
+            if (_cache.TryGetValue(cacheKey, out string cachedResult))
+            {
+                return Ok(cachedResult);
+            }
+
             try
             {
-                var quizzes = await SearchScope.Search(apiKey.ToString(), useEnglishToExplain, request.Keyword.Trim(), request.Context.Trim());
-                return Ok(quizzes);
+                var result = await SearchScope.Search(apiKey.ToString(), useEnglishToExplain, request.Keyword.Trim(), request.Context.Trim());
+                _cache.Set(cacheKey, result, TimeSpan.FromMinutes(5));
+                return Ok(result);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, $"Keyword: {request.Keyword} - Context: {request.Context} - Use English: {useEnglishToExplain.ToString()}");
                 return StatusCode(400, ex.Message);
             }
         }

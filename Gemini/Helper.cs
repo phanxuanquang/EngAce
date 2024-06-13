@@ -21,15 +21,17 @@ namespace Gemini
         /// <returns></returns>
         public static async Task<string> GenerateContent(string apiKey, string query, bool useJson = true, double creativeLevel = 50, GenerativeModel model = GenerativeModel.Gemini_15_Flash)
         {
-            apiKey = apiKey.StartsWith("AIza") ? apiKey : Environment.GetEnvironmentVariable("GEMINI_API_KEY");
-
-            var modelName = EnumHelper.GetEnumDescription(model);
-            var endpoint = $"https://generativelanguage.googleapis.com/v1beta/models/{modelName}:generateContent?key={apiKey}";
-
-            var requestData = new
+            try
             {
-                contents = new[]
+                apiKey = apiKey.StartsWith("AIza") ? apiKey : Environment.GetEnvironmentVariable("GEMINI_API_KEY");
+
+                var modelName = EnumHelper.GetEnumDescription(model);
+                var endpoint = $"https://generativelanguage.googleapis.com/v1beta/models/{modelName}:generateContent?key={apiKey}";
+
+                var requestData = new
                 {
+                    contents = new[]
+                    {
                     new
                     {
                         parts = new[]
@@ -41,43 +43,39 @@ namespace Gemini
                         }
                     }
                 },
-                safetySettings = new[]
-                {
+                    safetySettings = new[]
+                    {
                     new
                     {
                         category = "HARM_CATEGORY_DANGEROUS_CONTENT",
                         threshold = "BLOCK_ONLY_HIGH"
                     }
                 },
-                generationConfig = new
-                {
-                    temperature = creativeLevel / 100,
-                    topP = 0.8,
-                    topK = 10,
-                    responseMimeType = useJson ? "application/json" : "text/plain"
-                }
-            };
+                    generationConfig = new
+                    {
+                        temperature = creativeLevel / 100,
+                        topP = 0.8,
+                        topK = 10,
+                        responseMimeType = useJson ? "application/json" : "text/plain"
+                    }
+                };
 
-            try
-            {
-                var content = JsonConvert.SerializeObject(requestData);
+                var content = new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8, "application/json");
+                var response = await _httpClient.PostAsync(endpoint, content).ConfigureAwait(false);
+                response.EnsureSuccessStatusCode();
 
-                using (var request = new StringContent(content, Encoding.UTF8, "application/json"))
-                {
-                    HttpResponseMessage response = await _httpClient.PostAsync(endpoint, request).ConfigureAwait(false);
-                    response.EnsureSuccessStatusCode();
+                var responseData = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                var dto = JsonConvert.DeserializeObject<Response>(responseData);
 
-                    var responseData = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                    var dto = JsonConvert.DeserializeObject<Response>(responseData);
+                var result = dto.Candidates[0].Content.Parts[0].Text;
+                Terminal.Println(result, ConsoleColor.Green);
 
-                    var result = dto.Candidates[0].Content.Parts[0].Text;
-                    return dto.Candidates[0].Content.Parts[0].Text;
-                }
+                return result;
             }
             catch (Exception ex)
             {
                 Terminal.Println(ex.Message, ConsoleColor.Red);
-                return $"Cannot generate quizzes. {ex.Message}";
+                return $"Cannot generate content. {ex.Message}";
             }
         }
     }
