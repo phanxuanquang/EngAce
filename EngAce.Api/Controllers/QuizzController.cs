@@ -93,9 +93,9 @@ namespace EngAce.Api.Controllers
         [HttpGet("SuggestTopics")]
         public async Task<ActionResult<List<string>>> SuggestTopics(EnglishLevel englishLevel = EnglishLevel.Intermediate)
         {
-            var cacheKey = $"SuggestedTopics-{englishLevel}";
+            var cacheKey = $"SuggestTopics-{englishLevel}";
             var random = new Random();
-            var totalTopics = random.Next(5, 10);
+            var totalTopics = random.Next(3, 6);
 
             if (_cache.TryGetValue(cacheKey, out List<string> cachedTopics))
             {
