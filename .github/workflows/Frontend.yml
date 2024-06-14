@@ -19,17 +19,14 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: ${{ env.NODE_VERSION }}
-        
-    - name: 'Install packages'
-      run: |
-        npm install
-      working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-        
+       
     - name: 'Build'
       run: |
+        cd engace.web
+        npm install
         npm run build --if-present
         npm run test --if-present
-      working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+      working-directory: .
 
     - name: 'Deploy'
       uses: azure/webapps-deploy@v3
