@@ -5,7 +5,6 @@ using Functions;
 using Helper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
-using System;
 
 namespace EngAce.Api.Controllers
 {
@@ -90,7 +89,7 @@ namespace EngAce.Api.Controllers
         /// <returns>10 suggested topics</returns>
         /// <response code="201">The list of 10 suggested topics</response>
         /// <response code="500">Internal Server Error</response>
-        [HttpGet("SuggestTopics")]
+        [HttpGet("SuggestTopicsCache")]
         public async Task<ActionResult<List<string>>> SuggestTopics(EnglishLevel englishLevel = EnglishLevel.Intermediate)
         {
             var cacheKey = $"SuggestTopics-{englishLevel}";
@@ -113,6 +112,33 @@ namespace EngAce.Api.Controllers
 
                 var selectedTopics = topics.OrderBy(topic => random.Next()).Take(totalTopics).ToList();
                 _cache.Set(cacheKey, topics, TimeSpan.FromDays(7));
+
+                Terminal.Println(string.Join("\n", selectedTopics));
+                return Created("Success", selectedTopics);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Cannot suggest topics");
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpGet("SuggestTopics")]
+        public async Task<ActionResult<List<string>>> SuggestTopic(EnglishLevel englishLevel = EnglishLevel.Intermediate)
+        {
+            var random = new Random();
+            var totalTopics = random.Next(3, 6);
+
+            if (!HttpContext.Request.Headers.TryGetValue("Authentication", out var apiKey))
+            {
+                return Unauthorized("Missing Gemini API Key");
+            }
+
+            try
+            {
+                var topics = await QuizzScope.SuggestTopcis(apiKey.ToString(), englishLevel);
+
+                var selectedTopics = topics.OrderBy(topic => random.Next()).Take(totalTopics).ToList();
 
                 Terminal.Println(string.Join("\n", selectedTopics));
                 return Created("Success", selectedTopics);
