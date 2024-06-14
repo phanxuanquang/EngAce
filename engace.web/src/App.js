@@ -7,15 +7,15 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          EngAce: Personalize the way you learn and practice English with AI
+          Edit <code>src/App.js</code> and save to reload.
         </p>
         <a
           className="App-link"
-          href="https://engace.azurewebsites.net/swagger/index.html"
+          href="https://reactjs.org"
           target="_blank"
           rel="noopener noreferrer"
         >
-          API Documentations of EngAce project
+          Learn React
         </a>
       </header>
     </div>
