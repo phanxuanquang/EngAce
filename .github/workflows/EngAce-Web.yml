@@ -15,10 +15,6 @@ jobs:
     - name: 'Checkout GitHub Action' 
       uses: actions/checkout@master
    
-    - uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-        
     - name: Setup Node ${{ env.NODE_VERSION }}
       uses: actions/setup-node@v4
       with:
@@ -32,13 +28,8 @@ jobs:
         npm run test --if-present
       working-directory:  .
                
-    # deploy web app using Azure credentials
     - uses: azure/webapps-deploy@v3
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        publish-profile: ${{ secrets.AZURE_CREDENTIALS }}
         package: ./build
-
-    # Azure logout 
-    - name: logout
-      run: |
-        az logout
