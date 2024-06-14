@@ -1,4 +1,4 @@
-name: Build and deploy .NET Core application to Web App EngAce
+name: Backend
 on:
   push:
     branches:
