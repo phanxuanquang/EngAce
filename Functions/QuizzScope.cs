@@ -37,7 +37,7 @@ namespace Functions
                 Terminal.Println($"- Quizz types: {string.Join(", ", quizzTypes.Select(type => type.ToString()))}", ConsoleColor.DarkCyan);
                 Terminal.Println($"- Total questions: {questionsCount}", ConsoleColor.DarkCyan);
 
-                var response = await Gemini.Helper.GenerateContent(apiKey, promptBuilder.ToString(), true, 75, model);
+                var response = await Gemini.Generator.Generate(apiKey, promptBuilder.ToString(), true, 75, model);
                 var quizzes = JsonConvert.DeserializeObject<List<Quizz>>(response);
 
                 Terminal.Println(JsonConvert.SerializeObject(quizzes, Formatting.Indented));
@@ -67,7 +67,7 @@ namespace Functions
                 Terminal.Println("Suggest Topcis:", ConsoleColor.Cyan);
                 Terminal.Println($"- English level: {level.ToString()}", ConsoleColor.DarkCyan);
 
-                var response = await Gemini.Helper.GenerateContent(apiKey, promptBuilder.ToString(), true, 100, GenerativeModel.Gemini_15_Pro);
+                var response = await Gemini.Generator.Generate(apiKey, promptBuilder.ToString(), true, 100, GenerativeModel.Gemini_15_Pro);
                 return JsonConvert.DeserializeObject<List<string>>(response);
             }
             catch (Exception ex)

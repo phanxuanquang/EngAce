@@ -37,7 +37,7 @@ namespace Functions
                 Terminal.Println($"- Keyword: {keyword}", ConsoleColor.DarkCyan);
                 Terminal.Println($"- Context: {context}", ConsoleColor.DarkCyan);
 
-                var result = await Gemini.Helper.GenerateContent(apiKey, promptBuilder.ToString(), false);
+                var result = await Gemini.Generator.Generate(apiKey, promptBuilder.ToString(), false);
 
                 Terminal.Println(result);
 
