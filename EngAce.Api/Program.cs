@@ -1,9 +1,23 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+})
+.AddCookie()
+.AddGoogle(googleOptions =>
+{
+    googleOptions.ClientId = "1049604073296-pm9h3iesnq95ncsimfbrqnq3djneetel.apps.googleusercontent.com";
+    googleOptions.ClientSecret = "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";
+});
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -98,6 +112,7 @@ app.UseHttpsRedirection();
 app.UseRouting();
 app.UseResponseCompression();
 app.UseCors();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 

@@ -50,7 +50,7 @@ namespace Functions
                 throw new Exception($"Cannot generate quizz. {ex.Message}");
             }
         }
-
+                                                                                                                            
         public static async Task<List<string>> SuggestTopcis(string apiKey, EnglishLevel level)
         {
             var promptBuilder = new StringBuilder();
