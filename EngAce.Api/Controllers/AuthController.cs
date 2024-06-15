@@ -33,9 +33,15 @@ namespace EngAce.Api.Controllers
                 {
                     claim.Type,
                     claim.Value
-                });
+                }).ToList();
 
-            return Ok(claims);
+            var accessToken = claims.FirstOrDefault(x => x.Type == "access_token")?.Value;
+
+            return Ok(new
+            {
+                AccessToken = accessToken,
+                Claims = claims
+            });
         }
     }
 }
