@@ -27,6 +27,8 @@ namespace EngAce.Api.Controllers
             if (!result.Succeeded)
                 return BadRequest();
 
+            var accessToken = await HttpContext.GetTokenAsync("access_token");
+
             var claims = result.Principal.Identities
                 .FirstOrDefault()?.Claims
                 .Select(claim => new
@@ -34,8 +36,6 @@ namespace EngAce.Api.Controllers
                     claim.Type,
                     claim.Value
                 }).ToList();
-
-            var accessToken = claims.FirstOrDefault(x => x.Type == "access_token")?.Value;
 
             return Ok(new
             {

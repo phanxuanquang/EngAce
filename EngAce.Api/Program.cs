@@ -26,7 +26,6 @@ builder.Services.AddAuthentication(options =>
     {
         OnCreatingTicket = context =>
         {
-            // Lưu access token vào Claims
             context.Identity.AddClaim(new Claim("access_token", context.AccessToken));
             return Task.CompletedTask;
         }
@@ -127,7 +126,9 @@ app.UseRouting();
 app.UseResponseCompression();
 app.UseCors();
 
+app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
 
 app.Run();
