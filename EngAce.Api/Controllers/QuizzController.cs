@@ -40,6 +40,11 @@ namespace EngAce.Api.Controllers
         [HttpPost("Generate")]
         public async Task<ActionResult<List<Quizz>>> Generate([FromBody] GenerateQuizzes request, EnglishLevel englishLevel = EnglishLevel.Intermediate, short totalQuestions = 10)
         {
+            if (string.IsNullOrEmpty(_accessKey))
+            {
+                return Unauthorized("Missing Gemini API Key or Access Token");
+            }
+
             if (string.IsNullOrWhiteSpace(request.Topic))
             {
                 return BadRequest("The topic must not be empty");
@@ -75,7 +80,6 @@ namespace EngAce.Api.Controllers
             }
         }
 
-
         /// <summary>
         /// Suggest topics to choose
         /// </summary>
@@ -85,6 +89,11 @@ namespace EngAce.Api.Controllers
         [HttpGet("SuggestTopicsCache")]
         public async Task<ActionResult<List<string>>> SuggestTopics(EnglishLevel englishLevel = EnglishLevel.Intermediate)
         {
+            if (string.IsNullOrEmpty(_accessKey))
+            {
+                return Unauthorized("Missing Gemini API Key or Access Token");
+            }
+
             var cacheKey = $"SuggestTopics-{englishLevel}";
             var random = new Random();
             var totalTopics = random.Next(3, 6);

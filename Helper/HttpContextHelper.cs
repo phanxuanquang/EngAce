@@ -15,8 +15,9 @@ namespace Helper
         {
             if (!_accessor.HttpContext.Request.Headers.TryGetValue("Authentication", out var apiKey))
             {
-                throw new NullReferenceException("Cannot find the access key");
+                return null;
             }
+
             return apiKey;
         }
     }

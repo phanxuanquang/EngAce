@@ -32,6 +32,11 @@ namespace EngAce.Api.Controllers
         [HttpPost("Search")]
         public async Task<ActionResult<string>> Search([FromBody] Search request, bool useEnglishToExplain = false)
         {
+            if (string.IsNullOrEmpty(_accessKey))
+            {
+                return Unauthorized("Missing Gemini API Key or Access Token");
+            }
+
             if (string.IsNullOrWhiteSpace(request.Keyword))
             {
                 return BadRequest("The keyword must not be empty");
