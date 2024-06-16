@@ -14,13 +14,13 @@ namespace EngAce.Api.Controllers
     {
         private readonly IMemoryCache _cache;
         private readonly ILogger<DictionaryController> _logger;
-        private readonly string _apiKey;
+        private readonly string _accessKey;
 
         public QuizzController(IMemoryCache cache, ILogger<DictionaryController> logger)
         {
             _cache = cache;
             _logger = logger;
-            _apiKey = HttpContextHelper.GetAccessKey();
+            _accessKey = HttpContextHelper.GetAccessKey();
         }
 
         /// <summary>
@@ -40,16 +40,6 @@ namespace EngAce.Api.Controllers
         [HttpPost("Generate")]
         public async Task<ActionResult<List<Quizz>>> Generate([FromBody] GenerateQuizzes request, EnglishLevel englishLevel = EnglishLevel.Intermediate, short totalQuestions = 10)
         {
-            if (string.IsNullOrWhiteSpace(_apiKey))
-            {
-                return Unauthorized("Missing Gemini API Key or Access Token");
-            }
-
-            if (request == null)
-            {
-                return BadRequest("Invalid Request");
-            }
-
             if (string.IsNullOrWhiteSpace(request.Topic))
             {
                 return BadRequest("The topic must not be empty");
@@ -73,7 +63,7 @@ namespace EngAce.Api.Controllers
 
             try
             {
-                var quizzes = await QuizzScope.GenerateQuizes(_apiKey, request.Topic, request.QuizzTypes, englishLevel, totalQuestions);
+                var quizzes = await QuizzScope.GenerateQuizes(_accessKey, request.Topic, request.QuizzTypes, englishLevel, totalQuestions);
                 _cache.Set(cacheKey, quizzes, TimeSpan.FromMinutes(20));
 
                 return Created("Success", quizzes);
@@ -106,7 +96,7 @@ namespace EngAce.Api.Controllers
 
             try
             {
-                var topics = await QuizzScope.SuggestTopcis(_apiKey, englishLevel);
+                var topics = await QuizzScope.SuggestTopcis(_accessKey, englishLevel);
 
                 var selectedTopics = topics.OrderBy(topic => random.Next()).Take(totalTopics).ToList();
                 _cache.Set(cacheKey, topics, TimeSpan.FromDays(7));

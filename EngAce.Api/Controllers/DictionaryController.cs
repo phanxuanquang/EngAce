@@ -14,13 +14,13 @@ namespace EngAce.Api.Controllers
     {
         private readonly IMemoryCache _cache;
         private readonly ILogger<DictionaryController> _logger;
-        private readonly string _apiKey;
+        private readonly string _accessKey;
 
         public DictionaryController(IMemoryCache cache, ILogger<DictionaryController> logger)
         {
             _cache = cache;
             _logger = logger;
-            _apiKey = HttpContextHelper.GetAccessKey();
+            _accessKey = HttpContextHelper.GetAccessKey();
         }
 
         /// <summary>
@@ -32,16 +32,6 @@ namespace EngAce.Api.Controllers
         [HttpPost("Search")]
         public async Task<ActionResult<string>> Search([FromBody] Search request, bool useEnglishToExplain = false)
         {
-            if (string.IsNullOrWhiteSpace(_apiKey))
-            {
-                return Unauthorized("Missing Gemini API Key or Access Token");
-            }
-
-            if (request == null)
-            {
-                return BadRequest("Invalid Request");
-            }
-
             if (string.IsNullOrWhiteSpace(request.Keyword))
             {
                 return BadRequest("The keyword must not be empty");
@@ -79,7 +69,7 @@ namespace EngAce.Api.Controllers
 
             try
             {
-                var result = await SearchScope.Search(_apiKey, useEnglishToExplain, request.Keyword.Trim(), request.Context.Trim());
+                var result = await SearchScope.Search(_accessKey, useEnglishToExplain, request.Keyword.Trim(), request.Context.Trim());
                 _cache.Set(cacheKey, result, TimeSpan.FromMinutes(15));
                 return Ok(result);
             }

@@ -10,32 +10,22 @@ namespace EngAce.Api.Controllers
     public class ChatbotController : ControllerBase
     {
         private readonly ILogger<DictionaryController> _logger;
-        private readonly string _apiKey;
+        private readonly string _accessKey;
         public ChatbotController(ILogger<DictionaryController> logger)
         {
             _logger = logger;
-            _apiKey = HttpContextHelper.GetAccessKey();
+            _accessKey = HttpContextHelper.GetAccessKey();
         }
 
         [HttpPost("GenerateAnswer")]
         public async Task<ActionResult<string>> GenerateAnswer([FromBody] Chat request)
         {
-            if (string.IsNullOrWhiteSpace(_apiKey))
-            {
-                return Unauthorized("Missing Gemini API Key or Access Token");
-            }
-
-            if (request == null)
-            {
-                return BadRequest("Invalid Request");
-            }
-
             if (string.IsNullOrWhiteSpace(request.Question))
             {
                 return BadRequest("The question must not be empty");
             }
 
-            return Ok(ChatbotScope.GenerateAnswer(_apiKey, request));
+            return Ok(ChatbotScope.GenerateAnswer(_accessKey, request));
         }
     }
 }
