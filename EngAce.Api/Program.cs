@@ -67,7 +67,7 @@ builder.Services.AddSwaggerGen(c =>
         In = ParameterLocation.Header,
         Name = "Authentication",
         Type = SecuritySchemeType.ApiKey,
-        Description = "The API key to access Gemini services"
+        Description = "The API Key or the Access Token to access Gemini services"
     });
 
     c.AddSecurityRequirement(new OpenApiSecurityRequirement

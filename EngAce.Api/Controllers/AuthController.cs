@@ -17,11 +17,11 @@ namespace EngAce.Api.Controllers
         }
 
         [HttpGet("login")]
-        public IActionResult Login(string returnUrl = null)
+        public IActionResult Login(string RedirectUrl = null)
         {
             var authenticationProperties = new AuthenticationProperties
             {
-                RedirectUri = Url.Action("GoogleResponse", new { returnUrl })
+                RedirectUri = Url.Action("GoogleResponse", new { RedirectUrl })
             };
 
             return Challenge(authenticationProperties, GoogleDefaults.AuthenticationScheme);
@@ -50,7 +50,11 @@ namespace EngAce.Api.Controllers
 
             _accessor.HttpContext.Session.SetString("AccessToken", accessToken);
 
-            return Redirect("https://engace-app.azurewebsites.net");
+            return Ok(new
+            {
+                AccessToken = accessToken,
+                Claims = claims
+            });
         }
     }
 }

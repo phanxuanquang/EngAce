@@ -18,10 +18,27 @@ namespace Helper
                 return apiKey;
             }
 
-            var accessToken = _accessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == "access_token")?.Value;
-            if (accessToken != null)
+            return null;
+
+            //if (_accessor.HttpContext.Request.Headers.TryGetValue("Authentication", out var apiKey))
+            //{
+            //    return apiKey;
+            //}
+
+            //var accessToken = _accessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == "access_token")?.Value;
+            //if (accessToken != null)
+            //{
+            //    return accessToken;
+            //}
+
+            //return null;
+        }
+
+        public static string GetApiKey()
+        {
+            if (_accessor.HttpContext.Request.Headers.TryGetValue("Authentication", out var apiKey))
             {
-                return accessToken;
+                return apiKey;
             }
 
             return null;
