@@ -50,6 +50,7 @@ namespace EngAce.Api.Controllers
 
             _accessor.HttpContext.Session.SetString("AccessToken", accessToken);
 
+
             return Ok(new
             {
                 AccessToken = accessToken,
