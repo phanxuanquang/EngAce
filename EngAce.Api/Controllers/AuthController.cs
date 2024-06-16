@@ -26,21 +26,12 @@ namespace EngAce.Api.Controllers
             var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             if (!result.Succeeded)
                 return BadRequest();
-
+            
             var accessToken = await HttpContext.GetTokenAsync("access_token");
-
-            var claims = result.Principal.Identities
-                .FirstOrDefault()?.Claims
-                .Select(claim => new
-                {
-                    claim.Type,
-                    claim.Value
-                }).ToList();
-
+            
             return Ok(new
             {
-                AccessToken = accessToken,
-                Claims = claims
+                AccessToken = accessToken
             });
         }
     }
