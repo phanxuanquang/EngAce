@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.Google;
+﻿using Helper;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -16,18 +16,19 @@ builder.Services.AddAuthentication(options =>
     options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
 })
 .AddCookie()
-.AddGoogle(googleOptions =>
+.AddGoogle(options =>
 {
-    googleOptions.ClientId = Environment.GetEnvironmentVariable("ClientId");
-googleOptions.ClientSecret = Environment.GetEnvironmentVariable("ClientSecret");
-    googleOptions.Scope.Add("https://www.googleapis.com/auth/cloud-platform");
-    googleOptions.Scope.Add("https://www.googleapis.com/auth/generative-language.retriever");
-    googleOptions.SaveTokens = true;
-    googleOptions.Events = new OAuthEvents
+    options.ClientId = Environment.GetEnvironmentVariable("ClientId");
+    options.ClientSecret = Environment.GetEnvironmentVariable("ClientSecret");
+    options.Scope.Add("https://www.googleapis.com/auth/cloud-platform");
+    options.Scope.Add("https://www.googleapis.com/auth/generative-language.retriever");
+    options.SaveTokens = true;
+    options.Events = new OAuthEvents
     {
         OnCreatingTicket = context =>
         {
             context.Identity.AddClaim(new Claim("access_token", context.AccessToken));
+
             return Task.CompletedTask;
         }
     };
@@ -39,6 +40,16 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.PropertyNamingPolicy = null;
     });
 
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromHours(3);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
+builder.Services.AddHttpContextAccessor();
+HttpContextHelper.Configure(builder.Services.BuildServiceProvider().GetRequiredService<IHttpContextAccessor>());
 builder.Services.AddMemoryCache();
 
 builder.Services.AddEndpointsApiExplorer();
@@ -129,6 +140,7 @@ app.UseCors();
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseSession();
 
 app.MapControllers();
 

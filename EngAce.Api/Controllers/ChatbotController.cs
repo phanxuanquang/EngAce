@@ -1,5 +1,6 @@
 ﻿using Entities;
 using Functions;
+using Helper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EngAce.Api.Controllers
@@ -8,12 +9,20 @@ namespace EngAce.Api.Controllers
     [ApiController]
     public class ChatbotController : ControllerBase
     {
+        private readonly ILogger<DictionaryController> _logger;
+        private readonly string _apiKey;
+        public ChatbotController(ILogger<DictionaryController> logger)
+        {
+            _logger = logger;
+            _apiKey = HttpContextHelper.GetAccessKey();
+        }
+
         [HttpPost("GenerateAnswer")]
         public async Task<ActionResult<string>> GenerateAnswer([FromBody] Chat request)
         {
-            if (!HttpContext.Request.Headers.TryGetValue("Authentication", out var apiKey))
+            if (string.IsNullOrWhiteSpace(_apiKey))
             {
-                return Unauthorized("Missing Gemini API Key");
+                return Unauthorized("Missing Gemini API Key or Access Token");
             }
 
             if (request == null)
@@ -26,7 +35,7 @@ namespace EngAce.Api.Controllers
                 return BadRequest("The question must not be empty");
             }
 
-            return Ok(ChatbotScope.GenerateAnswer(apiKey.ToString(), request));
+            return Ok(ChatbotScope.GenerateAnswer(_apiKey, request));
         }
     }
 }

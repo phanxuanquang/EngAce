@@ -14,11 +14,13 @@ namespace EngAce.Api.Controllers
     {
         private readonly IMemoryCache _cache;
         private readonly ILogger<DictionaryController> _logger;
+        private readonly string _apiKey;
 
         public QuizzController(IMemoryCache cache, ILogger<DictionaryController> logger)
         {
             _cache = cache;
             _logger = logger;
+            _apiKey = HttpContextHelper.GetAccessKey();
         }
 
         /// <summary>
@@ -38,9 +40,9 @@ namespace EngAce.Api.Controllers
         [HttpPost("Generate")]
         public async Task<ActionResult<List<Quizz>>> Generate([FromBody] GenerateQuizzes request, EnglishLevel englishLevel = EnglishLevel.Intermediate, short totalQuestions = 10)
         {
-            if (!HttpContext.Request.Headers.TryGetValue("Authentication", out var apiKey))
+            if (string.IsNullOrWhiteSpace(_apiKey))
             {
-                return Unauthorized("Missing Gemini API Key");
+                return Unauthorized("Missing Gemini API Key or Access Token");
             }
 
             if (request == null)
@@ -71,7 +73,7 @@ namespace EngAce.Api.Controllers
 
             try
             {
-                var quizzes = await QuizzScope.GenerateQuizes(apiKey.ToString(), request.Topic, request.QuizzTypes, englishLevel, totalQuestions);
+                var quizzes = await QuizzScope.GenerateQuizes(_apiKey, request.Topic, request.QuizzTypes, englishLevel, totalQuestions);
                 _cache.Set(cacheKey, quizzes, TimeSpan.FromMinutes(20));
 
                 return Created("Success", quizzes);
@@ -82,6 +84,7 @@ namespace EngAce.Api.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+
 
         /// <summary>
         /// Suggest topics to choose
@@ -101,14 +104,9 @@ namespace EngAce.Api.Controllers
                 return Ok(cachedTopics.OrderBy(topic => random.Next()).Take(totalTopics).ToList());
             }
 
-            if (!HttpContext.Request.Headers.TryGetValue("Authentication", out var apiKey))
-            {
-                return Unauthorized("Missing Gemini API Key");
-            }
-
             try
             {
-                var topics = await QuizzScope.SuggestTopcis(apiKey.ToString(), englishLevel);
+                var topics = await QuizzScope.SuggestTopcis(_apiKey, englishLevel);
 
                 var selectedTopics = topics.OrderBy(topic => random.Next()).Take(totalTopics).ToList();
                 _cache.Set(cacheKey, topics, TimeSpan.FromDays(7));

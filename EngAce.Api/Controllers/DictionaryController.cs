@@ -1,5 +1,6 @@
 ﻿using Entities;
 using Functions;
+using Helper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using System.Globalization;
@@ -13,11 +14,13 @@ namespace EngAce.Api.Controllers
     {
         private readonly IMemoryCache _cache;
         private readonly ILogger<DictionaryController> _logger;
+        private readonly string _apiKey;
 
         public DictionaryController(IMemoryCache cache, ILogger<DictionaryController> logger)
         {
             _cache = cache;
             _logger = logger;
+            _apiKey = HttpContextHelper.GetAccessKey();
         }
 
         /// <summary>
@@ -29,9 +32,9 @@ namespace EngAce.Api.Controllers
         [HttpPost("Search")]
         public async Task<ActionResult<string>> Search([FromBody] Search request, bool useEnglishToExplain = false)
         {
-            if (!HttpContext.Request.Headers.TryGetValue("Authentication", out var apiKey))
+            if (string.IsNullOrWhiteSpace(_apiKey))
             {
-                return Unauthorized("Missing Gemini API Key");
+                return Unauthorized("Missing Gemini API Key or Access Token");
             }
 
             if (request == null)
@@ -76,7 +79,7 @@ namespace EngAce.Api.Controllers
 
             try
             {
-                var result = await SearchScope.Search(apiKey.ToString(), useEnglishToExplain, request.Keyword.Trim(), request.Context.Trim());
+                var result = await SearchScope.Search(_apiKey, useEnglishToExplain, request.Keyword.Trim(), request.Context.Trim());
                 _cache.Set(cacheKey, result, TimeSpan.FromMinutes(15));
                 return Ok(result);
             }
