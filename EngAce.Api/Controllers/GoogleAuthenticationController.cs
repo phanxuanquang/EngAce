@@ -19,18 +19,17 @@ namespace EngAce.Api.Controllers
         /// <summary>
         /// Login using Google account
         /// </summary>
-        /// <param name="redirectUrl">The URL to redirect if successed</param>
         /// <returns></returns>
         /// <remarks>
         /// This endpoint triggers an OAuth 2.0 authentication flow using Google as the authentication provider.
         /// Currently, it is only available for the Google accounts of the UIT students.
         /// </remarks>
         [HttpGet("login")]
-        public IActionResult Login(string? redirectUrl)
+        public IActionResult Login()
         {
             var authenProperties = new AuthenticationProperties
             {
-                RedirectUri = Url.Action("GoogleResponse", new { redirectUrl })
+                RedirectUri = Url.Action("GoogleResponse")
             };
 
             return Challenge(authenProperties, GoogleDefaults.AuthenticationScheme);
@@ -39,10 +38,9 @@ namespace EngAce.Api.Controllers
         /// <summary>
         /// Get the access token after logging in using Google account
         /// </summary>
-        /// <param name="redirectUrl"></param>
         /// <returns></returns>
         [HttpGet("google-response")]
-        public async Task<IActionResult> GoogleResponse(string? redirectUrl)
+        public async Task<IActionResult> GoogleResponse()
         {
             var loginResult = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
@@ -60,18 +58,14 @@ namespace EngAce.Api.Controllers
                 })
                 .ToList();
 
-            var accessToken = claims.FirstOrDefault(x => x.Type == "access_token")?.Value;
+            var accessToken = claims?.FirstOrDefault(x => x.Type == "access_token")?.Value;
 
-            if (!string.IsNullOrEmpty(redirectUrl) && Url.IsLocalUrl(redirectUrl))
+            if (accessToken == null)
             {
-                return Redirect(redirectUrl);
+                return Unauthorized("Access Token not found");
             }
 
-            return Ok(new
-            {
-                AccessToken = accessToken,
-                Claims = claims
-            });
+            return Redirect($"https://engace-app.azurewebsites.net/welcome?key={accessToken}");
         }
     }
 }
