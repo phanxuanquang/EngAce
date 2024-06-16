@@ -11,14 +11,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAuthentication(options =>
 {
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
 })
 .AddCookie()
 .AddGoogle(googleOptions =>
 {
-    googleOptions.ClientId = "1049604073296-pm9h3iesnq95ncsimfbrqnq3djneetel.apps.googleusercontent.com";
-    googleOptions.ClientSecret = "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";
+    googleOptions.ClientId = Environment.GetEnvironmentVariable("ClientId");
+googleOptions.ClientSecret = Environment.GetEnvironmentVariable("ClientSecret");
     googleOptions.Scope.Add("https://www.googleapis.com/auth/cloud-platform");
     googleOptions.Scope.Add("https://www.googleapis.com/auth/generative-language.retriever");
     googleOptions.SaveTokens = true;
