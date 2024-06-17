@@ -144,7 +144,7 @@ namespace EngAce.Api.Controllers
 
             var descriptions = levels.ToDictionary(
                 level => (int)level,
-                level => EnumHelper.GetEnumDescription(level)
+                level => GeneralHelper.GetEnumDescription(level)
             );
 
             _cache.Set(cacheKey, descriptions, TimeSpan.FromDays(30));
@@ -179,7 +179,7 @@ namespace EngAce.Api.Controllers
 
             var descriptions = types.ToDictionary(
                 type => (int)type,
-                type => EnumHelper.GetEnumDescription(type)
+                type => GeneralHelper.GetEnumDescription(type)
             );
 
             _cache.Set(cacheKey, descriptions, TimeSpan.FromDays(15));

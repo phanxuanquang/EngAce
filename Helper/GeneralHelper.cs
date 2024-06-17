@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace Helper
 {
-    public static class EnumHelper
+    public static class GeneralHelper
     {
         public static string GetEnumDescription(Enum value)
         {
@@ -18,6 +18,19 @@ namespace Helper
             {
                 return value.ToString();
             }
+        }
+        public static int CountWords(string s)
+        {
+            if (string.IsNullOrWhiteSpace(s))
+            {
+                return 0;
+            }
+
+            char[] delimiters = { ' ', '\r', '\n', '\t', '.', ',', ';', ':', '!', '?' };
+
+            string[] words = s.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+
+            return words.Length;
         }
     }
 }

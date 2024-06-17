@@ -24,7 +24,7 @@ namespace EngAce.Api.Controllers
         }
 
         /// <summary>
-        /// Search the explanation of an English word in the specific context
+        /// GenerateComment the explanation of an English word in the specific context
         /// </summary>
         /// <param name="request"></param>
         /// <param name="useEnglishToExplain">Use English for the explanation</param>

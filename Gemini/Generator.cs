@@ -15,7 +15,7 @@ namespace Gemini
 
         public static async Task<string> Generate(string apiKey, string query, bool useJson = true, double creativeLevel = 50, GenerativeModel model = GenerativeModel.Gemini_15_Flash)
         {
-            var modelName = EnumHelper.GetEnumDescription(model);
+            var modelName = GeneralHelper.GetEnumDescription(model);
             var endpoint = GetUriWithHeadersIfAny(apiKey, model);
 
             var requestData = new
@@ -72,7 +72,7 @@ namespace Gemini
         {
             var model = GenerativeModel.Gemini_15_Flash;
 
-            var modelName = EnumHelper.GetEnumDescription(model);
+            var modelName = GeneralHelper.GetEnumDescription(model);
             var endpoint = GetUriWithHeadersIfAny(apiKey, model);
 
             var requestData = string.Empty; // TBD
@@ -97,7 +97,7 @@ namespace Gemini
 
         private static string GetUriWithHeadersIfAny(string accessKey, GenerativeModel model)
         {
-            var modelName = EnumHelper.GetEnumDescription(model);
+            var modelName = GeneralHelper.GetEnumDescription(model);
             var uriBuilder = new UriBuilder($"https://generativelanguage.googleapis.com/v1beta/models/{modelName}:generateContent");
 
             if (accessKey.StartsWith("AIza"))
