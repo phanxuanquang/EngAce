@@ -18,6 +18,19 @@ namespace EngAce.Api.Controllers
             _accessKey = HttpContextHelper.GetAccessKey();
         }
 
+        /// <summary>
+        /// Generate the comment and the improvement for the essay
+        /// </summary>
+        /// <param name="content">The content that need the improvement</param>
+        /// <param name="englishLevel">The English proficiency level of the user</param>
+        /// <returns></returns>
+        /// <remarks>
+        /// Generate the comment and the improvement for the essay, including the fields: 
+        /// - GeneralCommentForTheContent: The overall comment for the whole essay
+        /// - ContentWithHighlightedIssues: The original essay with highlighted issues (using markdown format)
+        /// - HighlightIssues: The array of highlighted issues in the original essay
+        /// - ImprovedContent: The essay after the improvement of the AI
+        /// </remarks>
         [HttpGet("Generate")]
         public async Task<ActionResult<string>> Generate(string content, EnglishLevel englishLevel = EnglishLevel.Intermediate)
         {
