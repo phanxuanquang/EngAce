@@ -10,6 +10,7 @@ namespace Functions
     {
         public static async Task<Comment> GenerateReview(string apiKey, EnglishLevel level, string content)
         {
+            string? result = null;
             var promptBuilder = new StringBuilder();
             var userLevel = GeneralHelper.GetEnumDescription(level);
 
@@ -24,27 +25,21 @@ namespace Functions
             promptBuilder.AppendLine("class ReviewerResponse");
             promptBuilder.AppendLine("{");
             promptBuilder.AppendLine("    string GeneralCommentForTheContent; // Nhận xét chung cho cả bài viết, bao gồm điểm tốt và điểm chưa tốt, cần cải thiện những gì. Lời nhận xét phải bằng tiếng Việt");
-            promptBuilder.AppendLine("    string ContentWithHighlightedIssues; // Bài viết ban đầu kèm những chỗ cần cải thiện được highlight bằng cách sử dụng cặp dấu ** của markdown");
-            promptBuilder.AppendLine("    List<string> HighlightIssues; // Danh sách những chỗ được highlight theo thứ tự từ đầu đến cuối bài viết, mỗi item là một đoạn trong bài viết của tôi");
+            promptBuilder.AppendLine("    string OriginalContentWithHighlightedIssues; // Bài viết ban đầu kèm những chỗ cần cải thiện được highlight bằng cách sử dụng cặp dấu ** của markdown");
             promptBuilder.AppendLine("    string ImprovedContent; // Bài viết sau khi được improve, bạn hãy cho tôi một kết quả tốt nhất có thể");
             promptBuilder.AppendLine("}");
             promptBuilder.AppendLine("Nội dung bài viết của tôi là: ");
-            promptBuilder.AppendLine(content);
+            promptBuilder.AppendLine($"{content}");
 
             try
             {
-                var result = await Gemini.Generator.Generate(apiKey, promptBuilder.ToString(), true, 60, GenerativeModel.Gemini_15_Pro);
+                result = await Gemini.Generator.Generate(apiKey, promptBuilder.ToString(), true, 60, GenerativeModel.Gemini_15_Pro);
 
-                var comment = JsonConvert.DeserializeObject<Comment>(result);
-
-                Terminal.Println(JsonConvert.SerializeObject(comment, Formatting.Indented));
-
-                return comment;
+                return JsonConvert.DeserializeObject<Comment>(result);
             }
             catch (Exception ex)
             {
-                Terminal.Println(ex.Message, ConsoleColor.Red);
-                throw new Exception($"Cannot find the explanation. {ex.Message}");
+                throw new Exception($"Cannot find the explanation. {ex.Message}\n{result}");
             }
         }
     }

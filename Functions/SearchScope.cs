@@ -1,5 +1,4 @@
-﻿using Helper;
-using System.Text;
+﻿using System.Text;
 
 namespace Functions
 {
@@ -31,21 +30,10 @@ namespace Functions
 
             try
             {
-                Terminal.Println("--------------------------------------------", ConsoleColor.White);
-                Terminal.Println("Search:", ConsoleColor.Cyan);
-                Terminal.Println($"- EN-EN: {useEnglish}", ConsoleColor.DarkCyan);
-                Terminal.Println($"- Keyword: {keyword}", ConsoleColor.DarkCyan);
-                Terminal.Println($"- Context: {context}", ConsoleColor.DarkCyan);
-
-                var result = await Gemini.Generator.Generate(apiKey, promptBuilder.ToString(), false);
-
-                Terminal.Println(result);
-
-                return result;
+                return await Gemini.Generator.Generate(apiKey, promptBuilder.ToString(), false);
             }
             catch (Exception ex)
             {
-                Terminal.Println(ex.Message, ConsoleColor.Red);
                 throw new Exception($"Cannot find the explanation. {ex.Message}");
             }
         }

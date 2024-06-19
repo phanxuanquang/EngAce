@@ -10,6 +10,7 @@ namespace Functions
     {
         public static async Task<List<Quizz>?> GenerateQuizes(string apiKey, string topic, List<QuizzType> quizzTypes, EnglishLevel level, short questionsCount)
         {
+            string? response = null;
             var promptBuilder = new StringBuilder();
             var userLevel = GeneralHelper.GetEnumDescription(level);
             var types = string.Join(", ", quizzTypes.Select(type => GeneralHelper.GetEnumDescription(type)).ToList());
@@ -30,24 +31,12 @@ namespace Functions
 
             try
             {
-                Terminal.Println("--------------------------------------------", ConsoleColor.White);
-                Terminal.Println("Generate Quizz:", ConsoleColor.Cyan);
-                Terminal.Println($"- Topic: {topic}", ConsoleColor.DarkCyan);
-                Terminal.Println($"- English level: {level.ToString()}", ConsoleColor.DarkCyan);
-                Terminal.Println($"- Quizz types: {string.Join(", ", quizzTypes.Select(type => type.ToString()))}", ConsoleColor.DarkCyan);
-                Terminal.Println($"- Total questions: {questionsCount}", ConsoleColor.DarkCyan);
-
-                var response = await Gemini.Generator.Generate(apiKey, promptBuilder.ToString(), true, 75, model);
-                var quizzes = JsonConvert.DeserializeObject<List<Quizz>>(response);
-
-                Terminal.Println(JsonConvert.SerializeObject(quizzes, Formatting.Indented));
-
-                return quizzes;
+                response = await Gemini.Generator.Generate(apiKey, promptBuilder.ToString(), true, 75, model);
+                return JsonConvert.DeserializeObject<List<Quizz>>(response);
             }
             catch (Exception ex)
             {
-                Terminal.Println(ex.Message, ConsoleColor.Red);
-                throw new Exception($"Cannot generate quizz. {ex.Message}");
+                throw new Exception($"Cannot generate quizz. {ex.Message}.\n{response}");
             }
         }
 

@@ -15,6 +15,7 @@ namespace Gemini
 
         public static async Task<string> Generate(string apiKey, string query, bool useJson = true, double creativeLevel = 50, GenerativeModel model = GenerativeModel.Gemini_15_Flash)
         {
+            Response? responseDTO = null;
             var modelName = GeneralHelper.GetEnumDescription(model);
             var endpoint = GetUriWithHeadersIfAny(apiKey, model);
 
@@ -57,14 +58,13 @@ namespace Gemini
                 response.EnsureSuccessStatusCode();
 
                 var responseData = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                var dto = JsonConvert.DeserializeObject<Response>(responseData);
+                responseDTO = JsonConvert.DeserializeObject<Response>(responseData);
 
-                return dto.Candidates[0].Content.Parts[0].Text;
+                return responseDTO.Candidates[0].Content.Parts[0].Text;
             }
             catch (Exception ex)
             {
-                Terminal.Println(ex.Message, ConsoleColor.Red);
-                return $"Cannot generate content. {ex.Message}";
+                throw new Exception($"Cannot generate content. {ex.Message}\n{JsonConvert.SerializeObject(responseDTO, Formatting.Indented)}");
             }
         }
 

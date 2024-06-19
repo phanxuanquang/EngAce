@@ -1,4 +1,5 @@
-﻿using Entities.Enums;
+﻿using Entities;
+using Entities.Enums;
 using Functions;
 using Helper;
 using Microsoft.AspNetCore.Mvc;
@@ -32,7 +33,7 @@ namespace EngAce.Api.Controllers
         /// 4. ImprovedContent: The essay after the improvement of the AI
         /// </remarks>
         [HttpGet("Generate")]
-        public async Task<ActionResult<string>> Generate(string content, EnglishLevel englishLevel = EnglishLevel.Intermediate)
+        public async Task<ActionResult<Comment>> Generate(string content, EnglishLevel englishLevel = EnglishLevel.Intermediate)
         {
             if (string.IsNullOrEmpty(_accessKey))
             {
