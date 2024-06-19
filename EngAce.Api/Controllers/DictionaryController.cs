@@ -24,49 +24,51 @@ namespace EngAce.Api.Controllers
         }
 
         /// <summary>
-        /// GenerateComment the explanation of an English word in the specific context
+        /// Search for the explanation for the keyword in the specific context
         /// </summary>
-        /// <param name="request"></param>
-        /// <param name="useEnglishToExplain">Use English for the explanation</param>
-        /// <returns></returns>
-        [HttpPost("Search")]
-        public async Task<ActionResult<string>> Search([FromBody] Search request, bool useEnglishToExplain = false)
+        /// <param name="keyword">The keyword to search</param>
+        /// <param name="context">The context that contains the keyword (can be empty)</param>
+        /// <param name="useEnglishToExplain">Use English/Vietnamese for the explanation</param>
+        /// <returns>The explanation in markdown format</returns>
+        [HttpGet("Search")]
+        public async Task<ActionResult<string>> Search(string keyword, string context, bool useEnglishToExplain = false)
         {
             if (string.IsNullOrEmpty(_accessKey))
             {
                 return Unauthorized("Missing Gemini API Key or Access Token");
             }
 
-            if (string.IsNullOrWhiteSpace(request.Keyword))
+            if (string.IsNullOrWhiteSpace(keyword))
             {
-                return BadRequest("The keyword must not be empty");
+                return BadRequest("Không được để trống từ khóa");
+            }
+            if (!string.IsNullOrWhiteSpace(context) && GeneralHelper.CountWords(context) > 100)
+            {
+                return BadRequest("Ngữ cảnh chỉ chứa tối đa 100 từ");
             }
 
-            if (!string.IsNullOrWhiteSpace(request.Context) && !request.Context.ToLower().Trim().Contains(request.Keyword.ToLower().Trim()))
+            if (!string.IsNullOrWhiteSpace(context) && !context.ToLower().Trim().Contains(keyword.ToLower().Trim()))
             {
-                return BadRequest("The keyword must appear in the context");
+                return BadRequest("Ngữ cảnh phải chứa từ khóa cần tra cứu");
             }
 
-            if (useEnglishToExplain)
-            {
-                if (request.Context.Trim() != new string(request.Context.Trim().Normalize(NormalizationForm.FormD)
+            if (context.Trim() != new string(context.Trim().Normalize(NormalizationForm.FormD)
                     .Where(c => CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)
                     .ToArray())
                     .Normalize(NormalizationForm.FormC))
-                {
-                    return BadRequest("The context must be in English");
-                }
-
-                if (request.Keyword.Trim() != new string(request.Keyword.Trim().Normalize(NormalizationForm.FormD)
-                    .Where(c => CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)
-                    .ToArray())
-                    .Normalize(NormalizationForm.FormC))
-                {
-                    return BadRequest("The keyword must be in English");
-                }
+            {
+                return BadRequest("Ngữ cảnh phải là tiếng Anh");
             }
 
-            var cacheKey = $"Search: {request.Keyword.ToLower().Trim()}-{request.Context.ToLower().Trim()}-{useEnglishToExplain}";
+            if (keyword.Trim() != new string(keyword.Trim().Normalize(NormalizationForm.FormD)
+                .Where(c => CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)
+                .ToArray())
+                .Normalize(NormalizationForm.FormC))
+            {
+                return BadRequest("Từ khóa cần tra cứu phải là tiếng Anh");
+            }
+
+            var cacheKey = $"Search: {keyword.ToLower().Trim()}-{context.ToLower().Trim()}-{useEnglishToExplain}";
             if (_cache.TryGetValue(cacheKey, out string cachedResult))
             {
                 return Ok(cachedResult);
@@ -74,13 +76,13 @@ namespace EngAce.Api.Controllers
 
             try
             {
-                var result = await SearchScope.Search(_accessKey, useEnglishToExplain, request.Keyword.Trim(), request.Context.Trim());
+                var result = await SearchScope.Search(_accessKey, useEnglishToExplain, keyword.Trim(), context.Trim());
                 _cache.Set(cacheKey, result, TimeSpan.FromMinutes(15));
                 return Ok(result);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Cannot find the explanation");
+                _logger.LogError(ex, "Không tìm được lời giải thích");
                 return StatusCode(400, ex.Message);
             }
         }

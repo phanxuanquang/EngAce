@@ -26,10 +26,10 @@ namespace EngAce.Api.Controllers
         /// <returns></returns>
         /// <remarks>
         /// Generate the comment and the improvement for the essay, including the fields: 
-        /// - GeneralCommentForTheContent: The overall comment for the whole essay
-        /// - ContentWithHighlightedIssues: The original essay with highlighted issues (using markdown format)
-        /// - HighlightIssues: The array of highlighted issues in the original essay
-        /// - ImprovedContent: The essay after the improvement of the AI
+        /// 1. GeneralCommentForTheContent: The overall comment for the whole essay
+        /// 2. ContentWithHighlightedIssues: The original essay with highlighted issues (using markdown format)
+        /// 3. HighlightIssues: The array of highlighted issues in the original essay
+        /// 4. ImprovedContent: The essay after the improvement of the AI
         /// </remarks>
         [HttpGet("Generate")]
         public async Task<ActionResult<string>> Generate(string content, EnglishLevel englishLevel = EnglishLevel.Intermediate)
@@ -46,7 +46,7 @@ namespace EngAce.Api.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Cannot find the explanation");
+                _logger.LogError(ex, "Không thể phân tích");
                 return StatusCode(400, ex.Message);
             }
         }

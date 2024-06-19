@@ -1,4 +1,4 @@
-using EngAce.Api.DTO;
+﻿using EngAce.Api.DTO;
 using Entities;
 using Entities.Enums;
 using Functions;
@@ -47,17 +47,17 @@ namespace EngAce.Api.Controllers
 
             if (string.IsNullOrWhiteSpace(request.Topic))
             {
-                return BadRequest("The topic must not be empty");
+                return BadRequest("Tên chủ đề không được rỗng");
             }
 
             if (totalQuestions < 1 || totalQuestions > 30)
             {
-                return BadRequest("The total questions must be between 1 and 30");
+                return BadRequest("Số lượng câu hỏi không được lớn hơn 30");
             }
 
             if (request.QuizzTypes == null || request.QuizzTypes.Count == 0 || request.QuizzTypes.Count > 7)
             {
-                return BadRequest("Invalid Quizz Types");
+                return BadRequest("Loại câu hỏi không hợp lệ");
             }
 
             var cacheKey = $"GenerateQuizzes-{request.Topic.ToLower().Trim()}-{string.Join(string.Empty, request.QuizzTypes)}-{englishLevel}-{totalQuestions}";
@@ -75,7 +75,7 @@ namespace EngAce.Api.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Cannot generate quizzes");
+                _logger.LogError(ex, "Không thể tạo câu hỏi");
                 return StatusCode(500, ex.Message);
             }
         }
@@ -115,7 +115,7 @@ namespace EngAce.Api.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Cannot suggest topics");
+                _logger.LogError(ex, "Không thể đề xuất chủ đề");
                 return StatusCode(500, ex.Message);
             }
         }
