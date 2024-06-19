@@ -18,7 +18,7 @@ namespace EngAce.Api.Controllers
             _accessKey = HttpContextHelper.GetAccessKey();
         }
 
-        [HttpGet("Healthcheck")]
+        [HttpGet]
         public async Task<ActionResult<string>> Healthcheck()
         {
             if (string.IsNullOrEmpty(_accessKey))
