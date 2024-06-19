@@ -1,37 +1,10 @@
 ﻿using Helper;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
-using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-})
-.AddCookie()
-.AddGoogle(options =>
-{
-    options.ClientId = Environment.GetEnvironmentVariable("ClientId");
-    options.ClientSecret = Environment.GetEnvironmentVariable("ClientSecret");
-    options.Scope.Add("https://www.googleapis.com/auth/cloud-platform");
-    options.Scope.Add("https://www.googleapis.com/auth/generative-language.retriever");
-    options.SaveTokens = true;
-    options.Events = new OAuthEvents
-    {
-        OnCreatingTicket = context =>
-        {
-            context.Identity.AddClaim(new Claim("access_token", context.AccessToken));
-            return Task.CompletedTask;
-        }
-    };
-});
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -40,12 +13,6 @@ builder.Services.AddControllers()
     });
 
 builder.Services.AddDistributedMemoryCache();
-builder.Services.AddSession(options =>
-{
-    options.IdleTimeout = TimeSpan.FromHours(3);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
-});
 
 builder.Services.AddHttpContextAccessor();
 HttpContextHelper.Configure(builder.Services.BuildServiceProvider().GetRequiredService<IHttpContextAccessor>());

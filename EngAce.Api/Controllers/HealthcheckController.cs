@@ -1,7 +1,5 @@
-﻿using Entities.Enums;
-using Functions;
+﻿using Functions;
 using Helper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 

@@ -1,5 +1,4 @@
-﻿using Entities;
-using Functions;
+﻿using Functions;
 using Helper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
