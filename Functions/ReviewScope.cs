@@ -8,6 +8,35 @@ namespace Functions
 {
     public static class ReviewScope
     {
+        public static async Task<string> GenerateReviewAsHtml(string apiKey, EnglishLevel level, string content)
+        {
+            string? result = null;
+            var promptBuilder = new StringBuilder();
+            var userLevel = GeneralHelper.GetEnumDescription(level);
+
+            promptBuilder.Append("Bạn là một giáo viên tiếng Anh với hơn 20 năm kinh nghiệm giảng dạy, đồng thời đang làm việc tại một trung tâm dạy IELTS lớn. ");
+            promptBuilder.Append($"Tôi là một người đang học tiếng Anh, trình độ hiện tại của tôi là {userLevel}. ");
+            promptBuilder.Append("Tôi đang luyện tập kỹ năng writting và cần bạn góp ý để bài viết của tôi tốt hơn.");
+            promptBuilder.Append("Mục tiêu của tôi là có thể viết những bài viết tiếng Anh thật hay và dễ hiểu cho mọi người đọc.");
+            promptBuilder.AppendLine("Bạn hãy đọc bài viết của tôi rồi sau đó cho nhận xét và góp ý. ");
+            promptBuilder.AppendLine("BNhận xét của bạn phải phù hợp với trình độ hiện tại của tôi, đồng thời phải thật dễ hiểu và thân thiện. ");
+            promptBuilder.Append("Ngoài ra, tôi cũng cần bạn chỉ ra những lỗi sai hoặc những chỗ chưa tốt trong bài viết rồi đưa ra những cải thiện hợp lý, và bài viết sau khi được improve không được phép dài quá 1.5 lần độ dài bài viết ban đầu.");
+            promptBuilder.AppendLine("Nội dung giải thích của bạn phải thật chi tiết, chỉ ra được những điểm chưa tốt để cải thiện, đồng thời phải được trình bày rõ ràng và chuyên nghiệp. Ở phần kết luận, bạn cần tổng kết được những điểm tốt và những điểm cần cải thiện, cho tôi một số góp ý phù hợp với nội dung bài viết và trình độ của tôi.");
+            promptBuilder.AppendLine("Bài viết của tôi là: ");
+            promptBuilder.AppendLine($"{content}");
+
+            try
+            {
+                result = await Gemini.Generator.Generate(apiKey, promptBuilder.ToString(), false, 60, GenerativeModel.Gemini_15_Pro);
+
+                return GeneralHelper.AsHtml(result);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Cannot find the explanation. {ex.Message}\n{result}");
+            }
+        }
+
         public static async Task<Comment> GenerateReview(string apiKey, EnglishLevel level, string content)
         {
             string? result = null;

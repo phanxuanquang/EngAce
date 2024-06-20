@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Markdig;
+using System.ComponentModel;
 using System.Reflection;
 
 namespace Helper
@@ -19,6 +20,7 @@ namespace Helper
                 return value.ToString();
             }
         }
+
         public static int CountWords(string s)
         {
             if (string.IsNullOrWhiteSpace(s))
@@ -31,6 +33,12 @@ namespace Helper
             string[] words = s.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
 
             return words.Length;
+        }
+
+        public static string AsHtml(string markdown)
+        {
+            var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
+            return Markdown.ToHtml(markdown, pipeline);
         }
     }
 }
