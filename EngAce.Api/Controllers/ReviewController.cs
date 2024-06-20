@@ -21,13 +21,18 @@ namespace EngAce.Api.Controllers
         }
 
         /// <summary>
-        /// Generate the comment and the improvement for the essay
+        /// Generate the review and the improvement for the essay
         /// </summary>
         /// <param name="content">The content that need the improvement</param>
-        /// <param name="englishLevel">The English proficiency level of the user</param>
+        /// <param name="englishLevel">
+        /// The English proficiency levels of the user:
+        /// 1. Beginner
+        /// 2. Intermediate
+        /// 3. Advanced
+        /// </param>
         /// <returns></returns>
         /// <remarks>
-        /// Generate the comment and the improvement for the essay, including the fields: 
+        /// Generate the review and the improvement for the essay, including the fields: 
         /// 1. GeneralCommentForTheContent: The overall comment for the whole essay
         /// 2. ContentWithHighlightedIssues: The original essay with highlighted issues (using markdown format)
         /// 3. ImprovedContent: The essay after the improvement of the AI
@@ -53,17 +58,24 @@ namespace EngAce.Api.Controllers
         }
 
         /// <summary>
-        /// Generate the comment and the improvement for the essay
+        /// Generate the review and the improvement for the essay
         /// </summary>
         /// <param name="content">The content that need the improvement</param>
-        /// <param name="englishLevel">The English proficiency level of the user</param>
-        /// <returns></returns>
+        /// <param name="englishLevel">
+        /// The English proficiency levels of the user:
+        /// 1. Beginner
+        /// 2. Intermediate
+        /// 3. Advanced
+        /// </param>
         /// <remarks>
-        /// Generate the comment and the improvement for the essay, including the fields: 
+        /// Generate the review and the improvement for the essay, including the fields: 
         /// 1. GeneralCommentForTheContent: The overall comment for the whole essay
         /// 2. ContentWithHighlightedIssues: The original essay with highlighted issues (using markdown format)
         /// 3. ImprovedContent: The essay after the improvement of the AI
         /// </remarks>
+        /// <response code="200">The review as a .HTML file</response>
+        /// <response code="400">If the request is null or an error occurs during quiz generation</response>
+        /// <response code="401">Missing Gemini API Key</response>
         [HttpGet("GenerateAsHtml")]
         public async Task<ActionResult> GenerateAsHtml(string content, EnglishLevel englishLevel = EnglishLevel.Intermediate)
         {

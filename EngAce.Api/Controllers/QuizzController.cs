@@ -26,7 +26,11 @@ namespace EngAce.Api.Controllers
 
         /// <summary>
         /// </summary>
-        /// <param name="request">The parameters used for quiz generation</param>
+        /// <param name="request">
+        /// The parameters used for quizz generation:
+        /// - Topic: The name of topic
+        /// - QuizzTypes: The indexes array of quizz types (further detail can be found in the "api/Quizz/GetQuizzTypes" API)
+        /// </param>
         /// <param name="englishLevel">
         /// The English proficiency levels of the user:
         /// 1. Beginner
@@ -83,7 +87,11 @@ namespace EngAce.Api.Controllers
 
         /// <summary>
         /// </summary>
-        /// <param name="request">The parameters used for quiz generation</param>
+        /// <param name="request">
+        /// The parameters used for quizz generation:
+        /// - Topic: The name of topic
+        /// - QuizzTypes: The indexes array of quizz types (further detail can be found in the "api/Quizz/GetQuizzTypes" API)
+        /// </param>
         /// <param name="englishLevel">
         /// The English proficiency levels of the user:
         /// 1. Beginner
@@ -140,6 +148,12 @@ namespace EngAce.Api.Controllers
         /// <summary>
         /// Suggest topics to choose
         /// </summary>
+        /// <param name="englishLevel">
+        /// The English proficiency levels of the user:
+        /// 1. Beginner
+        /// 2. Intermediate
+        /// 3. Advanced
+        /// </param>
         /// <returns>10 suggested topics</returns>
         /// <response code="201">The list of 10 suggested topics</response>
         /// <response code="500">Internal Server Error</response>
