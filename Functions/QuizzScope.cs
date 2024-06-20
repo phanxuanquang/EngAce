@@ -77,7 +77,7 @@ namespace Functions
             promptBuilder.AppendLine($"Bạn là một giáo viên dạy tiếng Anh với hơn 20 năm kinh nghiệm và bạn đang giảng dạy tại Việt Nam. Tôi là một người đang học tiếng Anh, trình độ hiện tại của tôi là {userLevel}. ");
             promptBuilder.Append($"Bây giờ, tôi cần một bộ câu hỏi trắc nghiệm tiếng Anh bao gồm {questionsCount} câu hỏi liên quan đến chủ đề '{topic}' để luyện tập. ");
             promptBuilder.AppendLine($"Bộ câu hỏi trắc nghiệm mà bạn cung cấp phải có đầy đủ các dạng câu hỏi bao gồm: {types}. ");
-            promptBuilder.Append("Nội dung câu hỏi phải thật thú vị để kích thích và tạo cảm hứng cho người học. Mỗi câu hỏi trong bộ đề trắc nghiệm chỉ được phép có 4 lựa chọn. ");
+            promptBuilder.Append("Nội dung câu hỏi phải thật thú vị để kích thích và tạo cảm hứng cho người học. Mỗi câu hỏi trong bộ đề trắc nghiệm chỉ được phép có 4 lựa chọn, và độ khó phải tăng dần qua từng câu hỏi. ");
             promptBuilder.Append("Bộ câu hỏi trắc nghiệm của bạn phải được trình bày thật rõ ràng và chỉn chu. Ngoài ra, bạn cũng phải thêm đáp án cho từng câu hỏi kèm lời giải thích bằng tiếng Việt ở cuối trang.");
 
             try
