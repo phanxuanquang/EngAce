@@ -5,7 +5,6 @@ using Functions;
 using Helper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
-using System.Text;
 
 namespace EngAce.Api.Controllers
 {
@@ -86,66 +85,6 @@ namespace EngAce.Api.Controllers
         }
 
         /// <summary>
-        /// </summary>
-        /// <param name="request">
-        /// The parameters used for quizz generation:
-        /// - Topic: The name of topic
-        /// - QuizzTypes: The indexes array of quizz types (further detail can be found in the "api/Quizz/GetQuizzTypes" API)
-        /// </param>
-        /// <param name="englishLevel">
-        /// The English proficiency levels of the user:
-        /// 1. Beginner
-        /// 2. Intermediate
-        /// 3. Advanced
-        /// </param>
-        /// <param name="totalQuestions">The total questions to generate (maximum value is 30)</param>
-        /// <returns>The list of generated quizzes</returns>
-        /// <response code="201">The list of generated quizzes</response>
-        /// <response code="400">If the request is null or an error occurs during quiz generation</response>
-        /// <response code="401">Missing Gemini API Key</response>
-        [HttpPost("GenerateAsHtml")]
-        public async Task<ActionResult> GenerateAsHtml([FromBody] GenerateQuizzes request, EnglishLevel englishLevel = EnglishLevel.Intermediate, short totalQuestions = 10)
-        {
-            if (string.IsNullOrEmpty(_accessKey))
-            {
-                return Unauthorized("Missing Gemini API Key or Access Token");
-            }
-
-            if (string.IsNullOrWhiteSpace(request.Topic))
-            {
-                return BadRequest("Tên chủ đề không được rỗng");
-            }
-
-            if (totalQuestions < 1 || totalQuestions > 30)
-            {
-                return BadRequest("Số lượng câu hỏi không được lớn hơn 30");
-            }
-
-            if (request.QuizzTypes == null || request.QuizzTypes.Count == 0 || request.QuizzTypes.Count > 7)
-            {
-                return BadRequest("Loại câu hỏi không hợp lệ");
-            }
-
-            try
-            {
-                var quizzes = await QuizzScope.GenerateQuizesAsHtml(_accessKey, request.Topic, request.QuizzTypes, englishLevel, totalQuestions);
-
-                var byteArray = Encoding.UTF8.GetBytes(quizzes);
-                var stream = new MemoryStream(byteArray);
-
-                return new FileStreamResult(stream, "text/html")
-                {
-                    FileDownloadName = $"Quizzes about '{request.Topic}'.html"
-                };
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Không thể tạo câu hỏi");
-                return StatusCode(500, ex.Message);
-            }
-        }
-
-        /// <summary>
         /// Suggest topics to choose
         /// </summary>
         /// <param name="englishLevel">
@@ -157,8 +96,8 @@ namespace EngAce.Api.Controllers
         /// <returns>10 suggested topics</returns>
         /// <response code="201">The list of 10 suggested topics</response>
         /// <response code="500">Internal Server Error</response>
-        [HttpGet("SuggestTopics")]
-        public async Task<ActionResult<List<string>>> SuggestTopics(EnglishLevel englishLevel = EnglishLevel.Intermediate)
+        [HttpGet("Suggest3Topics")]
+        public async Task<ActionResult<List<string>>> Suggest3Topics(EnglishLevel englishLevel = EnglishLevel.Intermediate)
         {
             if (string.IsNullOrEmpty(_accessKey))
             {
