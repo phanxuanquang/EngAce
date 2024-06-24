@@ -24,5 +24,8 @@ namespace Entities.Enums
 
         [Description("Câu hỏi về ngữ pháp (Grammar Question)")]
         Grammar = 7,
+
+        [Description("Câu hỏi về phát âm (Pronunciation Question)")]
+        Pronunciation = 8,
     }
 }
