@@ -7,7 +7,7 @@
             var prompt = "Say 'Hello World' to me.";
             try
             {
-                return await Gemini.Generator.Generate(apiKey, prompt, false);
+                return await Gemini.Generator.Generate(apiKey, prompt, false, 10);
             }
             catch (Exception ex)
             {
