@@ -23,7 +23,7 @@ namespace EngAce.Api.Controllers
         {
             if (string.IsNullOrEmpty(_accessKey))
             {
-                return Unauthorized("Missing Gemini API Key or Access Token");
+                return Unauthorized("Incorrect Access Key");
             }
 
             try
