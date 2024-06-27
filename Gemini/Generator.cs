@@ -11,12 +11,10 @@ namespace Gemini
     public static class Generator
     {
         private static readonly HttpClient Client = new HttpClient();
-        private static string ApiKey = Environment.GetEnvironmentVariable("GEMINI_API_KEY");
 
         public static async Task<string> Generate(string apiKey, string query, bool useJson = true, double creativeLevel = 50, GenerativeModel model = GenerativeModel.Gemini_15_Flash)
         {
             Response? responseDTO = null;
-            var modelName = GeneralHelper.GetEnumDescription(model);
             var endpoint = GetUriWithHeadersIfAny(apiKey, model);
 
             var requestData = new
