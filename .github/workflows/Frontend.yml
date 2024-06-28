@@ -29,7 +29,7 @@ jobs:
       - name: Build
         run: |
           echo "Building the project..."
-          npm run build
+          npm run build --if present
         working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
       
       - name: Deploy
