@@ -1,10 +1,9 @@
-﻿using Entities;
-using Entities.Enums;
+﻿using Entities.Enums;
+using Gemini.DTO;
 using Helper;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Text;
-using static Gemini.DTO.ResponseForOneShot;
 
 namespace Gemini
 {
@@ -14,7 +13,7 @@ namespace Gemini
 
         public static async Task<string> Generate(string apiKey, string query, bool useJson = true, double creativeLevel = 50, GenerativeModel model = GenerativeModel.Gemini_15_Flash)
         {
-            Response? responseDTO = null;
+            ResponseForOneShot.Response? responseDTO = null;
             var endpoint = GetUriWithHeadersIfAny(apiKey, model);
 
             var requestData = new
@@ -56,7 +55,7 @@ namespace Gemini
                 response.EnsureSuccessStatusCode();
 
                 var responseData = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                responseDTO = JsonConvert.DeserializeObject<Response>(responseData);
+                responseDTO = JsonConvert.DeserializeObject<ResponseForOneShot.Response>(responseData);
 
                 return responseDTO.Candidates[0].Content.Parts[0].Text;
             }
@@ -66,31 +65,19 @@ namespace Gemini
             }
         }
 
-        public static async Task<string> Generate(string apiKey, Chat chat)
+        public static async Task<string> Generate(string apiKey, ChatRequest.Request requestData)
         {
             var model = GenerativeModel.Gemini_15_Flash;
-
-            var modelName = GeneralHelper.GetEnumDescription(model);
             var endpoint = GetUriWithHeadersIfAny(apiKey, model);
 
-            var requestData = string.Empty; // TBD
+            var content = new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8, "application/json");
+            var response = await Client.PostAsync(endpoint, content);
+            response.EnsureSuccessStatusCode();
 
-            try
-            {
-                var content = new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8, "application/json");
-                var response = await Client.PostAsync(endpoint, content).ConfigureAwait(false);
-                response.EnsureSuccessStatusCode();
+            var responseData = await response.Content.ReadAsStringAsync();
+            var dto = JsonConvert.DeserializeObject<ResponseForConversation.Response>(responseData);
 
-                var responseData = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                var dto = JsonConvert.DeserializeObject<Response>(responseData);
-
-                return dto.Candidates[0].Content.Parts[0].Text;
-            }
-            catch (Exception ex)
-            {
-                Terminal.Println(ex.Message, ConsoleColor.Red);
-                return $"Cannot generate content. {ex.Message}";
-            }
+            return dto.Candidates[0].Content.Parts[0].Text;
         }
 
         private static string GetUriWithHeadersIfAny(string accessKey, GenerativeModel model)

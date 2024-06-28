@@ -1,6 +1,7 @@
 ﻿using Entities;
 using Gemini;
 using System.Text;
+using static Gemini.DTO.ChatRequest;
 
 namespace Functions
 {
@@ -13,7 +14,35 @@ namespace Functions
                 chat.ChatHistory.AddRange(InitPrompts());
             }
 
-            return await Generator.Generate(apiKey, chat);
+            var request = new Request
+            {
+                Contents = chat.ChatHistory.Select(message => new Content
+                {
+                    Role = message.FromUser ? "user" : "model",
+                    Parts = new List<Part>
+                    {
+                        new Part
+                        {
+                            Text = message.Message,
+                        }
+                    }
+                })
+                .ToList()
+            };
+
+            request.Contents.Add(new Content
+            {
+                Role = "user",
+                Parts = new List<Part>
+                {
+                    new Part
+                    {
+                        Text = chat.Question
+                    }
+                }
+            });
+
+            return await Generator.Generate(apiKey, request);
         }
 
         private static List<Chat.History> InitPrompts()
