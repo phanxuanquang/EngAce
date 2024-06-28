@@ -19,13 +19,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-     
-      - name: Cache
-        uses: actions/cache@v4.0.2
-        with:
-          path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles(env.AZURE_WEBAPP_PACKAGE_PATH + '/package-lock.json') }}
-          restore-keys: ${{ runner.os }}-node-
   
       - name: Install Packages
         run: |
