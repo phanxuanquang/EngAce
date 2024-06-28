@@ -1,4 +1,4 @@
-name: Frontend
+name: Frontend 
 
 on: [push]
 
@@ -15,10 +15,13 @@ jobs:
       - name: Checkout Main Branch
         uses: actions/checkout@v4
 
-      - name: Setup Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v4
+      - name: Cache npm dependencies
+        uses: actions/cache@v3
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
       - name: Cache Node.js modules
         uses: actions/cache@v4
@@ -27,22 +30,27 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles(env.AZURE_WEBAPP_PACKAGE_PATH + '/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
-
+      
+      - name: Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      
       - name: Install Packages
         run: |
           echo "Installing npm dependencies..."
           npm ci
         working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-
+      
       - name: Build
         run: |
           echo "Building the project..."
-          npm run build
+          npm run build 
         working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-
+      
       - name: Deploy
-        uses: azure/webapps-deploy@v4
+        uses: azure/webapps-deploy@v3
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_CREDENTIALS }}
-          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/build
+          package:  ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/build
