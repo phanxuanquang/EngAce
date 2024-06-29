@@ -37,21 +37,21 @@ namespace EngAce.Api.Controllers
                 return Unauthorized("Incorrect Access Key");
             }
 
-            if (string.IsNullOrWhiteSpace(keyword))
+            if (string.IsNullOrEmpty(keyword))
             {
                 return BadRequest("Không được để trống từ khóa");
             }
-            if (!string.IsNullOrWhiteSpace(context) && GeneralHelper.CountWords(context) > 100)
+            if (!string.IsNullOrEmpty(context) && GeneralHelper.CountWords(context) > 100)
             {
                 return BadRequest("Ngữ cảnh chỉ chứa tối đa 100 từ");
             }
 
-            if (!string.IsNullOrWhiteSpace(context) && !context.ToLower().Trim().Contains(keyword.ToLower().Trim()))
+            if (!string.IsNullOrEmpty(context) && !context.ToLower().Trim().Contains(keyword.ToLower().Trim()))
             {
                 return BadRequest("Ngữ cảnh phải chứa từ khóa cần tra cứu");
             }
 
-            if (!string.IsNullOrWhiteSpace(context) && context.Trim() != new string(context.Trim().Normalize(NormalizationForm.FormD)
+            if (!string.IsNullOrEmpty(context) && context.Trim() != new string(context.Trim().Normalize(NormalizationForm.FormD)
                     .Where(c => CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)
                     .ToArray())
                     .Normalize(NormalizationForm.FormC))
