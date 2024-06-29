@@ -25,7 +25,15 @@ namespace EngAce.Api.Controllers
                 return BadRequest("The question must not be empty");
             }
 
-            return Ok(ChatbotScope.GenerateAnswer(_accessKey, request));
+            try
+            {
+                var result = await ChatScope.GenerateAnswer(_accessKey, request);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
     }
 }

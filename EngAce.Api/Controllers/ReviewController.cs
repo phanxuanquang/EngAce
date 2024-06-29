@@ -15,7 +15,6 @@ namespace EngAce.Api.Controllers
 
         public ReviewController(ILogger<DictionaryController> logger)
         {
-            _logger = logger;
             _accessKey = HttpContextHelper.GetAccessKey();
         }
 
@@ -51,8 +50,7 @@ namespace EngAce.Api.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Không thể phân tích");
-                return StatusCode(400, ex.Message);
+                return BadRequest(ex);
             }
         }
     }

@@ -5,7 +5,7 @@ using static Gemini.DTO.ChatRequest;
 
 namespace Events
 {
-    public static class ChatbotScope
+    public static class ChatScope
     {
         public static async Task<string> GenerateAnswer(string apiKey, Chat chat)
         {

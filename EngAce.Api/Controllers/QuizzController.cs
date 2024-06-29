@@ -38,9 +38,6 @@ namespace EngAce.Api.Controllers
         /// </param>
         /// <param name="totalQuestions">The total questions to generate (maximum value is 30)</param>
         /// <returns>The list of generated quizzes</returns>
-        /// <response code="201">The list of generated quizzes</response>
-        /// <response code="400">If the request is null or an error occurs during quiz generation</response>
-        /// <response code="401">Missing Gemini API Key</response>
         [HttpPost("Generate")]
         public async Task<ActionResult<List<Quizz>>> Generate([FromBody] GenerateQuizzes request, EnglishLevel englishLevel = EnglishLevel.Intermediate, short totalQuestions = 10)
         {
@@ -93,9 +90,7 @@ namespace EngAce.Api.Controllers
         /// 2. Intermediate
         /// 3. Advanced
         /// </param>
-        /// <returns>10 suggested topics</returns>
-        /// <response code="201">The list of 10 suggested topics</response>
-        /// <response code="500">Internal Server Error</response>
+        /// <returns>3 suggested topics</returns>
         [HttpGet("Suggest3Topics")]
         public async Task<ActionResult<List<string>>> Suggest3Topics(EnglishLevel englishLevel = EnglishLevel.Intermediate)
         {
@@ -104,28 +99,25 @@ namespace EngAce.Api.Controllers
                 return Unauthorized("Incorrect Access Key");
             }
 
+            const int totalTopics = 3;
             var cacheKey = $"SuggestTopics-{englishLevel}";
-            var random = new Random();
-            var totalTopics = random.Next(3, 6);
 
             if (_cache.TryGetValue(cacheKey, out List<string> cachedTopics))
             {
-                return Ok(cachedTopics.OrderBy(topic => random.Next()).Take(totalTopics).ToList());
+                return Ok(cachedTopics.OrderBy(x => Guid.NewGuid()).Take(totalTopics).ToList());
             }
 
             try
             {
                 var topics = await QuizzScope.SuggestTopcis(_accessKey, englishLevel);
 
-                var selectedTopics = topics.OrderBy(topic => random.Next()).Take(totalTopics).ToList();
+                var selectedTopics = topics.OrderBy(x => Guid.NewGuid()).Take(totalTopics).ToList();
                 _cache.Set(cacheKey, topics, TimeSpan.FromDays(7));
 
-                Terminal.Println(string.Join("\n", selectedTopics));
                 return Created("Success", selectedTopics);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Không thể đề xuất chủ đề");
                 return StatusCode(500, ex.Message);
             }
         }
@@ -134,8 +126,6 @@ namespace EngAce.Api.Controllers
         /// Get the levels of English proficiency
         /// </summary>
         /// <returns>The list of English proficiency levels</returns>
-        /// <response code="200">The English proficiency levels.</response>
-        /// <response code="500">Internal Server Error.</response>
         [HttpGet("GetEnglishLevels")]
         public ActionResult<Dictionary<int, string>> GetEnglishLevels()
         {
@@ -165,8 +155,6 @@ namespace EngAce.Api.Controllers
         /// Get the types of quizz
         /// </summary>
         /// <returns>The quiz types with their descriptions.</returns>
-        /// <response code="200">The quiz types</response>
-        /// <response code="500">Internal Server Error</response>
         [HttpGet("GetQuizzTypes")]
         public ActionResult<Dictionary<int, string>> GetQuizzTypes()
         {
