@@ -39,7 +39,7 @@ namespace EngAce.Api.Controllers
         /// <param name="totalQuestions">The total questions to generate (maximum value is 30)</param>
         /// <returns>The list of generated quizzes</returns>
         [HttpPost("Generate")]
-        public async Task<ActionResult<List<Quizz>>> Generate([FromBody] GenerateQuizzes request, EnglishLevel englishLevel = EnglishLevel.Intermediate, short totalQuestions = 10)
+        public async Task<ActionResult<List<Quizz>>> Generate([FromBody] GenerateQuizzes request, EnglishLevel englishLevel = EnglishLevel.Intermediate, short? totalQuestions = 10)
         {
             if (string.IsNullOrEmpty(_accessKey))
             {
