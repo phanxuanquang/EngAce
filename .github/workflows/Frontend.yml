@@ -19,19 +19,23 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-  
-      - name: Install Packages
-        run: |
-          echo "Installing npm dependencies..."
-          npm ci
-        working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
       
-      - name: Build
+      - name: Cache Node.js modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ env.NODE_VERSION }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ env.NODE_VERSION }}-
+            ${{ runner.os }}-node-
+      
+      - name: Install and Build
         run: |
-          echo "Building the project..."
+          echo "Installing npm dependencies and building the project..."
+          npm ci
           npm run build 
         working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-      
+
       - name: Deploy
         uses: azure/webapps-deploy@v3
         with:
