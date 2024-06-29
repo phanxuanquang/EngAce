@@ -76,8 +76,7 @@ namespace EngAce.Api.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Không thể tạo câu hỏi");
-                return StatusCode(500, ex.Message);
+                return BadRequest(ex);
             }
         }
 

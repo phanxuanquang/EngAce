@@ -81,8 +81,7 @@ namespace EngAce.Api.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Không tìm được lời giải thích");
-                return StatusCode(400, ex.Message);
+                return BadRequest(ex);
             }
         }
     }
