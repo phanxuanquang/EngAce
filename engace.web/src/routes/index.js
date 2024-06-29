@@ -5,6 +5,7 @@ import Level from "../pages/Level";
 import Test from "../pages/Test";
 import MainLayout from "../layout/MainLayout";
 import { checkAuthLoader, checkEnglishLevelLoader } from "../utils/auth";
+import Dictionary from "../pages/Dictionary";
 
 export const router = createBrowserRouter([
   {
@@ -15,7 +16,7 @@ export const router = createBrowserRouter([
       {
         path: "/dictionary",
         element: <MainLayout />,
-        children: [{ index: true, element: <Test /> }],
+        children: [{ index: true, element: <Dictionary /> }],
       },
       {
         path: "/test",

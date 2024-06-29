@@ -116,14 +116,16 @@ export default function Level() {
                 />
               </FormControl>
             )}
+
             <FormControl sx={{ m: 1, minWidth: 120, width: "100%" }}>
               <Typography variant="body1">
                 Trình độ tiếng Anh của bạn là:
               </Typography>
               <Select
+                labelId="gender-label"
+                id="gender"
                 value={level}
                 onChange={handleChange}
-                inputProps={{ "aria-label": "Without label" }}
                 sx={{
                   bgcolor: "#fafafa",
                 }}

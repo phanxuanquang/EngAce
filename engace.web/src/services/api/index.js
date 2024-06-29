@@ -23,4 +23,14 @@ export const AppService = {
   getEnglishLevel: () => {
     return baseRequest.get(UrlApi.URL_GET_ENGLISH_LEVEL);
   },
+
+  getDictionarySearch: (keyword, context, useEnglishToExplain) => {
+    return baseRequest.get(
+      `${UrlApi.URL_GET_DICTIONARY_SEARCH}?keyword=${encodeURIComponent(
+        keyword
+      )}&context=${encodeURIComponent(
+        context ?? ""
+      )}&useEnglishToExplain=${encodeURIComponent(useEnglishToExplain)}`
+    );
+  },
 };

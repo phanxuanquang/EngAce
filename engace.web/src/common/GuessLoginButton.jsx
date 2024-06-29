@@ -1,4 +1,12 @@
-import { Box, Button, Modal, TextField, Typography, Link } from "@mui/material";
+import {
+  Box,
+  Button,
+  Modal,
+  TextField,
+  Typography,
+  Link,
+  InputLabel,
+} from "@mui/material";
 import { useState } from "react";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SendIcon from "@mui/icons-material/Send";
@@ -67,19 +75,36 @@ export default function GuessLoginButton() {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Nhập GeminiAPI Key
-          </Typography>
-          <Link href="https://aistudio.google.com/app/apikey" target="_blank">
-            Lấy Key
-          </Link>
-          <TextField
-            id="outlined-basic"
-            variant="outlined"
-            sx={{ marginTop: 2, marginBottom: 2, width: "100%" }}
-            onChange={(e) => setKeyValue(e.target.value)}
-            value={keyValue}
-          />
+          <InputLabel htmlFor="outlined-basic">
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              Nhập GeminiAPI Key
+            </Typography>
+          </InputLabel>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              marginBottom: 2,
+              marginTop: 2,
+              gap: 1,
+            }}
+          >
+            <TextField
+              id="outlined-basic"
+              variant="outlined"
+              sx={{ flexGrow: 1 }}
+              onChange={(e) => setKeyValue(e.target.value)}
+              value={keyValue}
+            />
+            <Button
+              component={Link}
+              href="https://aistudio.google.com/app/apikey"
+              target="_blank"
+            >
+              Lấy Key
+            </Button>
+          </Box>
           <Box
             sx={{
               display: "flex",
