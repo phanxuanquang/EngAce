@@ -30,7 +30,7 @@ namespace EngAce.Api.Controllers
         /// <param name="useEnglishToExplain">Use English/Vietnamese for the explanation</param>
         /// <returns>The explanation in markdown format</returns>
         [HttpGet("Search")]
-        public async Task<ActionResult<string>> Search(string keyword, string context, bool useEnglishToExplain = false)
+        public async Task<ActionResult<string>> Search(string keyword, string? context = null, bool useEnglishToExplain = false)
         {
             if (string.IsNullOrEmpty(_accessKey))
             {
