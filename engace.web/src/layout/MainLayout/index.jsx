@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import ResponsiveAppBar from "./Appbar";
 import Sidebar from "./Drawer";
-//
+import { Container } from "@mui/material";
 
 const APP_BAR_MOBILE = 56;
 const APP_BAR_DESKTOP = 68;
@@ -29,10 +29,6 @@ const MainStyle = styled("div")(({ theme }) => ({
   },
 }));
 
-const FullHeightDiv = styled("div")({
-  height: "100%", // Set the height to 100%
-});
-
 export default function DashboardLayout() {
   const [open, setOpen] = useState(false);
 
@@ -41,9 +37,9 @@ export default function DashboardLayout() {
       <ResponsiveAppBar onOpenSidebar={() => setOpen(true)} />
       <Sidebar isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} />
       <MainStyle>
-        <FullHeightDiv>
+        <Container fixed sx={{ height: "100%", bgcolor: "#fbfbfb" }}>
           <Outlet />
-        </FullHeightDiv>
+        </Container>
       </MainStyle>
     </RootStyle>
   );
