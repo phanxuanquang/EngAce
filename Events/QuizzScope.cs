@@ -4,7 +4,7 @@ using Helper;
 using Newtonsoft.Json;
 using System.Text;
 
-namespace Functions
+namespace Events
 {
     public static class QuizzScope
     {

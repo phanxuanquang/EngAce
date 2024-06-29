@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Functions
+namespace Events
 {
     public static class SearchScope
     {

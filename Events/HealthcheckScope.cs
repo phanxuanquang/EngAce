@@ -1,4 +1,4 @@
-﻿namespace Functions
+﻿namespace Events
 {
     public static class HealthcheckScope
     {

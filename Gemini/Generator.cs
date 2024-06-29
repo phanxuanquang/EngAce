@@ -48,27 +48,19 @@ namespace Gemini
                 }
             };
 
-            try
-            {
-                var content = new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8, "application/json");
-                var response = await Client.PostAsync(endpoint, content).ConfigureAwait(false);
-                response.EnsureSuccessStatusCode();
+            var content = new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8, "application/json");
+            var response = await Client.PostAsync(endpoint, content).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
 
-                var responseData = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                responseDTO = JsonConvert.DeserializeObject<ResponseForOneShot.Response>(responseData);
+            var responseData = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            responseDTO = JsonConvert.DeserializeObject<ResponseForOneShot.Response>(responseData);
 
-                return responseDTO.Candidates[0].Content.Parts[0].Text;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Cannot generate content. {ex.Message}\n{JsonConvert.SerializeObject(responseDTO, Formatting.Indented)}");
-            }
+            return responseDTO.Candidates[0].Content.Parts[0].Text;
         }
 
         public static async Task<string> Generate(string apiKey, ChatRequest.Request requestData)
         {
-            var model = GenerativeModel.Gemini_15_Flash;
-            var endpoint = GetUriWithHeadersIfAny(apiKey, model);
+            var endpoint = GetUriWithHeadersIfAny(apiKey, GenerativeModel.Gemini_15_Flash);
 
             var content = new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8, "application/json");
             var response = await Client.PostAsync(endpoint, content);

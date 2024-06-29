@@ -3,7 +3,7 @@ using Gemini;
 using System.Text;
 using static Gemini.DTO.ChatRequest;
 
-namespace Functions
+namespace Events
 {
     public static class ChatbotScope
     {

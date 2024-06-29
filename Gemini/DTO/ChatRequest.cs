@@ -7,22 +7,22 @@ namespace Gemini.DTO
         public class Content
         {
             [JsonProperty("role")]
-            public string Role;
+            public string Role { get; set; }
 
             [JsonProperty("parts")]
-            public List<Part> Parts;
+            public List<Part> Parts { get; set; }
         }
 
         public class Part
         {
             [JsonProperty("text")]
-            public string Text;
+            public string Text { get; set; }
         }
 
         public class Request
         {
             [JsonProperty("contents")]
-            public List<Content> Contents;
+            public List<Content> Contents { get; set; }
         }
     }
 }
