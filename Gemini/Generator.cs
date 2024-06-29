@@ -75,21 +75,18 @@ namespace Gemini
         private static string GetUriWithHeadersIfAny(string accessKey, GenerativeModel model)
         {
             var modelName = GeneralHelper.GetEnumDescription(model);
-            var uriBuilder = new UriBuilder($"https://generativelanguage.googleapis.com/v1beta/models/{modelName}:generateContent");
+            var endpoint = $"https://generativelanguage.googleapis.com/v1beta/models/{modelName}:generateContent";
 
             if (accessKey.StartsWith("AIza"))
             {
-                var query = System.Web.HttpUtility.ParseQueryString(uriBuilder.Query);
-                query["key"] = accessKey;
-                uriBuilder.Query = query.ToString();
-
-                return uriBuilder.ToString();
+                endpoint += $"?key={accessKey}";
+                return endpoint;
             }
 
             Client.DefaultRequestHeaders.Add("x-goog-user-project", "engace-426517");
             Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessKey);
 
-            return uriBuilder.ToString();
+            return endpoint;
         }
     }
 }
