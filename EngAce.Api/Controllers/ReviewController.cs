@@ -10,7 +10,6 @@ namespace EngAce.Api.Controllers
     [ApiController]
     public class ReviewController : ControllerBase
     {
-        private readonly ILogger<DictionaryController> _logger;
         private readonly string _accessKey;
 
         public ReviewController(ILogger<DictionaryController> logger)
