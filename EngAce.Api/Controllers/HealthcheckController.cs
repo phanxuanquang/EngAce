@@ -1,7 +1,6 @@
 ﻿using Events;
 using Helper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
 
 namespace EngAce.Api.Controllers
 {
@@ -10,11 +9,9 @@ namespace EngAce.Api.Controllers
     public class HealthcheckController : ControllerBase
     {
         private readonly string _accessKey;
-        private readonly IMemoryCache _cache;
 
-        public HealthcheckController(IMemoryCache cache)
+        public HealthcheckController()
         {
-            _cache = cache;
             _accessKey = HttpContextHelper.GetAccessKey();
         }
 

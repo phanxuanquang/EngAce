@@ -77,6 +77,8 @@ namespace Gemini
             var modelName = GeneralHelper.GetEnumDescription(model);
             var endpoint = $"https://generativelanguage.googleapis.com/v1beta/models/{modelName}:generateContent";
 
+            Client.DefaultRequestHeaders.Clear();
+
             if (accessKey.StartsWith("AIza"))
             {
                 endpoint += $"?key={accessKey}";
@@ -84,6 +86,7 @@ namespace Gemini
             }
 
             Client.DefaultRequestHeaders.Add("x-goog-user-project", "engace-426517");
+            Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessKey);
 
             return endpoint;
