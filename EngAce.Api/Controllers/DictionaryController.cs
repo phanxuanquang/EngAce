@@ -30,7 +30,7 @@ namespace EngAce.Api.Controllers
         /// <param name="useEnglishToExplain">Use English/Vietnamese for the explanation</param>
         /// <returns>The explanation in markdown format</returns>
         [HttpGet("Search")]
-        public async Task<ActionResult<string>> Search(string keyword, string? context, bool useEnglishToExplain = false)
+        public async Task<ActionResult<string>> Search(string keyword, string context = "", bool useEnglishToExplain = false)
         {
             if (string.IsNullOrEmpty(_accessKey))
             {
@@ -51,7 +51,7 @@ namespace EngAce.Api.Controllers
                 return BadRequest("Ngữ cảnh phải chứa từ khóa cần tra cứu");
             }
 
-            if (!string.IsNullOrEmpty(context) && context.Trim() != new string(context.Trim().Normalize(NormalizationForm.FormD)
+            if (context.Trim() != new string(context.Trim().Normalize(NormalizationForm.FormD)
                     .Where(c => CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)
                     .ToArray())
                     .Normalize(NormalizationForm.FormC))
