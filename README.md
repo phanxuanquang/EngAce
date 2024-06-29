@@ -1,6 +1,6 @@
 **© 2024 University of Information Technology / EngAce Project**
 ------------ 
-**Released date:** June 30th, 2024
+**Released date:** June 30th, 2024 
 ____________________________
 ## Our team 
 | No. | Name | Responsibilities |
