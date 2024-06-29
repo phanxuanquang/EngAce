@@ -7,6 +7,7 @@ namespace Events
         public static async Task<string> Search(string apiKey, bool useEnglish, string keyword, string context)
         {
             var promptBuilder = new StringBuilder();
+
             if (useEnglish)
             {
                 promptBuilder.Append("You are an English teacher with over 20 years of experience and also an in-depth researcher of the English language.");
@@ -28,14 +29,7 @@ namespace Events
                 promptBuilder.Append("\nCách trình bày giải thích của bạn nên giống trang web Oxford Dictionary hoặc Cambridge Dictionary, và bạn phải sử dụng tiếng Việt để giải thích vì người đọc chính là người Việt Nam.");
             }
 
-            try
-            {
-                return await Gemini.Generator.Generate(apiKey, promptBuilder.ToString(), false);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Cannot find the explanation. {ex.Message}");
-            }
+            return await Gemini.Generator.Generate(apiKey, promptBuilder.ToString(), false);
         }
     }
 }

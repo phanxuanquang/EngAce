@@ -41,7 +41,7 @@ namespace EngAce.Api.Controllers
             {
                 return BadRequest("Không được để trống từ khóa");
             }
-            if (!string.IsNullOrEmpty(context) && GeneralHelper.CountWords(context) > 100)
+            if (!string.IsNullOrEmpty(context) && GeneralHelper.GetTotalWords(context) > 100)
             {
                 return BadRequest("Ngữ cảnh chỉ chứa tối đa 100 từ");
             }

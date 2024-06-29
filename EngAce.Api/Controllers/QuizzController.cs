@@ -117,7 +117,7 @@ namespace EngAce.Api.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return BadRequest(ex);
             }
         }
 

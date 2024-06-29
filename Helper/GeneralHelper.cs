@@ -21,7 +21,7 @@ namespace Helper
             }
         }
 
-        public static int CountWords(string s)
+        public static int GetTotalWords(string s)
         {
             if (string.IsNullOrWhiteSpace(s))
             {

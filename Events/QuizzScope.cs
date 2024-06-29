@@ -29,15 +29,8 @@ namespace Events
             promptBuilder.AppendLine("    string ExplanationInVietnamese; // Lời giải thích một cách dễ hiểu, phù hợp với trình độ tiếng Anh của tôi");
             promptBuilder.AppendLine("}");
 
-            try
-            {
-                response = await Gemini.Generator.Generate(apiKey, promptBuilder.ToString(), true, 75, model);
-                return JsonConvert.DeserializeObject<List<Quizz>>(response);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Cannot generate quizz. {ex.Message}.\n{response}");
-            }
+            response = await Gemini.Generator.Generate(apiKey, promptBuilder.ToString(), true, 50, model);
+            return JsonConvert.DeserializeObject<List<Quizz>>(response);
         }
 
         public static async Task<List<string>> SuggestTopcis(string apiKey, EnglishLevel level)
@@ -50,20 +43,8 @@ namespace Events
             promptBuilder.AppendLine("Hãy đề xuất cho tôi ít nhất 100 topic ngắn bằng tiếng Anh mà bạn cảm thấy phù hợp nhất và thú vị nhất để luyện tập tiếng Anh.");
             promptBuilder.Append("Danh sách chủ đề mà bạn đề xuất phải là một mảng đối lượng JSON tương ứng với kiểu dữ liệu List<string> trong ngôn ngữ C#.");
 
-            try
-            {
-                Terminal.Println("--------------------------------------------", ConsoleColor.White);
-                Terminal.Println("Suggest Topcis:", ConsoleColor.Cyan);
-                Terminal.Println($"- English level: {level.ToString()}", ConsoleColor.DarkCyan);
-
-                var response = await Gemini.Generator.Generate(apiKey, promptBuilder.ToString(), true, 100, GenerativeModel.Gemini_15_Pro);
-                return JsonConvert.DeserializeObject<List<string>>(response);
-            }
-            catch (Exception ex)
-            {
-                Terminal.Println(ex.Message, ConsoleColor.Red);
-                throw new Exception($"Cannot generate quizz. {ex.Message}");
-            }
+            var response = await Gemini.Generator.Generate(apiKey, promptBuilder.ToString(), true, 100, GenerativeModel.Gemini_15_Pro);
+            return JsonConvert.DeserializeObject<List<string>>(response);
         }
     }
 }

@@ -18,7 +18,7 @@ namespace EngAce.Api.Controllers
         }
 
         [HttpPost("GenerateAnswer")]
-        public async Task<ActionResult<string>> GenerateAnswer([FromBody] Chat request)
+        public async Task<ActionResult<string>> GenerateAnswer([FromBody] Conversation request)
         {
             if (string.IsNullOrWhiteSpace(request.Question))
             {

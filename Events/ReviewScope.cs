@@ -30,16 +30,8 @@ namespace Events
             promptBuilder.AppendLine("Nội dung bài viết của tôi là: ");
             promptBuilder.AppendLine($"{content}");
 
-            try
-            {
-                result = await Gemini.Generator.Generate(apiKey, promptBuilder.ToString(), true, 60, GenerativeModel.Gemini_15_Pro);
-
-                return JsonConvert.DeserializeObject<Comment>(result);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Cannot find the explanation. {ex.Message}\n{result}");
-            }
+            result = await Gemini.Generator.Generate(apiKey, promptBuilder.ToString(), true, 60, GenerativeModel.Gemini_15_Pro);
+            return JsonConvert.DeserializeObject<Comment>(result);
         }
     }
 }
