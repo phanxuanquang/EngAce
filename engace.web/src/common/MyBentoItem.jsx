@@ -11,7 +11,7 @@ const Item = styled(Paper)(({ theme }) => ({
   flexDirection: "column",
   alignItems: "center",
   justifyContent: "center", 
-  margin: 2,
+  margin: 3,
 }));
 
 const IconWrapper = styled("div")({
@@ -33,20 +33,19 @@ export default function MyBentoItem({ title, route, backgroundColor, Icon }) {
   };
   return (
     <Item
-      sx={{
-        bgcolor: { backgroundColor },
-        color: "white",
-        cursor: "pointer",
-        overflow: 'hidden',
-        border: "0px",
-        transition: "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
-        "&:hover": {
-          opacity: 0.9,
-          transform: "scale(1.05)",
-          boxShadow: "0 0.2rem 1.2rem rgba(255, 255, 255, 0.5)",
-          border: "0px"
-        },
-      }}
+    sx={{
+      bgcolor: { backgroundColor },
+      color: "white",
+      cursor: "pointer",
+      overflow: 'hidden',
+      border: "0px",
+      transition: "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, background-color 0.3s ease-in-out", /* Chỉnh background-color */
+      "&:hover": {
+        transform: "scale(1.05)",
+        boxShadow: "0 0.2rem 1.2rem rgba(255, 255, 255, 0.5)",
+        backgroundColor: "rgba(0, 0, 0, 0.5)"
+      },
+    }}
       onClick={() => handleNavigation()}
       elevation={8}
     >

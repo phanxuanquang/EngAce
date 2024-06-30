@@ -137,8 +137,8 @@ export default function NavSection({ navConfig, ...other }) {
         ) : (
           <AccountCircleIcon fontSize="large" sx={{ color: "black" }}/>
         )}
-        <Typography>{name}</Typography>
-        <Typography>{getLevelDisplayValue(level)}</Typography>
+        <Typography sx={{ marginBottom: "0.2rem", marginTop: "0.2rem", fontWeight: "bold"}}>{name}</Typography>
+        <Typography sx={{ marginBottom: "0.2rem", }}>{getLevelDisplayValue(level)}</Typography>
       </Box>
       <Divider />
       <List disablePadding>
@@ -154,6 +154,7 @@ export default function NavSection({ navConfig, ...other }) {
           alignItems: "center",
           flexDirection: "column",
           gap: 1,
+          marginBottom: "1rem"
         }}
       >
         <Button

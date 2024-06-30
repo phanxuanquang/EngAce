@@ -4,7 +4,7 @@ import MenuBookIcon from "@mui/icons-material/MenuBook";
 import QuizIcon from "@mui/icons-material/Quiz";
 import DrawIcon from "@mui/icons-material/Draw";
 import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
-import BackgroundImage from '../assets/Background.jpg';
+import BackgroundImage from '../assets/Background1.jpg';
 
 
 export default function Home() {

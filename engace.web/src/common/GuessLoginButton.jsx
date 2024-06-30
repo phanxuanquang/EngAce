@@ -32,11 +32,16 @@ export default function GuessLoginButton() {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [keyValue, setKeyValue] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    setErrorMessage(""); // Clear error message when modal is closed
+  };
   const handleSubmit = async () => {
     setLoading(true);
+    setErrorMessage(""); // Clear any previous error message
     try {
       const response = await AppService.healCheck(keyValue.trim());
       if (response.status === 200) {
@@ -45,6 +50,8 @@ export default function GuessLoginButton() {
         navigate("/level");
       }
     } catch (error) {
+      setErrorMessage("Không hợp lệ"); 
+      setKeyValue(""); 
       console.log(error);
     } finally {
       setLoading(false);
@@ -81,7 +88,6 @@ export default function GuessLoginButton() {
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
-
       >
         <Box sx={style}>
           <InputLabel htmlFor="outlined-basic">
@@ -112,6 +118,8 @@ export default function GuessLoginButton() {
               }}
               onChange={(e) => setKeyValue(e.target.value)}
               value={keyValue}
+              error={!!errorMessage} // Highlight the TextField with error
+              helperText={errorMessage} // Show the error message
             />
             <Button
               component={Link}

@@ -20,14 +20,13 @@ const MainStyle = styled("div")(({ theme }) => ({
   overflow: "auto",
   height: "100%",
   paddingTop: APP_BAR_MOBILE + 8,
-  paddingLeft: theme.spacing(1),
-  paddingRight: theme.spacing(1),
+  paddingLeft: theme.spacing(0),
+  paddingRight: theme.spacing(0),
   [theme.breakpoints.up("sm")]: {
     paddingTop: APP_BAR_DESKTOP + 8,
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
   },
-  backgroundColor: "white",
 }));
 
 export default function DashboardLayout() {

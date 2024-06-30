@@ -9,12 +9,12 @@ import {
   Button,
   TextField,
 } from "@mui/material";
-import Logo from "../assets/user.png";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { AppService } from "../services/api";
 import { useNavigate } from "react-router-dom";
-import BackgroundImage from '../assets/Background.jpg';
+import BackgroundImage from "../assets/Background.jpg";
+import Logo from "../assets/user.png";
 export default function Level() {
   const token = Cookies.get("token");
   const initName = localStorage.getItem("name");
@@ -75,17 +75,19 @@ export default function Level() {
   };
 
   return (
-    <Box sx={{
-      backgroundImage: `url(${BackgroundImage})`,
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      height: '100vh',
-    }}>
+    <Box
+      sx={{
+        backgroundImage: `url(${BackgroundImage})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        height: "100vh",
+      }}
+    >
       <CssBaseline />
       <Container fixed>
         <Box
           sx={{
-            height: '100vh',
+            height: "100vh",
           }}
           display="flex"
           justifyContent="center"
@@ -97,16 +99,25 @@ export default function Level() {
             alignItems="center"
             flexDirection="column"
             gap={2}
-            sx={{ width: "80%" }}
+            sx={{ width: "80%", height: "75vh" }}
           >
-            <img src={Logo} alt="Mô tả về ảnh" width="500" height="auto"/>
+            <Box sx={{ textAlign: "center" }}>
+              <img
+                src={Logo}
+                alt="Description of the image"
+                style={{ maxWidth: "100%", height: "auto"}}
+                
+              />
+            </Box>
             {token.startsWith("ya29.") ? (
-              <Typography variant="h3" sx={{ fontWeight: "normal"}}>
+              <Typography variant="h3" sx={{ fontWeight: "normal" }}>
                 Xin chào, {data?.name}
               </Typography>
             ) : (
               <FormControl sx={{ m: 1, minWidth: 120, width: "100%" }}>
-                <Typography variant="body1" sx={{ marginBottom: "0.5rem"}}>Nhập tên của bạn</Typography>
+                <Typography variant="body1" sx={{ marginBottom: "0.5rem" }}>
+                  Tên của bạn là
+                </Typography>
                 <TextField
                   id="outlined-basic"
                   variant="outlined"
@@ -127,7 +138,7 @@ export default function Level() {
 
             {Object.keys(englishLevels).length > 0 && (
               <FormControl sx={{ m: 1, minWidth: 120, width: "100%" }}>
-                <Typography variant="body1" sx={{ marginBottom: "0.5rem"}}>
+                <Typography variant="body1" sx={{ marginBottom: "0.5rem" }}>
                   Trình độ tiếng Anh của bạn
                 </Typography>
                 <Select
@@ -168,7 +179,8 @@ export default function Level() {
                 color: "white",
                 fontSize: "1.2rem",
                 "&:not(:disabled)": {
-                  background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
+                  background:
+                    "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
                   transition:
                     "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
                   "&:hover": {

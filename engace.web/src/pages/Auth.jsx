@@ -2,14 +2,24 @@ import { Box, Container, CssBaseline } from "@mui/material";
 import GoogleLoginButton from "../common/GoogleLoginButton";
 import GuessLoginButton from "../common/GuessLoginButton";
 import Logo from "../assets/icon.png";
+import BackgroundImage from "../assets/Background.jpg";
 
 export default function Auth() {
   return (
-    <Box sx={{ bgcolor: "#cfe8fc" }}>
+    <Box
+      sx={{
+        backgroundImage: `url(${BackgroundImage})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        height: "100vh",
+      }}
+    >
       <CssBaseline />
       <Container fixed>
         <Box
-          sx={{ bgcolor: "#cfe8fc", height: "100vh", }}
+          sx={{
+            height: "100vh",
+          }}
           display="flex"
           justifyContent="center"
           alignItems="center"
@@ -22,7 +32,7 @@ export default function Auth() {
             flexDirection="column"
             gap={2}
           >
-            <img src={Logo} alt="Mô tả về ảnh" width="400px" height="auto"/>
+            <img src={Logo} alt="Mô tả về ảnh" width="400px" height="auto" />
             <GoogleLoginButton />
             <GuessLoginButton />
           </Box>
