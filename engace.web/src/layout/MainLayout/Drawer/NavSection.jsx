@@ -19,6 +19,7 @@ import { alpha, styled, useTheme } from "@mui/material/styles";
 import { Logout, Settings } from "@mui/icons-material";
 import Cookies from "js-cookie";
 import { googleLogout } from "@react-oauth/google";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const ListItemStyle = styled((props) => (
   <ListItemButton disableGutters {...props} />
@@ -42,9 +43,7 @@ const ListItemIconStyle = styled(ListItemIcon)({
 
 function NavItem({ item, active }) {
   const theme = useTheme();
-
   const isActiveRoot = active(item.path);
-
   const { title, path, icon } = item;
 
   const activeRootStyle = {
@@ -79,12 +78,26 @@ NavItem.propTypes = {
   active: PropTypes.func.isRequired,
 };
 
+const getLevelDisplayValue = (level) => {
+  switch (level) {
+    case '1':
+      return 'Beginner';
+    case '2':
+      return 'Intermediate';
+    case '3':
+      return 'Advanced';
+    default:
+      return 'Không rõ';
+  }
+};
+
 export default function NavSection({ navConfig, ...other }) {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const name = localStorage.getItem("name");
   const level = localStorage.getItem("level");
   const picture = localStorage.getItem("picture");
+
   const match = (path) => {
     const pathFirstPart = path.split("/")[1];
     const pathnameFirstPart = pathname.split("/")[1];
@@ -115,17 +128,17 @@ export default function NavSection({ navConfig, ...other }) {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          gap: 1,
+          gap: 0,
           padding: 1,
         }}
       >
         {picture ? (
           <Avatar alt="Avatar" src={picture}></Avatar>
         ) : (
-          <Avatar>G</Avatar>
+          <AccountCircleIcon fontSize="large" sx={{ color: "black" }}/>
         )}
         <Typography>{name}</Typography>
-        <Typography>Level: {level}</Typography>
+        <Typography>{getLevelDisplayValue(level)}</Typography>
       </Box>
       <Divider />
       <List disablePadding>

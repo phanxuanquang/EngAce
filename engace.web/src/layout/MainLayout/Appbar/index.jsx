@@ -9,6 +9,7 @@ import Container from "@mui/material/Container";
 import navConfig from "../NavConfig";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import AppBarItem from "./AppbarItem";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import {
   Avatar,
   Divider,
@@ -43,6 +44,19 @@ const ResponsiveAppBar = ({ onOpenSidebar }) => {
     googleLogout();
     navigate("/auth");
     window.location.reload();
+  };
+
+  const getLevelDisplayValue = (level) => {
+    switch (level) {
+      case '1':
+        return 'Beginner';
+      case '2':
+        return 'Intermediate';
+      case '3':
+        return 'Advanced';
+      default:
+        return 'Không rõ';
+    }
   };
 
   const handleClose = () => {
@@ -128,11 +142,11 @@ const ResponsiveAppBar = ({ onOpenSidebar }) => {
           <Box
             sx={{
               flexGrow: 0,
-              marginLeft: 4,
+              marginLeft: 0,
               display: { xs: "none", md: "flex" },
             }}
           >
-            <Tooltip title="Account settings">
+            <Tooltip title="Thiết lập">
               <IconButton
                 onClick={handleClick}
                 size="large"
@@ -144,7 +158,7 @@ const ResponsiveAppBar = ({ onOpenSidebar }) => {
                 {picture ? (
                   <Avatar alt="Avatar" src={picture}></Avatar>
                 ) : (
-                  <Avatar>G</Avatar>
+                  <AccountCircleIcon fontSize="large" sx={{ color: "black" }}/>
                 )}
               </IconButton>
             </Tooltip>
@@ -193,7 +207,7 @@ const ResponsiveAppBar = ({ onOpenSidebar }) => {
                 }}
               >
                 <Typography>{name}</Typography>
-                <Typography>Level: {level}</Typography>
+                <Typography>Trình độ: {getLevelDisplayValue(level)}</Typography>
               </Box>
               <Divider />
               <MenuItem onClick={handleSetting}>
