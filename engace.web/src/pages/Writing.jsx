@@ -5,47 +5,36 @@ import {
   Box,
   Grid,
   Hidden,
+  Typography,
 } from "@mui/material";
-import DistionarySearchForm from "../components/DistionarySearchForm";
+import WritingForm from "../components/WritingForm";
 import { useSearchParams } from "react-router-dom";
-import { useEffect, useState } from "react";
 import { AppService } from "../services/api";
-import { MuiMarkdown, getOverrides } from "mui-markdown";
+import { useEffect, useState } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChatLoader from "../common/ChatLoader";
 
-export default function Dictionary() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const keyword = searchParams.get("keyword");
-  const context = searchParams.get("context");
-  const useEnglishToExplain = searchParams.get("useEnglishToExplain");
-  const [markdown, setMarkDown] = useState("");
-  const [expanded, setExpanded] = useState(false);
+export default function Writing() {
+  const [searchParams] = useSearchParams();
+  const content = searchParams.get("content");
+  const level = localStorage.getItem("level");
+  const [review, setReview] = useState({});
   const [loading, setLoading] = useState(false);
+  const [expanded, setExpanded] = useState(false);
 
   const handleCloseAccordion = () => () => {
     setExpanded((pre) => !pre);
   };
 
   useEffect(() => {
-    if (useEnglishToExplain !== "true" && useEnglishToExplain !== "false") {
-      setSearchParams((prev) => ({
-        ...Object.fromEntries(prev.entries()),
-        useEnglishToExplain: false,
-      }));
-    }
-    const fetchDictionarySearch = async () => {
+    const fetchEssayReview = async () => {
       try {
-        if (keyword) {
+        if (content) {
           setLoading(true);
-          const response = await AppService.getDictionarySearch(
-            keyword,
-            context,
-            useEnglishToExplain
-          );
+          const response = await AppService.getEssayReview(content, level);
           if (response.status === 200) {
             console.log(response.data);
-            setMarkDown(response.data);
+            setReview(response.data);
           }
         }
       } catch (error) {
@@ -55,10 +44,10 @@ export default function Dictionary() {
       }
     };
 
-    fetchDictionarySearch();
-  }, [keyword, context, useEnglishToExplain, setSearchParams]);
+    fetchEssayReview();
+  }, [content, level]);
 
-  if (keyword) {
+  if (content) {
     return (
       <Box
         sx={{
@@ -68,19 +57,20 @@ export default function Dictionary() {
       >
         <Grid container columnSpacing={4}>
           <Hidden mdDown>
-            <Grid item xs={4}>
+            <Grid item xs={6}>
               <Box sx={{ position: "sticky", top: 0 }}>
-                <DistionarySearchForm />
+                <WritingForm />
               </Box>
             </Grid>
           </Hidden>
-          <Grid item xs={12} md={8}>
+          <Grid item xs={12} md={6}>
             <Hidden mdUp>
               <Accordion
                 sx={{
                   padding: 0,
                   position: "sticky",
                   top: 0,
+                  zIndex: 100,
                   boxShadow: "1px 1px 1px 1px #ccc",
                 }}
                 expanded={expanded}
@@ -92,43 +82,37 @@ export default function Dictionary() {
                   id="panel1-header"
                   sx={{ bgcolor: "#f5f5f5", borderRadius: 0 }}
                 >
-                  Tra cứu
+                  Bài viết của bạn
                 </AccordionSummary>
                 <AccordionDetails>
-                  <DistionarySearchForm onClosePannel={setExpanded} />
+                  <WritingForm onClosePannel={setExpanded} />
                 </AccordionDetails>
               </Accordion>
             </Hidden>
 
             {!loading ? (
-              <MuiMarkdown
-                overrides={{
-                  ...getOverrides({}),
-                  div: {
-                    props: {
-                      style: { lineHeight: 2 },
-                    },
-                  },
-                  h2: {
-                    component: "h1",
-                    props: {
-                      style: { color: "#e28048" },
-                    },
-                  },
-                  ul: {
-                    props: {
-                      style: { marginLeft: 20 },
-                    },
-                  },
-                  p: {
-                    props: {
-                      style: { marginBottom: 2 },
-                    },
-                  },
-                }}
-              >
-                {`<div>${markdown}</div>`}
-              </MuiMarkdown>
+              <>
+                <Accordion
+                  sx={{
+                    padding: 0,
+                    marginBottom: 2,
+                  }}
+                  defaultExpanded
+                >
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1-content"
+                    id="panel1-header"
+                    sx={{ bgcolor: "#f5f5f5", borderRadius: 0 }}
+                  >
+                    Nhận xét
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Typography paragraph>{review?.GeneralComment}</Typography>
+                  </AccordionDetails>
+                </Accordion>
+                <Typography paragraph>{review?.ImprovedContent}</Typography>
+              </>
             ) : (
               <Box
                 sx={{
@@ -159,7 +143,7 @@ export default function Dictionary() {
       alignItems="center"
       flexDirection="column"
     >
-      <DistionarySearchForm />
+      <WritingForm />
     </Box>
   );
 }

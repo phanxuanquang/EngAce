@@ -33,4 +33,20 @@ export const AppService = {
       )}&useEnglishToExplain=${encodeURIComponent(useEnglishToExplain)}`
     );
   },
+
+  getEssayReview: (content, level) => {
+    return baseRequest.get(
+      `${UrlApi.URL_GET_ESSAY_REVIEW}?content=${encodeURIComponent(
+        content
+      )}?englishLevel=${level}`
+    );
+  },
+
+  sendChatMessage: (chatHistory, question) => {
+    const data = {
+      ChatHistory: chatHistory,
+      Question: question,
+    };
+    return baseRequest.post(UrlApi.URL_GET_CHAT_MESSAGE, data);
+  },
 };

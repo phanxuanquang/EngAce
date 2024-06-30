@@ -9,12 +9,6 @@ export default function GoogleLoginButton() {
   const navigate = useNavigate();
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
-      //   Cookies.set("token", tokenResponse.access_token);
-      //   navigate("/level");
-      //   const response = await AppService.getUserInfo();
-
-      //   console.log(response.data);
-
       try {
         const response = await AppService.healCheck(tokenResponse.access_token);
 

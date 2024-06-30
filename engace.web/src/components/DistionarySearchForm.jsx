@@ -10,8 +10,9 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import PropTypes from "prop-types";
 
-export default function DistionarySearchForm() {
+export default function DistionarySearchForm({ onClosePannel }) {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [keyword, setSearch] = useState(searchParams.get("keyword") ?? "");
@@ -21,7 +22,7 @@ export default function DistionarySearchForm() {
   );
 
   const handleSearch = () => {
-    if (keyword && context) {
+    if (keyword) {
       navigate(
         `?keyword=${encodeURIComponent(
           keyword.trim()
@@ -29,6 +30,7 @@ export default function DistionarySearchForm() {
           context.trim()
         )}&useEnglishToExplain=${mode}`
       );
+      onClosePannel ? onClosePannel(false) : null;
     }
   };
 
@@ -111,3 +113,7 @@ export default function DistionarySearchForm() {
     </Box>
   );
 }
+
+DistionarySearchForm.propTypes = {
+  onClosePannel: PropTypes.func,
+};

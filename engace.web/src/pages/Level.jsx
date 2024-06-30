@@ -20,7 +20,8 @@ export default function Level() {
   const initLevel = localStorage.getItem("level");
 
   const [data, setData] = useState({});
-  const [level, setLevel] = useState(initLevel ?? 1);
+
+  const [level, setLevel] = useState(initLevel ?? "1");
   const [englishLevels, setEnglishLevels] = useState({});
   const [name, setName] = useState(initName ?? "");
   const navigate = useNavigate();
@@ -117,40 +118,42 @@ export default function Level() {
               </FormControl>
             )}
 
-            <FormControl sx={{ m: 1, minWidth: 120, width: "100%" }}>
-              <Typography variant="body1">
-                Trình độ tiếng Anh của bạn là:
-              </Typography>
-              <Select
-                labelId="gender-label"
-                id="gender"
-                value={level}
-                onChange={handleChange}
-                sx={{
-                  bgcolor: "#fafafa",
-                }}
-                MenuProps={{
-                  PaperProps: {
-                    style: {
-                      width: "60%",
+            {Object.keys(englishLevels).length > 0 && (
+              <FormControl sx={{ m: 1, minWidth: 120, width: "100%" }}>
+                <Typography variant="body1">
+                  Trình độ tiếng Anh của bạn là:
+                </Typography>
+                <Select
+                  labelId="gender-label"
+                  id="gender"
+                  value={level}
+                  onChange={handleChange}
+                  sx={{
+                    bgcolor: "#fafafa",
+                  }}
+                  MenuProps={{
+                    PaperProps: {
+                      style: {
+                        width: "60%",
+                      },
                     },
-                  },
-                }}
-              >
-                {Object.keys(englishLevels).map((key) => (
-                  <MenuItem
-                    key={key}
-                    value={key}
-                    sx={{
-                      whiteSpace: "normal",
-                      wordWrap: "break-word",
-                    }}
-                  >
-                    {englishLevels[key]}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+                  }}
+                >
+                  {Object.keys(englishLevels).map((key) => (
+                    <MenuItem
+                      key={key}
+                      value={key}
+                      sx={{
+                        whiteSpace: "normal",
+                        wordWrap: "break-word",
+                      }}
+                    >
+                      {englishLevels[key]}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            )}
             <Button
               variant="contained"
               sx={{ fontSize: "1.2rem" }}

@@ -5,15 +5,19 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import ThemeProvider from "./theme";
+import { Provider } from "react-redux";
+import { store } from "./redux";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <ThemeProvider>
-      <GoogleOAuthProvider clientId="918170775082-ngpd10u94hqkor1g3vveprfbhr8ov3r1.apps.googleusercontent.com">
-        <App />
-      </GoogleOAuthProvider>
-    </ThemeProvider>
+    <Provider store={store}>
+      <ThemeProvider>
+        <GoogleOAuthProvider clientId="918170775082-ngpd10u94hqkor1g3vveprfbhr8ov3r1.apps.googleusercontent.com">
+          <App />
+        </GoogleOAuthProvider>
+      </ThemeProvider>
+    </Provider>
   </React.StrictMode>
 );
 

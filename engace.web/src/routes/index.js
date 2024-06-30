@@ -6,6 +6,8 @@ import Test from "../pages/Test";
 import MainLayout from "../layout/MainLayout";
 import { checkAuthLoader, checkEnglishLevelLoader } from "../utils/auth";
 import Dictionary from "../pages/Dictionary";
+import Writing from "../pages/Writing";
+import ChatPage from "../pages/ChatPage";
 
 export const router = createBrowserRouter([
   {
@@ -26,12 +28,12 @@ export const router = createBrowserRouter([
       {
         path: "/writing",
         element: <MainLayout />,
-        children: [{ index: true, element: <Test /> }],
+        children: [{ index: true, element: <Writing /> }],
       },
       {
         path: "/chat",
         element: <MainLayout />,
-        children: [{ index: true, element: <Test /> }],
+        children: [{ index: true, element: <ChatPage /> }],
       },
     ],
   },

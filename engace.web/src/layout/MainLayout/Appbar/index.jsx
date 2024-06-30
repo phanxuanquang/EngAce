@@ -42,6 +42,7 @@ const ResponsiveAppBar = ({ onOpenSidebar }) => {
     localStorage.removeItem("picture");
     googleLogout();
     navigate("/auth");
+    window.location.reload();
   };
 
   const handleClose = () => {
