@@ -14,6 +14,7 @@ import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { AppService } from "../services/api";
 import { useNavigate } from "react-router-dom";
+import BackgroundImage from '../assets/Background.jpg';
 export default function Level() {
   const token = Cookies.get("token");
   const initName = localStorage.getItem("name");
@@ -74,11 +75,18 @@ export default function Level() {
   };
 
   return (
-    <Box sx={{ bgcolor: "#cfe8fc" }}>
+    <Box sx={{
+      backgroundImage: `url(${BackgroundImage})`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      height: '100vh',
+    }}>
       <CssBaseline />
       <Container fixed>
         <Box
-          sx={{ bgcolor: "#cfe8fc", height: "100vh" }}
+          sx={{
+            height: '100vh',
+          }}
           display="flex"
           justifyContent="center"
           alignItems="center"
@@ -88,10 +96,10 @@ export default function Level() {
             justifyContent="center"
             alignItems="center"
             flexDirection="column"
-            gap={4}
+            gap={2}
             sx={{ width: "80%" }}
           >
-            <img src={Logo} alt="Mô tả về ảnh" width="500" height="300"/>
+            <img src={Logo} alt="Mô tả về ảnh" width="500" height="auto"/>
             {token.startsWith("ya29.") ? (
               <Typography variant="h3" sx={{ fontWeight: "normal"}}>
                 Xin chào, {data?.name}
@@ -106,7 +114,7 @@ export default function Level() {
                   sx={{
                     width: "100%",
                     "& .MuiInputBase-input": {
-                      bgcolor: "#fafafa",
+                      bgcolor: "white",
                       borderRadius: 1,
                     },
                   }}
@@ -128,7 +136,7 @@ export default function Level() {
                   value={level}
                   onChange={handleChange}
                   sx={{
-                    bgcolor: "#fafafa",
+                    bgcolor: "white",
                   }}
                   MenuProps={{
                     PaperProps: {
@@ -168,7 +176,7 @@ export default function Level() {
                       "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
                     opacity: 0.8,
                     transform: "scale(1.05)",
-                    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.2)",
+                    boxShadow: "0 4px 20px rgba(255, 255, 255, 0.5)",
                   },
                 },
               }}

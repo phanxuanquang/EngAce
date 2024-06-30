@@ -1,5 +1,5 @@
 import MenuBookIcon from "@mui/icons-material/MenuBook";
-import QuizIcon from "@mui/icons-material/Quiz";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import DrawIcon from "@mui/icons-material/Draw";
 import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
 
@@ -10,9 +10,9 @@ const navConfig = [
     icon: <MenuBookIcon />,
   },
   {
-    title: "Bài tập",
+    title: "Trắc nghiệm",
     path: "/test",
-    icon: <QuizIcon />,
+    icon: <HelpOutlineIcon />,
   },
   {
     title: "Luyện viết",

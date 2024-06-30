@@ -9,19 +9,20 @@ export default function Auth() {
       <CssBaseline />
       <Container fixed>
         <Box
-          sx={{ bgcolor: "#cfe8fc", height: "100vh" }}
+          sx={{ bgcolor: "#cfe8fc", height: "100vh", }}
           display="flex"
           justifyContent="center"
           alignItems="center"
+          maxWidth="lg"
         >
           <Box
             display="flex"
             justifyContent="center"
             alignItems="center"
             flexDirection="column"
-            gap={3}
+            gap={2}
           >
-            <img src={Logo} alt="Mô tả về ảnh" width="500" height="300"/>
+            <img src={Logo} alt="Mô tả về ảnh" width="400px" height="auto"/>
             <GoogleLoginButton />
             <GuessLoginButton />
           </Box>

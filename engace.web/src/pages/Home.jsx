@@ -4,17 +4,18 @@ import MenuBookIcon from "@mui/icons-material/MenuBook";
 import QuizIcon from "@mui/icons-material/Quiz";
 import DrawIcon from "@mui/icons-material/Draw";
 import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
+import BackgroundImage from '../assets/Background.jpg';
+
 
 export default function Home() {
   return (
     <Box
-      sx={{
-        background: "rgb(154,160,166)",
-        backgroundImage:
-          "linear-gradient(320deg, rgba(254,239,195,1) 0%, rgba(206,234,214,1) 100%)",
-        msFilter:
-          "progid:DXImageTransform.Microsoft.gradient(startColorstr='#5bcdf9',endColorstr='#ffeec9',GradientType=1)" /* IE9 and older */,
-      }}
+    sx={{
+      backgroundImage: `url(${BackgroundImage})`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      height: '100vh',
+    }}
     >
       <CssBaseline />
       <Container fixed>
