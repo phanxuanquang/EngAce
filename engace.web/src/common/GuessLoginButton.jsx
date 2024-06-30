@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import LoadingButton from "@mui/lab/LoadingButton";
-import SendIcon from "@mui/icons-material/Send";
+import DoneIcon from "@mui/icons-material/Check";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import { AppService } from "../services/api";
@@ -58,16 +58,20 @@ export default function GuessLoginButton() {
         sx={{
           textTransform: "none",
           fontSize: "1.2rem",
-          width: "100%",
+          width: "90%",
           bgcolor: "white",
+          transition:
+            "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, background-color 0.3s ease-in-out",
           "&:hover": {
             bgcolor: "#fafafa",
+            transform: "scale(1.05)",
           },
         }}
         onClick={handleOpen}
       >
         Tiếp tục với tư cách khách
       </Button>
+
       <Modal
         open={open}
         onClose={handleClose}
@@ -77,7 +81,7 @@ export default function GuessLoginButton() {
         <Box sx={style}>
           <InputLabel htmlFor="outlined-basic">
             <Typography id="modal-modal-title" variant="h6" component="h2">
-              Nhập GeminiAPI Key
+              Nhập Gemini API Key để tiếp tục
             </Typography>
           </InputLabel>
           <Box
@@ -92,19 +96,32 @@ export default function GuessLoginButton() {
           >
             <TextField
               id="outlined-basic"
-              variant="outlined"
-              sx={{ flexGrow: 1 }}
+              variant="standard"
+              placeholder="AIza . . ."
+              sx={{
+                flexGrow: 1,
+                height: "2.5rem",
+                "& .MuiInputBase-root": {
+                  height: "100%",
+                },
+              }}
               onChange={(e) => setKeyValue(e.target.value)}
               value={keyValue}
             />
             <Button
               component={Link}
+              variant="contained"
+              color="secondary"
               href="https://aistudio.google.com/app/apikey"
               target="_blank"
+              sx={{
+                height: "2.5rem",
+              }}
             >
               Lấy Key
             </Button>
           </Box>
+
           <Box
             sx={{
               display: "flex",
@@ -115,10 +132,25 @@ export default function GuessLoginButton() {
             <LoadingButton
               loading={loading}
               loadingPosition="end"
-              endIcon={<SendIcon />}
+              endIcon={<DoneIcon />}
               variant="contained"
               onClick={handleSubmit}
               disabled={!keyValue.trim()}
+              sx={{
+                color: "white",
+                "&:not(:disabled)": {
+                  background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
+                  transition:
+                    "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
+                  "&:hover": {
+                    background:
+                      "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
+                    opacity: 0.8,
+                    transform: "scale(1.05)",
+                    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.2)",
+                  },
+                },
+              }}
             >
               Xác nhận
             </LoadingButton>

@@ -10,7 +10,7 @@ const navConfig = [
     icon: <MenuBookIcon />,
   },
   {
-    title: "Trắc nghiệm",
+    title: "Bài tập",
     path: "/test",
     icon: <HelpOutlineIcon />,
   },

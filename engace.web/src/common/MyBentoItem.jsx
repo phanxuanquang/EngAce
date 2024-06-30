@@ -8,9 +8,16 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
   aspectRatio: "1/1",
   display: "flex",
-  justifyContent: "space-between",
   flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center", 
+  margin: 5,
 }));
+
+const IconWrapper = styled("div")({
+  alignSelf: "center", 
+  marginBottom: "8px", 
+});
 
 MyBentoItem.propTypes = {
   Icon: PropTypes.elementType.isRequired,
@@ -26,20 +33,26 @@ export default function MyBentoItem({ title, route, backgroundColor, Icon }) {
   };
   return (
     <Item
-      sx={{ bgcolor: { backgroundColor }, color: "black", cursor: "pointer" }}
+      sx={{
+        bgcolor: { backgroundColor },
+        color: "#ffffff",
+        cursor: "pointer",
+        transition: "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
+        "&:hover": {
+          opacity: 0.9,
+          transform: "scale(1.05)",
+          boxShadow: "0 0.2rem 1.2rem rgba(0, 0, 0, 0.2)",
+        },
+      }}
       onClick={() => handleNavigation()}
       elevation={8}
     >
-      <Typography variant="h3" sx={{ alignSelf: "start" }}>
+      <IconWrapper>
+        <Icon sx={{ width: "60%", height: "auto", margin: "0px" }} />
+      </IconWrapper>
+      <Typography variant="h3" sx={{ alignSelf: "center" }}>
         {title}
       </Typography>
-      <Icon
-        sx={{
-          alignSelf: "end",
-          width: "30%",
-          height: "30%",
-        }}
-      />
     </Item>
   );
 }

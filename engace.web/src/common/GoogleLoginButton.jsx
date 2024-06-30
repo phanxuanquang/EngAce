@@ -32,10 +32,18 @@ export default function GoogleLoginButton() {
     <Button
       variant="contained"
       onClick={login}
-      sx={{ textTransform: "none", fontSize: "1.2rem", width: "100%" }}
+      sx={{
+        textTransform: "none",
+        fontSize: "1.2rem",
+        width: "90%",
+        transition: "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
+        "&:hover": {
+          transform: "scale(1.05)",
+        },
+      }}
       endIcon={<GoogleIcon />}
     >
-      Đăng nhập với Google
+      Đăng nhập bằng Google
     </Button>
   );
 }

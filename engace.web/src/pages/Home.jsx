@@ -7,7 +7,15 @@ import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
 
 export default function Home() {
   return (
-    <Box sx={{ bgcolor: "#b3a7d6" }}>
+    <Box
+      sx={{
+        background: "rgb(154,160,166)",
+        backgroundImage:
+          "linear-gradient(320deg, rgba(254,239,195,1) 0%, rgba(206,234,214,1) 100%)",
+        msFilter:
+          "progid:DXImageTransform.Microsoft.gradient(startColorstr='#5bcdf9',endColorstr='#ffeec9',GradientType=1)" /* IE9 and older */,
+      }}
+    >
       <CssBaseline />
       <Container fixed>
         <Box
@@ -34,15 +42,15 @@ export default function Home() {
                 <MyBentoItem
                   title="Từ điển"
                   route="/dictionary"
-                  backgroundColor="#b6d8a7"
+                  backgroundColor="#34A853"
                   Icon={MenuBookIcon}
                 />
               </Grid>
               <Grid item xs={6}>
                 <MyBentoItem
-                  title="Trắc nghiệm"
+                  title="Bài tập"
                   route="/test"
-                  backgroundColor="#a2c4c8"
+                  backgroundColor="#4285F4"
                   Icon={HelpOutlineIcon}
                 />
               </Grid>
@@ -50,7 +58,7 @@ export default function Home() {
                 <MyBentoItem
                   title="Luyện viết"
                   route="/writing"
-                  backgroundColor="#ffe59a"
+                  backgroundColor="#FBBC04"
                   Icon={DrawIcon}
                 />
               </Grid>
@@ -58,7 +66,7 @@ export default function Home() {
                 <MyBentoItem
                   title="Tư vấn"
                   route="/chat"
-                  backgroundColor="#e8999b"
+                  backgroundColor="#EA4335"
                   Icon={QuestionAnswerIcon}
                 />
               </Grid>

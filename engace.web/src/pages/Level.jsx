@@ -9,10 +9,10 @@ import {
   Button,
   TextField,
 } from "@mui/material";
+import Logo from "../assets/user.png";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { AppService } from "../services/api";
-import MyCustomTitle from "../common/MyCustomTitle";
 import { useNavigate } from "react-router-dom";
 export default function Level() {
   const token = Cookies.get("token");
@@ -91,19 +91,18 @@ export default function Level() {
             gap={4}
             sx={{ width: "80%" }}
           >
-            <MyCustomTitle sx={{ fontSize: "100px !important" }}>
-              EngAce
-            </MyCustomTitle>
+            <img src={Logo} alt="Mô tả về ảnh" width="500" height="300"/>
             {token.startsWith("ya29.") ? (
-              <Typography variant="h3" sx={{ fontWeight: "normal" }}>
+              <Typography variant="h3" sx={{ fontWeight: "normal"}}>
                 Xin chào, {data?.name}
               </Typography>
             ) : (
               <FormControl sx={{ m: 1, minWidth: 120, width: "100%" }}>
-                <Typography variant="body1">Nhập tên của bạn</Typography>
+                <Typography variant="body1" sx={{ marginBottom: "0.5rem"}}>Nhập tên của bạn</Typography>
                 <TextField
                   id="outlined-basic"
                   variant="outlined"
+                  required
                   sx={{
                     width: "100%",
                     "& .MuiInputBase-input": {
@@ -120,8 +119,8 @@ export default function Level() {
 
             {Object.keys(englishLevels).length > 0 && (
               <FormControl sx={{ m: 1, minWidth: 120, width: "100%" }}>
-                <Typography variant="body1">
-                  Trình độ tiếng Anh của bạn là:
+                <Typography variant="body1" sx={{ marginBottom: "0.5rem"}}>
+                  Trình độ tiếng Anh của bạn
                 </Typography>
                 <Select
                   labelId="gender-label"
@@ -156,7 +155,23 @@ export default function Level() {
             )}
             <Button
               variant="contained"
-              sx={{ fontSize: "1.2rem" }}
+              size="large"
+              sx={{
+                color: "white",
+                fontSize: "1.2rem",
+                "&:not(:disabled)": {
+                  background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
+                  transition:
+                    "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
+                  "&:hover": {
+                    background:
+                      "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
+                    opacity: 0.8,
+                    transform: "scale(1.05)",
+                    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.2)",
+                  },
+                },
+              }}
               onClick={() => handleSubmit()}
             >
               Xác nhận
