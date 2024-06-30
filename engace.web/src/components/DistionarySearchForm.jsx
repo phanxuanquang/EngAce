@@ -37,7 +37,7 @@ export default function DistionarySearchForm({ onClosePannel }) {
   return (
     <Box display="flex" flexDirection="column" gap={2} sx={{ width: "100%" }}>
       <Typography variant="h1" textAlign={"center"}>
-        Từ điển
+        TỪ ĐIỂN
       </Typography>
       <Box sx={{ width: "100%" }}>
         <Typography
@@ -45,7 +45,8 @@ export default function DistionarySearchForm({ onClosePannel }) {
           component={InputLabel}
           required
           htmlFor="search"
-          sx={{ color: "black" }}
+          color={"black"}
+          sx={{ marginBottom: "0.5rem" }}
         >
           Từ hoặc cụm từ cần tra
         </Typography>
@@ -64,7 +65,8 @@ export default function DistionarySearchForm({ onClosePannel }) {
           variant="body1"
           component={InputLabel}
           htmlFor="context"
-          sx={{ color: "black" }}
+          color={"black"}
+          sx={{ marginBottom: "0.5rem" }}
         >
           Ngữ cảnh
         </Typography>
@@ -85,6 +87,7 @@ export default function DistionarySearchForm({ onClosePannel }) {
           htmlFor="mode"
           id="mode-label"
           color={"black"}
+          sx={{ marginBottom: "0.5rem" }}
         >
           Loại từ điển
         </Typography>
@@ -103,12 +106,27 @@ export default function DistionarySearchForm({ onClosePannel }) {
       </Box>
       <Button
         variant="contained"
-        sx={{ width: "fit-content", alignSelf: "center" }}
+        sx={{
+          width: "fit-content",
+          alignSelf: "center",
+          color: "white",
+          "&:not(:disabled)": {
+            background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
+            transition:
+              "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
+            "&:hover": {
+              background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
+              opacity: 0.8,
+              transform: "scale(1.05)",
+              boxShadow: "0 4px 20px rgba(0, 0, 0, 0.2)",
+            },
+          },
+        }}
         size="large"
         disabled={!keyword.trim()}
         onClick={handleSearch}
       >
-        Tra Cứu
+        TRA CỨU
       </Button>
     </Box>
   );
