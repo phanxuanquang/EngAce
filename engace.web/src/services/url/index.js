@@ -5,6 +5,8 @@ export const URL_GET_ENGLISH_LEVEL = `${DOMAIN_NAME}/Quizz/GetEnglishLevels`;
 export const URL_GET_DICTIONARY_SEARCH = `${DOMAIN_NAME}/Dictionary/Search`;
 export const URL_GET_ESSAY_REVIEW = `${DOMAIN_NAME}/Review/Generate`;
 export const URL_GET_CHAT_MESSAGE = `${DOMAIN_NAME}/Chatbot/GenerateAnswer`;
+export const URL_GET_SUGGEST_TOPICS = `${DOMAIN_NAME}/Quizz/Suggest3Topics`;
+export const URL_GET_QUIZZ_TYPES = `${DOMAIN_NAME}/Quizz/GetQuizzTypes`;
 
 export const URL_GET_USER_INFO =
   "https://www.googleapis.com/oauth2/v3/userinfo";

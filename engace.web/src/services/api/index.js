@@ -49,4 +49,14 @@ export const AppService = {
     };
     return baseRequest.post(UrlApi.URL_GET_CHAT_MESSAGE, data);
   },
+
+  getSuggestTopics: (level) => {
+    return baseRequest.get(
+      `${UrlApi.URL_GET_SUGGEST_TOPICS}?englishLevel=${level}`
+    );
+  },
+
+  getQuizzTypes: () => {
+    return baseRequest.get(UrlApi.URL_GET_QUIZZ_TYPES);
+  },
 };
