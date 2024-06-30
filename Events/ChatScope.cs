@@ -9,7 +9,7 @@ namespace Events
     {
         public static async Task<string> GenerateAnswer(string apiKey, Conversation conversation)
         {
-            if (!conversation.ChatHistory.Any())
+            if (conversation.ChatHistory.Count == 1)
             {
                 conversation.ChatHistory.AddRange(InitPrompts());
             }
