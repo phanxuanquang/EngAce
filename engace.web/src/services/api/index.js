@@ -57,6 +57,6 @@ export const AppService = {
   },
 
   getQuizzTypes: () => {
-    return baseRequest.get(UrlApi.URL_GET_QUIZZ_TYPES);
+    return baseRequest.get(UrlApi.URL_GET_QUIZ_TYPES);
   },
 };

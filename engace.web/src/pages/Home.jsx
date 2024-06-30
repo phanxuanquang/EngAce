@@ -1,7 +1,7 @@
 import { Box, Container, CssBaseline, Grid } from "@mui/material";
 import MyBentoItem from "../common/MyBentoItem";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
-import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import QuizIcon from "@mui/icons-material/Quiz";
 import DrawIcon from "@mui/icons-material/Draw";
 import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
 
@@ -51,7 +51,7 @@ export default function Home() {
                   title="Bài tập"
                   route="/test"
                   backgroundColor="#4285F4"
-                  Icon={HelpOutlineIcon}
+                  Icon={QuizIcon}
                 />
               </Grid>
               <Grid item xs={6}>

@@ -1,6 +1,6 @@
 ﻿namespace Entities
 {
-    public class Quizz
+    public class Quiz
     {
         public required string Question { get; set; }
         public required List<string> Options { get; set; }

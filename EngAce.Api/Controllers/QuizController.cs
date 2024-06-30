@@ -10,13 +10,13 @@ namespace EngAce.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class QuizzController : ControllerBase
+    public class QuizController : ControllerBase
     {
         private readonly IMemoryCache _cache;
         private readonly ILogger<DictionaryController> _logger;
         private readonly string _accessKey;
 
-        public QuizzController(IMemoryCache cache, ILogger<DictionaryController> logger)
+        public QuizController(IMemoryCache cache, ILogger<DictionaryController> logger)
         {
             _cache = cache;
             _logger = logger;
@@ -28,7 +28,7 @@ namespace EngAce.Api.Controllers
         /// <param name="request">
         /// The parameters used for quizz generation:
         /// - Topic: The name of topic
-        /// - QuizzTypes: The indexes array of quizz types (further detail can be found in the "api/Quizz/GetQuizzTypes" API)
+        /// - QuizzTypes: The indexes array of quizz types (further detail can be found in the "api/Quiz/GetQuizTypes" API)
         /// </param>
         /// <param name="englishLevel">
         /// The English proficiency levels of the user:
@@ -39,7 +39,7 @@ namespace EngAce.Api.Controllers
         /// <param name="totalQuestions">The total questions to generate (maximum value is 30)</param>
         /// <returns>The list of generated quizzes</returns>
         [HttpPost("Generate")]
-        public async Task<ActionResult<List<Quizz>>> Generate([FromBody] GenerateQuizzes request, EnglishLevel englishLevel = EnglishLevel.Intermediate, short totalQuestions = 10)
+        public async Task<ActionResult<List<Quiz>>> Generate([FromBody] GenerateQuizzes request, EnglishLevel englishLevel = EnglishLevel.Intermediate, short totalQuestions = 10)
         {
             if (string.IsNullOrEmpty(_accessKey))
             {
@@ -62,7 +62,7 @@ namespace EngAce.Api.Controllers
             }
 
             var cacheKey = $"GenerateQuizzes-{request.Topic.ToLower().Trim()}-{string.Join(string.Empty, request.QuizzTypes)}-{englishLevel}-{totalQuestions}";
-            if (_cache.TryGetValue(cacheKey, out List<Quizz> cachedQuizzes))
+            if (_cache.TryGetValue(cacheKey, out List<Quiz> cachedQuizzes))
             {
                 return Ok(cachedQuizzes);
             }
@@ -154,8 +154,8 @@ namespace EngAce.Api.Controllers
         /// Get the types of quizz
         /// </summary>
         /// <returns>The quiz types with their descriptions.</returns>
-        [HttpGet("GetQuizzTypes")]
-        public ActionResult<Dictionary<int, string>> GetQuizzTypes()
+        [HttpGet("GetQuizTypes")]
+        public ActionResult<Dictionary<int, string>> GetQuizTypes()
         {
             const string cacheKey = "QuizzTypes";
             if (_cache.TryGetValue(cacheKey, out Dictionary<int, string> cachedTypes))

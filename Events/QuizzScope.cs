@@ -8,7 +8,7 @@ namespace Events
 {
     public static class QuizzScope
     {
-        public static async Task<List<Quizz>?> GenerateQuizes(string apiKey, string topic, List<QuizzType> quizzTypes, EnglishLevel level, short questionsCount)
+        public static async Task<List<Quiz>?> GenerateQuizes(string apiKey, string topic, List<QuizzType> quizzTypes, EnglishLevel level, short questionsCount)
         {
             string? response = null;
             var promptBuilder = new StringBuilder();
@@ -30,7 +30,7 @@ namespace Events
             promptBuilder.AppendLine("}");
 
             response = await Gemini.Generator.Generate(apiKey, promptBuilder.ToString(), true, 50, model);
-            return JsonConvert.DeserializeObject<List<Quizz>>(response);
+            return JsonConvert.DeserializeObject<List<Quiz>>(response);
         }
 
         public static async Task<List<string>> SuggestTopcis(string apiKey, EnglishLevel level)

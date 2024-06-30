@@ -21,9 +21,9 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: 400,
   bgcolor: "background.paper",
-  border: "1px solid",
+  border: "0px solid",
   borderRadius: 2,
-  boxShadow: 24,
+  boxShadow: "0 0.2rem 1.2rem #ffffff",
   p: 4,
 };
 
@@ -60,13 +60,17 @@ export default function GuessLoginButton() {
           fontSize: "1.2rem",
           width: "90%",
           bgcolor: "white",
+          border: "0px",
           transition:
             "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, background-color 0.3s ease-in-out",
           "&:hover": {
-            bgcolor: "#fafafa",
+            bgcolor: "white",
             transform: "scale(1.05)",
+            border: "0px",
+            boxShadow: "0 0.2rem 1.2rem #ffffff",
           },
         }}
+        size="large"
         onClick={handleOpen}
       >
         Tiếp tục với tư cách khách
@@ -77,6 +81,7 @@ export default function GuessLoginButton() {
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
+
       >
         <Box sx={style}>
           <InputLabel htmlFor="outlined-basic">
@@ -110,7 +115,7 @@ export default function GuessLoginButton() {
             />
             <Button
               component={Link}
-              variant="contained"
+              variant="outlined"
               color="secondary"
               href="https://aistudio.google.com/app/apikey"
               target="_blank"
@@ -139,7 +144,8 @@ export default function GuessLoginButton() {
               sx={{
                 color: "white",
                 "&:not(:disabled)": {
-                  background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
+                  background:
+                    "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
                   transition:
                     "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
                   "&:hover": {

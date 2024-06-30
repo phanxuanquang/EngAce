@@ -46,5 +46,5 @@ export function* followActSendMessage() {
 }
 
 export function* followActGetQuizzTypes() {
-  yield takeLatest(SagaActionTypes.GET_QUIZZ_TYPES, actGetQuizzTypes);
+  yield takeLatest(SagaActionTypes.GET_QUIZ_TYPES, actGetQuizzTypes);
 }
