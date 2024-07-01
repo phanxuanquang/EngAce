@@ -15,11 +15,11 @@ namespace Events
             var types = string.Join(", ", quizzTypes.Select(type => GeneralHelper.GetEnumDescription(type)).ToList());
             var model = questionsCount <= 10 ? GenerativeModel.Gemini_15_Flash : GenerativeModel.Gemini_15_Pro;
 
-            promptBuilder.AppendLine($"Bạn là một giáo viên dạy tiếng Anh với hơn 20 năm kinh nghiệm và bạn đang giảng dạy tại Việt Nam. Tôi là một người đang học tiếng Anh, trình độ hiện tại của tôi là {userLevel}. ");
-            promptBuilder.Append($"Bây giờ, tôi cần một bộ câu hỏi trắc nghiệm tiếng Anh bao gồm {questionsCount} câu hỏi liên quan đến chủ đề '{topic}' để luyện tập. ");
-            promptBuilder.AppendLine($"Bộ câu hỏi trắc nghiệm mà bạn cung cấp phải có đầy đủ các dạng câu hỏi bao gồm: {types}. ");
+            promptBuilder.AppendLine($"Bạn là một giáo viên dạy tiếng Anh với hơn 20 năm kinh nghiệm. Tôi là một người đang học tiếng Anh, trình độ hiện tại của tôi là {userLevel}. ");
+            promptBuilder.Append($"Hãy cho tôi một bộ câu hỏi trắc nghiệm tiếng Anh bao gồm {questionsCount} câu hỏi liên quan đến chủ đề '{topic}' để luyện tập. ");
             promptBuilder.Append("Nội dung câu hỏi phải thật thú vị để kích thích và tạo cảm hứng cho người học. Mỗi câu hỏi trong bộ đề trắc nghiệm chỉ được phép có 4 lựa chọn. ");
-            promptBuilder.Append("Bộ câu hỏi trắc nghiệm của bạn là một mảng JSON tương ứng với class sau: ");
+            promptBuilder.AppendLine($"Bộ câu hỏi trắc nghiệm của bạn phải bao gồm các loại câu hỏi: {types}. ");
+            promptBuilder.AppendLine("Output là một mảng JSON tương ứng với class C# sau: ");
             promptBuilder.AppendLine("class Quiz");
             promptBuilder.AppendLine("{");
             promptBuilder.AppendLine("    string Question; // Nội dung câu hỏi bằng tiếng Anh");
@@ -27,6 +27,21 @@ namespace Events
             promptBuilder.AppendLine("    int RightOptionIndex; // Index của lựa chọn đúng trong mảng Options");
             promptBuilder.AppendLine("    string ExplanationInVietnamese; // Lời giải thích một cách dễ hiểu, phù hợp với trình độ tiếng Anh của tôi");
             promptBuilder.AppendLine("}");
+            promptBuilder.AppendLine("Ví dụ về output mà tôi cần:");
+            promptBuilder.AppendLine("[");
+            promptBuilder.AppendLine("    {");
+            promptBuilder.AppendLine("        \"Question\": \"Nội dung câu hỏi 1\",");
+            promptBuilder.AppendLine("        \"Options\": [\"Option1\", \"Option2\", \"Option3\", \"Option4\"],");
+            promptBuilder.AppendLine("        \"RightOptionIndex\": 0,");
+            promptBuilder.AppendLine("        \"ExplanationInVietnamese\": \"Lời giải thích cho đáp án đúng\"");
+            promptBuilder.AppendLine("    },");
+            promptBuilder.AppendLine("    {");
+            promptBuilder.AppendLine("        \"Question\": \"Nội dung câu hỏi 2\",");
+            promptBuilder.AppendLine("        \"Options\": [\"Option1\", \"Option2\", \"Option3\", \"Option4\"],");
+            promptBuilder.AppendLine("        \"RightOptionIndex\": 1,");
+            promptBuilder.AppendLine("        \"ExplanationInVietnamese\": \"Lời giải thích cho đáp án đúng\"");
+            promptBuilder.AppendLine("    }");
+            promptBuilder.AppendLine("]");
 
             var response = await Gemini.Generator.Generate(apiKey, promptBuilder.ToString(), true, 50, model);
             return JsonConvert.DeserializeObject<List<Quiz>>(response);
