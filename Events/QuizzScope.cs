@@ -10,7 +10,6 @@ namespace Events
     {
         public static async Task<List<Quiz>?> GenerateQuizes(string apiKey, string topic, List<QuizzType> quizzTypes, EnglishLevel level, short questionsCount)
         {
-            string? response = null;
             var promptBuilder = new StringBuilder();
             var userLevel = GeneralHelper.GetEnumDescription(level);
             var types = string.Join(", ", quizzTypes.Select(type => GeneralHelper.GetEnumDescription(type)).ToList());
@@ -25,11 +24,11 @@ namespace Events
             promptBuilder.AppendLine("{");
             promptBuilder.AppendLine("    string Question; // Nội dung câu hỏi bằng tiếng Anh");
             promptBuilder.AppendLine("    List<string> Options; // 4 lựa chọn cho người dùng chọn");
-            promptBuilder.AppendLine("    short RightOptionIndex; // Index của lựa chọn đúng trong mảng Options");
+            promptBuilder.AppendLine("    int RightOptionIndex; // Index của lựa chọn đúng trong mảng Options");
             promptBuilder.AppendLine("    string ExplanationInVietnamese; // Lời giải thích một cách dễ hiểu, phù hợp với trình độ tiếng Anh của tôi");
             promptBuilder.AppendLine("}");
 
-            response = await Gemini.Generator.Generate(apiKey, promptBuilder.ToString(), true, 50, model);
+            var response = await Gemini.Generator.Generate(apiKey, promptBuilder.ToString(), true, 50, model);
             return JsonConvert.DeserializeObject<List<Quiz>>(response);
         }
 
@@ -45,6 +44,23 @@ namespace Events
 
             var response = await Gemini.Generator.Generate(apiKey, promptBuilder.ToString(), true, 100, GenerativeModel.Gemini_15_Pro);
             return JsonConvert.DeserializeObject<List<string>>(response);
+        }
+
+        public static async Task<string> GenerateQuizesAsHtml(string apiKey, string topic, List<QuizzType> quizzTypes, EnglishLevel level, short questionsCount)
+        {
+            var promptBuilder = new StringBuilder();
+            var userLevel = GeneralHelper.GetEnumDescription(level);
+            var types = string.Join(", ", quizzTypes.Select(type => GeneralHelper.GetEnumDescription(type)).ToList());
+            var model = questionsCount <= 10 ? GenerativeModel.Gemini_15_Flash : GenerativeModel.Gemini_15_Pro;
+
+            promptBuilder.AppendLine($"Bạn là một giáo viên dạy tiếng Anh với hơn 20 năm kinh nghiệm và bạn đang giảng dạy tại Việt Nam. Tôi là một người đang học tiếng Anh, trình độ hiện tại của tôi là {userLevel}. ");
+            promptBuilder.Append($"Bây giờ, tôi cần một bộ đề trắc nghiệm tiếng Anh bao gồm {questionsCount} câu hỏi liên quan đến chủ đề '{topic}' để luyện tập. ");
+            promptBuilder.AppendLine($"Bộ đề trắc nghiệm mà bạn cung cấp phải có đầy đủ các dạng câu hỏi bao gồm: {types}. ");
+            promptBuilder.Append("Nội dung câu hỏi phải thật thú vị để kích thích và tạo cảm hứng cho người học. Mỗi câu hỏi trong bộ đề trắc nghiệm chỉ được phép có 4 lựa chọn. ");
+            promptBuilder.Append("Bộ đề trắc nghiệm của bạn phải được trình bày thật rõ ràng và chuyên nghiệp, chỉ được phép chứa danh sách câu hỏi và danh sách đáp án.");
+
+            var response = await Gemini.Generator.Generate(apiKey, promptBuilder.ToString(), false, 75, model);
+            return GeneralHelper.AsHtml(response);
         }
     }
 }
