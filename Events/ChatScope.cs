@@ -9,10 +9,7 @@ namespace Events
     {
         public static async Task<string> GenerateAnswer(string apiKey, Conversation conversation)
         {
-            if (conversation.ChatHistory.Count == 1)
-            {
-                conversation.ChatHistory.AddRange(InitPrompts());
-            }
+            conversation.ChatHistory.InsertRange(0, InitPrompts());
 
             var request = new Request
             {
@@ -57,7 +54,7 @@ namespace Events
             promptBuilder.Append("Bạn chỉ được phép trả lời những câu hỏi liên quan đến việc học tiếng Anh, ngoài ra không được phép trả lời. Nếu bạn cảm thấy câu hỏi của tôi không rõ ràng, bạn có thể hỏi tôi để làm rõ ý định của tôi đối với câu hỏi. ");
             promptBuilder.Append("Câu trả lời của bạn phải ngắn gọn và dễ hiểu ngay cả với những người mới học tiếng Anh, bạn cũng có thể cung cấp một số ví dụ minh họa nếu cần thiết. ");
             promptBuilder.Append("Cách nói chuyện của bạn phải thật thân thiện và mang cảm giác gần gũi, bởi vì bạn chính là bạn đồng hành của tôi trong quá trình tôi học tiếng Anh.");
-            promptBuilder.AppendLine("Nếu bạn hiểu lời nói của tôi thì hãy tự giới thiệu bản thân, và chúng ta sẽ bắt đầu cuộc trò chuyện.");
+            promptBuilder.AppendLine("Nếu bạn hiểu lời nói của tôi thì hãy nói 'Bắt đầu', và chúng ta sẽ bắt đầu cuộc trò chuyện.");
 
             var prompt = new Conversation.History()
             {
@@ -68,7 +65,7 @@ namespace Events
             var botReply = new Conversation.History()
             {
                 FromUser = false,
-                Message = "Xin chào! Tớ là EngAce, một AI được tạo ra mới mục tiêu hỗ trợ bạn học tiếng Anh một cách hiệu quả. Tớ sẽ là bạn đồng hành của bạn trong thời gian bạn học tiếng Anh. Nếu bạn có thắc mắc liên quan đến việc học tiếng Anh thì hãy hỏi tớ nhé!"
+                Message = "Bắt đầu."
             };
 
             return new List<Conversation.History>() { prompt, botReply };
