@@ -46,19 +46,6 @@ const ResponsiveAppBar = ({ onOpenSidebar }) => {
     window.location.reload();
   };
 
-  const getLevelDisplayValue = (level) => {
-    switch (level) {
-      case '1':
-        return 'Beginner';
-      case '2':
-        return 'Intermediate';
-      case '3':
-        return 'Advanced';
-      default:
-        return 'Không rõ';
-    }
-  };
-
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -207,7 +194,7 @@ const ResponsiveAppBar = ({ onOpenSidebar }) => {
                 }}
               >
                 <Typography>{name}</Typography>
-                <Typography>Trình độ: {getLevelDisplayValue(level)}</Typography>
+                <Typography>Trình độ: {level}</Typography>
               </Box>
               <Divider />
               <MenuItem onClick={handleSetting}>

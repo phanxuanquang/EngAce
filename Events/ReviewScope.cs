@@ -15,7 +15,7 @@ namespace Events
             var userLevel = GeneralHelper.GetEnumDescription(level);
 
             promptBuilder.Append("Bạn là một giáo viên tiếng Anh với hơn 20 năm kinh nghiệm giảng dạy, đồng thời đang làm việc tại một trung tâm dạy IELTS lớn. ");
-            promptBuilder.Append($"Tôi là một người đang học tiếng Anh, trình độ hiện tại của tôi là {userLevel}. ");
+            promptBuilder.Append($"Trình độ tiếng Anh của tôi theo tiêu chuẩn CEFR là {userLevel}. ");
             promptBuilder.Append("Tôi đang luyện tập kỹ năng writting và cần bạn góp ý để bài viết của tôi tốt hơn.");
             promptBuilder.Append("Mục tiêu của tôi là có thể viết những bài viết tiếng Anh thật hay và dễ hiểu cho mọi người đọc.");
             promptBuilder.AppendLine("Bạn hãy đọc bài viết của tôi rồi sau đó cho nhận xét và góp ý. ");

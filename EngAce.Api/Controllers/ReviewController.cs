@@ -24,8 +24,8 @@ namespace EngAce.Api.Controllers
         /// <param name="englishLevel">
         /// The English proficiency levels of the user:
         /// 1. Beginner
-        /// 2. Intermediate
-        /// 3. Advanced
+        /// 2. Elementary
+        /// 3. Intermediate
         /// </param>
         /// <returns></returns>
         /// <remarks>
@@ -35,7 +35,7 @@ namespace EngAce.Api.Controllers
         /// 3. ImprovedContent: The essay after the improvement of the AI
         /// </remarks>
         [HttpGet("Generate")]
-        public async Task<ActionResult<Comment>> Generate(string content, EnglishLevel englishLevel = EnglishLevel.Intermediate)
+        public async Task<ActionResult<Comment>> Generate(string content, EnglishLevel englishLevel = EnglishLevel.Elementary)
         {
             if (string.IsNullOrEmpty(_accessKey))
             {

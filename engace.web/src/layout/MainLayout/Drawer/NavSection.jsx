@@ -78,19 +78,6 @@ NavItem.propTypes = {
   active: PropTypes.func.isRequired,
 };
 
-const getLevelDisplayValue = (level) => {
-  switch (level) {
-    case '1':
-      return 'Beginner';
-    case '2':
-      return 'Intermediate';
-    case '3':
-      return 'Advanced';
-    default:
-      return 'Không rõ';
-  }
-};
-
 export default function NavSection({ navConfig, ...other }) {
   const { pathname } = useLocation();
   const navigate = useNavigate();
@@ -138,7 +125,7 @@ export default function NavSection({ navConfig, ...other }) {
           <AccountCircleIcon fontSize="large" sx={{ color: "black" }}/>
         )}
         <Typography sx={{ marginBottom: "0.2rem", marginTop: "0.2rem", fontWeight: "bold"}}>{name}</Typography>
-        <Typography sx={{ marginBottom: "0.2rem", }}>{getLevelDisplayValue(level)}</Typography>
+        <Typography sx={{ marginBottom: "0.2rem", }}>{level}</Typography>
       </Box>
       <Divider />
       <List disablePadding>

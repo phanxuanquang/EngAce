@@ -34,13 +34,13 @@ namespace EngAce.Api.Controllers
         /// <param name="englishLevel">
         /// The English proficiency levels of the user:
         /// 1. Beginner
-        /// 2. Intermediate
-        /// 3. Advanced
+        /// 2. Elementary
+        /// 3. Intermediate
         /// </param>
         /// <param name="totalQuestions">The total questions to generate (maximum value is 30)</param>
         /// <returns>The list of generated quizzes</returns>
         [HttpPost("Generate")]
-        public async Task<ActionResult<List<Quiz>>> Generate([FromBody] GenerateQuizzes request, EnglishLevel englishLevel = EnglishLevel.Intermediate, short totalQuestions = 10)
+        public async Task<ActionResult<List<Quiz>>> Generate([FromBody] GenerateQuizzes request, EnglishLevel englishLevel = EnglishLevel.Elementary, short totalQuestions = 10)
         {
             if (string.IsNullOrEmpty(_accessKey))
             {
@@ -52,25 +52,20 @@ namespace EngAce.Api.Controllers
                 return BadRequest("Tên chủ đề không được rỗng");
             }
 
-            if (totalQuestions < 1 || totalQuestions > 30)
+            if (totalQuestions < QuizScope.MinTotalQuiz || totalQuestions > QuizScope.MaxTotalQuiz)
             {
-                return BadRequest("Số lượng câu hỏi không được lớn hơn 30");
-            }
-
-            if (request.QuizzTypes == null || request.QuizzTypes.Count == 0 || request.QuizzTypes.Count > 7)
-            {
-                return BadRequest("Loại câu hỏi không hợp lệ");
+                return BadRequest($"Số lượng câu hỏi phải nằm trong khoảng {QuizScope.MinTotalQuiz} đến {QuizScope.MaxTotalQuiz}");
             }
 
             var cacheKey = $"GenerateQuizzes-{request.Topic.ToLower().Trim()}-{string.Join(string.Empty, request.QuizzTypes)}-{englishLevel}-{totalQuestions}";
-            if (_cache.TryGetValue(cacheKey, out List<Quiz> cachedQuizzes))
+            if (_cache.TryGetValue(cacheKey, out var cachedQuizzes))
             {
                 return Ok(cachedQuizzes);
             }
 
             try
             {
-                var quizzes = await QuizzScope.GenerateQuizes(_accessKey, request.Topic, request.QuizzTypes, englishLevel, totalQuestions);
+                var quizzes = await QuizScope.GenerateQuizes(_accessKey, request.Topic, request.QuizzTypes, englishLevel, totalQuestions);
                 _cache.Set(cacheKey, quizzes, TimeSpan.FromMinutes(20));
 
                 return Created("Success", quizzes);
@@ -82,7 +77,7 @@ namespace EngAce.Api.Controllers
         }
 
         [HttpPost("GenerateAsHtml")]
-        public async Task<ActionResult> GenerateAsHtml([FromBody] GenerateQuizzes request, EnglishLevel englishLevel = EnglishLevel.Intermediate, short totalQuestions = 10)
+        public async Task<ActionResult> GenerateAsHtml([FromBody] GenerateQuizzes request, EnglishLevel englishLevel = EnglishLevel.Elementary, short totalQuestions = 10)
         {
             if (string.IsNullOrEmpty(_accessKey))
             {
@@ -94,19 +89,14 @@ namespace EngAce.Api.Controllers
                 return BadRequest("Tên chủ đề không được rỗng");
             }
 
-            if (totalQuestions < 1 || totalQuestions > 30)
+            if (totalQuestions < QuizScope.MinTotalQuiz || totalQuestions > QuizScope.MaxTotalQuiz)
             {
-                return BadRequest("Số lượng câu hỏi không được lớn hơn 30");
-            }
-
-            if (request.QuizzTypes == null || request.QuizzTypes.Count == 0 || request.QuizzTypes.Count > 7)
-            {
-                return BadRequest("Loại câu hỏi không hợp lệ");
+                return BadRequest($"Số lượng câu hỏi phải nằm trong khoảng {QuizScope.MinTotalQuiz} đến {QuizScope.MaxTotalQuiz}");
             }
 
             try
             {
-                var quizzes = await QuizzScope.GenerateQuizesAsHtml(_accessKey, request.Topic, request.QuizzTypes, englishLevel, totalQuestions);
+                var quizzes = await QuizScope.GenerateQuizesAsHtml(_accessKey, request.Topic, request.QuizzTypes, englishLevel, totalQuestions);
 
                 var byteArray = Encoding.UTF8.GetBytes(quizzes);
                 var stream = new MemoryStream(byteArray);
@@ -127,14 +117,11 @@ namespace EngAce.Api.Controllers
         /// Suggest topics to choose
         /// </summary>
         /// <param name="englishLevel">
-        /// The English proficiency levels of the user:
-        /// 1. Beginner
-        /// 2. Intermediate
-        /// 3. Advanced
+        /// The English proficiency levels of the user
         /// </param>
         /// <returns>3 suggested topics</returns>
         [HttpGet("Suggest3Topics")]
-        public async Task<ActionResult<List<string>>> Suggest3Topics(EnglishLevel englishLevel = EnglishLevel.Intermediate)
+        public async Task<ActionResult<List<string>>> Suggest3Topics(EnglishLevel englishLevel = EnglishLevel.Elementary)
         {
             if (string.IsNullOrEmpty(_accessKey))
             {
@@ -151,7 +138,7 @@ namespace EngAce.Api.Controllers
 
             try
             {
-                var topics = await QuizzScope.SuggestTopcis(_accessKey, englishLevel);
+                var topics = await QuizScope.SuggestTopcis(_accessKey, englishLevel);
 
                 var selectedTopics = topics.OrderBy(x => Guid.NewGuid()).Take(totalTopics).ToList();
                 _cache.Set(cacheKey, topics, TimeSpan.FromDays(7));
@@ -180,8 +167,11 @@ namespace EngAce.Api.Controllers
             var levels = new List<EnglishLevel>
             {
                 EnglishLevel.Beginner,
+                EnglishLevel.Elementary,
                 EnglishLevel.Intermediate,
-                EnglishLevel.Advanced
+                EnglishLevel.UpperIntermediate,
+                EnglishLevel.Advanced,
+                EnglishLevel.Proficient
             };
 
             var descriptions = levels.ToDictionary(
@@ -214,7 +204,8 @@ namespace EngAce.Api.Controllers
                 QuizzType.SynonymAndAntonym,
                 QuizzType.FunctionalLanguage,
                 QuizzType.Vocabulary,
-                QuizzType.Grammar
+                QuizzType.Grammar,
+                QuizzType.Pronunciation,
             };
 
             var descriptions = types.ToDictionary(

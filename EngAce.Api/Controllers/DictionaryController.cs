@@ -41,6 +41,15 @@ namespace EngAce.Api.Controllers
             {
                 return BadRequest("Không được để trống từ khóa");
             }
+
+            if (keyword.Trim() != new string(keyword.Trim().Normalize(NormalizationForm.FormD)
+                .Where(c => CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)
+                .ToArray())
+                .Normalize(NormalizationForm.FormC))
+            {
+                return BadRequest("Từ khóa cần tra cứu phải là tiếng Anh");
+            }
+
             if (!string.IsNullOrEmpty(context) && GeneralHelper.GetTotalWords(context) > 100)
             {
                 return BadRequest("Ngữ cảnh chỉ chứa tối đa 100 từ");
@@ -54,12 +63,9 @@ namespace EngAce.Api.Controllers
                 return BadRequest("Ngữ cảnh phải là tiếng Anh");
             }
 
-            if (keyword.Trim() != new string(keyword.Trim().Normalize(NormalizationForm.FormD)
-                .Where(c => CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)
-                .ToArray())
-                .Normalize(NormalizationForm.FormC))
+            if (!string.IsNullOrEmpty(context) && !context.ToLower().Trim().Contains(keyword.ToLower().Trim()))
             {
-                return BadRequest("Từ khóa cần tra cứu phải là tiếng Anh");
+                return BadRequest("Ngữ cảnh phải chứa từ khóa cần tra");
             }
 
             var cacheKey = $"Search: {keyword.ToLower().Trim()}-{context.ToLower().Trim()}-{useEnglishToExplain}";
