@@ -3,8 +3,6 @@ on:
   push:
     branches:
       - master
-    paths:
-      - 'EngAce.Api/**'
 env:
   AZURE_WEBAPP_NAME: EngAce
   AZURE_WEBAPP_PACKAGE_PATH: EngAce.Api/publish
