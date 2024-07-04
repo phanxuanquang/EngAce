@@ -8,7 +8,7 @@ namespace EngAce.Api.Controllers
     [Route("api/[controller]")]
     [ApiController]
     public class ChatbotController : ControllerBase
-    {
+    { 
         private readonly ILogger<DictionaryController> _logger;
         private readonly string _accessKey;
         public ChatbotController(ILogger<DictionaryController> logger)
