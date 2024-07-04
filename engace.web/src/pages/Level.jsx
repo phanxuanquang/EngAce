@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 import { AppService } from "../services/api";
 import { useNavigate } from "react-router-dom";
 import BackgroundImage from "../assets/Background.jpg";
-import Logo from "../assets/user.png";
+import Logo from "../assets/user.png"; 
 export default function Level() {
   const token = Cookies.get("token");
   const initName = localStorage.getItem("name");
