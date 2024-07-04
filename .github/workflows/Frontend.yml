@@ -1,6 +1,9 @@
-name: Frontend 
+name: Frontend
 
-on: [push]
+on:
+  push:
+    paths:
+      - 'engace.web/**'
 
 env:
   AZURE_WEBAPP_NAME: engace-app   
