@@ -159,7 +159,7 @@ namespace EngAce.Api.Controllers
         public ActionResult<Dictionary<int, string>> GetEnglishLevels()
         {
             const string cacheKey = "EnglishLevels";
-            if (_cache.TryGetValue(cacheKey, out Dictionary<int, string> cachedLevels))
+            if (_cache.TryGetValue(cacheKey, out var cachedLevels))
             {
                 return Ok(cachedLevels);
             }
@@ -191,7 +191,7 @@ namespace EngAce.Api.Controllers
         public ActionResult<Dictionary<int, string>> GetQuizTypes()
         {
             const string cacheKey = "QuizzTypes";
-            if (_cache.TryGetValue(cacheKey, out Dictionary<int, string> cachedTypes))
+            if (_cache.TryGetValue(cacheKey, out var cachedTypes))
             {
                 return Ok(cachedTypes);
             }
