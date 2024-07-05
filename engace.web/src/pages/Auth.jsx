@@ -15,27 +15,26 @@ export default function Auth() {
       }}
     >
       <CssBaseline />
-      <Container fixed>
+      <Container
+        fixed
+        sx={{
+          height: "100%",
+        }}
+      >
         <Box
           sx={{
-            height: "100vh",
+            height: "100%",
           }}
           display="flex"
           justifyContent="center"
           alignItems="center"
+          flexDirection="column"
+          gap={2}
           maxWidth="lg"
         >
-          <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            flexDirection="column"
-            gap={2}
-          >
-            <img src={Logo} alt="Mô tả về ảnh" width="400px" height="auto" />
-            <GoogleLoginButton />
-            <GuessLoginButton />
-          </Box>
+          <img src={Logo} alt="logo" width={"80%"} style={{ maxWidth: 400 }} />
+          <GoogleLoginButton />
+          <GuessLoginButton />
         </Box>
       </Container>
     </Box>

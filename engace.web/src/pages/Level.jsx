@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 import { AppService } from "../services/api";
 import { useNavigate } from "react-router-dom";
 import BackgroundImage from "../assets/Background.jpg";
-import Logo from "../assets/user.png"; 
+import Logo from "../assets/user.png";
 export default function Level() {
   const token = Cookies.get("token");
   const initName = localStorage.getItem("name");
@@ -84,14 +84,12 @@ export default function Level() {
       }}
     >
       <CssBaseline />
-      <Container fixed>
+      <Container fixed sx={{ height: "100%" }}>
         <Box
-          sx={{
-            height: "100vh",
-          }}
           display="flex"
           justifyContent="center"
           alignItems="center"
+          height={"100%"}
         >
           <Box
             display="flex"
@@ -99,14 +97,21 @@ export default function Level() {
             alignItems="center"
             flexDirection="column"
             gap={2}
-            sx={{ width: "80%", height: "75vh" }}
+            sx={{
+              width: "80%",
+              height: "100%",
+            }}
           >
             <Box sx={{ textAlign: "center" }}>
               <img
                 src={Logo}
                 alt="Description of the image"
-                style={{ maxWidth: "100%", height: "auto"}}
-                
+                style={{
+                  maxWidth: 300,
+                  maxheight: 300,
+                  width: "100%",
+                  height: "auto",
+                }}
               />
             </Box>
             {token.startsWith("ya29.") ? (
@@ -142,8 +147,7 @@ export default function Level() {
                   Trình độ tiếng Anh của bạn
                 </Typography>
                 <Select
-                  labelId="gender-label"
-                  id="gender"
+                  id="level"
                   value={level}
                   onChange={handleChange}
                   sx={{
@@ -152,7 +156,7 @@ export default function Level() {
                   MenuProps={{
                     PaperProps: {
                       style: {
-                        width: "60%",
+                        width: 0,
                       },
                     },
                   }}

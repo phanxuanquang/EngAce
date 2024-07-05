@@ -50,8 +50,8 @@ export default function GuessLoginButton() {
         navigate("/level");
       }
     } catch (error) {
-      setErrorMessage("Không hợp lệ"); 
-      setKeyValue(""); 
+      setErrorMessage("Không hợp lệ");
+      setKeyValue("");
       console.log(error);
     } finally {
       setLoading(false);
@@ -65,7 +65,8 @@ export default function GuessLoginButton() {
         sx={{
           textTransform: "none",
           fontSize: "1.2rem",
-          width: "90%",
+          width: "100%",
+          maxWidth: "40rem",
           bgcolor: "white",
           border: "0px",
           transition:

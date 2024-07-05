@@ -73,7 +73,8 @@ export default function GoogleLoginButton() {
           sx={{
             textTransform: "none",
             fontSize: "1.2rem",
-            width: "90%",
+            width: "100%",
+            maxWidth: "40rem",
             background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
             transition:
               "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
@@ -114,9 +115,9 @@ export default function GoogleLoginButton() {
             }}
           >
             <Button onClick={handleCloseDialog}>Hủy</Button>
-          <Button onClick={handleLogin} variant="contained" autoFocus>
-            Tiếp tục
-          </Button>
+            <Button onClick={handleLogin} variant="contained" autoFocus>
+              Tiếp tục
+            </Button>
           </Box>
         </DialogActions>
       </Dialog>
