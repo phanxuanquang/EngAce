@@ -9,18 +9,11 @@ import { Provider } from "react-redux";
 import { store } from "./redux";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-
-const clientId = "918170775082-ngpd10u94hqkor1g3vveprfbhr8ov3r1.apps.googleusercontent.com";
-const scopes = "https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/generative-language.retriever"; 
-
 root.render(
   <React.StrictMode>
     <Provider store={store}>
       <ThemeProvider>
-        <GoogleOAuthProvider
-          clientId={clientId}
-          scope={scopes}
-        >
+        <GoogleOAuthProvider clientId="918170775082-ngpd10u94hqkor1g3vveprfbhr8ov3r1.apps.googleusercontent.com">
           <App />
         </GoogleOAuthProvider>
       </ThemeProvider>
@@ -28,4 +21,7 @@ root.render(
   </React.StrictMode>
 );
 
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
