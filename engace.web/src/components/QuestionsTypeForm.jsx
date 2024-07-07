@@ -32,7 +32,12 @@ export default function QuestionsTypeForm({ types, setTypes, error }) {
   }, [qTypes, setTypes]);
 
   return (
-    <FormControl component="fieldset" variant="standard" error={!!error}>
+    <FormControl
+      component="fieldset"
+      variant="standard"
+      error={!!error}
+      sx={{ paddingLeft: { sx: 0, md: 1 } }}
+    >
       <FormLabel component="legend">
         <Typography id="modal-modal-title" variant="h4" sx={{ color: "black" }}>
           Chọn loại câu hỏi

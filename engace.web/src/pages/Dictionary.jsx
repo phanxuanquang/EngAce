@@ -43,7 +43,7 @@ export default function Dictionary() {
             context,
             useEnglishToExplain
           );
-          if (response.status === 200) {
+          if (response.status === 200 || response.status === 201) {
             console.log(response.data);
             setMarkDown(response.data);
           }

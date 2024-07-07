@@ -10,7 +10,7 @@ function* actGetTopics(action) {
     const res = yield call(() => AppService.getSuggestTopics(level));
     const { status, data } = res;
     console.log(res);
-    if (status === 200) {
+    if (status === 200 || status === 201) {
       yield put(quizActions.getTopicsSuccess({ topics: data }));
     } else {
       console.log(data.error);
@@ -50,7 +50,7 @@ function* actGenerateQuiz(action) {
     );
     const { status, data } = res;
     console.log(res);
-    if (status === 200) {
+    if (status === 200 || status === 201) {
       yield put(quizActions.createQuizzesSuccess({ qaList: data }));
     } else {
       console.log(data.error);

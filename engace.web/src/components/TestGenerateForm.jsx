@@ -1,4 +1,4 @@
-import { Grid, Button } from "@mui/material";
+import { Grid, Button, Divider } from "@mui/material";
 import { memo, useState } from "react";
 import SuggestTopicInput from "./SuggestTopicInput";
 import QuestionsQuantity from "./QuestionsQuantity";
@@ -74,7 +74,12 @@ export default function TestGenerateForm() {
         item
         xs={12}
         md={6}
-        sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 2,
+          paddingRight: 4,
+        }}
       >
         <MemoizedSuggestTopicInput
           topic={topic}
@@ -87,6 +92,12 @@ export default function TestGenerateForm() {
           error={errorQuantity}
         />
       </Grid>
+      <Divider
+        orientation="vertical"
+        flexItem
+        sx={{ mr: "-1px", display: { xs: "none", md: "block" } }}
+      />
+
       <Grid item xs={12} md={6}>
         <MemoizedQuestionsTypeForm
           types={types}
