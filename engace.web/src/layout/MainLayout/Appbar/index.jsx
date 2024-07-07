@@ -9,7 +9,7 @@ import Container from "@mui/material/Container";
 import navConfig from "../NavConfig";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import AppBarItem from "./AppbarItem";
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import {
   Avatar,
   Divider,
@@ -22,9 +22,12 @@ import { useState } from "react";
 import { Logout, Settings } from "@mui/icons-material";
 import Cookies from "js-cookie";
 import { googleLogout } from "@react-oauth/google";
+import { chatbotActions } from "../../../redux/reducer/ChatbotReducer";
+import { useDispatch } from "react-redux";
 
 const ResponsiveAppBar = ({ onOpenSidebar }) => {
   const { pathname } = useLocation();
+  const dispatch = useDispatch();
   const name = localStorage.getItem("name");
   const level = localStorage.getItem("level");
   const picture = localStorage.getItem("picture");
@@ -42,8 +45,8 @@ const ResponsiveAppBar = ({ onOpenSidebar }) => {
     localStorage.removeItem("level");
     localStorage.removeItem("picture");
     googleLogout();
+    dispatch(chatbotActions.resetChat());
     navigate("/auth");
-    window.location.reload();
   };
 
   const handleClose = () => {
@@ -145,7 +148,7 @@ const ResponsiveAppBar = ({ onOpenSidebar }) => {
                 {picture ? (
                   <Avatar alt="Avatar" src={picture}></Avatar>
                 ) : (
-                  <AccountCircleIcon fontSize="large" sx={{ color: "black" }}/>
+                  <AccountCircleIcon fontSize="large" sx={{ color: "black" }} />
                 )}
               </IconButton>
             </Tooltip>

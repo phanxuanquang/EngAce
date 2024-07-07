@@ -1,11 +1,11 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   listChat: [],
 };
 
 const chatbotSlice = createSlice({
-  name: 'chatbotSlice',
+  name: "chatbotSlice",
   initialState,
   reducers: {
     sendMessage: (state, action) => {
@@ -13,6 +13,10 @@ const chatbotSlice = createSlice({
     },
     responseMessage: (state, action) => {
       state.listChat = [...state.listChat, action.payload.data];
+    },
+
+    resetChat: (state) => {
+      state.listChat = [];
     },
   },
 });

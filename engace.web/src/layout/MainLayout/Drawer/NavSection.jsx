@@ -19,7 +19,9 @@ import { alpha, styled, useTheme } from "@mui/material/styles";
 import { Logout, Settings } from "@mui/icons-material";
 import Cookies from "js-cookie";
 import { googleLogout } from "@react-oauth/google";
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { chatbotActions } from "../../../redux/reducer/ChatbotReducer";
+import { useDispatch } from "react-redux";
 
 const ListItemStyle = styled((props) => (
   <ListItemButton disableGutters {...props} />
@@ -80,6 +82,7 @@ NavItem.propTypes = {
 
 export default function NavSection({ navConfig, ...other }) {
   const { pathname } = useLocation();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const name = localStorage.getItem("name");
   const level = localStorage.getItem("level");
@@ -101,6 +104,7 @@ export default function NavSection({ navConfig, ...other }) {
     localStorage.removeItem("level");
     localStorage.removeItem("picture");
     googleLogout();
+    dispatch(chatbotActions.resetChat());
     navigate("/auth");
   };
 
@@ -122,10 +126,20 @@ export default function NavSection({ navConfig, ...other }) {
         {picture ? (
           <Avatar alt="Avatar" src={picture}></Avatar>
         ) : (
-          <AccountCircleIcon fontSize="large" sx={{ color: "black" }}/>
+          <AccountCircleIcon fontSize="large" sx={{ color: "black" }} />
         )}
-        <Typography sx={{ marginBottom: "0.2rem", marginTop: "0.2rem", fontWeight: "bold"}}>{name}</Typography>
-        <Typography sx={{ marginBottom: "0.2rem", }}>Trình độ: {level}</Typography>
+        <Typography
+          sx={{
+            marginBottom: "0.2rem",
+            marginTop: "0.2rem",
+            fontWeight: "bold",
+          }}
+        >
+          {name}
+        </Typography>
+        <Typography sx={{ marginBottom: "0.2rem" }}>
+          Trình độ: {level}
+        </Typography>
       </Box>
       <Divider />
       <List disablePadding>
@@ -141,7 +155,7 @@ export default function NavSection({ navConfig, ...other }) {
           alignItems: "center",
           flexDirection: "column",
           gap: 1,
-          marginBottom: "1rem"
+          marginBottom: "1rem",
         }}
       >
         <Button
