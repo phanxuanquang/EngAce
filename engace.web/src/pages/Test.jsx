@@ -1,11 +1,13 @@
 import { Box, Typography } from "@mui/material";
 import TestGenerateForm from "../components/TestGenerateForm";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import * as SagaActionTypes from "../redux/constants";
+import QuestionAndAnswer from "../components/QuestionAndAnswer";
 
 export default function Test() {
   const dispatch = useDispatch();
+  const { qaList } = useSelector((state) => state.quizSlice);
 
   useEffect(() => {
     dispatch({
@@ -14,6 +16,10 @@ export default function Test() {
       onFinish: () => {},
     });
   }, [dispatch]);
+
+  if (qaList.length > 0) {
+    return <QuestionAndAnswer />;
+  }
 
   return (
     <Box
