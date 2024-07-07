@@ -20,6 +20,11 @@ const quizSlice = createSlice({
     createQuizzesSuccess: (state, action) => {
       state.qaList = action.payload.qaList;
     },
+
+    resetQuiz: (state) => {
+      state.qaList = [];
+      state.qaList = [];
+    },
   },
 });
 

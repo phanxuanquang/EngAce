@@ -11,6 +11,8 @@ import {
 } from "@mui/material";
 import MyCustomQuizzChip from "../common/MyCustomQuizzChip";
 import { useState } from "react";
+import { quizActions } from "../redux/reducer/QuizReducer";
+import { useDispatch } from "react-redux";
 
 export default function QuizzStatus({
   qaList,
@@ -20,6 +22,8 @@ export default function QuizzStatus({
   submit,
   setSubmit,
 }) {
+  const dispatch = useDispatch();
+
   const [openDialog, setOpenDialog] = useState(false);
 
   const handleOpenDialog = () => {
@@ -34,6 +38,10 @@ export default function QuizzStatus({
     setSubmit(true);
     setIndex(0);
     setOpenDialog(false);
+  };
+
+  const handleContinue = () => {
+    dispatch(quizActions.resetQuiz());
   };
 
   return (
@@ -72,6 +80,15 @@ export default function QuizzStatus({
       >
         Nộp bài
       </Button>
+      {submit && (
+        <Button
+          variant="outlined"
+          sx={{ width: "100%" }}
+          onClick={handleContinue}
+        >
+          Tiếp tục
+        </Button>
+      )}
       <Dialog
         open={openDialog}
         onClose={handleCloseDialog}
