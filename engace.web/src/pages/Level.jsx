@@ -64,7 +64,9 @@ export default function Level() {
 
   const handleSubmit = () => {
     if (token.startsWith("ya29.")) {
-      localStorage.setItem("name", data?.name);
+      const fullName = data?.family_name + " " + data?.given_name;
+
+      localStorage.setItem("name", fullName);
       localStorage.setItem("picture", data?.picture);
       localStorage.setItem("level", level);
     } else {
@@ -103,20 +105,35 @@ export default function Level() {
             }}
           >
             <Box sx={{ textAlign: "center" }}>
-              <img
-                src={Logo}
-                alt="Description of the image"
-                style={{
-                  maxWidth: 300,
-                  maxheight: 300,
-                  width: "100%",
-                  height: "auto",
-                }}
-              />
+              {data?.picture ? (
+                <img
+                  src={data?.picture.replace("=s96-c", "")}
+                  alt="User's avatar"
+                  style={{
+                    maxWidth: 300,
+                    maxheight: 300,
+                    width: "100%",
+                    height: "auto",
+                    borderRadius: "50%", 
+                    border: '0.5rem solid #ffa16c' 
+                  }}
+                />
+              ) : (
+                <img
+                  src={Logo}
+                  alt="Default avatar"
+                  style={{
+                    maxWidth: 300,
+                    maxheight: 300,
+                    width: "100%",
+                    height: "auto",
+                  }}
+                />
+              )}
             </Box>
             {token.startsWith("ya29.") ? (
               <Typography variant="h3" sx={{ fontWeight: "normal" }}>
-                Xin chào, {data?.name}
+                Xin chào {data?.family_name} {data?.given_name}
               </Typography>
             ) : (
               <FormControl sx={{ m: 1, minWidth: 120, width: "100%" }}>

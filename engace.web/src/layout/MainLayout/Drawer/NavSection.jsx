@@ -125,7 +125,7 @@ export default function NavSection({ navConfig, ...other }) {
           <AccountCircleIcon fontSize="large" sx={{ color: "black" }}/>
         )}
         <Typography sx={{ marginBottom: "0.2rem", marginTop: "0.2rem", fontWeight: "bold"}}>{name}</Typography>
-        <Typography sx={{ marginBottom: "0.2rem", }}>{level}</Typography>
+        <Typography sx={{ marginBottom: "0.2rem", }}>Trình độ: {level}</Typography>
       </Box>
       <Divider />
       <List disablePadding>

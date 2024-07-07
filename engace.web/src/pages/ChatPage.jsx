@@ -10,6 +10,7 @@ import SendIcon from "@mui/icons-material/Send";
 import { useDispatch, useSelector } from "react-redux";
 import * as SagaActionTypes from "../redux/constants";
 import Chat from "../components/Chat";
+import Background from "../assets/ChatbotBackground.png"
 
 const ChatPage = () => {
   const dispatch = useDispatch();
@@ -48,7 +49,7 @@ const ChatPage = () => {
         height: "100%",
         width: "100%",
         backgroundImage:
-          "linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url(https://i.imgur.com/2JK3Ex8.png)",
+          `linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url(${Background})`,
         backgroundSize: "40%",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
