@@ -56,7 +56,18 @@ export const AppService = {
     );
   },
 
-  getQuizzTypes: () => {
+  getQuizTypes: () => {
     return baseRequest.get(UrlApi.URL_GET_QUIZ_TYPES);
+  },
+
+  generateQuiz: (topic, qTypes, level, quantity) => {
+    const data = {
+      Topic: topic,
+      QuizzTypes: qTypes,
+    };
+    return baseRequest.post(
+      `${UrlApi.URL_GENERATE_QUIZ}?englishLevel=${level}&totalQuestions=${quantity}`,
+      data
+    );
   },
 };

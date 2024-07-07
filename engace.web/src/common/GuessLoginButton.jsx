@@ -37,11 +37,11 @@ export default function GuessLoginButton() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
-    setErrorMessage(""); // Clear error message when modal is closed
+    setErrorMessage("");
   };
   const handleSubmit = async () => {
     setLoading(true);
-    setErrorMessage(""); // Clear any previous error message
+    setErrorMessage("");
     try {
       const response = await AppService.healCheck(keyValue.trim());
       if (response.status === 200) {
@@ -119,8 +119,8 @@ export default function GuessLoginButton() {
               }}
               onChange={(e) => setKeyValue(e.target.value)}
               value={keyValue}
-              error={!!errorMessage} // Highlight the TextField with error
-              helperText={errorMessage} // Show the error message
+              error={!!errorMessage}
+              helperText={errorMessage}
             />
             <Button
               component={Link}

@@ -6,19 +6,23 @@ const initialState = {
   qTypes: [],
 };
 
-const quizzSlice = createSlice({
+const quizSlice = createSlice({
   name: "quizzSlice",
   initialState,
   reducers: {
     getTopicsSuccess: (state, action) => {
       state.topics = action.payload.topics;
     },
-    getQuizzTypesSuccess: (state, action) => {
+    getQuizTypesSuccess: (state, action) => {
       state.qTypes = action.payload.qTypes;
+    },
+
+    createQuizzesSuccess: (state, action) => {
+      state.qaList = action.payload.qaList;
     },
   },
 });
 
-export const quizzActions = quizzSlice.actions;
+export const quizActions = quizSlice.actions;
 
-export default quizzSlice.reducer;
+export default quizSlice.reducer;

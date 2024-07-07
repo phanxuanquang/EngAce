@@ -8,12 +8,14 @@ import ThemeProvider from "./theme";
 import { Provider } from "react-redux";
 import { store } from "./redux";
 
+const CLIENTID = process.env.REACT_APP_CLIENTID;
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <Provider store={store}>
       <ThemeProvider>
-        <GoogleOAuthProvider clientId="918170775082-ngpd10u94hqkor1g3vveprfbhr8ov3r1.apps.googleusercontent.com">
+        <GoogleOAuthProvider clientId={CLIENTID}>
           <App />
         </GoogleOAuthProvider>
       </ThemeProvider>
