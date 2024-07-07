@@ -78,7 +78,7 @@ namespace EngAce.Api.Controllers
             {
                 var result = await SearchScope.Search(_accessKey, useEnglishToExplain, keyword.Trim(), context.Trim());
                 _cache.Set(cacheKey, result, TimeSpan.FromMinutes(15));
-                return Ok(result);
+                return Created("Success", result);
             }
             catch (Exception ex)
             {
