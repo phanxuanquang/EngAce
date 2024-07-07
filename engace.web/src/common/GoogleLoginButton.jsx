@@ -37,6 +37,9 @@ export default function GoogleLoginButton() {
     onSuccess: async (tokenResponse) => {
       try {
         const response = await AppService.healCheck(tokenResponse.access_token);
+        
+        console.log({TokenResponse : tokenResponse});
+        console.log({HealthcheckResult : response});
 
         if (response.status === 200) {
           const remainingMilliseconds = tokenResponse.expires_in * 1000;
@@ -55,7 +58,7 @@ export default function GoogleLoginButton() {
       }
     },
     scopes:
-      "https://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/generative-language.retriever",
+      "https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/generative-language.retriever",
     onError: () => {
       handleOpenErrorDialog();
     },
