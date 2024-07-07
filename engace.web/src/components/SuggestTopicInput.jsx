@@ -11,6 +11,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import * as SagaActionTypes from "../redux/constants";
 import { useState } from "react";
+import ChatLoader from "../common/ChatLoader";
 
 export default function SuggestTopicInput({ topic, setTopic, error }) {
   const dispatch = useDispatch();
@@ -91,6 +92,8 @@ export default function SuggestTopicInput({ topic, setTopic, error }) {
               onClick={() => handleChooseTopic(topic)}
             />
           ))}
+
+        {loading && <ChatLoader />}
       </Stack>
     </Box>
   );

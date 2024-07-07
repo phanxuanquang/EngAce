@@ -53,7 +53,9 @@ export default function QuizzStatus({
         gap: 2,
       }}
     >
-      <Typography variant="body1">Trạng thái làm bài</Typography>
+      <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+        Trạng thái làm bài
+      </Typography>
       <Stack
         spacing={{ xs: 1, sm: 2 }}
         direction="row"
@@ -73,13 +75,15 @@ export default function QuizzStatus({
           />
         ))}
       </Stack>
-      <Button
-        variant="contained"
-        sx={{ width: "100%" }}
-        onClick={handleOpenDialog}
-      >
-        Nộp bài
-      </Button>
+      {!submit && (
+        <Button
+          variant="contained"
+          sx={{ width: "100%" }}
+          onClick={handleOpenDialog}
+        >
+          Nộp bài
+        </Button>
+      )}
       {submit && (
         <Button
           variant="outlined"

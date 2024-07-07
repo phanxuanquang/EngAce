@@ -1,10 +1,12 @@
-import { Grid, Button, Divider } from "@mui/material";
+import { Grid, Divider } from "@mui/material";
 import { memo, useState } from "react";
 import SuggestTopicInput from "./SuggestTopicInput";
 import QuestionsQuantity from "./QuestionsQuantity";
 import QuestionsTypeForm from "./QuestionsTypeForm";
 import { useDispatch } from "react-redux";
 import * as SagaActionTypes from "../redux/constants";
+import { LoadingButton } from "@mui/lab";
+import DoneIcon from "@mui/icons-material/Check";
 
 const MemoizedSuggestTopicInput = memo(SuggestTopicInput);
 const MemoizedQuestionsQuantity = memo(QuestionsQuantity);
@@ -19,6 +21,7 @@ export default function TestGenerateForm() {
   const [errorTopic, setErrorTopic] = useState("");
   const [errorQuantity, setErrorQuantity] = useState("");
   const [errorTypes, setErrorTypes] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const generateQuiz = () => {
     const qTypes = Object.keys(types)
@@ -31,8 +34,8 @@ export default function TestGenerateForm() {
       qTypes: qTypes,
       level: level,
       quantity: quantity,
-      onLoading: () => {},
-      onFinish: () => {},
+      onLoading: () => setLoading(true),
+      onFinish: () => setLoading(false),
     });
   };
 
@@ -106,9 +109,15 @@ export default function TestGenerateForm() {
         />
       </Grid>
       <Grid item xs={12} display={"flex"} justifyContent={"center"}>
-        <Button variant="contained" onClick={handleGenerateQuiz}>
+        <LoadingButton
+          loading={loading}
+          loadingPosition="end"
+          endIcon={<DoneIcon />}
+          variant="contained"
+          onClick={handleGenerateQuiz}
+        >
           Tạo câu hỏi
-        </Button>
+        </LoadingButton>
       </Grid>
     </Grid>
   );

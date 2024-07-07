@@ -1,6 +1,6 @@
-import { Box, Typography } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import TestGenerateForm from "../components/TestGenerateForm";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as SagaActionTypes from "../redux/constants";
 import QuestionAndAnswer from "../components/QuestionAndAnswer";
@@ -8,12 +8,13 @@ import QuestionAndAnswer from "../components/QuestionAndAnswer";
 export default function Test() {
   const dispatch = useDispatch();
   const { qaList } = useSelector((state) => state.quizSlice);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     dispatch({
       type: SagaActionTypes.GET_QUIZ_TYPES,
-      onLoading: () => {},
-      onFinish: () => {},
+      onLoading: () => setLoading(true),
+      onFinish: () => setLoading(false),
     });
   }, [dispatch]);
 
@@ -34,7 +35,7 @@ export default function Test() {
       gap={2}
     >
       <Typography variant="h2">BÀI TẬP</Typography>
-      <TestGenerateForm />
+      {!loading ? <TestGenerateForm /> : <CircularProgress />}
     </Box>
   );
 }

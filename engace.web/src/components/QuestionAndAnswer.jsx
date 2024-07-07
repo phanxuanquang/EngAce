@@ -12,7 +12,7 @@ export default function QuestionAndAnswer() {
   const [submit, setSubmit] = useState(false);
 
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={4}>
       <Grid
         item
         xs={12}
@@ -21,7 +21,6 @@ export default function QuestionAndAnswer() {
           display: "flex",
           flexDirection: "column",
           gap: 2,
-          paddingRight: 4,
         }}
       >
         <QuestionIndex
@@ -40,6 +39,9 @@ export default function QuestionAndAnswer() {
       </Grid>
 
       <Grid item xs={12} md={3}>
+        <Divider
+          sx={{ marginBottom: 2, display: { xs: "block", md: "none" } }}
+        />
         <QuizzStatus
           qaList={qaList}
           answer={answer}
