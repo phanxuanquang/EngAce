@@ -6,7 +6,7 @@ import QuestionsTypeForm from "./QuestionsTypeForm";
 import { useDispatch } from "react-redux";
 import * as SagaActionTypes from "../redux/constants";
 import { LoadingButton } from "@mui/lab";
-import DoneIcon from "@mui/icons-material/Check";
+import DoneIcon from "@mui/icons-material/AutoAwesome";
 
 const MemoizedSuggestTopicInput = memo(SuggestTopicInput);
 const MemoizedQuestionsQuantity = memo(QuestionsQuantity);

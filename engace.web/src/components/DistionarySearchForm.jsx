@@ -36,7 +36,7 @@ export default function DistionarySearchForm({ onClosePannel }) {
 
   return (
     <Box display="flex" flexDirection="column" gap={2} sx={{ width: "100%" }}>
-      <Typography variant="h1" textAlign={"center"}>
+      <Typography variant="h2" textAlign={"center"}>
         TỪ ĐIỂN
       </Typography>
       <Box sx={{ width: "100%" }}>

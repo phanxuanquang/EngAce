@@ -10,6 +10,8 @@ import {
 } from "@mui/material";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
+import CircleCheckedFilled from '@mui/icons-material/CheckCircle';
+import CircleUnchecked from '@mui/icons-material/RadioButtonUnchecked';
 
 export default function QuestionsTypeForm({ types, setTypes, error }) {
   const { qTypes } = useSelector((state) => state.quizSlice);
@@ -52,7 +54,8 @@ export default function QuestionsTypeForm({ types, setTypes, error }) {
           <FormControlLabel
             sx={{ marginTop: 0.6 }}
             key={key}
-            control={<Checkbox checked={!!types[key]} />}
+            control={<Checkbox icon={<CircleUnchecked />}
+            checkedIcon={<CircleCheckedFilled />} checked={!!types[key]} />}
             onChange={() => handleCheckboxChange(key)}
             label={
               <Typography

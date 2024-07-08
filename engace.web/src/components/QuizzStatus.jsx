@@ -87,16 +87,16 @@ export default function QuizzStatus({
           sx={{ width: "100%" }}
           onClick={handleOpenDialog}
         >
-          Nộp bài
+          NỘP BÀI
         </Button>
       )}
       {submit && (
         <Button
           variant="outlined"
-          sx={{ width: "100%", textTransform: "none" }}
+          sx={{ width: "100%" }}
           onClick={handleContinue}
         >
-          Tiếp tục
+          LÀM BÀI TẬP KHÁC
         </Button>
       )}
       <Dialog
@@ -115,16 +115,16 @@ export default function QuizzStatus({
         <DialogActions>
           <Box
             display="flex"
-            justifyContent="center"
+            justifyContent="right"
             width="100%"
             size="large"
             sx={{
               margin: "0 1rem 0.5rem",
             }}
-            gap={2}
+            gap={1}
           >
             <Button onClick={handleCloseDialog}>Hủy</Button>
-            <Button onClick={handleSubmit} variant="contained" autoFocus>
+            <Button onClick={handleSubmit} variant="contained" color="error" autoFocus>
               Nộp
             </Button>
           </Box>
