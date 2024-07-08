@@ -16,6 +16,7 @@ import { AppService } from "../services/api";
 import { useNavigate } from "react-router-dom";
 import BackgroundImage from "../assets/Background.jpg";
 import Logo from "../assets/user.png";
+import AlertCustom from "../common/Alert";
 export default function Level() {
   const token = Cookies.get("token");
   const initName = localStorage.getItem("name");
@@ -39,10 +40,18 @@ export default function Level() {
           if (response.status === 200) {
             console.log(response.data);
             setData(response.data);
+          } else {
+            AlertCustom({
+              type: "error",
+              title: response?.data || "Có lỗi xảy ra, vui lòng thử lại",
+            });
           }
         }
       } catch (error) {
-        console.log(error);
+        AlertCustom({
+          type: "error",
+          title: error.response?.data || "Có lỗi xảy ra, vui lòng thử lại",
+        });
       } finally {
         setUserLoading(false);
       }

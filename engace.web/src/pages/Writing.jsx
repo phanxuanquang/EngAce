@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChatLoader from "../common/ChatLoader";
 import { MuiMarkdown, getOverrides } from "mui-markdown";
+import AlertCustom from "../common/Alert";
 
 export default function Writing() {
   const [searchParams] = useSearchParams();
@@ -35,10 +36,18 @@ export default function Writing() {
           if (response.status === 200) {
             console.log(response.data);
             setReview(response.data);
+          } else {
+            AlertCustom({
+              type: "error",
+              title: response?.data || "Có lỗi xảy ra, vui lòng thử lại",
+            });
           }
         }
       } catch (error) {
-        console.log(error);
+        AlertCustom({
+          type: "error",
+          title: error.response?.data || "Có lỗi xảy ra, vui lòng thử lại",
+        });
       } finally {
         setLoading(false);
       }
@@ -109,33 +118,33 @@ export default function Writing() {
                   </AccordionSummary>
                   <AccordionDetails>
                     <MuiMarkdown
-                  overrides={{
-                    ...getOverrides({}),
-                    div: {
-                      props: {
-                        style: { lineHeight: 2 },
-                      },
-                    },
-                    h2: {
-                      component: "h1",
-                      props: {
-                        style: { color: "#e28048" },
-                      },
-                    },
-                    ul: {
-                      props: {
-                        style: { marginLeft: 20 },
-                      },
-                    },
-                    p: {
-                      props: {
-                        style: { marginBottom: 2 },
-                      },
-                    },
-                  }}
-                >
-                  {`<div>${review?.GeneralComment}</div>`}
-                </MuiMarkdown>
+                      overrides={{
+                        ...getOverrides({}),
+                        div: {
+                          props: {
+                            style: { lineHeight: 2 },
+                          },
+                        },
+                        h2: {
+                          component: "h1",
+                          props: {
+                            style: { color: "#e28048" },
+                          },
+                        },
+                        ul: {
+                          props: {
+                            style: { marginLeft: 20 },
+                          },
+                        },
+                        p: {
+                          props: {
+                            style: { marginBottom: 2 },
+                          },
+                        },
+                      }}
+                    >
+                      {`<div>${review?.GeneralComment}</div>`}
+                    </MuiMarkdown>
                   </AccordionDetails>
                 </Accordion>
                 <MuiMarkdown

@@ -3,8 +3,11 @@ import GoogleLoginButton from "../common/GoogleLoginButton";
 import GuessLoginButton from "../common/GuessLoginButton";
 import Logo from "../assets/icon.png";
 import BackgroundImage from "../assets/Background.jpg";
+import { useState } from "react";
+import TruckLoader from "../common/TruckLoader";
 
 export default function Auth() {
+  const [loading, setLoading] = useState(false);
   return (
     <Box
       sx={{
@@ -33,8 +36,14 @@ export default function Auth() {
           maxWidth="lg"
         >
           <img src={Logo} alt="logo" width={"80%"} style={{ maxWidth: 400 }} />
-          <GoogleLoginButton />
-          <GuessLoginButton />
+          {!loading ? (
+            <>
+              <GoogleLoginButton setLoading={setLoading} />
+              <GuessLoginButton />
+            </>
+          ) : (
+            <TruckLoader />
+          )}
         </Box>
       </Container>
     </Box>

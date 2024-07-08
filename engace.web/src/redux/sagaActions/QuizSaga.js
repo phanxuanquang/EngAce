@@ -2,6 +2,7 @@ import { call, put, takeLatest } from "redux-saga/effects";
 import * as SagaActionTypes from "../constants";
 import { quizActions } from "../reducer/QuizReducer";
 import { AppService } from "../../services/api";
+import AlertCustom from "../../common/Alert";
 
 function* actGetTopics(action) {
   const { level, onLoading, onFinish } = action;
@@ -13,10 +14,16 @@ function* actGetTopics(action) {
     if (status === 200 || status === 201) {
       yield put(quizActions.getTopicsSuccess({ topics: data }));
     } else {
-      console.log(data.error);
+      AlertCustom({
+        type: "error",
+        title: data || "Có lỗi xảy ra, vui lòng thử lại",
+      });
     }
   } catch (err) {
-    console.log(err);
+    AlertCustom({
+      type: "error",
+      title: err.response?.data || "Có lỗi xảy ra, vui lòng thử lại",
+    });
   } finally {
     onFinish();
   }
@@ -32,10 +39,16 @@ function* actGetQuizTypes(action) {
     if (status === 200) {
       yield put(quizActions.getQuizTypesSuccess({ qTypes: data }));
     } else {
-      console.log(data.error);
+      AlertCustom({
+        type: "error",
+        title: data || "Có lỗi xảy ra, vui lòng thử lại",
+      });
     }
   } catch (err) {
-    console.log(err);
+    AlertCustom({
+      type: "error",
+      title: err.response?.data || "Có lỗi xảy ra, vui lòng thử lại",
+    });
   } finally {
     onFinish();
   }
@@ -53,10 +66,16 @@ function* actGenerateQuiz(action) {
     if (status === 200 || status === 201) {
       yield put(quizActions.createQuizzesSuccess({ qaList: data }));
     } else {
-      console.log(data.error);
+      AlertCustom({
+        type: "error",
+        title: data || "Có lỗi xảy ra, vui lòng thử lại",
+      });
     }
   } catch (err) {
-    console.log(err);
+    AlertCustom({
+      type: "error",
+      title: err.response?.data || "Có lỗi xảy ra, vui lòng thử lại",
+    });
   } finally {
     onFinish();
   }

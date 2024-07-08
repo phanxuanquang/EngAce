@@ -13,6 +13,7 @@ import { AppService } from "../services/api";
 import { MuiMarkdown, getOverrides } from "mui-markdown";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChatLoader from "../common/ChatLoader";
+import AlertCustom from "../common/Alert";
 
 export default function Dictionary() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -46,10 +47,18 @@ export default function Dictionary() {
           if (response.status === 200 || response.status === 201) {
             console.log(response.data);
             setMarkDown(response.data);
+          } else {
+            AlertCustom({
+              type: "error",
+              title: response?.data || "Có lỗi xảy ra, vui lòng thử lại",
+            });
           }
         }
       } catch (error) {
-        console.log(error);
+        AlertCustom({
+          type: "error",
+          title: error.response?.data || "Có lỗi xảy ra, vui lòng thử lại",
+        });
       } finally {
         setLoading(false);
       }

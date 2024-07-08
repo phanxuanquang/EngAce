@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { useState } from "react";
 import {
   Button,
@@ -11,11 +12,11 @@ import { useGoogleLogin } from "@react-oauth/google";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import { AppService } from "../services/api";
+import AlertCustom from "./Alert";
 
-export default function GoogleLoginButton() {
+export default function GoogleLoginButton({ setLoading }) {
   const navigate = useNavigate();
   const [openDialog, setOpenDialog] = useState(false);
-  const [openErrorDialog, setOpenErrorDialog] = useState(false);
 
   const handleOpenDialog = () => {
     setOpenDialog(true);
@@ -25,21 +26,14 @@ export default function GoogleLoginButton() {
     setOpenDialog(false);
   };
 
-  const handleOpenErrorDialog = () => {
-    setOpenErrorDialog(true);
-  };
-
-  const handleCloseErrorDialog = () => {
-    setOpenErrorDialog(false);
-  };
-
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       try {
+        setLoading(true);
         const response = await AppService.healCheck(tokenResponse.access_token);
-        
-        console.log({TokenResponse : tokenResponse});
-        console.log({HealthcheckResult : response});
+
+        console.log({ TokenResponse: tokenResponse });
+        console.log({ HealthcheckResult: response });
 
         if (response.status === 200) {
           const remainingMilliseconds = tokenResponse.expires_in * 1000;
@@ -51,17 +45,22 @@ export default function GoogleLoginButton() {
           });
           navigate("/level");
         } else {
-          throw new Error("Unexpected response status");
+          AlertCustom({
+            type: "error",
+            title: "Tài khoản Google của bạn hiện chưa được hỗ trợ.",
+          });
         }
       } catch (error) {
-        handleOpenErrorDialog();
+        AlertCustom({
+          type: "error",
+          title: "Tài khoản Google của bạn hiện chưa được hỗ trợ.",
+        });
+      } finally {
+        setLoading(false);
       }
     },
     scopes:
       "https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/generative-language.retriever",
-    onError: () => {
-      handleOpenErrorDialog();
-    },
   });
 
   const handleLogin = () => {
@@ -126,35 +125,10 @@ export default function GoogleLoginButton() {
           </Box>
         </DialogActions>
       </Dialog>
-      <Dialog
-        open={openErrorDialog}
-        onClose={handleCloseErrorDialog}
-        aria-labelledby="error-dialog-title"
-        aria-describedby="error-dialog-description"
-      >
-        <DialogContent
-          sx={{
-            paddingBottom: "0.5rem",
-          }}
-        >
-          <body1>Tài khoản Google của bạn hiện chưa được hỗ trợ.</body1>
-        </DialogContent>
-        <DialogActions>
-          <Box
-            display="flex"
-            justifyContent="center"
-            width="100%"
-            size="large"
-            sx={{
-              marginBottom: "0.5rem",
-            }}
-          >
-            <Button variant="contained" onClick={handleCloseErrorDialog}>
-              Đóng
-            </Button>
-          </Box>
-        </DialogActions>
-      </Dialog>
     </>
   );
 }
+
+GoogleLoginButton.propTypes = {
+  setLoading: PropTypes.func.isRequired,
+};
