@@ -198,7 +198,12 @@ export default function Level() {
                           wordWrap: "break-word",
                         }}
                       >
-                        {englishLevels[key]}
+                        {
+                          <span>
+                            <strong>{englishLevels[key].split(":")[0]}:</strong>
+                            {englishLevels[key].split(":")[1]}
+                          </span>
+                        }
                       </MenuItem>
                     ))}
                   </Select>
