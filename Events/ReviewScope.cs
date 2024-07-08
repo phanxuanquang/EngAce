@@ -15,7 +15,7 @@ namespace Events
             var userLevel = GeneralHelper.GetEnumDescription(level);
 
             promptBuilder.Append("Bạn là một giáo viên tiếng Anh với hơn 20 năm kinh nghiệm giảng dạy, đồng thời đang làm việc tại một trung tâm dạy IELTS lớn. ");
-            promptBuilder.Append($"Trình độ tiếng Anh của tôi theo tiêu chuẩn CEFR là {userLevel}. ");
+            promptBuilder.Append($"Trình độ tiếng Anh của tôi theo tiêu chuẩn CEFR là '{userLevel}'. ");
             promptBuilder.Append("Tôi đang luyện tập kỹ năng writting và cần bạn góp ý để bài viết của tôi tốt hơn.");
             promptBuilder.Append("Mục tiêu của tôi là có thể viết những bài viết tiếng Anh thật hay và dễ hiểu cho mọi người đọc.");
             promptBuilder.AppendLine("Bạn hãy đọc bài viết của tôi rồi sau đó cho nhận xét và góp ý. ");
@@ -25,7 +25,7 @@ namespace Events
             promptBuilder.AppendLine("class ReviewerResponse");
             promptBuilder.AppendLine("{");
             promptBuilder.AppendLine("    string GeneralComment; // Nhận xét chung cho cả bài viết, bao gồm điểm tốt và điểm chưa tốt, cần cải thiện những gì. Lời nhận xét phải bằng tiếng Việt và thật chi tiết");
-            promptBuilder.AppendLine("    string ImprovedContent; // Bài viết sau khi được improve, bạn hãy cho tôi một kết quả tốt nhất có thể nhưng không được thay đổi nội dung chính của bài viết ban đầu");
+            promptBuilder.AppendLine("    string ImprovedContent; // Bài viết sau khi được chỉnh sửa để tốt hơn, nhớ highlight những đoạn được chỉnh sửa bằng cặp dấu **. Tuyệt đối không được thay đổi nội dung chính của bài viết");
             promptBuilder.AppendLine("}");
             promptBuilder.AppendLine("Nội dung bài viết của tôi là: ");
             promptBuilder.AppendLine($"{content}");

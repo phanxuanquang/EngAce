@@ -14,9 +14,9 @@ namespace Events
                 promptBuilder.Append($"Please help me to explain the meaning of '{keyword}'");
                 if (!string.IsNullOrEmpty(context))
                 {
-                    promptBuilder.Append($" knowing the context is '{context}' ");
+                    promptBuilder.Append($" in the context '{context}' ");
                 }
-                promptBuilder.Append("\nYour explanation format should be similar to the Oxford Dictionary or Cambridge Dictionary website, and it must be easy for even intermediate English learners to understand.");
+                promptBuilder.Append("\nYour explanation format should be similar to the Oxford Dictionary or Cambridge Dictionary website, and it must be easy for even intermediate English learners to understand. You can also provide some examples for further clarification.");
             }
             else
             {
@@ -24,9 +24,9 @@ namespace Events
                 promptBuilder.Append($"Hãy giải thích một cách thật dễ hiểu nghĩa của '{keyword}'");
                 if (!string.IsNullOrEmpty(context))
                 {
-                    promptBuilder.Append($", biết rằng ngữ cảnh là '{context}' ");
+                    promptBuilder.Append($" trong ngữ cảnh '{context}' ");
                 }
-                promptBuilder.Append("\nCách trình bày giải thích của bạn nên giống trang web Oxford Dictionary hoặc Cambridge Dictionary, và bạn phải sử dụng tiếng Việt để giải thích vì người đọc chính là người Việt Nam.");
+                promptBuilder.Append("\nCách trình bày giải thích của bạn nên giống trang web Oxford Dictionary hoặc Cambridge Dictionary, và bạn phải sử dụng tiếng Việt để giải thích vì người đọc chính là người Việt Nam. Bạn cũng có thể cung cấp một số ví dụ để làm rõ hơn cách giải thích và cách áp dụng.");
             }
 
             return await Gemini.Generator.Generate(apiKey, promptBuilder.ToString(), false);
