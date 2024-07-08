@@ -8,14 +8,14 @@ namespace Events
 {
     public static class QuizScope
     {
-        public const int MinTotalQuiz = 5;
-        public const int MaxTotalQuiz = 40;
+        public const int MinTotalQuestions = 10;
+        public const int MaxTotalQuestions = 40;
         public static async Task<List<Quiz>?> GenerateQuizes(string apiKey, string topic, List<QuizzType> quizzTypes, EnglishLevel level, short questionsCount)
         {
             var promptBuilder = new StringBuilder();
             var userLevel = GeneralHelper.GetEnumDescription(level);
             var types = string.Join(", ", quizzTypes.Select(type => GeneralHelper.GetEnumDescription(type)).ToList());
-            var model = questionsCount <= 10 ? GenerativeModel.Gemini_15_Flash : GenerativeModel.Gemini_15_Pro;
+            var model = questionsCount <= (MinTotalQuestions * 2) ? GenerativeModel.Gemini_15_Flash : GenerativeModel.Gemini_15_Pro;
 
             promptBuilder.AppendLine($"Bạn là một giáo viên dạy tiếng Anh với hơn 20 năm kinh nghiệm. Trình độ tiếng Anh của tôi theo tiêu chuẩn CEFR là {userLevel}. ");
             promptBuilder.Append($"Hãy cho tôi một bộ câu hỏi trắc nghiệm tiếng Anh bao gồm {questionsCount} câu hỏi liên quan đến chủ đề '{topic}' để luyện tập. ");

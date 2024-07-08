@@ -52,9 +52,9 @@ namespace EngAce.Api.Controllers
                 return BadRequest("Tên chủ đề không được rỗng");
             }
 
-            if (totalQuestions < QuizScope.MinTotalQuiz || totalQuestions > QuizScope.MaxTotalQuiz)
+            if (totalQuestions < QuizScope.MinTotalQuestions || totalQuestions > QuizScope.MaxTotalQuestions)
             {
-                return BadRequest($"Số lượng câu hỏi phải nằm trong khoảng {QuizScope.MinTotalQuiz} đến {QuizScope.MaxTotalQuiz}");
+                return BadRequest($"Số lượng câu hỏi phải nằm trong khoảng {QuizScope.MinTotalQuestions} đến {QuizScope.MaxTotalQuestions}");
             }
 
             var cacheKey = $"GenerateQuizzes-{request.Topic.ToLower().Trim()}-{string.Join(string.Empty, request.QuizzTypes)}-{englishLevel}-{totalQuestions}";
@@ -89,9 +89,9 @@ namespace EngAce.Api.Controllers
                 return BadRequest("Tên chủ đề không được rỗng");
             }
 
-            if (totalQuestions < QuizScope.MinTotalQuiz || totalQuestions > QuizScope.MaxTotalQuiz)
+            if (totalQuestions < QuizScope.MinTotalQuestions || totalQuestions > QuizScope.MaxTotalQuestions)
             {
-                return BadRequest($"Số lượng câu hỏi phải nằm trong khoảng {QuizScope.MinTotalQuiz} đến {QuizScope.MaxTotalQuiz}");
+                return BadRequest($"Số lượng câu hỏi phải nằm trong khoảng {QuizScope.MinTotalQuestions} đến {QuizScope.MaxTotalQuestions}");
             }
 
             try
