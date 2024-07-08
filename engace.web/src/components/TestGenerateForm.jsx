@@ -15,7 +15,7 @@ const MemoizedQuestionsTypeForm = memo(QuestionsTypeForm);
 export default function TestGenerateForm() {
   const dispatch = useDispatch();
   const [topic, setTopic] = useState("");
-  const [quantity, setQuantity] = useState(5);
+  const [quantity, setQuantity] = useState(10);
   const [types, setTypes] = useState({});
   const level = localStorage.getItem("level");
   const [errorTopic, setErrorTopic] = useState("");
@@ -49,8 +49,8 @@ export default function TestGenerateForm() {
       setErrorTopic("");
     }
 
-    if (quantity < 5 || quantity > 40) {
-      setErrorQuantity("Số lượng câu hỏi phải từ 5 ... 40");
+    if (quantity < 10 || quantity > 40) {
+      setErrorQuantity("Số lượng câu hỏi phải từ 10 đến 40");
       hasError = true;
     } else {
       setErrorQuantity("");

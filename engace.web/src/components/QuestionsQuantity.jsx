@@ -3,10 +3,10 @@ import PropTypes from "prop-types";
 
 export default function QuestionsQuantity({ quantity, setQuantity, error }) {
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+    <Box sx={{ display: "flex", flexDirection: "column", gap: 1, marginBottom: 2 }}>
       <InputLabel htmlFor="quantity">
-        <Typography id="modal-modal-title" variant="h4" sx={{ color: "black" }}>
-          Số lượng câu hỏi trắc nghiệm
+        <Typography id="modal-modal-title" variant="h4" sx={{ color: "black"}}>
+          Số lượng câu hỏi
         </Typography>
       </InputLabel>
       <TextField
@@ -16,7 +16,7 @@ export default function QuestionsQuantity({ quantity, setQuantity, error }) {
         value={quantity}
         onChange={(e) => setQuantity(e.target.value)}
         error={!!error}
-        helperText={!error ? "Số lượng câu hỏi từ 5 ... 40" : error}
+        helperText={!error ? "Số lượng câu hỏi từ 10 đến 40" : error}
         sx={{
           height: "2.5rem",
           "& .MuiInputBase-root": {

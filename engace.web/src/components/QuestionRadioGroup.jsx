@@ -26,7 +26,7 @@ export default function QuestionRadioGroup({
       <FormLabel>
         <Typography
           variant="body1"
-          sx={{ color: "black !important", fontSize: "1.4rem" }}
+          sx={{ color: "black !important" }}
         >
           {question.Question}
         </Typography>

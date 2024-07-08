@@ -39,7 +39,11 @@ export default function QuestionsTypeForm({ types, setTypes, error }) {
       sx={{ paddingLeft: { sx: 0, md: 1 } }}
     >
       <FormLabel component="legend">
-        <Typography id="modal-modal-title" variant="h4" sx={{ color: "black" }}>
+        <Typography
+          id="modal-modal-title"
+          variant="h4"
+          sx={{ color: "primary.black", marginBottom: 1 }}
+        >
           Chọn loại câu hỏi
         </Typography>
       </FormLabel>
@@ -49,7 +53,15 @@ export default function QuestionsTypeForm({ types, setTypes, error }) {
             key={key}
             control={<Checkbox checked={!!types[key]} />}
             onChange={() => handleCheckboxChange(key)}
-            label={qTypes[key]}
+            label={
+              <Typography
+                id="modal-modal-title"
+                variant="body1"
+                sx={{ color: "primary.black" }}
+              >
+                {qTypes[key]}
+              </Typography>
+            }
           />
         ))}
       </FormGroup>

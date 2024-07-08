@@ -35,8 +35,8 @@ export default function SuggestTopicInput({ topic, setTopic, error }) {
   return (
     <Box sx={{ display: "flex", flexDirection: "column" }}>
       <InputLabel htmlFor="topic">
-        <Typography id="modal-modal-title" variant="h4" sx={{ color: "black" }}>
-          Chủ đề muốn luyện tập
+        <Typography id="modal-modal-title" variant="h4" sx={{ color: "primary.black" }}>
+          Chủ đề cho bài tập
         </Typography>
       </InputLabel>
       <Box
@@ -45,14 +45,13 @@ export default function SuggestTopicInput({ topic, setTopic, error }) {
           justifyContent: "center",
           alignItems: "center",
           marginBottom: 2,
-          marginTop: 2,
           gap: 1,
         }}
       >
         <TextField
           id="topic"
           variant="standard"
-          placeholder="Chủ đề . . ."
+          placeholder="Aa . . ."
           sx={{
             flexGrow: 1,
             height: "2.5rem",

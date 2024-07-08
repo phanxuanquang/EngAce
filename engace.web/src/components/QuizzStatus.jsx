@@ -53,8 +53,8 @@ export default function QuizzStatus({
         gap: 2,
       }}
     >
-      <Typography variant="body1" sx={{ fontWeight: "bold" }}>
-        Trạng thái làm bài
+      <Typography variant="h6" sx={{ color: "primary.black", textAlign: "center" }}>
+        TRẠNG THÁI LÀM BÀI
       </Typography>
       <Stack
         spacing={{ xs: 1, sm: 2 }}

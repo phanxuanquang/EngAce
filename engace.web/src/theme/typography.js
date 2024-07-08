@@ -2,83 +2,89 @@ function pxToRem(value) {
   return `${value / 16}rem`;
 }
 
-function responsiveFontSizes({ sm, md, lg }) {
+function responsiveFontSizes({ xs, sm, md, lg, xl }) {
   return {
-    "@media (min-width:600px)": {
+    "@media (min-width:375px)": { // Galaxy S8+
+      fontSize: pxToRem(xs),
+    },
+    "@media (min-width:600px)": { // iPad Gen 9
       fontSize: pxToRem(sm),
     },
-    "@media (min-width:900px)": {
+    "@media (min-width:900px)": { // Dell XPS 15
       fontSize: pxToRem(md),
     },
-    "@media (min-width:1200px)": {
+    "@media (min-width:1200px)": { // General desktops
       fontSize: pxToRem(lg),
+    },
+    "@media (min-width:2560px)": { // 4K desktop
+      fontSize: pxToRem(xl),
     },
   };
 }
 
-const FONT_PRIMARY = "Open Sans, sans-serif";
+const FONT_PRIMARY = "Roboto, sans-serif";
 
 const typography = {
   fontFamily: FONT_PRIMARY,
   fontWeightRegular: 400,
-  fontWeightMedium: 600,
+  fontWeightMedium: 500,
   fontWeightBold: 700,
   h1: {
-    fontWeight: 800,
-    lineHeight: 80 / 64,
-    fontSize: pxToRem(40),
-    ...responsiveFontSizes({ sm: 52, md: 58, lg: 64 }),
+    fontWeight: 700,
+    lineHeight: 1.25,
+    fontSize: pxToRem(28),
+    ...responsiveFontSizes({ xs: 32, sm: 36, md: 48, lg: 56, xl: 64 }),
   },
   h2: {
-    fontWeight: 800,
-    lineHeight: 64 / 48,
-    fontSize: pxToRem(32),
-    ...responsiveFontSizes({ sm: 40, md: 44, lg: 48 }),
+    fontWeight: 700,
+    lineHeight: 1.3,
+    fontSize: pxToRem(24),
+    ...responsiveFontSizes({ xs: 28, sm: 32, md: 40, lg: 48, xl: 56 }),
   },
   h3: {
-    fontWeight: 800,
-    lineHeight: 1.5,
-    fontSize: pxToRem(18),
-    ...responsiveFontSizes({ sm: 26, md: 30, lg: 32 }),
+    fontWeight: 700,
+    lineHeight: 1.35,
+    fontSize: pxToRem(20),
+    ...responsiveFontSizes({ xs: 24, sm: 28, md: 32, lg: 40, xl: 48 }),
   },
   h4: {
-    fontWeight: 800,
-    lineHeight: 1.5,
-    fontSize: pxToRem(16),
-    ...responsiveFontSizes({ sm: 20, md: 24, lg: 24 }),
+    fontWeight: "bold",
+    lineHeight: 1.4,
+    fontSize: pxToRem(18),
+    ...responsiveFontSizes({ xs: 20, sm: 24, md: 28, lg: 32, xl: 40 }),
   },
   h5: {
-    fontWeight: 800,
-    lineHeight: 1.5,
-    fontSize: pxToRem(13),
-    ...responsiveFontSizes({ sm: 19, md: 20, lg: 20 }),
-  },
-  h6: {
-    fontWeight: 800,
-    lineHeight: 28 / 18,
-    fontSize: pxToRem(11),
-    ...responsiveFontSizes({ sm: 18, md: 18, lg: 18 }),
-  },
-  subtitle1: {
     fontWeight: 700,
     lineHeight: 1.5,
+    fontSize: pxToRem(16),
+    ...responsiveFontSizes({ xs: 18, sm: 20, md: 24, lg: 28, xl: 32 }),
+  },
+  h6: {
+    fontWeight: 700,
+    lineHeight: 1.6,
+    fontSize: pxToRem(14),
+    ...responsiveFontSizes({ xs: 16, sm: 18, md: 20, lg: 24, xl: 28 }),
+  },
+  subtitle1: {
+    fontWeight: 500,
+    lineHeight: 1.75,
     fontSize: pxToRem(16),
   },
   subtitle2: {
-    fontWeight: 700,
-    lineHeight: 22 / 14,
+    fontWeight: 500,
+    lineHeight: 1.75,
     fontSize: pxToRem(14),
   },
   body1: {
-    lineHeight: 1.5,
+    lineHeight: 1.75,
     fontSize: pxToRem(16),
   },
   body2: {
-    lineHeight: 22 / 14,
+    lineHeight: 1.75,
     fontSize: pxToRem(14),
   },
   caption: {
-    lineHeight: 1,
+    lineHeight: 1.5,
     fontSize: pxToRem(12),
   },
   overline: {
@@ -90,7 +96,7 @@ const typography = {
   },
   button: {
     fontWeight: 700,
-    lineHeight: 24 / 14,
+    lineHeight: 1.75,
     fontSize: pxToRem(14),
     textTransform: "capitalize",
   },
