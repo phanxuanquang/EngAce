@@ -34,8 +34,14 @@ export default function Test() {
       flexDirection="column"
       gap={2}
     >
-      <Typography variant="h2">BÀI TẬP</Typography>
-      {!loading ? <TestGenerateForm /> : <CircularProgress />}
+      {!loading ? (
+        <>
+          <Typography variant="h2">BÀI TẬP</Typography>
+          <TestGenerateForm />
+        </>
+      ) : (
+        <CircularProgress />
+      )}
     </Box>
   );
 }
