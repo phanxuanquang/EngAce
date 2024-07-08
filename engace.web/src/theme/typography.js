@@ -4,25 +4,25 @@ function pxToRem(value) {
 
 function responsiveFontSizes({ xs, sm, md, lg, xl }) {
   return {
-    "@media (min-width:375px)": { // Galaxy S8+
+    "@media (min-width:375px)": { 
       fontSize: pxToRem(xs),
     },
-    "@media (min-width:600px)": { // iPad Gen 9
+    "@media (min-width:600px)": { 
       fontSize: pxToRem(sm),
     },
-    "@media (min-width:900px)": { // Dell XPS 15
+    "@media (min-width:900px)": { 
       fontSize: pxToRem(md),
     },
-    "@media (min-width:1200px)": { // General desktops
+    "@media (min-width:1200px)": { 
       fontSize: pxToRem(lg),
     },
-    "@media (min-width:2560px)": { // 4K desktop
+    "@media (min-width:2560px)": { 
       fontSize: pxToRem(xl),
     },
   };
 }
 
-const FONT_PRIMARY = "Roboto, sans-serif";
+const FONT_PRIMARY = "Helvetica, Arial, sans-serif";
 
 const typography = {
   fontFamily: FONT_PRIMARY,
@@ -48,7 +48,7 @@ const typography = {
     ...responsiveFontSizes({ xs: 24, sm: 28, md: 32, lg: 40, xl: 48 }),
   },
   h4: {
-    fontWeight: "bold",
+    fontWeight: 700,
     lineHeight: 1.4,
     fontSize: pxToRem(18),
     ...responsiveFontSizes({ xs: 20, sm: 24, md: 28, lg: 32, xl: 40 }),
@@ -63,7 +63,7 @@ const typography = {
     fontWeight: 700,
     lineHeight: 1.6,
     fontSize: pxToRem(14),
-    ...responsiveFontSizes({ xs: 16, sm: 18, md: 20, lg: 24, xl: 28 }),
+    ...responsiveFontSizes({ xs: 16, sm: 18, md: 20, lg: 20, xl: 28 }),
   },
   subtitle1: {
     fontWeight: 500,
@@ -77,11 +77,17 @@ const typography = {
   },
   body1: {
     lineHeight: 1.75,
-    fontSize: pxToRem(16),
+    fontSize: pxToRem(14),
+    ...responsiveFontSizes({ xs: 16, sm: 18, md: 20, lg: 16, xl: 28 }),
   },
   body2: {
     lineHeight: 1.75,
     fontSize: pxToRem(14),
+  },
+  body3: {
+    lineHeight: 1.6,
+    fontSize: pxToRem(13.5),
+    ...responsiveFontSizes({ xs: 16, sm: 18, md: 20, lg: 16, xl: 28 }),
   },
   caption: {
     lineHeight: 1.5,

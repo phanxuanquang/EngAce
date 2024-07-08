@@ -33,9 +33,9 @@ export default function SuggestTopicInput({ topic, setTopic, error }) {
   };
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column" }}>
+    <Box sx={{ display: "flex", flexDirection: "column", marginBottom: 1 }}>
       <InputLabel htmlFor="topic">
-        <Typography id="modal-modal-title" variant="h4" sx={{ color: "primary.black" }}>
+        <Typography id="modal-modal-title" variant="h6" sx={{ color: "primary.black" }}>
           Chủ đề cho bài tập
         </Typography>
       </InputLabel>
@@ -44,7 +44,7 @@ export default function SuggestTopicInput({ topic, setTopic, error }) {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          marginBottom: 2,
+          marginBottom: 1.5,
           gap: 1,
         }}
       >
@@ -70,6 +70,7 @@ export default function SuggestTopicInput({ topic, setTopic, error }) {
           target="_blank"
           sx={{
             height: "2.5rem",
+            textTransform: "none"
           }}
           onClick={handleSuggestTopic}
         >

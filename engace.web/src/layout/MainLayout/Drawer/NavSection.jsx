@@ -1,3 +1,4 @@
+import React from 'react';
 import PropTypes from "prop-types";
 import {
   NavLink as RouterLink,
@@ -14,6 +15,9 @@ import {
   ListItemIcon,
   ListItemText,
   Typography,
+  Dialog,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import { alpha, styled, useTheme } from "@mui/material/styles";
 import { Logout, Settings } from "@mui/icons-material";
@@ -94,11 +98,18 @@ export default function NavSection({ navConfig, ...other }) {
     return pathFirstPart === pathnameFirstPart;
   };
 
+  const [openLogoutDialog, setOpenLogoutDialog] = React.useState(false);
+
   const handleSetting = () => {
     navigate("/level");
   };
 
   const handleLogout = () => {
+    setOpenLogoutDialog(true); // Open the confirmation dialog
+  };
+
+  const handleLogoutConfirm = () => {
+    // Perform logout actions
     Cookies.remove("token");
     localStorage.removeItem("name");
     localStorage.removeItem("level");
@@ -106,6 +117,13 @@ export default function NavSection({ navConfig, ...other }) {
     googleLogout();
     dispatch(chatbotActions.resetChat());
     navigate("/auth");
+
+    // Close the confirmation dialog
+    setOpenLogoutDialog(false);
+  };
+
+  const handleLogoutCancel = () => {
+    setOpenLogoutDialog(false); // Close the confirmation dialog
   };
 
   return (
@@ -126,7 +144,10 @@ export default function NavSection({ navConfig, ...other }) {
         {picture ? (
           <Avatar alt="Avatar" src={picture}></Avatar>
         ) : (
-          <AccountCircleIcon fontSize="large" sx={{ color: "black" }} />
+          <AccountCircleIcon
+            fontSize="large"
+            sx={{ color: "primary.black" }}
+          />
         )}
         <Typography
           sx={{
@@ -160,7 +181,7 @@ export default function NavSection({ navConfig, ...other }) {
       >
         <Button
           variant="outlined"
-          sx={{ width: "100%" }}
+          sx={{ width: "100%", textTransform: "none" }}
           startIcon={<Settings />}
           onClick={handleSetting}
         >
@@ -168,7 +189,7 @@ export default function NavSection({ navConfig, ...other }) {
         </Button>
         <Button
           variant="contained"
-          sx={{ width: "100%" }}
+          sx={{ width: "100%", textTransform: "none" }}
           color="error"
           startIcon={<Logout />}
           onClick={handleLogout}
@@ -176,6 +197,27 @@ export default function NavSection({ navConfig, ...other }) {
           Đăng xuất
         </Button>
       </Box>
+
+      <Dialog
+        open={openLogoutDialog}
+        onClose={handleLogoutCancel}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent sx={{ padding: 2 }}>
+          <Typography>
+            Toàn bộ dữ liệu học tập của bạn sẽ bị xóa. Bạn có chắc chắn muốn đăng xuất?
+          </Typography>
+        </DialogContent>
+        <DialogActions sx={{ paddingTop: 0}}>
+          <Button onClick={handleLogoutCancel} color="primary"  autoFocus>
+            Hủy
+          </Button>
+          <Button onClick={handleLogoutConfirm} color="error" variant='outlined' sx={{ textTransform: "none"}}>
+            Đồng ý
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }

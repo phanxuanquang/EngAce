@@ -69,7 +69,7 @@ const ResponsiveAppBar = ({ onOpenSidebar }) => {
       <Container maxWidth="false">
         <Toolbar disableGutters>
           <Typography
-            variant="h4"
+            variant="h6"
             noWrap
             component={NavLink}
             to={"/"}
@@ -101,7 +101,7 @@ const ResponsiveAppBar = ({ onOpenSidebar }) => {
             </IconButton>
           </Box>
           <Typography
-            variant="h4"
+            variant="h6"
             noWrap
             component={NavLink}
             to={"/"}
@@ -148,7 +148,10 @@ const ResponsiveAppBar = ({ onOpenSidebar }) => {
                 {picture ? (
                   <Avatar alt="Avatar" src={picture}></Avatar>
                 ) : (
-                  <AccountCircleIcon fontSize="large" sx={{ color: "black" }} />
+                  <AccountCircleIcon
+                    fontSize="large"
+                    sx={{ color: "primary.black" }}
+                  />
                 )}
               </IconButton>
             </Tooltip>
@@ -206,9 +209,20 @@ const ResponsiveAppBar = ({ onOpenSidebar }) => {
                 </ListItemIcon>
                 Cài đặt
               </MenuItem>
-              <MenuItem onClick={handleLogout}>
+              <MenuItem
+                onClick={handleLogout}
+                sx={{
+                  color: "error.main",
+                  fontWeight: "bold",
+                }}
+              >
                 <ListItemIcon>
-                  <Logout fontSize="small" />
+                  <Logout
+                    fontSize="small"
+                    sx={{
+                      color: "error.main",
+                    }}
+                  />
                 </ListItemIcon>
                 Đăng xuất
               </MenuItem>

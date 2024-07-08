@@ -61,6 +61,12 @@ export default function QuizzStatus({
         direction="row"
         useFlexGap
         flexWrap="wrap"
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: { xs: "start", md: "center" },
+          gap: 2,
+        }}
       >
         {qaList.map((item, index) => (
           <MyCustomQuizzChip
@@ -87,7 +93,7 @@ export default function QuizzStatus({
       {submit && (
         <Button
           variant="outlined"
-          sx={{ width: "100%" }}
+          sx={{ width: "100%", textTransform: "none" }}
           onClick={handleContinue}
         >
           Tiếp tục
@@ -104,7 +110,7 @@ export default function QuizzStatus({
             paddingBottom: "0.5rem",
           }}
         >
-          <a>Xác nhận nộp bài?</a>
+          <a>Bạn có chắc chắn muốn nộp bài?</a>
         </DialogContent>
         <DialogActions>
           <Box

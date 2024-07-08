@@ -74,7 +74,7 @@ export default function DistionarySearchForm({ onClosePannel }) {
           <TextField
             id="context"
             variant="outlined"
-            placeholder="Hello World"
+            placeholder="Hello Vietnam"
             value={context}
             onChange={(e) => setContext(e.target.value)}
           />

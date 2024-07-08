@@ -3,9 +3,9 @@ import PropTypes from "prop-types";
 
 export default function QuestionsQuantity({ quantity, setQuantity, error }) {
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: 1, marginBottom: 2 }}>
+    <Box sx={{ display: "flex", flexDirection: "column", gap: 1, marginBottom: 3 }}>
       <InputLabel htmlFor="quantity">
-        <Typography id="modal-modal-title" variant="h4" sx={{ color: "black"}}>
+        <Typography id="modal-modal-title" variant="h6" sx={{ color: "primary.black"}}>
           Số lượng câu hỏi
         </Typography>
       </InputLabel>

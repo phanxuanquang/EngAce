@@ -22,7 +22,7 @@ export default function QuestionAndAnswer() {
         alignItems: "center"
       }}
     >
-      <Grid container spacing={4}>
+      <Grid container spacing={2}>
         <Grid
           item
           xs={12}
@@ -49,9 +49,6 @@ export default function QuestionAndAnswer() {
         </Grid>
 
         <Grid item xs={12} md={3}>
-          <Divider
-            sx={{ marginBottom: 2, display: { xs: "block", md: "none" } }}
-          />
           <QuizzStatus
             qaList={qaList}
             answer={answer}

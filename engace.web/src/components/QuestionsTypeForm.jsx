@@ -36,12 +36,12 @@ export default function QuestionsTypeForm({ types, setTypes, error }) {
       component="fieldset"
       variant="standard"
       error={!!error}
-      sx={{ paddingLeft: { sx: 0, md: 1 } }}
+      sx={{ paddingLeft: { sx: 0, md: 1 }, marginBottom: 1.5}}
     >
       <FormLabel component="legend">
         <Typography
           id="modal-modal-title"
-          variant="h4"
+          variant="h6"
           sx={{ color: "primary.black", marginBottom: 1 }}
         >
           Chọn loại câu hỏi
@@ -50,13 +50,14 @@ export default function QuestionsTypeForm({ types, setTypes, error }) {
       <FormGroup>
         {Object.keys(qTypes).map((key) => (
           <FormControlLabel
+            sx={{ marginTop: 0.6 }}
             key={key}
             control={<Checkbox checked={!!types[key]} />}
             onChange={() => handleCheckboxChange(key)}
             label={
               <Typography
                 id="modal-modal-title"
-                variant="body1"
+                variant="body3"
                 sx={{ color: "primary.black" }}
               >
                 {qTypes[key]}

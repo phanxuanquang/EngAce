@@ -108,8 +108,9 @@ export default function TestGenerateForm() {
           error={errorTypes}
         />
       </Grid>
-      <Grid item xs={12} display={"flex"} justifyContent={"center"}>
+      <Grid item xs={12} display={"flex"} justifyContent={"center"} sx={{ marginBottom: 3 }}>
         <LoadingButton
+          sx={{ textTransform: "none" }}
           loading={loading}
           loadingPosition="end"
           endIcon={<DoneIcon />}

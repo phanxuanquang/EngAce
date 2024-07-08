@@ -198,7 +198,7 @@ export default function Level() {
               size="large"
               sx={{
                 color: "white",
-                fontSize: "1.2rem",
+                fontSize: "1rem",
                 "&:not(:disabled)": {
                   background:
                     "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
@@ -215,7 +215,7 @@ export default function Level() {
               }}
               onClick={() => handleSubmit()}
             >
-              Xác nhận
+              XÁC NHẬN
             </Button>
           </Box>
         </Box>

@@ -1,4 +1,5 @@
 import {
+  Divider,
   FormControl,
   FormControlLabel,
   FormLabel,
@@ -24,17 +25,15 @@ export default function QuestionRadioGroup({
   return (
     <FormControl disabled={submit}>
       <FormLabel>
-        <Typography
-          variant="body1"
-          sx={{ color: "black !important" }}
-        >
-          {question.Question}
+        <Typography variant="body1" sx={{ color: "black !important" }}>
+          <strong>Câu hỏi:</strong> {question.Question}
         </Typography>
       </FormLabel>
       <RadioGroup
         name="radio-buttons-group"
         onChange={handleChange}
         value={answer[qIndex] || ""}
+        sx={{ marginBottom: 1.5 }}
       >
         {question.Options.map((option, index) => (
           <FormControlLabel
@@ -47,7 +46,7 @@ export default function QuestionRadioGroup({
                   color: !submit
                     ? "black"
                     : question.RightOptionIndex === index
-                    ? "green"
+                    ? "success.dark"
                     : "grey",
                   fontWeight: !submit
                     ? "normal"
@@ -62,7 +61,19 @@ export default function QuestionRadioGroup({
           />
         ))}
       </RadioGroup>
-      {submit && <Typography>{question.ExplanationInVietnamese}</Typography>}
+      <Divider />
+      {submit && (
+        <Typography
+          sx={{
+            marginTop: 1.5,
+            marginBottom: 1.5,
+            color: "info.dark",
+          }}
+        >
+          <strong>Giải thích:</strong> {question.ExplanationInVietnamese}
+        </Typography>
+      )}
+      <Divider />
     </FormControl>
   );
 }

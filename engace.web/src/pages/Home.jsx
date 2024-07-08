@@ -41,7 +41,7 @@ export default function Home() {
             >
               <Grid item xs={6}>
                 <MyBentoItem
-                  title="Từ điển"
+                  title="TỪ ĐIỂN"
                   route="/dictionary"
                   backgroundColor="#34A853"
                   Icon={MenuBookIcon}
@@ -49,7 +49,7 @@ export default function Home() {
               </Grid>
               <Grid item xs={6}>
                 <MyBentoItem
-                  title="Bài tập"
+                  title="BÀI TẬP"
                   route="/test"
                   backgroundColor="#4285F4"
                   Icon={QuizIcon}
@@ -57,7 +57,7 @@ export default function Home() {
               </Grid>
               <Grid item xs={6}>
                 <MyBentoItem
-                  title="Luyện viết"
+                  title="LUYỆN VIẾT"
                   route="/writing"
                   backgroundColor="#FBBC04"
                   Icon={DrawIcon}
@@ -65,7 +65,7 @@ export default function Home() {
               </Grid>
               <Grid item xs={6}>
                 <MyBentoItem
-                  title="Tư vấn"
+                  title="TƯ VẤN"
                   route="/chat"
                   backgroundColor="#EA4335"
                   Icon={QuestionAnswerIcon}

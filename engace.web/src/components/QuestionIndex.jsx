@@ -1,4 +1,6 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, IconButton, Typography } from "@mui/material";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import PropTypes from "prop-types";
 
 export default function QuestionIndex({ index, length, setIndex }) {
@@ -10,24 +12,28 @@ export default function QuestionIndex({ index, length, setIndex }) {
     setIndex(index + 1);
   };
 
+  const formatIndex = (index) => {
+    return index < 9 ? `0${index + 1}` : index + 1;
+  };
+
   return (
     <Box
       sx={{
         width: "100%",
         display: "flex",
-        justifyContent: "space-between",
+        justifyContent: "center",
         alignItems: "center",
       }}
     >
-      <Button disabled={index === 0} onClick={handleBack}>
-        BACK
-      </Button>
-      <Typography>
-        {index + 1} / {length}
+      <IconButton disabled={index === 0} onClick={handleBack}>
+        <ArrowBackIosIcon />
+      </IconButton>
+      <Typography sx={{ mx: 2 }}>
+        {formatIndex(index)} / {length < 10 ? `0${length}` : length}
       </Typography>
-      <Button disabled={index === length - 1} onClick={handleNext}>
-        NEXT
-      </Button>
+      <IconButton disabled={index === length - 1} onClick={handleNext}>
+        <ArrowForwardIosIcon />
+      </IconButton>
     </Box>
   );
 }

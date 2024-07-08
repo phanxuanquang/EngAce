@@ -9,7 +9,7 @@ const AppBarItem = ({ item, active }) => {
   const { title, path } = item;
 
   const activeStyle = {
-    color: "#202124",
+    color: "primary.black",
     bgcolor: alpha(
       theme.palette.primary.dark,
       theme.palette.action.selectedOpacity
@@ -25,6 +25,7 @@ const AppBarItem = ({ item, active }) => {
         px: 2,
         color: "white",
         display: "block",
+        textTransform: "none",
         ...(active && activeStyle),
       }}
     >

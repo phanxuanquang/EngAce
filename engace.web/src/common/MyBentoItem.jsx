@@ -52,7 +52,7 @@ export default function MyBentoItem({ title, route, backgroundColor, Icon }) {
       <IconWrapper>
         <Icon sx={{ width: "55%", height: "auto", marginBotton: "0px" }} />
       </IconWrapper>
-      <Typography variant="h3" sx={{ alignSelf: "center" }}>
+      <Typography variant="h5" sx={{ alignSelf: "center" }}>
         {title}
       </Typography>
     </Item>
