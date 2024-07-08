@@ -53,7 +53,10 @@ export default function QuizzStatus({
         gap: 2,
       }}
     >
-      <Typography variant="h6" sx={{ color: "primary.black", textAlign: "center" }}>
+      <Typography
+        variant="h6"
+        sx={{ color: "primary.black", textAlign: "center" }}
+      >
         TRẠNG THÁI LÀM BÀI
       </Typography>
       <Stack
@@ -64,7 +67,6 @@ export default function QuizzStatus({
         sx={{
           display: "flex",
           flexDirection: "row",
-          justifyContent: { xs: "start", md: "center" },
           gap: 2,
         }}
       >
@@ -124,7 +126,12 @@ export default function QuizzStatus({
             gap={1}
           >
             <Button onClick={handleCloseDialog}>Hủy</Button>
-            <Button onClick={handleSubmit} variant="contained" color="error" autoFocus>
+            <Button
+              onClick={handleSubmit}
+              variant="contained"
+              color="error"
+              autoFocus
+            >
               Nộp
             </Button>
           </Box>
