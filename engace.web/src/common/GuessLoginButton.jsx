@@ -151,6 +151,7 @@ export default function GuessLoginButton() {
               onClick={handleSubmit}
               disabled={!keyValue.trim()}
               sx={{
+                textTransform: "none",
                 color: "white",
                 "&:not(:disabled)": {
                   background:

@@ -99,7 +99,7 @@ const CHART_COLORS = {
 };
 
 const palette = {
-  common: { black: '#000', white: '#fff' },
+  common: { black: '#181818', white: '#fff' },
   primary: { ...PRIMARY },
   secondary: { ...SECONDARY },
   info: { ...INFO },

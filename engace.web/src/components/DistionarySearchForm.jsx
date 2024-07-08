@@ -45,7 +45,7 @@ export default function DistionarySearchForm({ onClosePannel }) {
           component={InputLabel}
           required
           htmlFor="search"
-          color={"black"}
+          color={"primary.black"}
           sx={{ marginBottom: "0.5rem" }}
         >
           Từ hoặc cụm từ cần tra
@@ -65,7 +65,7 @@ export default function DistionarySearchForm({ onClosePannel }) {
           variant="body1"
           component={InputLabel}
           htmlFor="context"
-          color={"black"}
+          color={"primary.black"}
           sx={{ marginBottom: "0.5rem" }}
         >
           Ngữ cảnh
@@ -86,7 +86,7 @@ export default function DistionarySearchForm({ onClosePannel }) {
           component={InputLabel}
           htmlFor="mode"
           id="mode-label"
-          color={"black"}
+          color={"primary.black"}
           sx={{ marginBottom: "0.5rem" }}
         >
           Loại từ điển
