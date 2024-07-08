@@ -47,9 +47,9 @@ namespace EngAce.Api.Controllers
                 var result = await ReviewScope.GenerateReview(_accessKey, englishLevel, content);
                 return Ok(result);
             }
-            catch (Exception ex)
+            catch
             {
-                return BadRequest(ex);
+                return BadRequest("Có lỗi xảy ra! Vui lòng kiểm tra lại nội dung bài viết và thử lại.");
             }
         }
     }

@@ -70,9 +70,9 @@ namespace EngAce.Api.Controllers
 
                 return Created("Success", quizzes);
             }
-            catch (Exception ex)
+            catch
             {
-                return BadRequest(ex);
+                return BadRequest("Có lỗi xảy ra! Vui lòng thử lại sau.");
             }
         }
 
@@ -145,9 +145,9 @@ namespace EngAce.Api.Controllers
 
                 return Created("Success", selectedTopics);
             }
-            catch (Exception ex)
+            catch
             {
-                return BadRequest(ex);
+                return BadRequest("Không thể gợi ý chủ đề. Vui lòng thử lại.");
             }
         }
 

@@ -80,9 +80,9 @@ namespace EngAce.Api.Controllers
                 _cache.Set(cacheKey, result, TimeSpan.FromMinutes(15));
                 return Created("Success", result);
             }
-            catch (Exception ex)
+            catch
             {
-                return BadRequest(ex);
+                return BadRequest("Có lỗi xảy ra! Vui lòng kiểm tra lại nội dung tra cứu và thử lại.");
             }
         }
     }
