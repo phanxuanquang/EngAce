@@ -111,7 +111,6 @@ export default function TestGenerateForm() {
       <Grid item xs={12} display={"flex"} justifyContent={"center"} sx={{ marginBottom: 3 }}>
         <LoadingButton
           sx={{
-            textTransform: "none",
             color: "white",
             "&:not(:disabled)": {
               background:

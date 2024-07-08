@@ -5,7 +5,6 @@ import {
   Box,
   Grid,
   Hidden,
-  Typography,
 } from "@mui/material";
 import WritingForm from "../components/WritingForm";
 import { useSearchParams } from "react-router-dom";
@@ -13,6 +12,7 @@ import { AppService } from "../services/api";
 import { useEffect, useState } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChatLoader from "../common/ChatLoader";
+import { MuiMarkdown, getOverrides } from "mui-markdown";
 
 export default function Writing() {
   const [searchParams] = useSearchParams();
@@ -108,10 +108,64 @@ export default function Writing() {
                     Nhận xét
                   </AccordionSummary>
                   <AccordionDetails>
-                    <Typography paragraph>{review?.GeneralComment}</Typography>
+                    <MuiMarkdown
+                  overrides={{
+                    ...getOverrides({}),
+                    div: {
+                      props: {
+                        style: { lineHeight: 2 },
+                      },
+                    },
+                    h2: {
+                      component: "h1",
+                      props: {
+                        style: { color: "#e28048" },
+                      },
+                    },
+                    ul: {
+                      props: {
+                        style: { marginLeft: 20 },
+                      },
+                    },
+                    p: {
+                      props: {
+                        style: { marginBottom: 2 },
+                      },
+                    },
+                  }}
+                >
+                  {`<div>${review?.GeneralComment}</div>`}
+                </MuiMarkdown>
                   </AccordionDetails>
                 </Accordion>
-                <Typography paragraph>{review?.ImprovedContent}</Typography>
+                <MuiMarkdown
+                  overrides={{
+                    ...getOverrides({}),
+                    div: {
+                      props: {
+                        style: { lineHeight: 2 },
+                      },
+                    },
+                    h2: {
+                      component: "h1",
+                      props: {
+                        style: { color: "#e28048" },
+                      },
+                    },
+                    ul: {
+                      props: {
+                        style: { marginLeft: 20 },
+                      },
+                    },
+                    p: {
+                      props: {
+                        style: { marginBottom: 2 },
+                      },
+                    },
+                  }}
+                >
+                  {`<div>${review?.ImprovedContent}</div>`}
+                </MuiMarkdown>
               </>
             ) : (
               <Box
