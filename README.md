@@ -14,6 +14,7 @@ EngAce is a cutting-edge, generative AI-powered application designed to revoluti
 
 ## 2. Features
 EngAce offers a suite of tools and functionalities aimed at making English learning more accessible, enjoyable, and efficient. The app is designed with four main features as below.
+
 <img width="1920" alt="image" src="https://github.com/phanxuanquang/EngAce/assets/84692657/2a4aa082-8e6d-44b0-8f27-e0c67ebfb708">
 
 ### 2.1. AI Dictionary
