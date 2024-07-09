@@ -11,7 +11,7 @@ namespace Events
             if (useEnglish)
             {
                 promptBuilder.Append("You are an English teacher with over 20 years of experience and also an in-depth researcher of the English language.");
-                promptBuilder.Append($"Please help me to explain the meaning of '{keyword}'");
+                promptBuilder.Append($"Please explain the meaning of '{keyword}'");
                 if (!string.IsNullOrEmpty(context))
                 {
                     promptBuilder.Append($" in the context '{context}' ");

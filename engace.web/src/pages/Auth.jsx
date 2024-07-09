@@ -35,11 +35,11 @@ export default function Auth() {
           gap={2}
           maxWidth="lg"
         >
-          <img src={Logo} alt="logo" width={"80%"} style={{ maxWidth: 400 }} />
+          <img src={Logo} alt="logo" width={"80%"} style={{ maxWidth: 400, marginBottom: 3 }} />
           {!loading ? (
             <>
-              <GoogleLoginButton setLoading={setLoading} />
               <GuessLoginButton />
+              <GoogleLoginButton setLoading={setLoading} />
             </>
           ) : (
             <TruckLoader />

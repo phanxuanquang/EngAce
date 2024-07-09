@@ -63,19 +63,24 @@ export default function GuessLoginButton() {
       <Button
         variant="outlined"
         sx={{
+          color: "white",
           textTransform: "none",
           fontSize: "1.2rem",
           width: "100%",
           maxWidth: "40rem",
-          bgcolor: "white",
-          border: "0px",
+          background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
           transition:
-            "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, background-color 0.3s ease-in-out",
+            "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
           "&:hover": {
-            bgcolor: "white",
+            background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
+            opacity: 0.9,
             transform: "scale(1.05)",
-            border: "0px",
             boxShadow: "0 0.2rem 1.2rem #ffffff",
+            border: "0px",
+          },
+          "&:disabled": {
+            background: "#e0e0e0",
+            color: "#c5c5c5",
           },
         }}
         size="large"

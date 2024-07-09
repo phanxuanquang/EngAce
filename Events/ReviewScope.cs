@@ -25,7 +25,7 @@ namespace Events
             promptBuilder.AppendLine("class ReviewerResponse");
             promptBuilder.AppendLine("{");
             promptBuilder.AppendLine("    string GeneralComment; // Nhận xét chung cho cả bài viết, bao gồm điểm tốt và điểm chưa tốt, cần cải thiện những gì. Lời nhận xét phải bằng tiếng Việt và thật chi tiết");
-            promptBuilder.AppendLine("    string ImprovedContent; // Bài viết sau khi được chỉnh sửa để tốt hơn, nhớ highlight những đoạn được chỉnh sửa bằng cặp dấu **. Tuyệt đối không được thay đổi nội dung chính của bài viết");
+            promptBuilder.AppendLine("    string ImprovedContent; // Bài viết sau khi được chỉnh sửa để tốt hơn, nhớ highlight những đoạn được chỉnh sửa bằng cặp dấu **, nhưng tuyệt đối không được thay đổi nội dung chính của bài viết");
             promptBuilder.AppendLine("}");
             promptBuilder.AppendLine("Nội dung bài viết của tôi là: ");
             promptBuilder.AppendLine($"{content}");

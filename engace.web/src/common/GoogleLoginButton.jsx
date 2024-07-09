@@ -72,9 +72,11 @@ export default function GoogleLoginButton({ setLoading }) {
     <>
       <Tooltip title="Chỉ dành cho sinh viên UIT" placement="top">
         <Button
+          disabled
           variant="contained"
           onClick={handleOpenDialog}
           sx={{
+            color: "white",
             textTransform: "none",
             fontSize: "1.2rem",
             width: "100%",
@@ -88,6 +90,10 @@ export default function GoogleLoginButton({ setLoading }) {
               transform: "scale(1.05)",
               boxShadow: "0 0.2rem 1.2rem #ffffff",
               border: "0px",
+            },
+            "&:disabled": {
+              background: "#e0e0e0",
+              color: "#c5c5c5",
             },
           }}
           size="large"
