@@ -36,14 +36,14 @@ namespace Events
                     promptBuilder.Append($" trong ngữ cảnh '{context}'.");
                 }
                 promptBuilder.AppendLine("Nội dung output của bạn phải bao gồm 8 phần:");
-                promptBuilder.AppendLine("- Phiên âm và từ loại (danh từ, động từ, tính từ, trạng từ,...) của từ được tra cứu");
-                promptBuilder.AppendLine("- Định nghĩa của từ được tra trong ngữ cảnh được cung cấp (nếu có), nếu không có ngữ cảnh thì cho tôi tối đa 10 nghĩa phổ biến nhất của từ được tra cứu kèm lời giải thích chi tiết");
-                promptBuilder.AppendLine("- Cung cấp tối thiểu 5 ví dụ về cách áp dụng và hoàn cảnh áp từ được tra cứu và một số từ vựng khác có liên quan");
+                promptBuilder.AppendLine($"- Phiên âm và từ loại (danh từ, động từ, tính từ, trạng từ, thành ngữ...) của '{keyword}'");
+                promptBuilder.AppendLine($"- Định nghĩa của '{keyword}' trong ngữ cảnh được cung cấp (nếu có), nếu không có ngữ cảnh thì cho tôi tối đa 10 nghĩa phổ biến nhất của '{keyword}' kèm lời giải thích chi tiết");
+                promptBuilder.AppendLine($"- Cung cấp tối thiểu 5 ví dụ về cách áp dụng và hoàn cảnh áp dụng từ '{keyword}' và một số từ vựng khác có liên quan");
                 promptBuilder.AppendLine("- Cung cấp tối thiểu 3 từ đồng nghĩa và từ trái nghĩa nếu có, đồng thời giải thích chi tiết về chúng.");
-                promptBuilder.AppendLine("- Cung cấp một số thành ngữ và cụm từ phổ biến liên quan chứa từ đó");
-                promptBuilder.AppendLine("- Cung cấp thông tin về từ gốc và các từ phái sinh để hiểu sâu hơn về cấu trúc từ");
-                promptBuilder.AppendLine("- Cung cấp thông tin về lịch sử hình thành của từ được tra cứu (nếu có)");
-                promptBuilder.AppendLine("- Các dạng biến đổi của từ được tra cứu như thì quá khứ, thì hiện tại, dạng số nhiều, dạng so sánh,...");
+                promptBuilder.AppendLine($"- Cung cấp một số thành ngữ và cụm từ phổ biến liên quan chứa từ '{keyword}'");
+                promptBuilder.AppendLine($"- Cung cấp thông tin về từ gốc và các từ phái sinh của '{keyword}' để hiểu sâu hơn về cấu trúc từ");
+                promptBuilder.AppendLine($"- Cung cấp thông tin về lịch sử hình thành của từ '{keyword}' (nếu có)");
+                promptBuilder.AppendLine($"- Các dạng biến đổi của '{keyword}' được tra cứu như thì quá khứ, thì hiện tại, dạng số nhiều, dạng so sánh,... (nếu có)");
                 promptBuilder.AppendLine("Cách trình bày output của bạn phải thật chuyên nghiệp và phải thật dễ hiểu, tuy nhiên không được quá dài dòng.");
             }
 
