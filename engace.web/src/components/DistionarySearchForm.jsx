@@ -68,7 +68,7 @@ export default function DistionarySearchForm({ onClosePannel }) {
           color={"primary.black"}
           sx={{ marginBottom: "0.5rem" }}
         >
-          Ngữ cảnh
+          Ngữ cảnh nếu có
         </Typography>
         <FormControl fullWidth>
           <TextField
