@@ -82,7 +82,7 @@ namespace EngAce.Api.Controllers
             }
             catch
             {
-                return BadRequest("Có lỗi xảy ra! Vui lòng kiểm tra lại nội dung tra cứu và thử lại.");
+                return BadRequest("Có lỗi xảy ra! Vui lòng kiểm tra lại.");
             }
         }
     }
