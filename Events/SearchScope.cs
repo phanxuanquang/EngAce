@@ -47,7 +47,7 @@ namespace Events
                 promptBuilder.AppendLine("Cách trình bày output của bạn phải thật chuyên nghiệp và phải thật dễ hiểu, tuy nhiên không được quá dài dòng.");
             }
 
-            return await Gemini.Generator.Generate(apiKey, promptBuilder.ToString(), false);
+            return await Gemini.Generator.GenerateContent(apiKey, promptBuilder.ToString(), false);
         }
     }
 }

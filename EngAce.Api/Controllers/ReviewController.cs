@@ -18,7 +18,7 @@ namespace EngAce.Api.Controllers
         }
 
         /// <summary>
-        /// Generate the review and the improvement for the essay
+        /// GenerateResponseForConversation the review and the improvement for the essay
         /// </summary>
         /// <param name="content">The content that need the improvement</param>
         /// <param name="englishLevel">
@@ -29,7 +29,7 @@ namespace EngAce.Api.Controllers
         /// </param>
         /// <returns></returns>
         /// <remarks>
-        /// Generate the review and the improvement for the essay, including the fields: 
+        /// GenerateResponseForConversation the review and the improvement for the essay, including the fields: 
         /// 1. GeneralCommentForTheContent: The overall comment for the whole essay
         /// 2. ContentWithHighlightedIssues: The original essay with highlighted issues (using markdown format)
         /// 3. ImprovedContent: The essay after the improvement of the AI
@@ -64,6 +64,13 @@ namespace EngAce.Api.Controllers
             if (file == null || file.Length == 0)
             {
                 return BadRequest("Không có ảnh nào được đăng tải.");
+            }
+
+            var maxFileSize = 15 * 1000 * 1000;
+
+            if (file.Length > maxFileSize)
+            {
+                return BadRequest($"Dung lượng ảnh phải nhỏ hơn {maxFileSize / 1024 / 1024} MB.");
             }
 
             using (var stream = new MemoryStream())

@@ -45,7 +45,7 @@ namespace Events
             promptBuilder.AppendLine("    }");
             promptBuilder.AppendLine("]");
 
-            var response = await Gemini.Generator.Generate(apiKey, promptBuilder.ToString(), true, 50, model);
+            var response = await Gemini.Generator.GenerateContent(apiKey, promptBuilder.ToString(), true, 50, model);
             return JsonConvert.DeserializeObject<List<Quiz>>(response);
         }
 
@@ -59,25 +59,8 @@ namespace Events
             promptBuilder.AppendLine("Hãy đề xuất cho tôi ít nhất 100 topic ngắn bằng tiếng Anh mà bạn cảm thấy phù hợp nhất và thú vị nhất để luyện tập tiếng Anh.");
             promptBuilder.Append("Danh sách chủ đề mà bạn đề xuất phải là một mảng đối lượng JSON tương ứng với kiểu dữ liệu List<string> trong ngôn ngữ C#.");
 
-            var response = await Gemini.Generator.Generate(apiKey, promptBuilder.ToString(), true, 100, GenerativeModel.Gemini_15_Pro);
+            var response = await Gemini.Generator.GenerateContent(apiKey, promptBuilder.ToString(), true, 75);
             return JsonConvert.DeserializeObject<List<string>>(response);
-        }
-
-        public static async Task<string> GenerateQuizesAsHtml(string apiKey, string topic, List<QuizzType> quizzTypes, EnglishLevel level, short questionsCount)
-        {
-            var promptBuilder = new StringBuilder();
-            var userLevel = GeneralHelper.GetEnumDescription(level);
-            var types = string.Join(", ", quizzTypes.Select(type => GeneralHelper.GetEnumDescription(type)).ToList());
-            var model = questionsCount <= 10 ? GenerativeModel.Gemini_15_Flash : GenerativeModel.Gemini_15_Pro;
-
-            promptBuilder.AppendLine($"Bạn là một giáo viên dạy tiếng Anh với hơn 20 năm kinh nghiệm và bạn đang giảng dạy tại Việt Nam. Trình độ tiếng Anh của tôi theo tiêu chuẩn CEFR là {userLevel}. ");
-            promptBuilder.Append($"Bây giờ, tôi cần một bộ đề trắc nghiệm tiếng Anh bao gồm {questionsCount} câu hỏi liên quan đến chủ đề '{topic}' để luyện tập. ");
-            promptBuilder.AppendLine($"Bộ đề trắc nghiệm mà bạn cung cấp phải có đầy đủ các dạng câu hỏi bao gồm: {types}. ");
-            promptBuilder.Append("Nội dung câu hỏi phải thật thú vị để kích thích và tạo cảm hứng cho người học. Mỗi câu hỏi trong bộ đề trắc nghiệm chỉ được phép có 4 lựa chọn. ");
-            promptBuilder.Append("Bộ đề trắc nghiệm của bạn phải được trình bày thật rõ ràng và chuyên nghiệp, chỉ được phép chứa danh sách câu hỏi và danh sách đáp án.");
-
-            var response = await Gemini.Generator.Generate(apiKey, promptBuilder.ToString(), false, 75, model);
-            return GeneralHelper.AsHtml(response);
         }
     }
 }

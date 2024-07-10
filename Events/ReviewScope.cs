@@ -10,7 +10,6 @@ namespace Events
     {
         public static async Task<Comment> GenerateReview(string apiKey, EnglishLevel level, string content)
         {
-            string? result = null;
             var promptBuilder = new StringBuilder();
             var userLevel = GeneralHelper.GetEnumDescription(level);
 
@@ -33,18 +32,16 @@ namespace Events
             promptBuilder.AppendLine("Nội dung bài viết của tôi là: ");
             promptBuilder.AppendLine($"{content}");
 
-            result = await Gemini.Generator.Generate(apiKey, promptBuilder.ToString(), true, 60, GenerativeModel.Gemini_15_Flash);
+            var result = await Gemini.Generator.GenerateContent(apiKey, promptBuilder.ToString(), true);
             return JsonConvert.DeserializeObject<Comment>(result);
         }
 
-        public static async Task<CommentFromImage> GenerateReviewFromImage(string apiKey, EnglishLevel level, MemoryStream stream)
+        public static async Task<CommentFromImage> GenerateReviewFromImage(string apiKey, EnglishLevel level, MemoryStream image)
         {
-            return new CommentFromImage
-            {
-                ExtractedContent = "Not updated yet",
-                GeneralComment = "Not updated yet",
-                ImprovedContent = "Not updated yet"
-            };
+            var base64 = await ImageOptimizer.GetOptimizedBase64VersionOf(image);
+            var result = await Gemini.Generator.GenerateReviewFromImage(apiKey, base64);
+
+            return JsonConvert.DeserializeObject<CommentFromImage>(result);
         }
     }
 }

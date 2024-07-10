@@ -41,7 +41,7 @@ namespace Events
 
             request.Contents.Add(question);
 
-            return await Generator.Generate(apiKey, request);
+            return await Generator.GenerateResponseForConversation(apiKey, request);
         }
 
         private static List<Conversation.History> InitPrompts()

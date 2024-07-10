@@ -4,22 +4,22 @@ namespace Entities.Enums
 {
     public enum EnglishLevel
     {
-        [Description("Beginner: Hiểu và sử dụng các cụm từ đơn giản hàng ngày và các câu cơ bản, có thể tự giới thiệu và trả lời câu hỏi về thông tin cá nhân")]
+        [Description("Beginner: Hiểu các thông điệp rõ ràng và cụ thể trong thông tin cơ bản về cá nhân, hoặc những câu đơn giản trong các nội dung rất ngắn")]
         Beginner = 1,
 
-        [Description("Elementary: Hiểu câu từ thông dụng liên quan đến những kiến thức xã hội cơ bản, có thể giao tiếp trong các tình huống đơn giản và thường nhật")]
+        [Description("Elementary: Hiểu sơ lượt văn bản ngắn về các chủ đề quen thuộc trong cuộc sống và những thông tin cơ bản từ email ngắn")]
         Elementary = 2,
 
-        [Description("Intermediate: Hiểu ý chính khi giao tiếp về các chủ đề quen thuộc trong đời sống, có thể xử lý hầu hết các tình huống phát sinh trong sinh hoạt")]
+        [Description("Intermediate: Hiểu các văn bản đơn giản như tin tức hoặc tiểu sử cá nhân, có thể tìm thông tin cụ thể trong bài báo ngắn")]
         Intermediate = 3,
 
-        [Description("Upper Intermediate: Hiểu ý chính trong các văn bản phức tạp cả về chủ đề cụ thể và trừu tượng, có thể tương tác với người bản xứ tương đối suông sẻ")]
+        [Description("Upper Intermediate: Hiểu các văn bản khá phức tạp như tác phẩm văn học hoặc thông tin kỹ thuật, có thể hiểu ý chính của văn bản dài")]
         UpperIntermediate = 4,
 
-        [Description("Advanced: Hiểu nhiều văn bản dài và phức tạp và ý nghĩa tiềm ẩn bên trong, có thể diễn đạt lưu loát và tự nhiên mà không cần tra cứu nhiều")]
+        [Description("Advanced: Hiểu các văn bản phức tạp như bài nghiên cứu khoa học hoặc bài phê bình văn học, có thể phân tích và đánh giá luận điểm phức tạp")]
         Advanced = 5,
 
-        [Description("Proficient: Hiểu hầu hết mọi thứ nghe và đọc được, có thể tóm tắt thông tin từ các nguồn nói và viết khác nhau")]
+        [Description("Proficient: Hiểu các văn bản mang tính hàn lâm, trừu tượng và rất phức tạp, có khả năng hiểu sâu rộng và phân tích đa chiều nội dung đọc được")]
         Proficient = 6,
     }
 }

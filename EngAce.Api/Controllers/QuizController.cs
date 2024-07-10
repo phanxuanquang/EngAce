@@ -5,7 +5,6 @@ using Events;
 using Helper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
-using System.Text;
 
 namespace EngAce.Api.Controllers
 {
@@ -73,43 +72,6 @@ namespace EngAce.Api.Controllers
             catch
             {
                 return BadRequest("Có lỗi xảy ra! Vui lòng thử lại sau.");
-            }
-        }
-
-        [HttpPost("GenerateAsHtml")]
-        public async Task<ActionResult> GenerateAsHtml([FromBody] GenerateQuizzes request, EnglishLevel englishLevel = EnglishLevel.Elementary, short totalQuestions = 10)
-        {
-            if (string.IsNullOrEmpty(_accessKey))
-            {
-                return Unauthorized("Missing Gemini API Key or Access Token");
-            }
-
-            if (string.IsNullOrWhiteSpace(request.Topic))
-            {
-                return BadRequest("Tên chủ đề không được rỗng");
-            }
-
-            if (totalQuestions < QuizScope.MinTotalQuestions || totalQuestions > QuizScope.MaxTotalQuestions)
-            {
-                return BadRequest($"Số lượng câu hỏi phải nằm trong khoảng {QuizScope.MinTotalQuestions} đến {QuizScope.MaxTotalQuestions}");
-            }
-
-            try
-            {
-                var quizzes = await QuizScope.GenerateQuizesAsHtml(_accessKey, request.Topic, request.QuizzTypes, englishLevel, totalQuestions);
-
-                var byteArray = Encoding.UTF8.GetBytes(quizzes);
-                var stream = new MemoryStream(byteArray);
-
-                return new FileStreamResult(stream, "text/html")
-                {
-                    FileDownloadName = $"Quizzes about '{request.Topic}'.html"
-                };
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Không thể tạo câu hỏi");
-                return StatusCode(500, ex.Message);
             }
         }
 

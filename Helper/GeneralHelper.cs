@@ -1,5 +1,4 @@
-﻿using Markdig;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Reflection;
 
 namespace Helper
@@ -33,12 +32,6 @@ namespace Helper
             string[] words = s.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
 
             return words.Length;
-        }
-
-        public static string AsHtml(string markdown)
-        {
-            var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
-            return Markdown.ToHtml(markdown, pipeline);
         }
     }
 }
