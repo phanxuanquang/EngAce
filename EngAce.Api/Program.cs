@@ -82,11 +82,11 @@ builder.Services.Configure<BrotliCompressionProviderOptions>(options =>
 builder.Services.AddApplicationInsightsTelemetry(builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(builder =>
+    options.AddDefaultPolicy(policyBuilder =>
     {
-        builder.AllowAnyOrigin()
-               .AllowAnyHeader()
-               .AllowAnyMethod();
+        policyBuilder.WithOrigins("https://engace-app.azurewebsites.net", "https://localhost:3000") 
+                     .AllowAnyHeader()
+                     .AllowAnyMethod();
     });
 });
 
