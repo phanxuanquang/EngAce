@@ -52,5 +52,36 @@ namespace EngAce.Api.Controllers
                 return BadRequest("Có lỗi xảy ra! Vui lòng kiểm tra lại nội dung bài viết và thử lại.");
             }
         }
+
+        [HttpPost("GenerateFromImage")]
+        public async Task<ActionResult<CommentFromImage>> GenerateFromImage(IFormFile file, EnglishLevel englishLevel = EnglishLevel.Elementary)
+        {
+            if (string.IsNullOrEmpty(_accessKey))
+            {
+                return Unauthorized("Incorrect Access Key");
+            }
+
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("Không có ảnh nào được đăng tải.");
+            }
+
+            using (var stream = new MemoryStream())
+            {
+                try
+                {
+                    await file.CopyToAsync(stream);
+                    stream.Position = 0;
+
+                    var result = await ReviewScope.GenerateReviewFromImage(_accessKey, englishLevel, stream);
+                    return Ok(result);
+                }
+                catch
+                {
+                    return BadRequest("Có lỗi xảy ra! Vui lòng kiểm tra lại ảnh và thử lại.");
+                }
+
+            }
+        }
     }
 }

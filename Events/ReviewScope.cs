@@ -36,5 +36,15 @@ namespace Events
             result = await Gemini.Generator.Generate(apiKey, promptBuilder.ToString(), true, 60, GenerativeModel.Gemini_15_Flash);
             return JsonConvert.DeserializeObject<Comment>(result);
         }
+
+        public static async Task<CommentFromImage> GenerateReviewFromImage(string apiKey, EnglishLevel level, MemoryStream stream)
+        {
+            return new CommentFromImage
+            {
+                ExtractedContent = "Not updated yet",
+                GeneralComment = "Not updated yet",
+                ImprovedContent = "Not updated yet"
+            };
+        }
     }
 }
