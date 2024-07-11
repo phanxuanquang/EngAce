@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Box,
   Button,
@@ -8,6 +7,7 @@ import {
   Link,
   InputLabel,
 } from "@mui/material";
+import { useState } from "react";
 import LoadingButton from "@mui/lab/LoadingButton";
 import DoneIcon from "@mui/icons-material/Check";
 import Cookies from "js-cookie";
@@ -19,7 +19,7 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 390,
+  width: 400,
   bgcolor: "background.paper",
   border: "0px solid",
   borderRadius: 2,
@@ -33,35 +33,13 @@ export default function GuessLoginButton() {
   const [loading, setLoading] = useState(false);
   const [keyValue, setKeyValue] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [privacyAgreed, setPrivacyAgreed] = useState(false); 
-  const [showPrivacyModal, setShowPrivacyModal] = useState(false); 
 
-  const handleOpen = () => {
-    if (!privacyAgreed) {
-      setShowPrivacyModal(true);
-    } else {
-      setOpen(true);
-    }
-  };
-
+  const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
-    setShowPrivacyModal(false);
     setErrorMessage("");
-    setPrivacyAgreed(false); 
   };
-
-  const handlePrivacyAgree = () => {
-    setPrivacyAgreed(true);
-    setShowPrivacyModal(false);
-    setOpen(true);
-  };
-
   const handleSubmit = async () => {
-    if (!privacyAgreed) {
-      alert("Bạn cần đọc và đồng ý với Data Privacy Statement.");
-      return;
-    }
     setLoading(true);
     setErrorMessage("");
     try {
@@ -91,7 +69,8 @@ export default function GuessLoginButton() {
           width: "100%",
           maxWidth: "40rem",
           background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
-          transition: "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
+          transition:
+            "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
           "&:hover": {
             background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
             opacity: 0.9,
@@ -110,64 +89,6 @@ export default function GuessLoginButton() {
         Tiếp tục với tư cách khách
       </Button>
 
-      {/* Modal for Data Privacy Statement */}
-      <Modal
-        open={showPrivacyModal}
-        onClose={handleClose}
-        aria-labelledby="privacy-modal-title"
-        aria-describedby="privacy-modal-description"
-      >
-        <Box sx={style}>
-          <Typography variant="h5" component="h2" gutterBottom>
-            Bảo mật dữ liệu
-          </Typography>
-          <Typography color="text.secondary" paragraph align="justify">
-            Dữ liệu của bạn (bao gồm thông tin tài khoản Google, Gemini API Key,
-            và lịch sử hoạt động) chỉ được lưu trữ cục bộ trên thiết bị đang
-            truy cập và sẽ bị xóa ngay khi bạn đăng xuất, nhằm đảm bảo dữ liệu
-            của bạn bảo mật tuyệt đối.
-          </Typography>
-          <Typography color="text.secondary" paragraph>
-            <a>Dự án của chúng tôi trên Github tại </a>
-            <Link
-              href="https://github.com/phanxuanquang/EngAce"
-              target="_blank"
-              rel="noopener"
-              sx={{ fontWeight: "bold" }}
-            >
-              ĐÂY
-            </Link>
-          </Typography>
-          <Box sx={{ display: "flex", justifyContent: "center", marginTop: 2 }}>
-            <Button
-              onClick={handlePrivacyAgree}
-              variant="contained"
-              size="large"
-              sx={{
-                textTransform: "none",
-                color: "white",
-                "&:not(:disabled)": {
-                  background:
-                    "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
-                  transition:
-                    "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
-                  "&:hover": {
-                    background:
-                      "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
-                    opacity: 0.8,
-                    transform: "scale(1.05)",
-                    boxShadow: "0 0.2rem 1.2rem rgba(255, 255, 255, 0.2)",
-                  },
-                },
-              }}
-            >
-              TIẾP TỤC
-            </Button>
-          </Box>
-        </Box>
-      </Modal>
-
-      {/* Main Modal */}
       <Modal
         open={open}
         onClose={handleClose}
