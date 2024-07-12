@@ -19,7 +19,13 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: {
+    xs: "95%",
+    sm: 400,
+    md: 500,
+    lg: 500,
+    xl: 600,
+  },
   bgcolor: "background.paper",
   border: "0px solid",
   borderRadius: 2,
@@ -69,8 +75,7 @@ export default function GuessLoginButton() {
           width: "100%",
           maxWidth: "40rem",
           background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
-          transition:
-            "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
+          transition: "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
           "&:hover": {
             background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
             opacity: 0.9,
@@ -156,6 +161,7 @@ export default function GuessLoginButton() {
               onClick={handleSubmit}
               disabled={!keyValue.trim()}
               sx={{
+                mt: 1,
                 textTransform: "none",
                 color: "white",
                 "&:not(:disabled)": {
