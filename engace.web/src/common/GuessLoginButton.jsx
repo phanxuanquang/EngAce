@@ -6,6 +6,8 @@ import {
   Typography,
   Link,
   InputLabel,
+  Checkbox,
+  FormControlLabel,
 } from "@mui/material";
 import { useState } from "react";
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -39,13 +41,19 @@ export default function GuessLoginButton() {
   const [loading, setLoading] = useState(false);
   const [keyValue, setKeyValue] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [agreeTerms, setAgreeTerms] = useState(false);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
     setErrorMessage("");
   };
+
   const handleSubmit = async () => {
+    if (!agreeTerms) {
+      setErrorMessage("Bạn phải đồng ý với điều khoản sử dụng.");
+      return;
+    }
     setLoading(true);
     setErrorMessage("");
     try {
@@ -111,7 +119,7 @@ export default function GuessLoginButton() {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              marginBottom: 2,
+              marginBottom: 1.5,
               marginTop: 2,
               gap: 1,
             }}
@@ -146,6 +154,28 @@ export default function GuessLoginButton() {
             </Button>
           </Box>
 
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={agreeTerms}
+                onChange={(e) => setAgreeTerms(e.target.checked)}
+              />
+            }
+            label={
+              <>
+                Tôi đồng ý{" "}
+                <Link
+                  href="https://ai.google.dev/gemini-api/terms"
+                  target="_blank"
+                  sx={{ fontWeight: "bold" }}
+                >
+                  Điều khoản sử dụng
+                </Link>
+              </>
+            }
+            sx={{ mb: 1 }}
+          />
+
           <Box
             sx={{
               display: "flex",
@@ -159,7 +189,7 @@ export default function GuessLoginButton() {
               endIcon={<DoneIcon />}
               variant="contained"
               onClick={handleSubmit}
-              disabled={!keyValue.trim()}
+              disabled={!keyValue.trim() || !agreeTerms}
               sx={{
                 mt: 1,
                 textTransform: "none",
