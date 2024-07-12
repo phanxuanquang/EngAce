@@ -12,7 +12,6 @@ import GoogleLoginButton from "../common/GoogleLoginButton";
 import GuessLoginButton from "../common/GuessLoginButton";
 import Logo from "../assets/icon.png";
 import OverviewImg from "../assets/overview.jpg";
-import BackgroundImage from "../assets/Background.jpg";
 import { useState, useEffect } from "react";
 import TruckLoader from "../common/TruckLoader";
 
@@ -28,7 +27,7 @@ export default function Auth() {
     }
 
     const loadAssets = async () => {
-      const assetUrls = [Logo, OverviewImg, BackgroundImage];
+      const assetUrls = [Logo, OverviewImg];
       const assetPromises = assetUrls.map((url) => {
         return new Promise((resolve, reject) => {
           const img = new Image();
@@ -61,7 +60,29 @@ export default function Auth() {
   return (
     <Box
       sx={{
-        backgroundImage: `url(${BackgroundImage})`,
+        backgroundImage: `
+          linear-gradient(
+            200deg,
+            #E3FDFFff,
+            #DFFBFFff,
+            #DBF8FFff,
+            #D6F6FFff,
+            #D2F3FFff,
+            #CEF1FFff,
+            #CAEEFFff,
+            #C6ECFFff,
+            #C2E9FFff,
+            #BDE7FFff,
+            #B9E4FFff,
+            #B5E2FFff,
+            #B1DFFFff,
+            #ADDDFFff,
+            #A9DAFFff,
+            #A4D8FFff,
+            #A0D5FFff,
+            #9CD3FFff
+          )
+        `,
         backgroundSize: "cover",
         backgroundPosition: "center",
         height: "100vh",

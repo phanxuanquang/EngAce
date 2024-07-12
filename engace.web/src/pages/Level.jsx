@@ -14,7 +14,6 @@ import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { AppService } from "../services/api";
 import { useNavigate } from "react-router-dom";
-import BackgroundImage from "../assets/Background.jpg";
 import Logo from "../assets/user.png";
 import AlertCustom from "../common/Alert";
 export default function Level() {
@@ -98,7 +97,29 @@ export default function Level() {
   return (
     <Box
       sx={{
-        backgroundImage: `url(${BackgroundImage})`,
+        backgroundImage: `
+          linear-gradient(
+            200deg,
+            #E3FDFFff,
+            #DFFBFFff,
+            #DBF8FFff,
+            #D6F6FFff,
+            #D2F3FFff,
+            #CEF1FFff,
+            #CAEEFFff,
+            #C6ECFFff,
+            #C2E9FFff,
+            #BDE7FFff,
+            #B9E4FFff,
+            #B5E2FFff,
+            #B1DFFFff,
+            #ADDDFFff,
+            #A9DAFFff,
+            #A4D8FFff,
+            #A0D5FFff,
+            #9CD3FFff
+          )
+        `,
         backgroundSize: "cover",
         backgroundPosition: "center",
         height: "100vh",
