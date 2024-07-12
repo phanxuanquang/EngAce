@@ -110,7 +110,7 @@ export default function GuessLoginButton() {
       >
         <Box sx={style}>
           <InputLabel htmlFor="outlined-basic">
-            <Typography id="modal-modal-title" variant="h6" component="h2">
+            <Typography id="modal-modal-title" variant="h6">
               Nhập Gemini API Key để tiếp tục
             </Typography>
           </InputLabel>
@@ -119,14 +119,14 @@ export default function GuessLoginButton() {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              marginBottom: 1.5,
-              marginTop: 2,
+              marginBottom: 1,
+              marginTop: 1,
               gap: 1,
             }}
           >
             <TextField
               id="outlined-basic"
-              variant="standard"
+              variant="outlined"
               placeholder="AIza . . ."
               sx={{
                 flexGrow: 1,
@@ -153,7 +153,6 @@ export default function GuessLoginButton() {
               Lấy Key
             </Button>
           </Box>
-
           <FormControlLabel
             control={
               <Checkbox
@@ -163,7 +162,7 @@ export default function GuessLoginButton() {
             }
             label={
               <>
-                Tôi đồng ý{" "}
+                Tôi đồng ý với{" "}
                 <Link
                   href="https://ai.google.dev/gemini-api/terms"
                   target="_blank"
@@ -171,6 +170,7 @@ export default function GuessLoginButton() {
                 >
                   Điều khoản sử dụng
                 </Link>
+                .
               </>
             }
             sx={{ mb: 1 }}
@@ -191,7 +191,6 @@ export default function GuessLoginButton() {
               onClick={handleSubmit}
               disabled={!keyValue.trim() || !agreeTerms}
               sx={{
-                mt: 1,
                 textTransform: "none",
                 color: "white",
                 "&:not(:disabled)": {
