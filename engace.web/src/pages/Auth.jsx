@@ -17,6 +17,7 @@ import TruckLoader from "../common/TruckLoader";
 export default function Auth() {
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [assetsLoaded, setAssetsLoaded] = useState(false);
 
   useEffect(() => {
     const isVisited = localStorage.getItem("isVisited");
@@ -24,6 +25,28 @@ export default function Auth() {
       setIsModalOpen(true);
       localStorage.setItem("isVisited", "true");
     }
+
+    // Load all assets
+    const loadAssets = async () => {
+      const assetUrls = [Logo, OverviewImg, BackgroundImage];
+      const assetPromises = assetUrls.map((url) => {
+        return new Promise((resolve, reject) => {
+          const img = new Image();
+          img.src = url;
+          img.onload = resolve;
+          img.onerror = reject;
+        });
+      });
+
+      try {
+        await Promise.all(assetPromises);
+        setAssetsLoaded(true);
+      } catch (error) {
+        console.error("Failed to load assets", error);
+      }
+    };
+
+    loadAssets();
   }, []);
 
   const handleCloseModal = () => {
@@ -60,39 +83,43 @@ export default function Auth() {
       }}
     >
       <CssBaseline />
-      <Container
-        fixed
-        sx={{
-          height: "100%",
-        }}
-      >
-        <Box
+      {!assetsLoaded ? (
+        <TruckLoader />
+      ) : (
+        <Container
+          fixed
           sx={{
             height: "100%",
           }}
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          flexDirection="column"
-          gap={2}
-          maxWidth="lg"
         >
-          <img
-            src={Logo}
-            alt="logo"
-            width={"90%"}
-            style={{ maxWidth: 400, marginBottom: 3 }}
-          />
-          {!loading ? (
-            <>
-              <GuessLoginButton />
-              <GoogleLoginButton setLoading={setLoading} />
-            </>
-          ) : (
-            <TruckLoader />
-          )}
-        </Box>
-      </Container>
+          <Box
+            sx={{
+              height: "100%",
+            }}
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            flexDirection="column"
+            gap={2}
+            maxWidth="lg"
+          >
+            <img
+              src={Logo}
+              alt="logo"
+              width={"90%"}
+              style={{ maxWidth: 400, marginBottom: 3 }}
+            />
+            {!loading ? (
+              <>
+                <GuessLoginButton />
+                <GoogleLoginButton setLoading={setLoading} />
+              </>
+            ) : (
+              <TruckLoader />
+            )}
+          </Box>
+        </Container>
+      )}
 
       <Modal
         open={isModalOpen}
@@ -111,7 +138,7 @@ export default function Auth() {
                 src={OverviewImg}
                 alt="Overview UI"
                 style={{
-                  maxheight: 600,
+                  maxHeight: 600,
                   width: "100%",
                   height: "auto",
                   borderRadius: 10,
