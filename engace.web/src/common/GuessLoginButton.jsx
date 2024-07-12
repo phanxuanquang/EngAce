@@ -27,7 +27,7 @@ const style = {
     xl: 600,
   },
   bgcolor: "background.paper",
-  border: "0px solid",
+  outline: "none",
   borderRadius: 2,
   boxShadow: "0 0.2rem 1.2rem #ffffff",
   p: 4,
