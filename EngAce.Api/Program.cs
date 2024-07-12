@@ -84,7 +84,7 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policyBuilder =>
     {
-        policyBuilder.WithOrigins("https://engace-app.azurewebsites.net", "https://localhost:3000")
+        policyBuilder.WithOrigins("https://engace-app.azurewebsites.net", "http://localhost:3000", "https://localhost:3000")
                      .AllowAnyHeader()
                      .AllowAnyMethod();
     });
