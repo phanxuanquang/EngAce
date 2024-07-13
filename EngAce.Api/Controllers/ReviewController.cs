@@ -29,8 +29,8 @@ namespace EngAce.Api.Controllers
         /// <response code="200">The generated comment.</response>
         /// <response code="400">The error message if an error occurs during generation.</response>
         /// <response code="401">The error message if the access key is invalid.</response>
-        [HttpPost("Generate")]
-        public async Task<ActionResult<Comment>> Generate([FromBody] string content, EnglishLevel englishLevel = EnglishLevel.Intermediate)
+        [HttpGet("Generate")]
+        public async Task<ActionResult<Comment>> Generate(string content, EnglishLevel englishLevel = EnglishLevel.Intermediate)
         {
             if (string.IsNullOrEmpty(_accessKey))
             {
