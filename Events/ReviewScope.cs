@@ -18,21 +18,22 @@ namespace Events
 
             promptBuilder.Append("Bạn là một giáo viên tiếng Anh với hơn 20 năm kinh nghiệm giảng dạy, đồng thời đang làm việc tại một trung tâm dạy IELTS lớn. ");
             promptBuilder.Append($"Trình độ tiếng Anh của tôi theo tiêu chuẩn CEFR là '{userLevel}'. ");
-            promptBuilder.Append("Tôi đang luyện tập kỹ năng writting và cần bạn góp ý để bài viết của tôi tốt hơn.");
-            promptBuilder.AppendLine("Bạn hãy phân tích bài viết của tôi rồi sau đó cho nhận xét và viết lại để nó hay hơn. ");
-            promptBuilder.Append("Nhận xét của bạn phải phù hợp với trình độ tiếng Anh hiện tại của tôi như đã đề cập ở trên.");
+            promptBuilder.AppendLine("Bạn hãy đọc phân tích bài viết của tôi rồi cho nhận xét và chỉnh sửa lại để nó tốt hơn. ");
+            promptBuilder.AppendLine("Output phải bao gồm 2 phần như sau:");
+            promptBuilder.AppendLine("- GeneralComment: Nhận xét chung bằng tiếng Việt cho cả bài viết. Nhận xét của bạn phải dựa trên nội dung chính của bài viết và trình độ tiếng Anh của tôi. Nội dung nhận xét phải bao gồm: Phát hiện lỗi chính tả và nêu cách sửa, phát hiện lỗi ngữ pháp và giải thích cho từng lỗi, đề xuất cách thay thế từ ngữ phù hợp hơn, phân tích phong cách viết và đề xuất cách viết phù hợp với ngữ cảnh và đối tượng tùy vào từng câu trong bài viết, phát hiện lỗi logic và đề xuất cách sửa để nội dung mạch lạc hơn. Bạn cũng phải giải thích chi tiết cho các gợi ý sửa chữa để tôi hiểu rõ và áp dụng hiệu quả.");
+            promptBuilder.AppendLine("- ImprovedContent: Bài viết được chỉnh sửa sau khi áp dụng những sửa chữa trong phần GeneralComment, nhớ highlight những đoạn được chỉnh sửa bằng cặp dấu **. Bạn tuyệt đối không được tự ý thay đổi nội dung chính của bài viết, và bài viết sau khi được chỉnh sửa không được phép dài hơn 1.5 lần bài viết ban đầu.");
             promptBuilder.AppendLine("Output phải là một JSON object tương ứng với class C# sau: ");
             promptBuilder.AppendLine("class ReviewerResponse");
             promptBuilder.AppendLine("{");
-            promptBuilder.AppendLine("    string GeneralComment; // Nhận xét bằng tiếng Việt cho cả bài viết, bao gồm phát hiện lỗi ngữ pháp cơ bản và cung cấp giải thích chi tiết cho từng lỗi, đề xuất cách thay thế từ ngữ phù hợp hơn, chỉ ra những chính tả và gợi ý cách sửa lỗi chính xác, phân tích phong cách viết và đề xuất cách viết phù hợp với ngữ cảnh và đối tượng, phát hiện lỗi logic trong lập luận và gợi ý cách sửa để bài viết mạch lạc hơn, giải thích chi tiết cho các gợi ý sửa chữa để người dùng hiểu rõ và áp dụng hiệu quả.");
-            promptBuilder.AppendLine("    string ImprovedContent; // Bài viết sau khi được viết lại để tốt hơn, hãy highlight những đoạn được chỉnh sửa bằng cặp dấu **, nhưng tuyệt đối không được thay đổi nội dung chính của bài viết hoặc khiến bài viết dài hơn");
+            promptBuilder.AppendLine("    string GeneralComment;");
+            promptBuilder.AppendLine("    string ImprovedContent;");
             promptBuilder.AppendLine("}");
-            promptBuilder.AppendLine("Ví dụ về output mà tôi cần:");
+            promptBuilder.AppendLine("Ví dụ về output:");
             promptBuilder.AppendLine("{");
-            promptBuilder.AppendLine("  \"GeneralComment\": \"Đây là nhận xét chung cho bài viết của tôi, hãy nhớ là sử dụng tiếng Việt và nó phải phù hợp với trình độ của tôi\",");
-            promptBuilder.AppendLine("  \"ImprovedContent\": \"Đây là bài viết sau khi được viết lại để tốt hơn, hãy nhớ là sử dụng tiếng Anh và không được vượt quá trình độ của tôi\"");
+            promptBuilder.AppendLine("  \"GeneralComment\": \"Đây là nhận xét chung cho bài viết của tôi, hãy nhớ là phải sử dụng tiếng Việt\",");
+            promptBuilder.AppendLine("  \"ImprovedContent\": \"Đây là bài viết đã được sửa chữa dựa trên nhận xét trong phần GeneralComment.\"");
             promptBuilder.AppendLine("}");
-            promptBuilder.AppendLine("Nội dung bài viết của tôi là: ");
+            promptBuilder.AppendLine("Nội dung bài viết của tôi: ");
             promptBuilder.AppendLine($"{content.Trim()}");
 
             var result = await Gemini.Generator.GenerateContent(apiKey, promptBuilder.ToString(), true, 50, model);

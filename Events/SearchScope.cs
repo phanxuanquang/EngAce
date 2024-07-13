@@ -40,7 +40,7 @@ namespace Events
                 promptBuilder.AppendLine($"- Cung cấp thông tin về từ gốc và các từ phái sinh của '{keyword}' để hiểu sâu hơn về cấu trúc từ.");
                 promptBuilder.AppendLine($"- Cung cấp thông tin về lịch sử hình thành của từ '{keyword}' (nếu có).");
                 promptBuilder.AppendLine($"- Các dạng biến đổi của '{keyword}' được tra cứu như thì quá khứ, thì hiện tại, dạng số nhiều, dạng so sánh,... (nếu có).");
-                promptBuilder.AppendLine($"- Một số fun facts vui liên quan đến '{keyword}' nếu có.");
+                promptBuilder.AppendLine($"- Một số fun facts vui liên quan đến '{keyword}' (nếu có).");
                 promptBuilder.AppendLine("Cách trình bày output của bạn phải thật dễ hiểu, tuy nhiên không được quá dài dòng.");
             }
 

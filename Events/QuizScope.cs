@@ -19,12 +19,13 @@ namespace Events
 
             promptBuilder.AppendLine($"Bạn là một giáo viên dạy tiếng Anh với hơn 20 năm kinh nghiệm. Trình độ tiếng Anh của tôi theo tiêu chuẩn CEFR là {userLevel}. ");
             promptBuilder.Append($"Hãy cho tôi một bộ câu hỏi trắc nghiệm tiếng Anh bao gồm chính xác {questionsCount} câu hỏi liên quan đến chủ đề '{topic.Trim()}' để luyện tập. ");
-            promptBuilder.Append("Nội dung câu hỏi phải thật thú vị để kích thích và tạo cảm hứng cho người học. Mỗi câu hỏi trong bộ đề trắc nghiệm chỉ được phép có 4 lựa chọn. ");
+            promptBuilder.Append("Nội dung câu hỏi phải phù hợp với trình độ tiếng Anh của tôi, nhưng cũng phải thật thú vị để kích thích và tạo cảm hứng cho người học. ");
+            promptBuilder.Append("Mỗi câu hỏi trong bộ đề trắc nghiệm chỉ được phép có 4 lựa chọn.");
             promptBuilder.AppendLine($"Bộ câu hỏi trắc nghiệm của bạn phải bao gồm các loại câu hỏi: {types}. ");
             promptBuilder.AppendLine("Output là một mảng JSON tương ứng với class C# sau: ");
             promptBuilder.AppendLine("class Quiz");
             promptBuilder.AppendLine("{");
-            promptBuilder.AppendLine("    string Question; // Nội dung câu hỏi bằng tiếng Anh");
+            promptBuilder.AppendLine("    string Question; // Nội dung câu hỏi bằng tiếng Anh, nó phải phù hợp với trình độ tiếng Anh của tôi");
             promptBuilder.AppendLine("    List<string> Options; // 4 lựa chọn cho người dùng chọn");
             promptBuilder.AppendLine("    int RightOptionIndex; // Index của lựa chọn đúng trong mảng Options");
             promptBuilder.AppendLine("    string ExplanationInVietnamese; // Lời giải thích một cách dễ hiểu, phù hợp với trình độ tiếng Anh của tôi");
