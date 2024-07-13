@@ -105,7 +105,7 @@ const ChatPage = () => {
           <TextField
             inputProps={{ style: { fontWeight: 500 }, autoComplete: "off" }}
             variant="outlined"
-            placeholder="Aa"
+            placeholder="Aa . . ."
             fullWidth
             color="secondary"
             value={newMessage}

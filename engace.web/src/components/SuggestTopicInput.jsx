@@ -51,7 +51,7 @@ export default function SuggestTopicInput({ topic, setTopic, error }) {
         <TextField
           id="topic"
           variant="standard"
-          placeholder="Aa . . ."
+          placeholder="Ex: Traveling"
           sx={{
             flexGrow: 1,
             height: "2.5rem",

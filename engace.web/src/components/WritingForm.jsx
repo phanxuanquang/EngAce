@@ -41,7 +41,7 @@ export default function WritingForm({ onClosePannel }) {
           <TextField
             id="search"
             variant="outlined"
-            placeholder="Ex: Cats are fascinating creatures known for their independence and playful nature. Domesticated around 9,000 years ago, they have been revered in various cultures, particularly in ancient Egypt where they were considered sacred. Today, cats are cherished pets, offering companionship and joy to millions of households worldwide. "
+            placeholder="Ex: My name is EngAce. I live in Vietnam. I work in small software company. I like listen to music and watch movie. English very hard for me. I learn English very long ago. My talk not clear, hard for people understand. I feel shy when speak English. I want to improve for job and future."
             value={content}
             onChange={(e) => setContent(e.target.value)}
             multiline
