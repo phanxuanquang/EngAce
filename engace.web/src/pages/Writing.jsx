@@ -143,7 +143,7 @@ export default function Writing() {
                         },
                       }}
                     >
-                      {`<div>${review?.GeneralComment}</div>`}
+                      {`<div>${review?.GeneralComment ?? ""}</div>`}
                     </MuiMarkdown>
                   </AccordionDetails>
                 </Accordion>
@@ -173,7 +173,7 @@ export default function Writing() {
                     },
                   }}
                 >
-                  {`<div>${review?.ImprovedContent}</div>`}
+                  {`<div>${review?.ImprovedContent ?? ""}</div>`}
                 </MuiMarkdown>
               </>
             ) : (

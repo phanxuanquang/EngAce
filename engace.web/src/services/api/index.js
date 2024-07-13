@@ -35,10 +35,9 @@ export const AppService = {
   },
 
   getEssayReview: (content, level) => {
-    return baseRequest.get(
-      `${UrlApi.URL_GET_ESSAY_REVIEW}?content=${encodeURIComponent(
-        content
-      )}?englishLevel=${level}`
+    return baseRequest.post(
+      `${UrlApi.URL_GET_ESSAY_REVIEW}?englishLevel=${level}`,
+      content
     );
   },
 
