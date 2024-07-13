@@ -66,7 +66,6 @@ builder.Services.AddResponseCompression(options =>
 {
     options.Providers.Add<GzipCompressionProvider>();
     options.Providers.Add<BrotliCompressionProvider>();
-    options.EnableForHttps = true;
 });
 
 builder.Services.Configure<GzipCompressionProviderOptions>(options =>
@@ -80,6 +79,7 @@ builder.Services.Configure<BrotliCompressionProviderOptions>(options =>
 });
 
 builder.Services.AddApplicationInsightsTelemetry(builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
+
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policyBuilder =>
