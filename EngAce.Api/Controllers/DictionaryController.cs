@@ -23,18 +23,25 @@ namespace EngAce.Api.Controllers
         }
 
         /// <summary>
-        /// Search for the explanation for the keyword in the specific context
+        /// Searches for a given keyword within an optional context
         /// </summary>
-        /// <param name="keyword">The keyword to search</param>
-        /// <param name="context">The context that contains the keyword (can be empty)</param>
-        /// <param name="useEnglishToExplain">Use English/Vietnamese for the explanation</param>
-        /// <returns>The explanation in markdown format</returns>
+        /// <param name="keyword">The keyword to search for (must be in English).</param>
+        /// <param name="context">The optional context for the search (must be in English, contain the keyword, and have less than 100 words)</param>
+        /// <param name="useEnglishToExplain">Indicates whether the explanation should be in English.</param>
+        /// <returns>
+        /// An <see cref="ActionResult{T}"/> containing the search result as a string if the operation is successful,
+        /// or an error response if validation fails or an exception occurs during the search.
+        /// </returns>
+        /// <response code="200">The search result from the cache if available.</response>
+        /// <response code="201">The search result after performing the search successfully.</response>
+        /// <response code="400">The error message if the input validation fails or if an error occurs during the search.</response>
+        /// <response code="401">Invalid Access Key</response>
         [HttpGet("Search")]
         public async Task<ActionResult<string>> Search(string keyword, string? context = "", bool useEnglishToExplain = false)
         {
             if (string.IsNullOrEmpty(_accessKey))
             {
-                return Unauthorized("Incorrect Access Key");
+                return Unauthorized("Invalid Access Key");
             }
 
             if (string.IsNullOrEmpty(keyword))

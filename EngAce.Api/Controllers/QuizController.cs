@@ -24,31 +24,30 @@ namespace EngAce.Api.Controllers
         }
 
         /// <summary>
+        /// Generates a list of quizzes based on the specified request, English level, and total number of questions.
         /// </summary>
-        /// <param name="request">
-        /// The parameters used for quizz generation:
-        /// - Topic: The name of topic
-        /// - QuizzTypes: The indexes array of quizz types (further detail can be found in the "api/Quiz/GetQuizTypes" API)
-        /// </param>
-        /// <param name="englishLevel">
-        /// The English proficiency levels of the user:
-        /// 1. Beginner
-        /// 2. Elementary
-        /// 3. Intermediate
-        /// </param>
-        /// <param name="totalQuestions">The total questions to generate (maximum value is 30)</param>
-        /// <returns>The list of generated quizzes</returns>
+        /// <param name="request">The request containing the topic and quiz types.</param>
+        /// <param name="englishLevel">The English level for which to generate quizzes. Default is Elementary.</param>
+        /// <param name="totalQuestions">The total number of questions to generate. Default is 10.</param>
+        /// <returns>
+        /// An <see cref="ActionResult{T}"/> containing a list of generated quizzes if the operation is successful,
+        /// or an error response if the access key is invalid, the topic is empty, the total number of questions is out of range, or an exception occurs during generation.
+        /// </returns>
+        /// <response code="200">The list of generated quizzes from the cache if available.</response>
+        /// <response code="201">The list of generated quizzes after performing the generation successfully.</response>
+        /// <response code="400">The error message if the topic is empty, the total number of questions is out of range, or an error occurs during generation.</response>
+        /// <response code="401">The error message if the access key is invalid.</response>
         [HttpPost("Generate")]
-        public async Task<ActionResult<List<Quiz>>> Generate([FromBody] GenerateQuizzes request, EnglishLevel englishLevel = EnglishLevel.Elementary, short totalQuestions = 10)
+        public async Task<ActionResult<List<Quiz>>> Generate([FromBody] GenerateQuizzes request, EnglishLevel englishLevel = EnglishLevel.Intermediate, short totalQuestions = 10)
         {
             if (string.IsNullOrEmpty(_accessKey))
             {
-                return Unauthorized("Incorrect Access Key");
+                return Unauthorized("Invalid Access Key");
             }
 
             if (string.IsNullOrWhiteSpace(request.Topic))
             {
-                return BadRequest("Tên chủ đề không được rỗng");
+                return BadRequest("Tên chủ đề không được để trống");
             }
 
             if (totalQuestions < QuizScope.MinTotalQuestions || totalQuestions > QuizScope.MaxTotalQuestions)
@@ -76,18 +75,23 @@ namespace EngAce.Api.Controllers
         }
 
         /// <summary>
-        /// Suggest topics to choose
+        /// Suggests 3 topics based on the specified English level
         /// </summary>
-        /// <param name="englishLevel">
-        /// The English proficiency levels of the user
-        /// </param>
-        /// <returns>3 suggested topics</returns>
+        /// <param name="englishLevel">The English level for which to suggest topics. Default is Elementary.</param>
+        /// <returns>
+        /// An <see cref="ActionResult{T}"/> containing a list of three suggested topics if the operation is successful,
+        /// or an error response if the access key is invalid or if an exception occurs during the suggestion process.
+        /// </returns>
+        /// <response code="200">The list of three suggested topics from the cache if available.</response>
+        /// <response code="201">The list of three suggested topics after performing the suggestion successfully.</response>
+        /// <response code="400">The error message if an error occurs during the suggestion process.</response>
+        /// <response code="401">The error message if the access key is invalid.</response>
         [HttpGet("Suggest3Topics")]
-        public async Task<ActionResult<List<string>>> Suggest3Topics(EnglishLevel englishLevel = EnglishLevel.Elementary)
+        public async Task<ActionResult<List<string>>> Suggest3Topics(EnglishLevel englishLevel = EnglishLevel.Intermediate)
         {
             if (string.IsNullOrEmpty(_accessKey))
             {
-                return Unauthorized("Incorrect Access Key");
+                return Unauthorized("Invalid Access Key");
             }
 
             const int totalTopics = 3;
@@ -95,7 +99,10 @@ namespace EngAce.Api.Controllers
 
             if (_cache.TryGetValue(cacheKey, out List<string> cachedTopics))
             {
-                return Ok(cachedTopics.OrderBy(x => Guid.NewGuid()).Take(totalTopics).ToList());
+                return Ok(cachedTopics
+                    .OrderBy(x => Guid.NewGuid())
+                    .Take(totalTopics)
+                    .ToList());
             }
 
             try
@@ -114,9 +121,12 @@ namespace EngAce.Api.Controllers
         }
 
         /// <summary>
-        /// Get the levels of English proficiency
+        /// Retrieves a dictionary of English levels with their descriptions
         /// </summary>
-        /// <returns>The list of English proficiency levels</returns>
+        /// <returns>
+        /// An <see cref="ActionResult{T}"/> containing a dictionary of English levels and their descriptions if the operation is successful.
+        /// </returns>
+        /// <response code="200">Returns a dictionary of English levels and their descriptions.</response>
         [HttpGet("GetEnglishLevels")]
         public ActionResult<Dictionary<int, string>> GetEnglishLevels()
         {
@@ -146,9 +156,12 @@ namespace EngAce.Api.Controllers
         }
 
         /// <summary>
-        /// Get the types of quizz
+        /// Retrieves a dictionary of quiz types with their descriptions
         /// </summary>
-        /// <returns>The quiz types with their descriptions.</returns>
+        /// <returns>
+        /// An <see cref="ActionResult{T}"/> containing a dictionary of quiz types and their descriptions if the operation is successful.
+        /// </returns>
+        /// <response code="200">Returns a dictionary of quiz types and their descriptions.</response>
         [HttpGet("GetQuizTypes")]
         public ActionResult<Dictionary<int, string>> GetQuizTypes()
         {

@@ -13,7 +13,10 @@ namespace Events
 
             var request = new Request
             {
-                Contents = conversation.ChatHistory.Select(message => new Content
+                Contents = conversation.ChatHistory
+                .AsParallel()
+                .AsOrdered()
+                .Select(message => new Content
                 {
                     Role = message.FromUser ? "user" : "model",
                     Parts = new List<Part>
@@ -54,7 +57,7 @@ namespace Events
             promptBuilder.Append("Nếu bạn cảm thấy câu hỏi của tôi không rõ ràng thì hãy hỏi tôi để làm rõ ý định của câu hỏi, và bạn chỉ được phép trả lời khi đã thực sự hiểu câu hỏi của tôi.");
             promptBuilder.AppendLine("Câu trả lời của bạn phải ngắn gọn, không dài dòng, và thật dễ hiểu, bạn cũng có thể cung cấp một số ví dụ minh họa nếu cần thiết. ");
             promptBuilder.Append("Cách nói chuyện của bạn phải thân thiện và mang cảm giác gần gũi, bởi vì bạn cũng chính là người đồng hành với tôi trong quá trình tôi học tiếng Anh.");
-            promptBuilder.AppendLine("Nếu bạn hiểu lời nói của tôi thì hãy nói 'Bắt đầu', và chúng ta sẽ bắt đầu cuộc trò chuyện.");
+            promptBuilder.AppendLine("Nếu bạn hiểu lời nói của tôi thì hãy nói 'Bắt đầu', và chúng ta sẽ bắt đầu cuộc tharo luận.");
 
             var prompt = new Conversation.History()
             {
@@ -65,7 +68,7 @@ namespace Events
             var botReply = new Conversation.History()
             {
                 FromUser = false,
-                Message = "Bắt đầu."
+                Message = "Bắt đầu!"
             };
 
             return new List<Conversation.History>() { prompt, botReply };

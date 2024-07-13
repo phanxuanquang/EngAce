@@ -15,12 +15,14 @@ namespace EngAce.Api.Controllers
             _accessKey = HttpContextHelper.GetAccessKey();
         }
 
+        /// <response code="200">"Hello World"</response>
+        /// <response code="401">Invalid Access Key</response>
         [HttpGet]
         public async Task<ActionResult<string>> Healthcheck()
         {
             if (string.IsNullOrEmpty(_accessKey))
             {
-                return Unauthorized("Incorrect Access Key");
+                return Unauthorized("Invalid Access Key");
             }
 
             try

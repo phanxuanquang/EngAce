@@ -56,7 +56,7 @@ namespace Events
 
             promptBuilder.AppendLine($"Bạn là một giáo viên dạy tiếng Anh với hơn 20 năm kinh nghiệm và bạn đang giảng dạy tại Việt Nam. Trình độ tiếng Anh của tôi theo tiêu chuẩn CEFR là {userLevel}.");
             promptBuilder.Append($"Tôi đang tìm kiếm những chủ đề thú vị để luyện tập tiếng Anh phù hợp với trình độ hiện tại của bản thân, đồng thời cũng muốn có thêm hứng thú để học tập.");
-            promptBuilder.AppendLine("Hãy đề xuất cho tôi ít nhất 100 topic ngắn bằng tiếng Anh mà bạn cảm thấy phù hợp nhất và thú vị nhất để luyện tập tiếng Anh.");
+            promptBuilder.AppendLine("Hãy đề xuất cho tôi ít nhất 20 topic ngắn gọn bằng tiếng Anh mà bạn cảm thấy phù hợp nhất và thú vị nhất để luyện tập tiếng Anh.");
             promptBuilder.Append("Danh sách chủ đề mà bạn đề xuất phải là một mảng đối lượng JSON tương ứng với kiểu dữ liệu List<string> trong ngôn ngữ C#.");
 
             var response = await Gemini.Generator.GenerateContent(apiKey, promptBuilder.ToString(), true, 75);
