@@ -122,7 +122,7 @@ export default function Writing() {
                         ...getOverrides({}),
                         div: {
                           props: {
-                            style: { lineHeight: 2 },
+                            style: { lineHeight: 2, textAlign: "justify" },
                           },
                         },
                         h2: {
@@ -133,7 +133,7 @@ export default function Writing() {
                         },
                         ul: {
                           props: {
-                            style: { marginLeft: 20 },
+                            style: { marginLeft: 15 },
                           },
                         },
                         p: {
@@ -152,7 +152,7 @@ export default function Writing() {
                     ...getOverrides({}),
                     div: {
                       props: {
-                        style: { lineHeight: 2 },
+                        style: { lineHeight: 2, textAlign: "justify" },
                       },
                     },
                     h2: {
