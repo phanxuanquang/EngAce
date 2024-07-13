@@ -54,7 +54,7 @@ export default function DistionarySearchForm({ onClosePannel }) {
           <TextField
             id="search"
             variant="outlined"
-            placeholder="I have a crush on you for a long time"
+            placeholder="Have a crush on"
             value={keyword}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -74,7 +74,7 @@ export default function DistionarySearchForm({ onClosePannel }) {
           <TextField
             id="context"
             variant="outlined"
-            placeholder="The quiz was a piece of cake"
+            placeholder="I have a crush on you for a long time"
             value={context}
             onChange={(e) => setContext(e.target.value)}
           />
