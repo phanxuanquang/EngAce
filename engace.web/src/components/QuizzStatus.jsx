@@ -83,24 +83,44 @@ export default function QuizzStatus({
           />
         ))}
       </Stack>
-      {!submit && (
-        <Button
-          variant="contained"
-          sx={{ width: "100%" }}
-          onClick={handleOpenDialog}
-        >
-          NỘP BÀI
-        </Button>
-      )}
-      {submit && (
-        <Button
-          variant="outlined"
-          sx={{ width: "100%" }}
-          onClick={handleContinue}
-        >
-          LÀM BÀI TẬP KHÁC
-        </Button>
-      )}
+      <Box sx={{ mb: 3, width: "100%", mt: 1.5 }}>
+        {!submit && (
+          <Button
+            variant="contained"
+            sx={{
+              width: "100%",
+              alignSelf: "center",
+              color: "white",
+              "&:not(:disabled)": {
+                background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
+                transition:
+                  "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
+                "&:hover": {
+                  background:
+                    "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
+                  opacity: 0.8,
+                  transform: "scale(1.05)",
+                  boxShadow: "0 4px 20px rgba(255, 0, 0, 0.2)",
+                },
+              },
+            }}
+            size="large"
+            onClick={handleOpenDialog}
+          >
+            NỘP BÀI
+          </Button>
+        )}
+        {submit && (
+          <Button
+            variant="outlined"
+            sx={{ width: "100%" }}
+            size="large"
+            onClick={handleContinue}
+          >
+            LÀM BÀI TẬP KHÁC
+          </Button>
+        )}
+      </Box>
       <Dialog
         open={openDialog}
         onClose={handleCloseDialog}

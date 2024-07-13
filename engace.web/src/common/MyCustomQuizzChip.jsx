@@ -23,6 +23,7 @@ export default function MyCustomQuizzChip({
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
+            mb: 1.5
           }}
         >
           {index + 1}

@@ -63,7 +63,7 @@ export default function WritingForm({ onClosePannel }) {
               background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
               opacity: 0.8,
               transform: "scale(1.05)",
-              boxShadow: "0 4px 20px rgba(0, 0, 0, 0.2)",
+              boxShadow: "0 0.2rem 1.2rem rgba(255, 0, 0, 0.2)",
             },
           },
         }}

@@ -33,7 +33,7 @@ export default function QuestionRadioGroup({
         name="radio-buttons-group"
         onChange={handleChange}
         value={answer[qIndex] || ""}
-        sx={{ marginBottom: 1.5 }}
+        sx={{ mb: 1.5, mt: 1 }}
       >
         {question.Options.map((option, index) => (
           <FormControlLabel
@@ -52,7 +52,7 @@ export default function QuestionRadioGroup({
                     ? "normal"
                     : question.RightOptionIndex === index
                     ? "bold"
-                    : "normal",
+                    : "normal"
                 }}
               >
                 {option}
@@ -67,7 +67,7 @@ export default function QuestionRadioGroup({
           sx={{
             marginTop: 1.5,
             marginBottom: 1.5,
-            color: "info.dark",
+            color: "info.dark"
           }}
         >
           <strong>Giải thích:</strong> {question.ExplanationInVietnamese}

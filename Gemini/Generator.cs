@@ -13,10 +13,9 @@ namespace Gemini
 
         public static async Task<string> GenerateContent(string apiKey, string query, bool useJson = true, double creativeLevel = 50, GenerativeModel model = GenerativeModel.Gemini_15_Flash)
         {
-            ResponseForOneShot.Response? responseDTO = null;
             var endpoint = GetUriWithHeadersIfAny(apiKey, model);
 
-            var requestData = new
+            var request = new
             {
                 contents = new[]
                 {
@@ -36,7 +35,22 @@ namespace Gemini
                     new
                     {
                         category = "HARM_CATEGORY_DANGEROUS_CONTENT",
-                        threshold = "BLOCK_ONLY_HIGH"
+                        threshold = "BLOCK_NONE"
+                    },
+                    new
+                    {
+                        category = "HARM_CATEGORY_HARASSMENT",
+                        threshold = "BLOCK_NONE"
+                    },
+                    new
+                    {
+                        category = "HARM_CATEGORY_HATE_SPEECH",
+                        threshold = "BLOCK_NONE"
+                    },
+                    new
+                    {
+                        category = "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+                        threshold = "BLOCK_NONE"
                     }
                 },
                 generationConfig = new
@@ -48,12 +62,12 @@ namespace Gemini
                 }
             };
 
-            var content = new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8, "application/json");
-            var response = await Client.PostAsync(endpoint, content).ConfigureAwait(false);
+            var body = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
+            var response = await Client.PostAsync(endpoint, body).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
 
             var responseData = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            responseDTO = JsonConvert.DeserializeObject<ResponseForOneShot.Response>(responseData);
+            var responseDTO = JsonConvert.DeserializeObject<ResponseForOneShot.Response>(responseData);
 
             return responseDTO.Candidates[0].Content.Parts[0].Text;
         }
@@ -62,8 +76,8 @@ namespace Gemini
         {
             var endpoint = GetUriWithHeadersIfAny(apiKey, GenerativeModel.Gemini_15_Flash);
 
-            var content = new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8, "application/json");
-            var response = await Client.PostAsync(endpoint, content);
+            var body = new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8, "application/json");
+            var response = await Client.PostAsync(endpoint, body);
             response.EnsureSuccessStatusCode();
 
             var responseData = await response.Content.ReadAsStringAsync();
@@ -74,7 +88,7 @@ namespace Gemini
 
         public static async Task<string> GenerateReviewFromImage(string apiKey, string base64Img, bool useJson = true, double creativeLevel = 50, GenerativeModel model = GenerativeModel.Gemini_15_Flash)
         {
-            return null;
+            return null; // TBD
         }
 
         private static string GetUriWithHeadersIfAny(string accessKey, GenerativeModel model)
