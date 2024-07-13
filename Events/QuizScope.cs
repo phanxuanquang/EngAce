@@ -8,8 +8,8 @@ namespace Events
 {
     public static class QuizScope
     {
-        public const int MinTotalQuestions = 10;
-        public const int MaxTotalQuestions = 40;
+        public const sbyte MinTotalQuestions = 10;
+        public const sbyte MaxTotalQuestions = 40;
         public static async Task<List<Quiz>?> GenerateQuizes(string apiKey, string topic, List<QuizzType> quizzTypes, EnglishLevel level, short questionsCount)
         {
             var promptBuilder = new StringBuilder();
@@ -18,7 +18,7 @@ namespace Events
             var model = questionsCount <= (MinTotalQuestions * 2) ? GenerativeModel.Gemini_15_Flash : GenerativeModel.Gemini_15_Pro;
 
             promptBuilder.AppendLine($"Bạn là một giáo viên dạy tiếng Anh với hơn 20 năm kinh nghiệm. Trình độ tiếng Anh của tôi theo tiêu chuẩn CEFR là {userLevel}. ");
-            promptBuilder.Append($"Hãy cho tôi một bộ câu hỏi trắc nghiệm tiếng Anh bao gồm {questionsCount} câu hỏi liên quan đến chủ đề '{topic}' để luyện tập. ");
+            promptBuilder.Append($"Hãy cho tôi một bộ câu hỏi trắc nghiệm tiếng Anh bao gồm chính xác {questionsCount} câu hỏi liên quan đến chủ đề '{topic.Trim()}' để luyện tập. ");
             promptBuilder.Append("Nội dung câu hỏi phải thật thú vị để kích thích và tạo cảm hứng cho người học. Mỗi câu hỏi trong bộ đề trắc nghiệm chỉ được phép có 4 lựa chọn. ");
             promptBuilder.AppendLine($"Bộ câu hỏi trắc nghiệm của bạn phải bao gồm các loại câu hỏi: {types}. ");
             promptBuilder.AppendLine("Output là một mảng JSON tương ứng với class C# sau: ");
@@ -57,7 +57,7 @@ namespace Events
             promptBuilder.AppendLine($"Bạn là một giáo viên dạy tiếng Anh với hơn 20 năm kinh nghiệm và bạn đang giảng dạy tại Việt Nam. Trình độ tiếng Anh của tôi theo tiêu chuẩn CEFR là {userLevel}.");
             promptBuilder.Append($"Tôi đang tìm kiếm những chủ đề thú vị để luyện tập tiếng Anh phù hợp với trình độ hiện tại của bản thân, đồng thời cũng muốn có thêm hứng thú để học tập.");
             promptBuilder.AppendLine("Hãy đề xuất cho tôi ít nhất 20 topic ngắn gọn bằng tiếng Anh mà bạn cảm thấy phù hợp nhất và thú vị nhất để luyện tập tiếng Anh.");
-            promptBuilder.Append("Danh sách chủ đề mà bạn đề xuất phải là một mảng đối lượng JSON tương ứng với kiểu dữ liệu List<string> trong ngôn ngữ C#.");
+            promptBuilder.Append("Danh sách chủ đề mà bạn đề xuất phải là một mảng đối lượng JSON tương ứng với kiểu dữ liệu List<string> của ngôn ngữ lập trình C#.");
 
             var response = await Gemini.Generator.GenerateContent(apiKey, promptBuilder.ToString(), true, 75);
             return JsonConvert.DeserializeObject<List<string>>(response);

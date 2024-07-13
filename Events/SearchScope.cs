@@ -7,44 +7,41 @@ namespace Events
         public static async Task<string> Search(string apiKey, bool useEnglish, string keyword, string context)
         {
             var promptBuilder = new StringBuilder();
+            keyword = keyword.Trim();
+            context = context.Trim();
 
             if (useEnglish)
             {
-                promptBuilder.Append("You are an English teacher with over 20 years of experience and also a language researcher specializing in the English language. ");
-                promptBuilder.Append($"Please explain the meaning of '{keyword}' in a very easy-to-understand way,");
-                if (!string.IsNullOrEmpty(context))
-                {
-                    promptBuilder.Append($" the context of the word is that '{context}'.");
-                }
-                promptBuilder.AppendLine("Your response must include 8 parts:");
-                promptBuilder.AppendLine("- The IPA transcription and the part of speech (noun, verb, adjective, adverb, etc.) of the searched word.");
-                promptBuilder.AppendLine("- The explanation of the word in the provided context (if any), if there is no context, provide up to 10 most common meanings of the searched word with detailed explanations.");
-                promptBuilder.AppendLine("- Provide at least 5 examples of how to apply and the circumstances in which the searched word is used, along with some related vocabulary.");
-                promptBuilder.AppendLine("- Provide at least 3 synonyms and antonyms, if any, and explain them in detail.");
-                promptBuilder.AppendLine("- Provide some common idioms and phrases related to the word.");
-                promptBuilder.AppendLine("- Provide information on the root word and its derivatives to give a deeper understanding of the word structure.");
-                promptBuilder.AppendLine("- Provide historical and cultural information related to the searched word (if any).");
-                promptBuilder.AppendLine("- The variations of the searched word, such as past tense, present tense, plural form, comparative form, etc.");
-                promptBuilder.AppendLine("The format of your response must be very professional and very easy to understand, but not too verbose.");
+                promptBuilder.Append("You are an English teacher with over 20 years of experience and also a language scientist specialized in the English language.");
+                promptBuilder.Append($"Please explain in a very understandable way the meaning of '{keyword}'");
+                promptBuilder.Append(!string.IsNullOrEmpty(context) ? $" within the context '{context}'." : string.Empty);
+                promptBuilder.AppendLine("Your output must include 8 parts:");
+                promptBuilder.AppendLine($"- Pronunciation and part of speech (noun, verb, adjective, adverb, idiomatic expression...) of '{keyword}'");
+                promptBuilder.AppendLine($"- Definition of '{keyword}' within the provided context (if available); otherwise, provide up to the 10 most common meanings of '{keyword}' with detailed explanations");
+                promptBuilder.AppendLine($"- Provide at least 5 examples of how '{keyword}' is used, along with the contexts in which it applies and other related vocabulary.");
+                promptBuilder.AppendLine("- Provide at least 3 synonyms and 3 antonyms if available, and explain them in detail.");
+                promptBuilder.AppendLine($"- Provide some common idioms and phrases related to '{keyword}'.");
+                promptBuilder.AppendLine($"- Provide information about the origin of '{keyword}' and its derived forms to understand the word structure better.");
+                promptBuilder.AppendLine($"- Provide information about the historical development of the word '{keyword}' (if available).");
+                promptBuilder.AppendLine($"- Different forms of '{keyword}' such as past tense, present tense, plural form, comparative form, etc. (if available).");
+                promptBuilder.AppendLine("Your output should be presented in a very understandable manner, but not overly verbose.");
             }
             else
             {
-                promptBuilder.Append("Bạn là một giáo viên dạy tiếng Anh với hơn 20 năm kinh nghiệm và cũng là một nhà nghiên cứu chuyên sâu về ngôn ngữ tiếng Anh. ");
+                promptBuilder.Append("Bạn là một giáo viên dạy tiếng Anh với hơn 20 năm kinh nghiệm và cũng là một nhà khoa học ngôn ngữ chuyên về ngôn ngữ tiếng Anh. ");
                 promptBuilder.Append($"Hãy giải thích một cách thật dễ hiểu nghĩa của '{keyword}'");
-                if (!string.IsNullOrEmpty(context))
-                {
-                    promptBuilder.Append($" trong ngữ cảnh '{context}'.");
-                }
+                promptBuilder.Append(!string.IsNullOrEmpty(context) ? $" trong ngữ cảnh '{context}'." : string.Empty);
                 promptBuilder.AppendLine("Nội dung output của bạn phải bao gồm 8 phần:");
                 promptBuilder.AppendLine($"- Phiên âm và từ loại (danh từ, động từ, tính từ, trạng từ, thành ngữ...) của '{keyword}'");
                 promptBuilder.AppendLine($"- Định nghĩa của '{keyword}' trong ngữ cảnh được cung cấp (nếu có), nếu không có ngữ cảnh thì cho tôi tối đa 10 nghĩa phổ biến nhất của '{keyword}' kèm lời giải thích chi tiết");
-                promptBuilder.AppendLine($"- Cung cấp tối thiểu 5 ví dụ về cách áp dụng và hoàn cảnh áp dụng từ '{keyword}' và một số từ vựng khác có liên quan");
-                promptBuilder.AppendLine("- Cung cấp tối thiểu 3 từ đồng nghĩa và từ trái nghĩa nếu có, đồng thời giải thích chi tiết về chúng.");
-                promptBuilder.AppendLine($"- Cung cấp một số thành ngữ và cụm từ phổ biến liên quan chứa từ '{keyword}'");
-                promptBuilder.AppendLine($"- Cung cấp thông tin về từ gốc và các từ phái sinh của '{keyword}' để hiểu sâu hơn về cấu trúc từ");
-                promptBuilder.AppendLine($"- Cung cấp thông tin về lịch sử hình thành của từ '{keyword}' (nếu có)");
-                promptBuilder.AppendLine($"- Các dạng biến đổi của '{keyword}' được tra cứu như thì quá khứ, thì hiện tại, dạng số nhiều, dạng so sánh,... (nếu có)");
-                promptBuilder.AppendLine("Cách trình bày output của bạn phải thật chuyên nghiệp và phải thật dễ hiểu, tuy nhiên không được quá dài dòng.");
+                promptBuilder.AppendLine($"- Cung cấp tối thiểu 5 ví dụ về cách áp dụng kèm hoàn cảnh áp dụng từ '{keyword}' và một số từ vựng khác có liên quan.");
+                promptBuilder.AppendLine("- Cung cấp tối thiểu 3 từ đồng nghĩa và 3 từ trái nghĩa nếu có, đồng thời giải thích chi tiết về chúng.");
+                promptBuilder.AppendLine($"- Cung cấp một số idiom và cụm từ phổ biến liên quan chứa từ '{keyword}'.");
+                promptBuilder.AppendLine($"- Cung cấp thông tin về từ gốc và các từ phái sinh của '{keyword}' để hiểu sâu hơn về cấu trúc từ.");
+                promptBuilder.AppendLine($"- Cung cấp thông tin về lịch sử hình thành của từ '{keyword}' (nếu có).");
+                promptBuilder.AppendLine($"- Các dạng biến đổi của '{keyword}' được tra cứu như thì quá khứ, thì hiện tại, dạng số nhiều, dạng so sánh,... (nếu có).");
+                promptBuilder.AppendLine($"- Một số fun facts vui liên quan đến '{keyword}' nếu có.");
+                promptBuilder.AppendLine("Cách trình bày output của bạn phải thật dễ hiểu, tuy nhiên không được quá dài dòng.");
             }
 
             return await Gemini.Generator.GenerateContent(apiKey, promptBuilder.ToString(), false);

@@ -8,10 +8,13 @@ namespace Events
 {
     public static class ReviewScope
     {
+        public const short MinTotalWords = 50;
+        public const short MaxTotalWords = 500;
         public static async Task<Comment> GenerateReview(string apiKey, EnglishLevel level, string content)
         {
             var promptBuilder = new StringBuilder();
             var userLevel = GeneralHelper.GetEnumDescription(level);
+            var model = GeneralHelper.GetTotalWords(content) <= (MaxTotalWords / 2) ? GenerativeModel.Gemini_15_Flash : GenerativeModel.Gemini_15_Pro;
 
             promptBuilder.Append("Bạn là một giáo viên tiếng Anh với hơn 20 năm kinh nghiệm giảng dạy, đồng thời đang làm việc tại một trung tâm dạy IELTS lớn. ");
             promptBuilder.Append($"Trình độ tiếng Anh của tôi theo tiêu chuẩn CEFR là '{userLevel}'. ");
@@ -30,9 +33,9 @@ namespace Events
             promptBuilder.AppendLine("  \"ImprovedContent\": \"Đây là bài viết sau khi được chỉnh sửa để tốt hơn\"");
             promptBuilder.AppendLine("}");
             promptBuilder.AppendLine("Nội dung bài viết của tôi là: ");
-            promptBuilder.AppendLine($"{content}");
+            promptBuilder.AppendLine($"{content.Trim()}");
 
-            var result = await Gemini.Generator.GenerateContent(apiKey, promptBuilder.ToString(), true);
+            var result = await Gemini.Generator.GenerateContent(apiKey, promptBuilder.ToString(), true, 50, model);
             return JsonConvert.DeserializeObject<Comment>(result);
         }
 

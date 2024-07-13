@@ -27,7 +27,7 @@ namespace EngAce.Api.Controllers
         /// Generates a list of quizzes based on the specified request, English level, and total number of questions.
         /// </summary>
         /// <param name="request">The request containing the topic and quiz types.</param>
-        /// <param name="englishLevel">The English level for which to generate quizzes. Default is Elementary.</param>
+        /// <param name="englishLevel">The English level for which to generate quizzes. Default is Intermediate.</param>
         /// <param name="totalQuestions">The total number of questions to generate. Default is 10.</param>
         /// <returns>
         /// An <see cref="ActionResult{T}"/> containing a list of generated quizzes if the operation is successful,
@@ -77,7 +77,7 @@ namespace EngAce.Api.Controllers
         /// <summary>
         /// Suggests 3 topics based on the specified English level
         /// </summary>
-        /// <param name="englishLevel">The English level for which to suggest topics. Default is Elementary.</param>
+        /// <param name="englishLevel">The English level for which to suggest topics. Default is Intermediate.</param>
         /// <returns>
         /// An <see cref="ActionResult{T}"/> containing a list of three suggested topics if the operation is successful,
         /// or an error response if the access key is invalid or if an exception occurs during the suggestion process.

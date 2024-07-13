@@ -21,7 +21,7 @@ namespace EngAce.Api.Controllers
         /// Generates the review based on the provided content and English level
         /// </summary>
         /// <param name="content">The content for which to generate a comment.</param>
-        /// <param name="englishLevel">The English level for the generated comment. Default is Elementary.</param>
+        /// <param name="englishLevel">The English level for the generated comment. Default is Intermediate.</param>
         /// <returns>
         /// An <see cref="ActionResult{T}"/> containing the generated comment if the operation is successful,
         /// or an error response if the access key is invalid or an exception occurs during generation.
@@ -29,8 +29,8 @@ namespace EngAce.Api.Controllers
         /// <response code="200">The generated comment.</response>
         /// <response code="400">The error message if an error occurs during generation.</response>
         /// <response code="401">The error message if the access key is invalid.</response>
-        [HttpGet("Generate")]
-        public async Task<ActionResult<Comment>> Generate(string content, EnglishLevel englishLevel = EnglishLevel.Intermediate)
+        [HttpPost("Generate")]
+        public async Task<ActionResult<Comment>> Generate([FromBody] string content, EnglishLevel englishLevel = EnglishLevel.Intermediate)
         {
             if (string.IsNullOrEmpty(_accessKey))
             {
@@ -39,9 +39,14 @@ namespace EngAce.Api.Controllers
 
             content = content.Trim();
 
-            if (GeneralHelper.GetTotalWords(content) > 300)
+            if (GeneralHelper.GetTotalWords(content) < ReviewScope.MinTotalWords)
             {
-                return BadRequest("Bài viết chỉ được chứa tối đa 300 từ.");
+                return BadRequest($"Bài viết phải chứa tối thiểu {ReviewScope.MinTotalWords} từ.");
+            }
+
+            if (GeneralHelper.GetTotalWords(content) > ReviewScope.MaxTotalWords)
+            {
+                return BadRequest($"Bài viết chỉ được chứa tối đa {ReviewScope.MaxTotalWords} từ.");
             }
 
             try
@@ -59,7 +64,7 @@ namespace EngAce.Api.Controllers
         /// Generates a comment from an uploaded image based on the specified English level
         /// </summary>
         /// <param name="file">The image file from which to generate a comment.</param>
-        /// <param name="englishLevel">The English level for the generated comment. Default is Elementary.</param>
+        /// <param name="englishLevel">The English level for the generated comment. Default is Intermediate.</param>
         /// <returns>
         /// An <see cref="ActionResult{T}"/> containing the generated comment from the image if the operation is successful,
         /// or an error response if the access key is invalid, no image is uploaded, the image size exceeds the maximum limit, or an exception occurs during generation.
