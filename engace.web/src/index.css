@@ -31,3 +31,18 @@ code {
 .markdown ol, .markdown ul {
   margin-left: 20px;
 }
+
+/* Define a keyframe animation */
+@keyframes highlight {
+  from {
+    background-color: #ffece1;
+  }
+  to {
+    background-color: transparent;
+  }
+}
+
+/* Define a class that uses the animation */
+.highlight {
+  animation: highlight 2s ease;
+}

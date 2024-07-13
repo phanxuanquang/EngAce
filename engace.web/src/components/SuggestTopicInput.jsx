@@ -35,7 +35,11 @@ export default function SuggestTopicInput({ topic, setTopic, error }) {
   return (
     <Box sx={{ display: "flex", flexDirection: "column", marginBottom: 1 }}>
       <InputLabel htmlFor="topic">
-        <Typography id="modal-modal-title" variant="h6" sx={{ color: "primary.black" }}>
+        <Typography
+          id="modal-modal-title"
+          variant="h6"
+          sx={{ color: "primary.black" }}
+        >
           Chủ đề cho bài tập
         </Typography>
       </InputLabel>
@@ -70,7 +74,7 @@ export default function SuggestTopicInput({ topic, setTopic, error }) {
           target="_blank"
           sx={{
             height: "2.5rem",
-            textTransform: "none"
+            textTransform: "none",
           }}
           onClick={handleSuggestTopic}
         >
@@ -84,12 +88,12 @@ export default function SuggestTopicInput({ topic, setTopic, error }) {
         flexWrap="wrap"
       >
         {!loading &&
-          topics.map((topic) => (
+          topics.map((topicItem) => (
             <Chip
-              key={topic}
-              label={topic}
-              variant="outlined"
-              onClick={() => handleChooseTopic(topic)}
+              key={topicItem}
+              label={topicItem}
+              variant={topicItem === topic ? "filled" : "outlined"}
+              onClick={() => handleChooseTopic(topicItem)}
             />
           ))}
 

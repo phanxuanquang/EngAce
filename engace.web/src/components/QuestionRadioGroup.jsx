@@ -8,25 +8,25 @@ import {
   Typography,
 } from "@mui/material";
 import PropTypes from "prop-types";
+import { useDispatch } from "react-redux";
+import { quizActions } from "../redux/reducer/QuizReducer";
 
 export default function QuestionRadioGroup({
   question,
   answer,
   index: qIndex,
-  setAnswer,
   submit,
 }) {
+  const dispatch = useDispatch();
   const handleChange = (event) => {
-    const newAnswer = [...answer];
-    newAnswer[qIndex] = event.target.value;
-    setAnswer(newAnswer);
+    dispatch(quizActions.setAnswerList({ qIndex, value: event.target.value }));
   };
 
   return (
-    <FormControl disabled={submit}>
+    <FormControl disabled={submit} fullWidth>
       <FormLabel>
         <Typography variant="body1" sx={{ color: "black !important" }}>
-          <strong>Câu hỏi:</strong> {question.Question}
+          <strong>Câu hỏi {qIndex + 1}: </strong> {question.Question}
         </Typography>
       </FormLabel>
       <RadioGroup
@@ -52,7 +52,7 @@ export default function QuestionRadioGroup({
                     ? "normal"
                     : question.RightOptionIndex === index
                     ? "bold"
-                    : "normal"
+                    : "normal",
                 }}
               >
                 {option}
@@ -67,7 +67,7 @@ export default function QuestionRadioGroup({
           sx={{
             marginTop: 1.5,
             marginBottom: 1.5,
-            color: "info.dark"
+            color: "info.dark",
           }}
         >
           <strong>Giải thích:</strong> {question.ExplanationInVietnamese}
@@ -81,6 +81,5 @@ QuestionRadioGroup.propTypes = {
   question: PropTypes.object.isRequired,
   answer: PropTypes.array.isRequired,
   index: PropTypes.number.isRequired,
-  setAnswer: PropTypes.func.isRequired,
   submit: PropTypes.bool.isRequired,
 };

@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { Chip, Typography } from "@mui/material";
 
-export default function MyCustomQuizzChip({
+export default function MyCustomQuizChip({
   index,
   isDone,
   setIndex,
@@ -23,7 +23,7 @@ export default function MyCustomQuizzChip({
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            mb: 1.5
+            mb: 1.5,
           }}
         >
           {index + 1}
@@ -41,7 +41,7 @@ export default function MyCustomQuizzChip({
   );
 }
 
-MyCustomQuizzChip.propTypes = {
+MyCustomQuizChip.propTypes = {
   index: PropTypes.number.isRequired,
   isDone: PropTypes.bool.isRequired,
   setIndex: PropTypes.func.isRequired,

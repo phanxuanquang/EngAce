@@ -1,25 +1,31 @@
-import { Divider, Grid, Box } from "@mui/material";
+import { Divider, Grid, Box, Hidden } from "@mui/material";
 import { useSelector } from "react-redux";
+import { useState, useRef } from "react";
 import QuestionRadioGroup from "./QuestionRadioGroup";
-import { useState } from "react";
 import QuestionIndex from "./QuestionIndex";
 import QuizzStatus from "./QuizzStatus";
 
 export default function QuestionAndAnswer() {
-  const { qaList } = useSelector((state) => state.quizSlice);
+  const { qaList, answer, submit } = useSelector((state) => state.quizSlice);
   const [index, setIndex] = useState(0);
-  const [answer, setAnswer] = useState([]);
-  const [submit, setSubmit] = useState(false);
+  const questionRefs = useRef([]);
+
+  const scrollToQuestion = (i) => {
+    setIndex(i);
+    if (questionRefs.current[i]) {
+      questionRefs.current[i].scrollIntoView({ behavior: "smooth" });
+      questionRefs.current[i].classList.add("highlight");
+      setTimeout(() => {
+        questionRefs.current[i]?.classList.remove("highlight");
+      }, 2000);
+    }
+  };
 
   return (
     <Box
       sx={{
         height: "100%",
-        display: {
-          xs: "block",
-          md: "flex"
-        },
-        alignItems: "center"
+        overflow: "auto",
       }}
     >
       <Grid container spacing={2}>
@@ -33,29 +39,42 @@ export default function QuestionAndAnswer() {
             gap: 2,
           }}
         >
-          <QuestionIndex
-            index={index}
-            length={qaList.length}
-            setIndex={setIndex}
-          />
-          <Divider />
-          <QuestionRadioGroup
-            question={qaList[index]}
-            answer={answer}
-            index={index}
-            setAnswer={setAnswer}
-            submit={submit}
-          />
+          <Hidden mdUp>
+            <QuestionIndex
+              index={index}
+              length={qaList.length}
+              setIndex={setIndex}
+            />
+            <Divider />
+            <QuestionRadioGroup
+              question={qaList[index]}
+              answer={answer}
+              index={index}
+              submit={submit}
+            />
+          </Hidden>
+
+          <Hidden mdDown>
+            {qaList.map((question, i) => (
+              <Box key={i} ref={(el) => (questionRefs.current[i] = el)}>
+                <QuestionRadioGroup
+                  question={question}
+                  answer={answer}
+                  index={i}
+                  submit={submit}
+                />
+              </Box>
+            ))}
+          </Hidden>
         </Grid>
 
         <Grid item xs={12} md={3}>
           <QuizzStatus
             qaList={qaList}
             answer={answer}
-            setIndex={setIndex}
+            setIndex={scrollToQuestion}
             index={index}
             submit={submit}
-            setSubmit={setSubmit}
           />
         </Grid>
       </Grid>

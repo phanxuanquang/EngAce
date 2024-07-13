@@ -6,10 +6,11 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
+  Paper,
   Stack,
   Typography,
 } from "@mui/material";
-import MyCustomQuizzChip from "../common/MyCustomQuizzChip";
+import MyCustomQuizChip from "../common/MyCustomQuizChip";
 import { useState } from "react";
 import { quizActions } from "../redux/reducer/QuizReducer";
 import { useDispatch } from "react-redux";
@@ -20,7 +21,6 @@ export default function QuizzStatus({
   setIndex,
   index: qIndex,
   submit,
-  setSubmit,
 }) {
   const dispatch = useDispatch();
 
@@ -35,7 +35,7 @@ export default function QuizzStatus({
   };
 
   const handleSubmit = () => {
-    setSubmit(true);
+    dispatch(quizActions.onSubmit());
     setIndex(0);
     setOpenDialog(false);
   };
@@ -45,19 +45,21 @@ export default function QuizzStatus({
   };
 
   return (
-    <Box
+    <Paper
       sx={{
         display: "flex",
         flexDirection: "column",
         alignItems: { xs: "start", md: "center" },
         gap: 2,
+        position: "sticky",
+        top: 0,
+        px: { xs: 1, md: 2 },
+        pt: 1,
       }}
+      elevation={2}
     >
-      <Typography
-        variant="h6"
-        sx={{ color: "primary.black", textAlign: "center" }}
-      >
-        TRẠNG THÁI LÀM BÀI
+      <Typography variant="h6" sx={{ color: "primary.black" }}>
+        TRẠNG THÀI LÀM BÀI
       </Typography>
       <Stack
         spacing={{ xs: 1, sm: 2 }}
@@ -68,10 +70,11 @@ export default function QuizzStatus({
           display: "flex",
           flexDirection: "row",
           gap: 2,
+          width: "100%",
         }}
       >
         {qaList.map((item, index) => (
-          <MyCustomQuizzChip
+          <MyCustomQuizChip
             key={index}
             index={index}
             variant="outlined"
@@ -157,7 +160,7 @@ export default function QuizzStatus({
           </Box>
         </DialogActions>
       </Dialog>
-    </Box>
+    </Paper>
   );
 }
 
@@ -167,5 +170,4 @@ QuizzStatus.propTypes = {
   setIndex: PropTypes.func.isRequired,
   index: PropTypes.number.isRequired,
   submit: PropTypes.bool.isRequired,
-  setSubmit: PropTypes.func.isRequired,
 };
