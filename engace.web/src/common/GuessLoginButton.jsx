@@ -125,8 +125,8 @@ export default function GuessLoginButton() {
             }}
           >
             <TextField
-              id="outlined-basic"
-              variant="outlined"
+              id="standard-basic"
+              variant="standard"
               placeholder="AIza . . ."
               sx={{
                 flexGrow: 1,

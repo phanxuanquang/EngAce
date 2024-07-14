@@ -55,6 +55,7 @@ export default function QuizzStatus({
         top: 0,
         px: { xs: 1, md: 2 },
         pt: 1,
+        mt: 1
       }}
       elevation={2}
     >
@@ -62,14 +63,14 @@ export default function QuizzStatus({
         TRẠNG THÀI LÀM BÀI
       </Typography>
       <Stack
-        spacing={{ xs: 1, sm: 2 }}
+        spacing={{ xs: 1, sm: 1 }}
         direction="row"
         useFlexGap
         flexWrap="wrap"
         sx={{
           display: "flex",
           flexDirection: "row",
-          gap: 2,
+          gap: 1,
           width: "100%",
         }}
       >

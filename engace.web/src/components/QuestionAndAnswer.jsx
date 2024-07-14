@@ -25,7 +25,7 @@ export default function QuestionAndAnswer() {
     <Box
       sx={{
         height: "100%",
-        // overflow: "auto",
+        overflow: "auto",
       }}
     >
       <Grid container spacing={2}>
@@ -37,6 +37,7 @@ export default function QuestionAndAnswer() {
             display: "flex",
             flexDirection: "column",
             gap: 2,
+            mt: 1
           }}
         >
           <Hidden mdUp>

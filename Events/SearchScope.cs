@@ -12,7 +12,7 @@ namespace Events
 
             if (useEnglish)
             {
-                promptBuilder.Append("You are an English teacher with over 20 years of experience and also a language scientist specialized in the English language.");
+                promptBuilder.Append("You are an English-Vietnamese dictionary using the AI technology.");
                 promptBuilder.Append($"Please explain in a very understandable way the meaning of '{keyword}'");
                 promptBuilder.Append(!string.IsNullOrEmpty(context) ? $" within the context '{context}'." : string.Empty);
                 promptBuilder.AppendLine("Your output must include 8 parts:");
@@ -28,8 +28,8 @@ namespace Events
             }
             else
             {
-                promptBuilder.Append("Bạn là một giáo viên dạy tiếng Anh với hơn 20 năm kinh nghiệm và cũng là một nhà khoa học ngôn ngữ chuyên về ngôn ngữ tiếng Anh. ");
-                promptBuilder.Append($"Hãy giải thích một cách thật dễ hiểu nghĩa của '{keyword}'");
+                promptBuilder.Append("Bạn là từ điển Anh-Việt siêu ưu việt ứng dụng công nghệ AI vào việc tra cứu. ");
+                promptBuilder.Append($"Hãy cho tôi lời giải thích của '{keyword}'");
                 promptBuilder.Append(!string.IsNullOrEmpty(context) ? $" trong ngữ cảnh '{context}'." : string.Empty);
                 promptBuilder.AppendLine("Nội dung output của bạn phải bao gồm 8 phần:");
                 promptBuilder.AppendLine($"- Phiên âm và từ loại (danh từ, động từ, tính từ, trạng từ, thành ngữ...) của '{keyword}'");
