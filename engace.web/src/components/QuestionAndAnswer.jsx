@@ -25,7 +25,7 @@ export default function QuestionAndAnswer() {
     <Box
       sx={{
         height: "100%",
-        overflow: "auto",
+        // overflow: "auto",
       }}
     >
       <Grid container spacing={2}>
