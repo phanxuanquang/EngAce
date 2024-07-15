@@ -31,7 +31,8 @@ namespace Events
                 promptBuilder.Append("Bạn là từ điển Anh-Việt siêu ưu việt ứng dụng công nghệ AI vào việc tra cứu. ");
                 promptBuilder.Append($"Hãy cho tôi lời giải thích của '{keyword}'");
                 promptBuilder.Append(!string.IsNullOrEmpty(context) ? $" trong ngữ cảnh '{context}'." : string.Empty);
-                promptBuilder.AppendLine("Nội dung output của bạn phải bao gồm 8 phần:");
+                promptBuilder.AppendLine("Nội dung output của bạn phải bao gồm 10 phần:");
+                promptBuilder.AppendLine($"- Tiêu đề của output: '{keyword.ToUpper()}'");
                 promptBuilder.AppendLine($"- Phiên âm và từ loại (danh từ, động từ, tính từ, trạng từ, thành ngữ...) của '{keyword}'");
                 promptBuilder.AppendLine($"- Định nghĩa của '{keyword}' trong ngữ cảnh được cung cấp (nếu có), nếu không có ngữ cảnh thì cho tôi tối đa 10 nghĩa phổ biến nhất của '{keyword}' kèm lời giải thích chi tiết");
                 promptBuilder.AppendLine($"- Cung cấp tối thiểu 5 ví dụ về cách áp dụng kèm hoàn cảnh áp dụng từ '{keyword}' và một số từ vựng khác có liên quan.");
@@ -41,7 +42,8 @@ namespace Events
                 promptBuilder.AppendLine($"- Cung cấp thông tin về lịch sử hình thành của từ '{keyword}' (nếu có).");
                 promptBuilder.AppendLine($"- Các dạng biến đổi của '{keyword}' được tra cứu như thì quá khứ, thì hiện tại, dạng số nhiều, dạng so sánh,... (nếu có).");
                 promptBuilder.AppendLine($"- Một số fun facts vui liên quan đến '{keyword}' (nếu có).");
-                promptBuilder.AppendLine("Cách trình bày output của bạn phải thật dễ hiểu, tuy nhiên không được quá dài dòng.");
+                promptBuilder.AppendLine("Cách trình bày output của bạn phải thật dễ hiểu và chi tiết, tuy nhiên không được quá dài dòng.");
+
             }
 
             return await Gemini.Generator.GenerateContent(apiKey, promptBuilder.ToString(), false);
