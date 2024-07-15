@@ -28,7 +28,8 @@ namespace Events
             }
             else
             {
-                promptBuilder.Append("Bạn là từ điển Anh-Việt siêu ưu việt ứng dụng công nghệ AI vào việc tra cứu. ");
+                promptBuilder.Append("Bạn là từ điển Anh-Việt siêu ưu việt ứng dụng công nghệ AI vào việc tra cứu. Nhiệm vụ của bạn là giúp tôi giải nghĩa tiếng Anh.");
+                promptBuilder.AppendLine($"Nếu từ được input là một thứ vô nghĩa hoặc không thể hiểu được hoặc quá tục tĩu, bạn hãy đưa ra output là 'Không thể giải nghĩa'");
                 promptBuilder.Append($"Hãy cho tôi lời giải thích của '{keyword}'");
                 promptBuilder.Append(!string.IsNullOrEmpty(context) ? $" trong ngữ cảnh '{context}'." : string.Empty);
                 promptBuilder.AppendLine("Nội dung output của bạn phải bao gồm 10 phần:");

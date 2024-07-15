@@ -45,6 +45,7 @@ namespace Events
             promptBuilder.AppendLine("        \"ExplanationInVietnamese\": \"Lời giải thích cho đáp án đúng\"");
             promptBuilder.AppendLine("    }");
             promptBuilder.AppendLine("]");
+            promptBuilder.AppendLine("Nếu chủ đề được input một thứ vô nghĩa hoặc không thể khác định hoặc không thể hiểu được, hãy trả về một mảng rỗng.");
 
             var response = await Gemini.Generator.GenerateContent(apiKey, promptBuilder.ToString(), true, 50, model);
             return JsonConvert.DeserializeObject<List<Quiz>>(response);
