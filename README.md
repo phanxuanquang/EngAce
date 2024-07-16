@@ -7,7 +7,7 @@ ____________________________
 | --- | --- | --- |
 | 1 | [Phan Xuan Quang](https://github.com/phanxuanquang "Phan Xuân Quang") | Product Design, Backend Development, DevOps, AI Model Fine-Tuning|
 | 2 | [Bui Minh Tuan](https://github.com/tuan20520342 "Bùi Minh Tuấn") | Frontend Development |
-| 3 | [Mai Tan Ha](https://github.com/maitanha "Bùi Minh Tuấn") | Business Manager |
+| 3 | [Mai Tan Ha](https://github.com/maitanha "Bùi Minh Tuấn") | Business Management |
 
 ## :lock: Data Privacy Statement
 Your data, including your Gemini API Key and Google account information, is securely stored on your personal device only. This data will be automatically deleted from our system when you log out of the application. We do not store or retain your data on our servers, ensuring that your information remains private and secure at all times.
