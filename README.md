@@ -1,5 +1,3 @@
-**© 2024 University of Information Technology / EngAce Project** 
-------------
 ![image](https://github.com/phanxuanquang/EngAce/assets/84692657/64b52c2a-b659-4364-89a7-e1c4469922f7)
 
 ____________________________
@@ -9,6 +7,7 @@ ____________________________
 | --- | --- | --- |
 | 1 | [Phan Xuan Quang](https://github.com/phanxuanquang "Phan Xuân Quang") | Product Design, Backend Development, DevOps, AI Model Fine-Tuning|
 | 2 | [Bui Minh Tuan](https://github.com/tuan20520342 "Bùi Minh Tuấn") | Frontend Development |
+| 3 | [Mai Tan Ha](https://github.com/tuan20520342 "Bùi Minh Tuấn") | Business Expert |
 
 ## :lock: Data Privacy Statement
 Your data, including your Gemini API Key and Google account information, is securely stored on your personal device only. This data will be automatically deleted from our system when you log out of the application. We do not store or retain your data on our servers, ensuring that your information remains private and secure at all times.
