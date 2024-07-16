@@ -160,17 +160,8 @@ export default function Auth() {
             tôi cung cấp những tính năng ưu việt được cá nhân hóa theo trình độ
             và sở thích, nhằm tạo sự thoải mái và hứng thú trong quá trình học.
           </Typography>
-          <Typography>
-            <a>Thông tin chi tiết về dự án tại </a>
-            <a
-              href="https://github.com/phanxuanquang/EngAce?tab=readme-ov-file#-2024-university-of-information-technology--engace-project"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ fontWeight: "bold" }}
-            >
-              ĐÂY
-            </a>
-            .
+          <Typography sx={{ textAlign: "justify" }}>
+            Dự án được xây dựng và phát triển bởi <strong>Phan Xuân Quang</strong>, <strong>Bùi Minh Tuấn</strong>, và <strong>Mai Tấn Hà</strong>.
           </Typography>
         </DialogContent>
         <DialogActions sx={{ justifyContent: "center", mb: 2.5, p: 0 }}>

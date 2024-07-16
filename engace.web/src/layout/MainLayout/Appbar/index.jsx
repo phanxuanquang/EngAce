@@ -33,6 +33,7 @@ const ResponsiveAppBar = ({ onOpenSidebar }) => {
   const picture = localStorage.getItem("picture");
   const navigate = useNavigate();
 
+  const surveyFormUrl = "https://docs.google.com/forms/d/e/1FAIpQLSeKxVDOywFoWoSfDiiSU4QAZGNYn_RJP3_j0TK9ByA1nWV9GA/viewform";
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -47,6 +48,7 @@ const ResponsiveAppBar = ({ onOpenSidebar }) => {
     googleLogout();
     dispatch(chatbotActions.resetChat());
     navigate("/auth");
+    window.open(surveyFormUrl, "_blank");
   };
 
   const handleClose = () => {

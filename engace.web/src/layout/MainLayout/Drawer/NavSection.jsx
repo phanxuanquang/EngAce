@@ -27,6 +27,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { chatbotActions } from "../../../redux/reducer/ChatbotReducer";
 import { useDispatch } from "react-redux";
 
+const surveyFormUrl = "https://docs.google.com/forms/d/e/1FAIpQLSeKxVDOywFoWoSfDiiSU4QAZGNYn_RJP3_j0TK9ByA1nWV9GA/viewform";
 const ListItemStyle = styled((props) => (
   <ListItemButton disableGutters {...props} />
 ))(({ theme }) => ({
@@ -105,11 +106,10 @@ export default function NavSection({ navConfig, ...other }) {
   };
 
   const handleLogout = () => {
-    setOpenLogoutDialog(true); // Open the confirmation dialog
+    setOpenLogoutDialog(true); 
   };
 
   const handleLogoutConfirm = () => {
-    // Perform logout actions
     Cookies.remove("token");
     localStorage.removeItem("name");
     localStorage.removeItem("level");
@@ -117,13 +117,13 @@ export default function NavSection({ navConfig, ...other }) {
     googleLogout();
     dispatch(chatbotActions.resetChat());
     navigate("/auth");
-
-    // Close the confirmation dialog
     setOpenLogoutDialog(false);
+    window.open(surveyFormUrl, "_blank");
   };
 
   const handleLogoutCancel = () => {
-    setOpenLogoutDialog(false); // Close the confirmation dialog
+    setOpenLogoutDialog(false);
+    window.open(surveyFormUrl, "_blank");
   };
 
   return (
