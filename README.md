@@ -43,8 +43,3 @@ EngAce includes an AI-powered chatbot that acts as an English learning companion
 - Interactive Discussions: Users can engage in conversations with the chatbot on various English learning topics.
 - Learning Tips: The chatbot provides tips and advice to help users overcome common learning challenges.
 - Q&A Support: Users can ask the chatbot questions related to English learning and receive informative answers.
-
-____________________________
-
-## :hammer_and_wrench: Contribution
-We welcome contributions from the community to help improve EngAce. If you have suggestions, bug reports, or would like to contribute code, please create a pull request for this repository.
