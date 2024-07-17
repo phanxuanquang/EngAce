@@ -42,12 +42,12 @@ namespace EngAce.Api.Controllers
 
             if (GeneralHelper.GetTotalWords(content) < ReviewScope.MinTotalWords)
             {
-                return BadRequest($"Bài viết phải chứa tối thiểu {ReviewScope.MinTotalWords} từ.");
+                return BadRequest($"Bài viết phải dài tối thiểu {ReviewScope.MinTotalWords} từ.");
             }
 
             if (GeneralHelper.GetTotalWords(content) > ReviewScope.MaxTotalWords)
             {
-                return BadRequest($"Bài viết chỉ được chứa tối đa {ReviewScope.MaxTotalWords} từ.");
+                return BadRequest($"Bài viết không được dài hơn {ReviewScope.MaxTotalWords} từ.");
             }
 
             try
@@ -57,7 +57,7 @@ namespace EngAce.Api.Controllers
             }
             catch
             {
-                return BadRequest("Có lỗi xảy ra! Vui lòng kiểm tra lại nội dung bài viết và thử lại.");
+                return BadRequest("Có lỗi xảy ra! Vui lòng kiểm tra lại nội dung bài viết.");
             }
         }
 

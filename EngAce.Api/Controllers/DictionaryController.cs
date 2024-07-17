@@ -52,7 +52,7 @@ namespace EngAce.Api.Controllers
             context = string.IsNullOrEmpty(context) ? "" : context.Trim();
             keyword = keyword.ToLower().Trim();
 
-            var cacheKey = $"Search: {keyword.ToLower().Trim()}-{context.ToLower()}-{useEnglishToExplain}";
+            var cacheKey = $"Search-{keyword}-{context.ToLower()}-{useEnglishToExplain}";
             if (_cache.TryGetValue(cacheKey, out string cachedResult))
             {
                 return Ok(cachedResult);

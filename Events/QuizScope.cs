@@ -8,6 +8,7 @@ namespace Events
 {
     public static class QuizScope
     {
+        public const sbyte MaxTotalWordsOfTopic = 10;
         public const sbyte MinTotalQuestions = 10;
         public const sbyte MaxTotalQuestions = 40;
         public const int OneMonthAsCachingAge = 2592000;

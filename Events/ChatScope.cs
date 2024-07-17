@@ -23,7 +23,7 @@ namespace Events
                     {
                         new Part
                         {
-                            Text = message.Message,
+                            Text = message.Message.Trim(),
                         }
                     }
                 })
@@ -37,7 +37,7 @@ namespace Events
                 {
                     new Part
                     {
-                        Text = conversation.Question
+                        Text = conversation.Question.Trim()
                     }
                 }
             };

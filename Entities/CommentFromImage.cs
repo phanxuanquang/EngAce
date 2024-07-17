@@ -2,6 +2,6 @@
 {
     public class CommentFromImage : Comment
     {
-        public string ExtractedContent { get; set; }
+        public required string ExtractedContent { get; set; }
     }
 }

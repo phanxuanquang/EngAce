@@ -1,10 +1,7 @@
 ﻿using Helper;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.OpenApi.Models;
-using System.IO;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -105,7 +102,7 @@ app.UseSwaggerUI(c =>
 app.UseHttpsRedirection();
 app.UseRouting();
 
-app.UseCors(); 
+app.UseCors();
 app.UseResponseCompression();
 
 app.UseAuthentication();

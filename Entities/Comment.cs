@@ -2,7 +2,7 @@
 {
     public class Comment
     {
-        public string GeneralComment { get; set; }
-        public string ImprovedContent { get; set; }
+        public required string GeneralComment { get; set; }
+        public required string ImprovedContent { get; set; }
     }
 }

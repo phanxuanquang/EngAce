@@ -45,9 +45,16 @@ namespace EngAce.Api.Controllers
                 return Unauthorized("Invalid Access Key");
             }
 
+            request.Topic = string.IsNullOrEmpty(request.Topic) ? "" : request.Topic.Trim();
+
             if (string.IsNullOrWhiteSpace(request.Topic))
             {
                 return BadRequest("Tên chủ đề không được để trống");
+            }
+
+            if (GeneralHelper.GetTotalWords(request.Topic) > QuizScope.MaxTotalWordsOfTopic)
+            {
+                return BadRequest($"Chủ đề không được chứa nhiều hơn {QuizScope.MaxTotalWordsOfTopic} từ");
             }
 
             if (totalQuestions < QuizScope.MinTotalQuestions || totalQuestions > QuizScope.MaxTotalQuestions)
@@ -55,7 +62,7 @@ namespace EngAce.Api.Controllers
                 return BadRequest($"Số lượng câu hỏi phải nằm trong khoảng {QuizScope.MinTotalQuestions} đến {QuizScope.MaxTotalQuestions}");
             }
 
-            var cacheKey = $"GenerateQuizzes-{request.Topic.ToLower().Trim()}-{string.Join(string.Empty, request.QuizzTypes)}-{englishLevel}-{totalQuestions}";
+            var cacheKey = $"GenerateQuiz-{request.Topic.ToLower()}-{string.Join(string.Empty, request.QuizzTypes)}-{englishLevel}-{totalQuestions}";
             if (_cache.TryGetValue(cacheKey, out var cachedQuizzes))
             {
                 return Ok(cachedQuizzes);

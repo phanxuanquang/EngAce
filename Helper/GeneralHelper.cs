@@ -20,7 +20,7 @@ namespace Helper
             }
         }
 
-        public static int GetTotalWords(string s)
+        public static ushort GetTotalWords(string s)
         {
             if (string.IsNullOrWhiteSpace(s))
             {
@@ -31,7 +31,7 @@ namespace Helper
 
             string[] words = s.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
 
-            return words.Length;
+            return (ushort)words.Length;
         }
     }
 }
