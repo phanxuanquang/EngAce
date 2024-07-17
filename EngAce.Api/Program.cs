@@ -12,7 +12,7 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.PropertyNamingPolicy = null;
     });
 
-builder.Services.AddDistributedMemoryCache();
+builder.Services.AddResponseCaching();
 
 builder.Services.AddHttpContextAccessor();
 HttpContextHelper.Configure(builder.Services.BuildServiceProvider().GetRequiredService<IHttpContextAccessor>());
@@ -93,6 +93,7 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 app.UseDeveloperExceptionPage();
+app.UseResponseCaching();
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {

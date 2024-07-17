@@ -4,6 +4,7 @@ namespace Events
 {
     public static class SearchScope
     {
+        public const sbyte MaxContextTotalWords = 50;
         public static async Task<string> Search(string apiKey, bool useEnglish, string keyword, string context)
         {
             var promptBuilder = new StringBuilder();

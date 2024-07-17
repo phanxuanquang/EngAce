@@ -128,14 +128,9 @@ namespace EngAce.Api.Controllers
         /// </returns>
         /// <response code="200">Returns a dictionary of English levels and their descriptions.</response>
         [HttpGet("GetEnglishLevels")]
+        [ResponseCache(Duration = QuizScope.OneMonthAsCachingAge, Location = ResponseCacheLocation.Any, NoStore = false)]
         public ActionResult<Dictionary<int, string>> GetEnglishLevels()
         {
-            const string cacheKey = "EnglishLevels";
-            if (_cache.TryGetValue(cacheKey, out var cachedLevels))
-            {
-                return Ok(cachedLevels);
-            }
-
             var levels = new List<EnglishLevel>
             {
                 EnglishLevel.Beginner,
@@ -151,7 +146,6 @@ namespace EngAce.Api.Controllers
                 level => GeneralHelper.GetEnumDescription(level)
             );
 
-            _cache.Set(cacheKey, descriptions, TimeSpan.FromDays(30));
             return Ok(descriptions);
         }
 
@@ -163,15 +157,10 @@ namespace EngAce.Api.Controllers
         /// </returns>
         /// <response code="200">Returns a dictionary of quiz types and their descriptions.</response>
         [HttpGet("GetQuizTypes")]
+        [ResponseCache(Duration = QuizScope.OneMonthAsCachingAge, Location = ResponseCacheLocation.Any, NoStore = false)]
         public ActionResult<Dictionary<int, string>> GetQuizTypes()
         {
-            const string cacheKey = "QuizzTypes";
-            if (_cache.TryGetValue(cacheKey, out var cachedTypes))
-            {
-                return Ok(cachedTypes);
-            }
-
-            List<QuizzType> types = new List<QuizzType>
+            var types = new List<QuizzType>
             {
                 QuizzType.SentenceCorrection,
                 QuizzType.FillTheBlank,
@@ -188,7 +177,6 @@ namespace EngAce.Api.Controllers
                 type => GeneralHelper.GetEnumDescription(type)
             );
 
-            _cache.Set(cacheKey, descriptions, TimeSpan.FromDays(15));
             return Ok(descriptions);
         }
     }

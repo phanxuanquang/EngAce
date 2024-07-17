@@ -37,7 +37,7 @@ namespace EngAce.Api.Controllers
         /// <response code="400">The error message if the input validation fails or if an error occurs during the search.</response>
         /// <response code="401">Invalid Access Key</response>
         [HttpGet("Search")]
-        public async Task<ActionResult<string>> Search(string keyword, string? context = "", bool useEnglishToExplain = false)
+        public async Task<ActionResult<string>> Search(string keyword, string? context, bool useEnglishToExplain = false)
         {
             if (string.IsNullOrEmpty(_accessKey))
             {
@@ -49,42 +49,48 @@ namespace EngAce.Api.Controllers
                 return BadRequest("Không được để trống từ khóa");
             }
 
-            if (keyword.Trim() != new string(keyword.Trim().Normalize(NormalizationForm.FormD)
-                .Where(c => CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)
-                .ToArray())
-                .Normalize(NormalizationForm.FormC))
-            {
-                return BadRequest("Từ khóa cần tra cứu phải là tiếng Anh");
-            }
+            context = string.IsNullOrEmpty(context) ? "" : context.Trim();
+            keyword = keyword.ToLower().Trim();
 
-            if (!string.IsNullOrEmpty(context) && GeneralHelper.GetTotalWords(context) > 100)
-            {
-                return BadRequest("Ngữ cảnh chỉ chứa tối đa 100 từ");
-            }
-
-            if (!string.IsNullOrEmpty(context) && context.Trim() != new string(context.Trim().Normalize(NormalizationForm.FormD)
-                    .Where(c => CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)
-                    .ToArray())
-                    .Normalize(NormalizationForm.FormC))
-            {
-                return BadRequest("Ngữ cảnh phải là tiếng Anh");
-            }
-
-            if (!string.IsNullOrEmpty(context) && !context.ToLower().Trim().Contains(keyword.ToLower().Trim()))
-            {
-                return BadRequest("Ngữ cảnh phải chứa từ khóa cần tra");
-            }
-
-            var cacheKey = $"Search: {keyword.ToLower().Trim()}-{context.ToLower().Trim()}-{useEnglishToExplain}";
+            var cacheKey = $"Search: {keyword.ToLower().Trim()}-{context.ToLower()}-{useEnglishToExplain}";
             if (_cache.TryGetValue(cacheKey, out string cachedResult))
             {
                 return Ok(cachedResult);
             }
 
+            if (!keyword.Equals(new string(keyword.Normalize(NormalizationForm.FormD)
+                .Where(c => CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)
+                .ToArray())
+                .Normalize(NormalizationForm.FormC)))
+            {
+                return BadRequest("Từ khóa cần tra cứu phải là tiếng Anh");
+            }
+
+            if (!string.IsNullOrEmpty(context))
+            {
+                if (GeneralHelper.GetTotalWords(context) > SearchScope.MaxContextTotalWords)
+                {
+                    return BadRequest($"Ngữ cảnh chỉ chứa tối đa {SearchScope.MaxContextTotalWords} từ");
+                }
+
+                if (!context.Equals(new string(context.Normalize(NormalizationForm.FormD)
+                        .Where(c => CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)
+                        .ToArray())
+                        .Normalize(NormalizationForm.FormC)))
+                {
+                    return BadRequest("Ngữ cảnh phải là tiếng Anh");
+                }
+
+                if (!context.ToLower().Contains(keyword))
+                {
+                    return BadRequest("Ngữ cảnh phải chứa từ khóa cần tra");
+                }
+            }
+
             try
             {
                 var result = await SearchScope.Search(_accessKey, useEnglishToExplain, keyword, context);
-                _cache.Set(cacheKey, result, TimeSpan.FromMinutes(15));
+                _cache.Set(cacheKey, result, TimeSpan.FromHours(1));
                 return Created("Success", result);
             }
             catch
