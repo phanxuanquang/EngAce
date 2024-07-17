@@ -82,7 +82,7 @@ namespace EngAce.Api.Controllers
 
             if (file == null || file.Length == 0)
             {
-                return BadRequest("Không có ảnh nào được đăng tải.");
+                return BadRequest("Không có ảnh nào được tải lên.");
             }
 
             var maxFileSize = 15 * 1000 * 1000;
@@ -106,7 +106,6 @@ namespace EngAce.Api.Controllers
                 {
                     return BadRequest("Có lỗi xảy ra! Vui lòng kiểm tra lại ảnh và thử lại.");
                 }
-
             }
         }
     }
