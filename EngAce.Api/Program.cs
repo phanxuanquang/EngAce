@@ -1,7 +1,10 @@
 ﻿using Helper;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.OpenApi.Models;
+using System.IO;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,8 +14,6 @@ builder.Services.AddControllers()
     {
         options.JsonSerializerOptions.PropertyNamingPolicy = null;
     });
-
-builder.Services.AddResponseCaching();
 
 builder.Services.AddHttpContextAccessor();
 HttpContextHelper.Configure(builder.Services.BuildServiceProvider().GetRequiredService<IHttpContextAccessor>());
@@ -90,10 +91,11 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddResponseCaching();
+
 var app = builder.Build();
 
 app.UseDeveloperExceptionPage();
-app.UseResponseCaching();
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
@@ -102,12 +104,16 @@ app.UseSwaggerUI(c =>
 
 app.UseHttpsRedirection();
 app.UseRouting();
-app.UseCors();
+
+app.UseCors(); 
 app.UseResponseCompression();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 
 app.Run();
