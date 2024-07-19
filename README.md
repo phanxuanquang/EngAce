@@ -1,5 +1,4 @@
-![image](https://github.com/phanxuanquang/EngAce/assets/84692657/64b52c2a-b659-4364-89a7-e1c4469922f7)
-
+![Untitled-2-Recovered](https://github.com/user-attachments/assets/9b2c68a8-0ba2-4655-9c7f-3ce227c8eb86)
 ____________________________
 
 ## :raising_hand_man: Our Team
@@ -20,8 +19,6 @@ EngAce is a cutting-edge, generative AI-powered application designed to revoluti
 
 ## 2. Features
 EngAce offers a suite of tools and functionalities aimed at making English learning more accessible, enjoyable, and efficient. The app is designed with four main features as below.
-
-<img width="1920" alt="image" src="https://github.com/phanxuanquang/EngAce/assets/84692657/2a4aa082-8e6d-44b0-8f27-e0c67ebfb708">
 
 ### 2.1 AI Dictionary
 The AI Dictionary is a powerful tool that allows users to look up definitions in both English-to-English and English-to-Vietnamese formats. Key features include:
