@@ -30,7 +30,7 @@ namespace Events
             promptBuilder.AppendLine("{");
             promptBuilder.AppendLine("    string Question; // Nội dung câu hỏi bằng tiếng Anh");
             promptBuilder.AppendLine("    List<string> Options; // 4 lựa chọn cho người dùng chọn");
-            promptBuilder.AppendLine("    int RightOptionIndex; // Index của lựa chọn đúng trong mảng Options, hãy chắc chắn rằng đây là index của lựa chọn chính xác và hợp lý nhất cho câu hỏi");
+            promptBuilder.AppendLine("    int RightOptionIndex; // Index của lựa chọn đúng trong mảng Options, hãy chắc chắn rằng đây là index của lựa chọn chính xác và hợp lý nhất cho câu hỏi (chỉ số index có giá trị tối thiểu là 0 và giá trị tối đa là 3");
             promptBuilder.AppendLine("    string ExplanationInVietnamese; // Lời giải thích một cách dễ hiểu và hợp lý, phù hợp với trình độ tiếng Anh của tôi");
             promptBuilder.AppendLine("}");
             promptBuilder.AppendLine("Ví dụ về output mà tôi cần:");
