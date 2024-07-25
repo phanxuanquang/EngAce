@@ -8,8 +8,8 @@ namespace Events
 {
     public static class ReviewScope
     {
-        public const short MinTotalWords = 50;
-        public const short MaxTotalWords = 300;
+        public const short MinTotalWords = 30;
+        public const short MaxTotalWords = 200;
         public static async Task<Comment> GenerateReview(string apiKey, EnglishLevel level, string content)
         {
             var promptBuilder = new StringBuilder();

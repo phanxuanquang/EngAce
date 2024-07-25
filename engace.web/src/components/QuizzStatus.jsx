@@ -60,7 +60,7 @@ export default function QuizzStatus({
       elevation={2}
     >
       <Typography variant="h6" sx={{ color: "primary.black" }}>
-        TRẠNG THÀI LÀM BÀI
+        TRẠNG THÁI LÀM BÀI
       </Typography>
       <Stack
         spacing={{ xs: 1, sm: 1 }}
