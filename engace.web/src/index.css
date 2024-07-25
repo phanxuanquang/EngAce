@@ -46,3 +46,7 @@ code {
 .highlight {
   animation: highlight 2s ease;
 }
+
+.functional-carousel {
+  width: 60%;
+}

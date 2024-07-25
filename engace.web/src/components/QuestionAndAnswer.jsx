@@ -37,7 +37,7 @@ export default function QuestionAndAnswer() {
             display: "flex",
             flexDirection: "column",
             gap: 2,
-            mt: 1
+            mt: 1,
           }}
         >
           <Hidden mdUp>

@@ -23,7 +23,7 @@ export default function QuestionRadioGroup({
   };
 
   return (
-    <FormControl disabled={submit} fullWidth>
+    <FormControl disabled={submit} fullWidth sx={{ paddingLeft: "16px" }}>
       <FormLabel>
         <Typography variant="body1" sx={{ color: "black !important" }}>
           <strong>Câu hỏi {qIndex + 1}: </strong> {question.Question}

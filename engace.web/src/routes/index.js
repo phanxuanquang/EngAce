@@ -8,6 +8,7 @@ import { checkAuthLoader, checkEnglishLevelLoader } from "../utils/auth";
 import Dictionary from "../pages/Dictionary";
 import Writing from "../pages/Writing";
 import ChatPage from "../pages/ChatPage";
+import Introduction from "../pages/Introduction";
 
 export const router = createBrowserRouter([
   {
@@ -16,24 +17,28 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },
       {
-        path: "/dictionary",
+        path: "dictionary",
         element: <MainLayout />,
         children: [{ index: true, element: <Dictionary /> }],
       },
       {
-        path: "/test",
+        path: "test",
         element: <MainLayout />,
         children: [{ index: true, element: <Test /> }],
       },
       {
-        path: "/writing",
+        path: "writing",
         element: <MainLayout />,
         children: [{ index: true, element: <Writing /> }],
       },
       {
-        path: "/chat",
+        path: "chat",
         element: <MainLayout />,
         children: [{ index: true, element: <ChatPage /> }],
+      },
+      {
+        path: "introduction",
+        element: <Introduction />,
       },
     ],
   },
