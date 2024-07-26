@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Entities.Enums
+namespace Gemini
 {
     public enum GenerativeModel
     {

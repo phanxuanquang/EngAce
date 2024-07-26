@@ -37,8 +37,12 @@ namespace EngAce.Api.Controllers
             {
                 return Unauthorized("Invalid Access Key");
             }
-
             content = content.Trim();
+
+            if (!GeneralHelper.IsEnglish(content))
+            {
+                return BadRequest("Nội dung phải là tiếng Anh");
+            }
 
             if (GeneralHelper.GetTotalWords(content) < ReviewScope.MinTotalWords)
             {
@@ -87,11 +91,11 @@ namespace EngAce.Api.Controllers
                 return BadRequest("Không có ảnh nào được tải lên.");
             }
 
-            var maxFileSize = 15 * 1000 * 1000;
+            var maxSize = 15 * 1000 * 1000;
 
-            if (file.Length > maxFileSize)
+            if (file.Length > maxSize)
             {
-                return BadRequest($"Dung lượng ảnh phải nhỏ hơn {maxFileSize / 1024 / 1024} MB.");
+                return BadRequest($"Dung lượng ảnh phải nhỏ hơn {maxSize / 1024 / 1024} MB.");
             }
 
             using (var stream = new MemoryStream())

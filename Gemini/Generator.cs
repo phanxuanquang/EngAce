@@ -1,5 +1,4 @@
-﻿using Entities.Enums;
-using Gemini.DTO;
+﻿using Gemini.DTO;
 using Helper;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;

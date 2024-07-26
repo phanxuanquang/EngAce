@@ -117,7 +117,7 @@ namespace EngAce.Api.Controllers
                 var topics = await QuizScope.SuggestTopcis(_accessKey, englishLevel);
 
                 var selectedTopics = topics.OrderBy(x => Guid.NewGuid()).Take(totalTopics).ToList();
-                _cache.Set(cacheKey, topics, TimeSpan.FromDays(7));
+                _cache.Set(cacheKey, topics, TimeSpan.FromDays(1));
 
                 return Created("Success", selectedTopics);
             }

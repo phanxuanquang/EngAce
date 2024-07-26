@@ -2,8 +2,6 @@
 using Helper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
-using System.Globalization;
-using System.Text;
 
 namespace EngAce.Api.Controllers
 {
@@ -58,10 +56,7 @@ namespace EngAce.Api.Controllers
                 return Ok(cachedResult);
             }
 
-            if (!keyword.Equals(new string(keyword.Normalize(NormalizationForm.FormD)
-                .Where(c => CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)
-                .ToArray())
-                .Normalize(NormalizationForm.FormC)))
+            if (!GeneralHelper.IsEnglish(keyword))
             {
                 return BadRequest("Từ khóa cần tra cứu phải là tiếng Anh");
             }
@@ -73,10 +68,7 @@ namespace EngAce.Api.Controllers
                     return BadRequest($"Ngữ cảnh chỉ chứa tối đa {SearchScope.MaxContextTotalWords} từ");
                 }
 
-                if (!context.Equals(new string(context.Normalize(NormalizationForm.FormD)
-                        .Where(c => CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark)
-                        .ToArray())
-                        .Normalize(NormalizationForm.FormC)))
+                if (!GeneralHelper.IsEnglish(context))
                 {
                     return BadRequest("Ngữ cảnh phải là tiếng Anh");
                 }

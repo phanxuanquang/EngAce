@@ -1,5 +1,6 @@
 ﻿using Entities;
 using Entities.Enums;
+using Gemini;
 using Helper;
 using Newtonsoft.Json;
 using System.Text;
@@ -9,7 +10,7 @@ namespace Events
     public static class ReviewScope
     {
         public const short MinTotalWords = 30;
-        public const short MaxTotalWords = 200;
+        public const short MaxTotalWords = 300;
         public static async Task<Comment> GenerateReview(string apiKey, EnglishLevel level, string content)
         {
             var promptBuilder = new StringBuilder();

@@ -20,18 +20,25 @@ namespace Helper
             }
         }
 
-        public static ushort GetTotalWords(string s)
+        public static ushort GetTotalWords(string input)
         {
-            if (string.IsNullOrWhiteSpace(s))
+            if (string.IsNullOrWhiteSpace(input))
             {
                 return 0;
             }
 
             char[] delimiters = { ' ', '\r', '\n', '\t', '.', ',', ';', ':', '!', '?' };
 
-            string[] words = s.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+            string[] words = input.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
 
             return (ushort)words.Length;
+        }
+
+        public static bool IsEnglish(string input)
+        {
+            char[] englishAlphabetAndPunctuation = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.,!?;:'\"()[]{}$%&*+-/".ToCharArray();
+
+            return input.All(c => englishAlphabetAndPunctuation.Contains(c) || char.IsWhiteSpace(c) || char.IsDigit(c));
         }
     }
 }

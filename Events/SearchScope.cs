@@ -35,7 +35,7 @@ namespace Events
                 promptBuilder.Append(!string.IsNullOrEmpty(context) ? $" trong ngữ cảnh '{context}'." : string.Empty);
                 promptBuilder.AppendLine("Nội dung output của bạn phải bao gồm 10 phần:");
                 promptBuilder.AppendLine($"- Tiêu đề của output: '{keyword.ToUpper()}'");
-                promptBuilder.AppendLine($"- Phiên âm và từ loại (danh từ, động từ, tính từ, trạng từ, thành ngữ...) của '{keyword}'");
+                promptBuilder.AppendLine($"- Phiên âm và từ loại (danh từ, động từ, tính từ, trạng từ, thành ngữ...) của '{keyword}', nếu input không phải là từ vựng mà là thành ngữ thì không cần phiên âm");
                 promptBuilder.AppendLine($"- Định nghĩa của '{keyword}' trong ngữ cảnh được cung cấp (nếu có), nếu không có ngữ cảnh thì cho tôi tối đa 10 nghĩa phổ biến nhất của '{keyword}' kèm lời giải thích chi tiết");
                 promptBuilder.AppendLine($"- Cung cấp tối thiểu 5 ví dụ về cách áp dụng kèm hoàn cảnh áp dụng từ '{keyword}' và một số từ vựng khác có liên quan.");
                 promptBuilder.AppendLine("- Cung cấp tối thiểu 3 từ đồng nghĩa và 3 từ trái nghĩa nếu có, đồng thời giải thích chi tiết về chúng.");
