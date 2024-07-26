@@ -71,7 +71,12 @@ namespace EngAce.Api.Controllers
             try
             {
                 var quizzes = await QuizScope.GenerateQuizes(_accessKey, request.Topic, request.QuizzTypes, englishLevel, totalQuestions);
-                _cache.Set(cacheKey, quizzes, TimeSpan.FromMinutes(20));
+                if(quizzes != null && quizzes.Count != totalQuestions)
+                {
+                    return Created("Success", Generate(request, englishLevel, totalQuestions));
+                }
+
+                _cache.Set(cacheKey, quizzes, TimeSpan.FromMinutes(10));
 
                 return Created("Success", quizzes);
             }

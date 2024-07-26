@@ -56,6 +56,11 @@ namespace EngAce.Api.Controllers
                 return Ok(cachedResult);
             }
 
+            if (GeneralHelper.GetTotalWords(keyword) > SearchScope.MaxKeywordTotalWords)
+            {
+                return BadRequest($"Nội dung tra cứu chỉ chứa tối đa {SearchScope.MaxKeywordTotalWords} từ");
+            }
+
             if (!GeneralHelper.IsEnglish(keyword))
             {
                 return BadRequest("Từ khóa cần tra cứu phải là tiếng Anh");
