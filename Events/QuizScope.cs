@@ -29,8 +29,8 @@ namespace Events
             promptBuilder.AppendLine("class Quiz");
             promptBuilder.AppendLine("{");
             promptBuilder.AppendLine("    string Question; // Nội dung câu hỏi bằng tiếng Anh, hãy chắc chắn rằng nó phù hợp với trình độ của tôi");
-            promptBuilder.AppendLine("    List<string> Options; // 4 lựa chọn cho người dùng chọn, hãy chắc chắn rẳng chỉ có duy nhất 1 lựa chọn đúng cho câu hỏi và đáp án phải chính xác tuyệt đối");
-            promptBuilder.AppendLine("    int RightOptionIndex; // Index của lựa chọn đúng trong mảng Options, hãy chắc chắn rằng đây là index của lựa chọn chính xác và hợp lý nhất cho câu hỏi (chỉ số index có giá trị tối thiểu là 0 và giá trị tối đa là 3");
+            promptBuilder.AppendLine("    List<string> Options; // 4 lựa chọn cho người dùng chọn, hãy chắc chắn rẳng nội dung của các lựa chọn không được trùng nhau, và chỉ có duy nhất 1 lựa chọn đúng");
+            promptBuilder.AppendLine("    int RightOptionIndex; // Index của lựa chọn đúng trong mảng Options, bạn phải đảm bảo rằng đây là index của lựa chọn chính xác và hợp lý nhất cho câu hỏi (index có giá trị tối thiểu là 0 và giá trị tối đa là 3");
             promptBuilder.AppendLine("    string ExplanationInVietnamese; // Lời giải thích một cách dễ hiểu và hợp lý, phù hợp với trình độ tiếng Anh của tôi");
             promptBuilder.AppendLine("}");
             promptBuilder.AppendLine("Ví dụ về output mà tôi cần:");
