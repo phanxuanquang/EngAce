@@ -22,7 +22,7 @@ function responsiveFontSizes({ xs, sm, md, lg, xl }) {
   };
 }
 
-const FONT_PRIMARY = "Helvetica, Arial, sans-serif";
+const FONT_PRIMARY = "'Open Sans', sans-serif";
 
 const typography = {
   fontFamily: FONT_PRIMARY,
