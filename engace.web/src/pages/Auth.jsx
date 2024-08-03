@@ -161,7 +161,7 @@ export default function Auth() {
             và sở thích, nhằm tạo sự thoải mái và hứng thú trong quá trình học.
           </Typography>
           <Typography sx={{ textAlign: "justify" }}>
-            Dự án được xây dựng và phát triển bởi <strong>Phan Xuân Quang</strong>, <strong>Bùi Minh Tuấn</strong>, và <strong>Mai Tấn Hà</strong>.
+            Dự án được xây dựng và phát triển bởi <strong>Phan Xuân Quang</strong> và <strong>Bùi Minh Tuấn</strong>.
           </Typography>
         </DialogContent>
         <DialogActions sx={{ justifyContent: "center", mb: 2.5, p: 0 }}>
