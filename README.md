@@ -12,6 +12,10 @@ ____________________________
 Your data, including your Gemini API Key and Google account information, is securely stored on your personal device only. This data will be automatically deleted from our system when you log out of the application. We do not store or retain your data on our servers, ensuring that your information remains private and secure at all times.
 
 If you have any concerns or questions about our data privacy practices, please feel free to open a new issue.
+
+## :triangular_flag_on_post: License
+
+This project is licensed under the **Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International** license. See the [LICENSE](./LICENSE) file for details.
 ____________________________
 
 ## 1. Overview
