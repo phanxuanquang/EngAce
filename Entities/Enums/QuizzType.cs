@@ -10,13 +10,13 @@ namespace Entities.Enums
         [Description("Ngữ pháp (Grammar)")]
         Grammar = 2, 
         
-        [Description("Từ đồng nghĩa và từ trái nghĩa (Synonym and Antonym)")]
+        [Description("Từ đồng nghĩa/trái nghĩa (Synonym/Antonym)")]
         SynonymAndAntonym = 3,
 
-        [Description("Câu hỏi về xác định lỗi sai (Error Identification)")]
+        [Description("Xác định lỗi sai (Error Identification)")]
         ErrorIdentification = 4,
 
-        [Description("Điền từ vào chỗ trống (Sentence Completion)")]
+        [Description("Điền vào chỗ trống (Sentence Completion)")]
         FillTheBlank = 5,
 
         [Description("Chọn ý đúng nhất (Sentence Correction)")]
@@ -28,7 +28,7 @@ namespace Entities.Enums
         [Description("Chuyển đổi từ loại (Word Formation)")]
         WordFormation = 8,
 
-        [Description("Phối hợp từ ngữ (Collocation)")]
+        [Description("Phối hợp từ (Collocation)")]
         Collocations = 9,
     }
 }
