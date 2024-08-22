@@ -19,7 +19,6 @@ namespace Events
             var promptBuilder = new StringBuilder();
             var userLevel = GeneralHelper.GetEnumDescription(level);
             var types = string.Join(", ", quizzTypes.Select(type => GeneralHelper.GetEnumDescription(type)).ToList());
-            var model = questionsCount <= (MinTotalQuestions * 2) ? GenerativeModel.Gemini_15_Flash : GenerativeModel.Gemini_15_Pro;
 
             promptBuilder.AppendLine($"Bạn là một giáo viên dạy tiếng Anh với hơn 20 năm kinh nghiệm. Tôi là người đang học tiếng Anh, trình độ tiếng Anh của tôi theo tiêu chuẩn CEFR là {userLevel}. ");
             promptBuilder.Append($"Hãy cho tôi một bộ câu hỏi trắc nghiệm tiếng Anh bao gồm chính xác {questionsCount} câu hỏi liên quan đến chủ đề '{topic.Trim()}' để luyện tập. ");
@@ -50,8 +49,8 @@ namespace Events
             promptBuilder.AppendLine("]");
             promptBuilder.AppendLine("Nếu chủ đề được input một thứ vô nghĩa hoặc không thể khác định hoặc không thể hiểu được, hãy trả về một mảng rỗng.");
 
-            var response = await Gemini.Generator.GenerateContent(apiKey, promptBuilder.ToString(), true, 50, model);
-            return JsonConvert.DeserializeObject<List<Quiz>>(response);
+            var response = await Gemini.Generator.GenerateContent(apiKey, promptBuilder.ToString(), true, 50, GenerativeModel.Gemini_15_Flash);
+            return JsonConvert.DeserializeObject<List<Quiz>>(response)?.Take(questionsCount).ToList();
         }
 
         public static async Task<List<string>> SuggestTopcis(string apiKey, EnglishLevel level)

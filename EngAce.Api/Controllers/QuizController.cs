@@ -172,17 +172,7 @@ namespace EngAce.Api.Controllers
         [ResponseCache(Duration = QuizScope.OneMonthAsCachingAge, Location = ResponseCacheLocation.Any, NoStore = false)]
         public ActionResult<Dictionary<int, string>> GetQuizTypes()
         {
-            var types = new List<QuizzType>
-            {
-                QuizzType.SentenceCorrection,
-                QuizzType.FillTheBlank,
-                QuizzType.ReadingComprehension,
-                QuizzType.SynonymAndAntonym,
-                QuizzType.FunctionalLanguage,
-                QuizzType.Vocabulary,
-                QuizzType.Grammar,
-                QuizzType.Pronunciation,
-            };
+            List<QuizzType> types = Enum.GetValues(typeof(QuizzType)).Cast<QuizzType>().ToList();
 
             var descriptions = types.ToDictionary(
                 type => (int)type,
