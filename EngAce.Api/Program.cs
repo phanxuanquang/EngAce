@@ -6,6 +6,12 @@ using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen();
+}
+
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
@@ -82,7 +88,7 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policyBuilder =>
     {
-        policyBuilder.WithOrigins("https://engace-app.azurewebsites.net", "http://localhost:3000", "https://localhost:3000")
+        policyBuilder.WithOrigins("https://engace-app.azurewebsites.net")
                      .AllowAnyHeader()
                      .AllowAnyMethod();
     });
@@ -93,11 +99,15 @@ builder.Services.AddResponseCaching();
 var app = builder.Build();
 
 app.UseDeveloperExceptionPage();
-app.UseSwagger();
-app.UseSwaggerUI(c =>
+
+if (app.Environment.IsDevelopment())
 {
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Backend APIs");
-});
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Backend APIs");
+    });
+}
 
 app.UseHttpsRedirection();
 app.UseRouting();

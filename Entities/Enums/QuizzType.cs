@@ -8,8 +8,8 @@ namespace Entities.Enums
         Vocabulary = 1,
 
         [Description("Ngữ pháp (Grammar)")]
-        Grammar = 2, 
-        
+        Grammar = 2,
+
         [Description("Từ đồng nghĩa/trái nghĩa (Synonym/Antonym)")]
         SynonymAndAntonym = 3,
 
