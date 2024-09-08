@@ -7,18 +7,11 @@ namespace EngAce.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DictionaryController : ControllerBase
+    public class DictionaryController(IMemoryCache cache, ILogger<DictionaryController> logger) : ControllerBase
     {
-        private readonly IMemoryCache _cache;
-        private readonly ILogger<DictionaryController> _logger;
-        private readonly string _accessKey;
-
-        public DictionaryController(IMemoryCache cache, ILogger<DictionaryController> logger)
-        {
-            _cache = cache;
-            _logger = logger;
-            _accessKey = HttpContextHelper.GetAccessKey();
-        }
+        private readonly IMemoryCache _cache = cache;
+        private readonly ILogger<DictionaryController> _logger = logger;
+        private readonly string _accessKey = HttpContextHelper.GetAccessKey();
 
         /// <summary>
         /// Searches for a given keyword within an optional context
@@ -78,7 +71,7 @@ namespace EngAce.Api.Controllers
                     return BadRequest("Ngữ cảnh phải là tiếng Anh");
                 }
 
-                if (!context.ToLower().Contains(keyword))
+                if (!context.Contains(keyword, StringComparison.CurrentCultureIgnoreCase))
                 {
                     return BadRequest("Ngữ cảnh phải chứa từ khóa cần tra");
                 }
@@ -88,10 +81,12 @@ namespace EngAce.Api.Controllers
             {
                 var result = await SearchScope.Search(_accessKey, useEnglishToExplain, keyword, context);
                 _cache.Set(cacheKey, result, TimeSpan.FromHours(1));
+                _logger.LogInformation("Keyword: {Keyword} - Context: {Context}", keyword, context);
                 return Created("Success", result);
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Cannot search for the explaination of '{Keyword}' in the context '{Context}'", keyword, context);
                 return BadRequest("Có lỗi xảy ra! Vui lòng kiểm tra lại.");
             }
         }

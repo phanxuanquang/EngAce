@@ -7,16 +7,10 @@ namespace EngAce.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ChatbotController : ControllerBase
+    public class ChatbotController(ILogger<ChatbotController> logger) : ControllerBase
     {
-        private readonly ILogger<DictionaryController> _logger;
-        private readonly string _accessKey;
-
-        public ChatbotController(ILogger<DictionaryController> logger)
-        {
-            _logger = logger;
-            _accessKey = HttpContextHelper.GetAccessKey();
-        }
+        private readonly ILogger<ChatbotController> _logger = logger;
+        private readonly string _accessKey = HttpContextHelper.GetAccessKey();
 
         /// <summary>
         /// Generates an answer from the chat history and user's question
@@ -39,10 +33,13 @@ namespace EngAce.Api.Controllers
             try
             {
                 var result = await ChatScope.GenerateAnswer(_accessKey, request);
+
+                _logger.LogInformation("The question of user {_accessKey}: {Question}", _accessKey[..10], request.Question);
                 return Ok(result);
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Cannot generate answer");
                 return BadRequest(ex);
             }
         }

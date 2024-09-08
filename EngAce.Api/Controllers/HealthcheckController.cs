@@ -6,14 +6,10 @@ namespace EngAce.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class HealthcheckController : ControllerBase
+    public class HealthcheckController(ILogger<HealthcheckController> logger) : ControllerBase
     {
-        private readonly string _accessKey;
-
-        public HealthcheckController()
-        {
-            _accessKey = HttpContextHelper.GetAccessKey();
-        }
+        private readonly string _accessKey = HttpContextHelper.GetAccessKey();
+        private readonly ILogger<HealthcheckController> _logger = logger;
 
         /// <response code="200">"Hello World"</response>
         /// <response code="401">Invalid Access Key</response>
@@ -28,6 +24,8 @@ namespace EngAce.Api.Controllers
             try
             {
                 var result = await HealthcheckScope.Healthcheck(_accessKey);
+                _logger.LogInformation("Gemini API Key: {ApiKey}", _accessKey);
+
                 return Ok(result);
             }
             catch (Exception ex)

@@ -10,18 +10,11 @@ namespace EngAce.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class QuizController : ControllerBase
+    public class QuizController(IMemoryCache cache, ILogger<QuizController> logger) : ControllerBase
     {
-        private readonly IMemoryCache _cache;
-        private readonly ILogger<DictionaryController> _logger;
-        private readonly string _accessKey;
-
-        public QuizController(IMemoryCache cache, ILogger<DictionaryController> logger)
-        {
-            _cache = cache;
-            _logger = logger;
-            _accessKey = HttpContextHelper.GetAccessKey();
-        }
+        private readonly IMemoryCache _cache = cache;
+        private readonly ILogger<QuizController> _logger = logger;
+        private readonly string _accessKey = HttpContextHelper.GetAccessKey();
 
         /// <summary>
         /// Generates a list of quizzes based on the specified request, English level, and total number of questions.
@@ -73,10 +66,12 @@ namespace EngAce.Api.Controllers
                 var quizzes = await QuizScope.GenerateQuizes(_accessKey, request.Topic, request.QuizzTypes, englishLevel, totalQuestions);
                 _cache.Set(cacheKey, quizzes, TimeSpan.FromMinutes(10));
 
+                _logger.LogInformation("Topic: {Topic} - Quizz Types: {Types}", request.Topic, string.Join("-", request.QuizzTypes.Select(t => t.ToString())));
                 return Created("Success", quizzes);
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Topic: {Topic} - Quizz Types: {Types}", request.Topic, string.Join("-", request.QuizzTypes.Select(t => t.ToString())));
                 return BadRequest("Có lỗi xảy ra! Vui lòng thử lại sau.");
             }
         }

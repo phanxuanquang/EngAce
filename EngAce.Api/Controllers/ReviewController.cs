@@ -8,14 +8,9 @@ namespace EngAce.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ReviewController : ControllerBase
+    public class ReviewController(ILogger<ReviewController> logger) : ControllerBase
     {
-        private readonly string _accessKey;
-
-        public ReviewController(ILogger<DictionaryController> logger)
-        {
-            _accessKey = HttpContextHelper.GetAccessKey();
-        }
+        private readonly string _accessKey = HttpContextHelper.GetAccessKey();
 
         /// <summary>
         /// Generates the review based on the provided content and English level
@@ -98,20 +93,18 @@ namespace EngAce.Api.Controllers
                 return BadRequest($"Dung lượng ảnh phải nhỏ hơn {maxSize / 1024 / 1024} MB.");
             }
 
-            using (var stream = new MemoryStream())
+            using var stream = new MemoryStream();
+            try
             {
-                try
-                {
-                    await file.CopyToAsync(stream);
-                    stream.Position = 0;
+                await file.CopyToAsync(stream);
+                stream.Position = 0;
 
-                    var result = await ReviewScope.GenerateReviewFromImage(_accessKey, englishLevel, stream);
-                    return Ok(result);
-                }
-                catch
-                {
-                    return BadRequest("Có lỗi xảy ra! Vui lòng kiểm tra lại ảnh và thử lại.");
-                }
+                var result = await ReviewScope.GenerateReviewFromImage(_accessKey, englishLevel, stream);
+                return Ok(result);
+            }
+            catch
+            {
+                return BadRequest("Có lỗi xảy ra! Vui lòng kiểm tra lại ảnh và thử lại.");
             }
         }
     }

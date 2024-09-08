@@ -23,7 +23,7 @@ namespace Events
             promptBuilder.AppendLine($"Bạn là một giáo viên dạy tiếng Anh với hơn 20 năm kinh nghiệm. Tôi là người đang học tiếng Anh, trình độ tiếng Anh của tôi theo tiêu chuẩn CEFR là {userLevel}. ");
             promptBuilder.Append($"Hãy cho tôi một bộ câu hỏi trắc nghiệm tiếng Anh bao gồm chính xác {questionsCount} câu hỏi liên quan đến chủ đề '{topic.Trim()}' để luyện tập. ");
             promptBuilder.Append("Nội dung câu hỏi không được vượt quá trình độ tiếng Anh của tôi và trình độ tiếng Anh trung bình của người Việt Nam, và cũng phải thật thú vị để tạo cảm hứng cho tôi học");
-            promptBuilder.Append($"Bạn phải đảm bảo mỗi câu hỏi trong bộ đề trắc nghiệm chỉ được phép có 4 lựa chọn với duy nhất 1 lựa chọn đúng, và bộ câu hỏi trắc nghiệm phải bao gồm các loại câu hỏi sau: {types}");
+            promptBuilder.Append($"Bạn phải đảm bảo mỗi câu hỏi trong bộ đề trắc nghiệm chỉ được phép có 4 lựa chọn với duy nhất 1 lựa chọn đúng (nói cách khác là câu hỏi đóng), và bộ câu hỏi trắc nghiệm phải bao gồm các loại câu hỏi sau: {types}");
             promptBuilder.AppendLine("Output là một mảng JSON tương ứng với class C# sau: ");
             promptBuilder.AppendLine("class Quiz");
             promptBuilder.AppendLine("{");
