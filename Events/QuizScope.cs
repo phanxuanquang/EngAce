@@ -105,7 +105,7 @@ namespace Events
 
             promptBuilder.AppendLine($"You are an IELTS teacher with over 20 years of experience, teaching in Vietnam. My English level according to the CEFR standard is {userLevel}.");
             promptBuilder.Append($"I am looking for interesting topics to practice English that match my current level, and I also want to have more motivation for learning.");
-            promptBuilder.AppendLine("Please suggest at least 40 short topics in English that you think are most suitable and interesting for practicing English.");
+            promptBuilder.AppendLine("Please suggest at least 40 completely different topics with less than 5 words that you think are most suitable and interesting for practicing English.");
             promptBuilder.Append("The list of suggested topics should be a JSON array corresponding to the List<string> data type in C# programming language.");
             promptBuilder.AppendLine("In order to help you to do the task more correctly and more effectively, here is an example of the response I want:");
             promptBuilder.AppendLine("[");
