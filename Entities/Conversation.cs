@@ -2,7 +2,7 @@
 {
     public class Conversation
     {
-        public List<History> ChatHistory { get; set; } = new List<History>();
+        public List<History> ChatHistory { get; set; } = [];
         public required string Question { get; set; }
 
         public class History

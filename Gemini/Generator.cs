@@ -8,7 +8,7 @@ namespace Gemini
 {
     public static class Generator
     {
-        private static readonly HttpClient Client = new HttpClient();
+        private static readonly HttpClient Client = new();
 
         public static async Task<string> GenerateContent(string apiKey, string query, bool useJson = true, double creativeLevel = 50, GenerativeModel model = GenerativeModel.Gemini_15_Flash)
         {

@@ -19,13 +19,12 @@ namespace Events
                 .Select(message => new Content
                 {
                     Role = message.FromUser ? "user" : "model",
-                    Parts = new List<Part>
-                    {
-                        new Part
-                        {
+                    Parts =
+                    [
+                        new() {
                             Text = message.Message.Trim(),
                         }
-                    }
+                    ]
                 })
                 .ToList()
             };
@@ -33,13 +32,12 @@ namespace Events
             var question = new Content
             {
                 Role = "user",
-                Parts = new List<Part>
-                {
-                    new Part
-                    {
+                Parts =
+                [
+                    new() {
                         Text = conversation.Question.Trim()
                     }
-                }
+                ]
             };
 
             request.Contents.Add(question);
@@ -71,7 +69,7 @@ namespace Events
                 Message = "Bắt đầu!"
             };
 
-            return new List<Conversation.History>() { prompt, botReply };
+            return [prompt, botReply];
         }
     }
 }

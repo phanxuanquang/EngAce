@@ -34,7 +34,7 @@ namespace Events
             promptBuilder.AppendLine("  \"GeneralComment\": \"Đây là nhận xét chung cho bài viết của tôi, hãy nhớ là phải sử dụng tiếng Việt\",");
             promptBuilder.AppendLine("  \"ImprovedContent\": \"Đây là bài viết đã được sửa chữa dựa trên nhận xét trong phần GeneralComment.\"");
             promptBuilder.AppendLine("}");
-            promptBuilder.AppendLine("Nếu bài viết của tôi là một thứ vô nghĩa hoặc không thể khác định hoặc không thể hiểu được, GenerateComment sẽ mang giá trị 'Không thể nhận xét' và ImprovedContent mang giá trị ''.");
+            promptBuilder.AppendLine("Nếu bài viết của tôi là một thứ vô nghĩa hoặc không thể khác định hoặc không thể hiểu được, GenerateComment sẽ mang giá trị 'Không thể nhận xét' và ImprovedContent mang giá trị ''");
             promptBuilder.AppendLine("Nội dung bài viết của tôi: ");
             promptBuilder.AppendLine($"{content.Trim()}");
 
