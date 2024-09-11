@@ -1,7 +1,6 @@
 ﻿using Helper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
-using Microsoft.Extensions.Logging.ApplicationInsights;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 
@@ -19,6 +18,7 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.PropertyNamingPolicy = null;
     });
 
+builder.Services.AddApplicationInsightsTelemetry();
 builder.Services.AddHttpContextAccessor();
 HttpContextHelper.Configure(builder.Services.BuildServiceProvider().GetRequiredService<IHttpContextAccessor>());
 builder.Services.AddMemoryCache();
@@ -82,8 +82,6 @@ builder.Services.Configure<BrotliCompressionProviderOptions>(options =>
 {
     options.Level = System.IO.Compression.CompressionLevel.Fastest;
 });
-
-builder.Services.AddApplicationInsightsTelemetry();
 
 builder.Services.AddCors(options =>
 {
