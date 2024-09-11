@@ -49,8 +49,8 @@ export default function TestGenerateForm() {
       setErrorTopic("");
     }
 
-    if (quantity < 10 || quantity > 40) {
-      setErrorQuantity("Số lượng câu hỏi phải từ 10 đến 40");
+    if (quantity < 10 || quantity > 100) {
+      setErrorQuantity("Số lượng câu hỏi phải từ 10 đến 100");
       hasError = true;
     } else {
       setErrorQuantity("");

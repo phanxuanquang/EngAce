@@ -53,7 +53,7 @@ namespace Events
                 var type = GeneralHelper.GetEnumDescription(quizzType);
 
                 promptBuilder.AppendLine($"Bạn là một giáo viên dạy tiếng Anh với hơn 20 năm kinh nghiệm. Tôi là người đang học tiếng Anh, trình độ tiếng Anh của tôi theo tiêu chuẩn CEFR là {userLevel}. ");
-                promptBuilder.Append($"Hãy cho tôi một bộ câu hỏi trắc nghiệm tiếng Anh bao gồm ít nhất {questionsCount} câu hỏi liên quan đến chủ đề '{topic.Trim()}' để luyện tập. ");
+                promptBuilder.Append($"Hãy cho tôi một bộ câu hỏi trắc nghiệm tiếng Anh bao gồm từ {questionsCount} đến {questionsCount + 5} câu hỏi liên quan đến chủ đề '{topic.Trim()}' để luyện tập. ");
                 promptBuilder.Append("Nội dung câu hỏi không được vượt quá trình độ tiếng Anh của tôi. ");
                 promptBuilder.Append($"Bạn phải đảm bảo mỗi câu hỏi trong bộ đề trắc nghiệm chỉ được phép có 4 lựa chọn với duy nhất 1 lựa chọn đúng, và bộ câu hỏi trắc nghiệm phải thuộc loại câu hỏi: {type}");
                 promptBuilder.AppendLine("Output là một mảng JSON tương ứng với class C# sau: ");
