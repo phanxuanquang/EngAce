@@ -20,7 +20,7 @@ namespace Events
             var quizes = new List<Quiz>();
             var quizTypeQuestionCount = GeneralHelper.GenerateRandomNumbers(quizzTypes.Count, questionsCount);
 
-            var tasks = new List<Task<List<Quiz>?>>();
+            var tasks = new List<Task<List<Quiz>>>();
 
             for (int i = 0; i < quizTypeQuestionCount.Count; i++)
             {
@@ -41,7 +41,7 @@ namespace Events
                 .AsParallel()
                 .OrderBy(x => Guid.NewGuid())
                 .Take(questionsCount)
-                .Select(q => new Quiz 
+                .Select(q => new Quiz
                 {
                     Question = q.Question.Replace("**", "'"),
                     Options = q.Options.Select(o => o.Replace("**", "'")).ToList(),
@@ -116,9 +116,8 @@ namespace Events
             promptBuilder.AppendLine("]");
             promptBuilder.Append("Your response:");
 
-            var response = await Gemini.Generator.GenerateContent(apiKey, promptBuilder.ToString(), true, 75);
-            return JsonConvert.DeserializeObject<List<string>>(response);
+            var response = await Generator.GenerateContent(apiKey, promptBuilder.ToString(), true, 75);
+            return [.. JsonConvert.DeserializeObject<List<string>>(response)];
         }
-
     }
 }

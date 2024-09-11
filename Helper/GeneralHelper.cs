@@ -48,7 +48,7 @@ namespace Helper
 
             for (int i = 0; i < totalQuizTypes; i++)
             {
-                result.Add(1); 
+                result.Add(1);
             }
 
             int remaining = totalQuizzes - totalQuizTypes;

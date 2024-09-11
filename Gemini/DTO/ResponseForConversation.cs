@@ -63,7 +63,5 @@ namespace Gemini.DTO
             [JsonProperty("totalTokenCount")]
             public int TotalTokenCount;
         }
-
-
     }
 }
