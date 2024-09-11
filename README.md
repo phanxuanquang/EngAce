@@ -25,6 +25,7 @@ The AI Dictionary is a powerful tool that allows users to look up definitions in
 EngAce provides personalized practice exercises to help users improve their English skills. Features include:
 - Custom Quizzes: Users can generate multiple-choice quizzes tailored to their proficiency level and the topics they want to practice.
 - Adaptive Learning: The app adapts to the user's performance, providing progressively challenging questions to ensure continuous improvement.
+- Support up to 100 quizzes per request, and up to 10 different types of quizz for users to select.
 
 ### 3. Writing Assistant
 The AI Writing Assistant is designed to help users enhance their writing skills through real-time feedback and suggestions. Features include:
