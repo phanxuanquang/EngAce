@@ -64,7 +64,7 @@ namespace EngAce.Api.Controllers
             try
             {
                 var quizzes = await QuizScope.GenerateQuizes(_accessKey, request.Topic, request.QuizzTypes, englishLevel, totalQuestions);
-                _cache.Set(cacheKey, quizzes, TimeSpan.FromMinutes(10));
+                _cache.Set(cacheKey, quizzes, TimeSpan.FromMinutes(totalQuestions));
 
                 _logger.LogInformation("Topic: {Topic} - Quizz Types: {Types}", request.Topic, string.Join("-", request.QuizzTypes.Select(t => t.ToString())));
                 return Created("Success", quizzes);
@@ -72,7 +72,7 @@ namespace EngAce.Api.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Topic: {Topic} - Quizz Types: {Types}", request.Topic, string.Join("-", request.QuizzTypes.Select(t => t.ToString())));
-                return BadRequest("Có lỗi xảy ra! Vui lòng thử lại sau.");
+                return BadRequest("Có lỗi xảy ra! Vui lòng thử lại sau 3 phút.");
             }
         }
 
@@ -133,15 +133,7 @@ namespace EngAce.Api.Controllers
         [ResponseCache(Duration = QuizScope.OneMonthAsCachingAge, Location = ResponseCacheLocation.Any, NoStore = false)]
         public ActionResult<Dictionary<int, string>> GetEnglishLevels()
         {
-            var levels = new List<EnglishLevel>
-            {
-                EnglishLevel.Beginner,
-                EnglishLevel.Elementary,
-                EnglishLevel.Intermediate,
-                EnglishLevel.UpperIntermediate,
-                EnglishLevel.Advanced,
-                EnglishLevel.Proficient
-            };
+            var levels = Enum.GetValues(typeof(EnglishLevel)).Cast<EnglishLevel>().ToList();
 
             var descriptions = levels.ToDictionary(
                 level => (int)level,
@@ -162,7 +154,7 @@ namespace EngAce.Api.Controllers
         [ResponseCache(Duration = QuizScope.OneMonthAsCachingAge, Location = ResponseCacheLocation.Any, NoStore = false)]
         public ActionResult<Dictionary<int, string>> GetQuizTypes()
         {
-            List<QuizzType> types = Enum.GetValues(typeof(QuizzType)).Cast<QuizzType>().ToList();
+            var types = Enum.GetValues(typeof(QuizzType)).Cast<QuizzType>().ToList();
 
             var descriptions = types.ToDictionary(
                 type => (int)type,

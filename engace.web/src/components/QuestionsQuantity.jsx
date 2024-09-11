@@ -22,10 +22,10 @@ export default function QuestionsQuantity({ quantity, setQuantity, error }) {
         value={quantity}
         onChange={(e) => setQuantity(e.target.value)}
         error={!!error}
-        helperText={!error ? "Số lượng câu hỏi từ 10 đến 40" : error}
+        helperText={!error ? "Số lượng câu hỏi từ 10 đến 100" : error}
         inputProps={{
           min: 10,
-          max: 40,
+          max: 100,
         }}
         sx={{
           height: "2.5rem",

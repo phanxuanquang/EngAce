@@ -19,16 +19,25 @@ namespace Entities.Enums
         [Description("Điền vào chỗ trống (Sentence Completion)")]
         FillTheBlank = 5,
 
-        [Description("Chọn ý đúng nhất (Sentence Correction)")]
-        SentenceCorrection = 6,
-
         [Description("Đọc hiểu văn bản (Reading Comprehension)")]
-        ReadingComprehension = 7,
+        ReadingComprehension = 6,
 
         [Description("Chuyển đổi từ loại (Word Formation)")]
-        WordFormation = 8,
+        WordFormation = 7,
 
         [Description("Phối hợp từ (Collocation)")]
-        Collocations = 9,
+        Collocations = 8,
+
+        [Description("Chọn từ thích hợp nhất (Word Choice)")]
+        WordChoice = 9,
+
+        [Description("Chia động từ (Verb Conjugation)")]
+        VerbConjugation = 10,
+
+        [Description("Câu điều kiện (Conditional Sentences)")]
+        ConditionalSentences = 11,
+
+        [Description("Câu gián tiếp (Indirect Speech)")]
+        IndirectSpeech = 12
     }
 }

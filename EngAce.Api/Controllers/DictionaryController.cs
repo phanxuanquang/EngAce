@@ -87,7 +87,7 @@ namespace EngAce.Api.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Cannot search for the explaination of '{Keyword}' in the context '{Context}'", keyword, context);
-                return BadRequest("Có lỗi xảy ra! Vui lòng kiểm tra lại.");
+                return BadRequest("Có lỗi xảy ra! Vui lòng thử lại sau 1 phút.");
             }
         }
     }
