@@ -11,11 +11,11 @@ namespace Events
     {
         public const short MinTotalWords = 30;
         public const short MaxTotalWords = 300;
+        public const int OneHourAsCachingAge = 3600;
         public static async Task<Comment> GenerateReview(string apiKey, EnglishLevel level, string content)
         {
             var promptBuilder = new StringBuilder();
             var userLevel = GeneralHelper.GetEnumDescription(level);
-            var model = GeneralHelper.GetTotalWords(content) <= (MaxTotalWords / 2) ? GenerativeModel.Gemini_15_Flash : GenerativeModel.Gemini_15_Pro;
 
             promptBuilder.Append("Bạn là một giáo viên tiếng Anh với hơn 20 năm kinh nghiệm giảng dạy, đồng thời đang làm việc tại một trung tâm dạy IELTS lớn. ");
             promptBuilder.Append($"Trình độ tiếng Anh của tôi theo tiêu chuẩn CEFR là '{userLevel}'. ");
@@ -38,7 +38,7 @@ namespace Events
             promptBuilder.AppendLine("Nội dung bài viết của tôi: ");
             promptBuilder.AppendLine($"{content.Trim()}");
 
-            var result = await Gemini.Generator.GenerateContent(apiKey, promptBuilder.ToString(), true, 50, model);
+            var result = await Generator.GenerateContent(apiKey, promptBuilder.ToString(), true, 50, GenerativeModel.Gemini_15_Flash);
             return JsonConvert.DeserializeObject<Comment>(result);
         }
     }

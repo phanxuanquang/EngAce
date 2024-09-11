@@ -43,23 +43,24 @@ namespace Helper
 
         public static List<int> GenerateRandomNumbers(int totalQuizTypes, int totalQuizzes)
         {
-            var rand = new Random();
             var result = new List<int>();
-
-            for (int i = 0; i < totalQuizTypes; i++)
+            if (totalQuizzes % totalQuizTypes == 0)
             {
-                result.Add(1);
+                var div = totalQuizzes / totalQuizTypes;
+                for (int i = 0; i < totalQuizTypes; i++)
+                {
+                    result.Add(div);
+                }
             }
-
-            int remaining = totalQuizzes - totalQuizTypes;
-
-            while (remaining > 0)
+            else
             {
-                int index = rand.Next(0, totalQuizTypes);
-                result[index]++;
-                remaining--;
+                var div = totalQuizzes / (totalQuizTypes - 1);
+                for (int i = 0; i < totalQuizTypes; i++)
+                {
+                    result.Add(div);
+                }
+                result.Add(totalQuizzes % totalQuizTypes);
             }
-
             return result;
         }
     }

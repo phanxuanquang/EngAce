@@ -55,6 +55,11 @@ namespace EngAce.Api.Controllers
                 return BadRequest($"Số lượng câu hỏi phải nằm trong khoảng {QuizScope.MinTotalQuestions} đến {QuizScope.MaxTotalQuestions}");
             }
 
+            if (totalQuestions < request.QuizzTypes.Count)
+            {
+                return BadRequest($"Tổng số câu hỏi không được nhỏ hơn số loại câu hỏi mà bạn chọn");
+            }
+
             var cacheKey = $"GenerateQuiz-{request.Topic.ToLower()}-{string.Join(string.Empty, request.QuizzTypes)}-{englishLevel}-{totalQuestions}";
             if (_cache.TryGetValue(cacheKey, out var cachedQuizzes))
             {
@@ -112,7 +117,7 @@ namespace EngAce.Api.Controllers
                 var topics = await QuizScope.SuggestTopcis(_accessKey, englishLevel);
 
                 var selectedTopics = topics.OrderBy(x => Guid.NewGuid()).Take(totalTopics).ToList();
-                _cache.Set(cacheKey, topics, TimeSpan.FromDays(1));
+                _cache.Set(cacheKey, topics, TimeSpan.FromDays(QuizScope.ThreeDaysAsCachingAge));
 
                 return Created("Success", selectedTopics);
             }
@@ -130,7 +135,7 @@ namespace EngAce.Api.Controllers
         /// </returns>
         /// <response code="200">Returns a dictionary of English levels and their descriptions.</response>
         [HttpGet("GetEnglishLevels")]
-        //[ResponseCache(Duration = QuizScope.OneMonthAsCachingAge, Location = ResponseCacheLocation.Any, NoStore = false)]
+        [ResponseCache(Duration = QuizScope.ThreeDaysAsCachingAge, Location = ResponseCacheLocation.Any, NoStore = false)]
         public ActionResult<Dictionary<int, string>> GetEnglishLevels()
         {
             var levels = Enum.GetValues(typeof(EnglishLevel)).Cast<EnglishLevel>().ToList();
@@ -151,10 +156,12 @@ namespace EngAce.Api.Controllers
         /// </returns>
         /// <response code="200">Returns a dictionary of quiz types and their descriptions.</response>
         [HttpGet("GetQuizTypes")]
-        //[ResponseCache(Duration = QuizScope.OneMonthAsCachingAge, Location = ResponseCacheLocation.Any, NoStore = false)]
+        [ResponseCache(Duration = QuizScope.ThreeDaysAsCachingAge, Location = ResponseCacheLocation.Any, NoStore = false)]
         public ActionResult<Dictionary<int, string>> GetQuizTypes()
         {
-            var types = Enum.GetValues(typeof(QuizzType)).Cast<QuizzType>().ToList();
+            var types = Enum.GetValues(typeof(QuizzType))
+                .Cast<QuizzType>()
+                .OrderBy(t => GeneralHelper.GetEnumDescription(t));
 
             var descriptions = types.ToDictionary(
                 type => (int)type,

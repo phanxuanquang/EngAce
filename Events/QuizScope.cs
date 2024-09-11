@@ -12,8 +12,7 @@ namespace Events
         public const sbyte MaxTotalWordsOfTopic = 10;
         public const sbyte MinTotalQuestions = 10;
         public const sbyte MaxTotalQuestions = 100;
-        public const int OneMonthAsCachingAge = 2592000;
-        public const int OneHourAsCachingAge = 3600;
+        public const int ThreeDaysAsCachingAge = 259200;
 
         public static async Task<List<Quiz>> GenerateQuizes(string apiKey, string topic, List<QuizzType> quizzTypes, EnglishLevel level, short questionsCount)
         {

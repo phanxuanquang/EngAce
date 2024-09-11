@@ -25,7 +25,7 @@ namespace EngAce.Api.Controllers
         /// <response code="400">The error message if an error occurs during generation.</response>
         /// <response code="401">The error message if the access key is invalid.</response>
         [HttpPost("Generate")]
-        [ResponseCache(Duration = QuizScope.OneHourAsCachingAge, Location = ResponseCacheLocation.Client, NoStore = false)]
+        [ResponseCache(Duration = ReviewScope.OneHourAsCachingAge, Location = ResponseCacheLocation.Client, NoStore = false)]
         public async Task<ActionResult<Comment>> Generate([FromBody] string content, EnglishLevel englishLevel = EnglishLevel.Intermediate)
         {
             if (string.IsNullOrEmpty(_accessKey))

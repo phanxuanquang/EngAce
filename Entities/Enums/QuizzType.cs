@@ -4,17 +4,17 @@ namespace Entities.Enums
 {
     public enum QuizzType
     {
-        [Description("Từ vựng (Vocabulary)")]
-        Vocabulary = 1,
+        [Description("Chọn từ thích hợp nhất (Most Suitable Word)")]
+        WordChoice = 1,
 
-        [Description("Ngữ pháp (Grammar)")]
-        Grammar = 2,
+        [Description("Chia động từ (Verb Conjugation)")]
+        VerbConjugation = 2,
 
-        [Description("Từ đồng nghĩa/trái nghĩa (Synonym/Antonym)")]
-        SynonymAndAntonym = 3,
+        [Description("Câu điều kiện (Conditional Sentences)")]
+        ConditionalSentences = 3,
 
-        [Description("Xác định lỗi sai (Error Identification)")]
-        ErrorIdentification = 4,
+        [Description("Câu gián tiếp (Indirect Speech)")]
+        IndirectSpeech = 4,
 
         [Description("Điền vào chỗ trống (Sentence Completion)")]
         FillTheBlank = 5,
@@ -22,22 +22,23 @@ namespace Entities.Enums
         [Description("Đọc hiểu văn bản (Reading Comprehension)")]
         ReadingComprehension = 6,
 
-        [Description("Chuyển đổi từ loại (Word Formation)")]
-        WordFormation = 7,
+        [Description("Ngữ pháp (Grammar)")]
+        Grammar = 7,
 
         [Description("Phối hợp từ (Collocation)")]
         Collocations = 8,
 
-        [Description("Chọn từ thích hợp nhất (Word Choice)")]
-        WordChoice = 9,
+        [Description("Từ đồng nghĩa/trái nghĩa (Synonym/Antonym)")]
+        SynonymAndAntonym = 9,
 
-        [Description("Chia động từ (Verb Conjugation)")]
-        VerbConjugation = 10,
+        [Description("Từ vựng (Vocabulary)")]
+        Vocabulary = 10,
 
-        [Description("Câu điều kiện (Conditional Sentences)")]
-        ConditionalSentences = 11,
+        [Description("Xác định lỗi sai (Error Identification)")]
+        ErrorIdentification = 11,
 
-        [Description("Câu gián tiếp (Indirect Speech)")]
-        IndirectSpeech = 12
+        [Description("Chuyển đổi từ loại (Word Formation)")]
+        WordFormation = 12
     }
+
 }
