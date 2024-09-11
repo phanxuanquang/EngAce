@@ -1,6 +1,7 @@
 ﻿using Helper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.Extensions.Logging.ApplicationInsights;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 
@@ -82,7 +83,7 @@ builder.Services.Configure<BrotliCompressionProviderOptions>(options =>
     options.Level = System.IO.Compression.CompressionLevel.Fastest;
 });
 
-builder.Services.AddApplicationInsightsTelemetry(builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
+builder.Services.AddApplicationInsightsTelemetry();
 
 builder.Services.AddCors(options =>
 {
