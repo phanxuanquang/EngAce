@@ -130,7 +130,7 @@ namespace EngAce.Api.Controllers
         /// </returns>
         /// <response code="200">Returns a dictionary of English levels and their descriptions.</response>
         [HttpGet("GetEnglishLevels")]
-        [ResponseCache(Duration = QuizScope.OneMonthAsCachingAge, Location = ResponseCacheLocation.Any, NoStore = false)]
+        //[ResponseCache(Duration = QuizScope.OneMonthAsCachingAge, Location = ResponseCacheLocation.Any, NoStore = false)]
         public ActionResult<Dictionary<int, string>> GetEnglishLevels()
         {
             var levels = Enum.GetValues(typeof(EnglishLevel)).Cast<EnglishLevel>().ToList();
@@ -151,7 +151,7 @@ namespace EngAce.Api.Controllers
         /// </returns>
         /// <response code="200">Returns a dictionary of quiz types and their descriptions.</response>
         [HttpGet("GetQuizTypes")]
-        [ResponseCache(Duration = QuizScope.OneMonthAsCachingAge, Location = ResponseCacheLocation.Any, NoStore = false)]
+        //[ResponseCache(Duration = QuizScope.OneMonthAsCachingAge, Location = ResponseCacheLocation.Any, NoStore = false)]
         public ActionResult<Dictionary<int, string>> GetQuizTypes()
         {
             var types = Enum.GetValues(typeof(QuizzType)).Cast<QuizzType>().ToList();
