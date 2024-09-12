@@ -94,6 +94,7 @@ namespace EngAce.Api.Controllers
         /// <response code="400">The error message if an error occurs during the suggestion process.</response>
         /// <response code="401">The error message if the access key is invalid.</response>
         [HttpGet("Suggest3Topics")]
+        [ResponseCache(Duration = ReviewScope.OneHourAsCachingAge, Location = ResponseCacheLocation.Any, NoStore = false)]
         public async Task<ActionResult<List<string>>> Suggest3Topics(EnglishLevel englishLevel = EnglishLevel.Intermediate)
         {
             if (string.IsNullOrEmpty(_accessKey))
@@ -138,11 +139,10 @@ namespace EngAce.Api.Controllers
         [ResponseCache(Duration = QuizScope.ThreeDaysAsCachingAge, Location = ResponseCacheLocation.Any, NoStore = false)]
         public ActionResult<Dictionary<int, string>> GetEnglishLevels()
         {
-            var levels = Enum.GetValues(typeof(EnglishLevel)).Cast<EnglishLevel>().ToList();
-
-            var descriptions = levels.ToDictionary(
-                level => (int)level,
-                level => GeneralHelper.GetEnumDescription(level)
+            var descriptions = Enum
+                .GetValues(typeof(EnglishLevel))
+                .Cast<EnglishLevel>()
+                .ToDictionary(level => (int)level, level => GeneralHelper.GetEnumDescription(level)
             );
 
             return Ok(descriptions);
@@ -156,16 +156,14 @@ namespace EngAce.Api.Controllers
         /// </returns>
         /// <response code="200">Returns a dictionary of quiz types and their descriptions.</response>
         [HttpGet("GetQuizTypes")]
-        [ResponseCache(Duration = QuizScope.ThreeDaysAsCachingAge, Location = ResponseCacheLocation.Any, NoStore = false)]
+        [ResponseCache(Duration = ReviewScope.OneHourAsCachingAge, Location = ResponseCacheLocation.Any, NoStore = false)]
         public ActionResult<Dictionary<int, string>> GetQuizTypes()
         {
-            var types = Enum.GetValues(typeof(QuizzType))
+            var descriptions = Enum
+                .GetValues(typeof(QuizzType))
                 .Cast<QuizzType>()
-                .OrderBy(t => GeneralHelper.GetEnumDescription(t));
-
-            var descriptions = types.ToDictionary(
-                type => (int)type,
-                type => GeneralHelper.GetEnumDescription(type)
+                .OrderBy(t => GeneralHelper.GetEnumDescription(t))
+                .ToDictionary(type => (int)type, type => GeneralHelper.GetEnumDescription(type)
             );
 
             return Ok(descriptions);
