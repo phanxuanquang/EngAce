@@ -41,26 +41,25 @@ namespace Helper
             return input.All(c => englishAlphabetAndPunctuation.Contains(c) || char.IsWhiteSpace(c) || char.IsDigit(c));
         }
 
-        public static List<int> GenerateRandomNumbers(int totalQuizTypes, int totalQuizzes)
+        public static List<int> GenerateRandomNumbers(int x, int y)
         {
+            var rand = new Random();
             var result = new List<int>();
-            if (totalQuizzes % totalQuizTypes == 0)
+
+            for (int i = 0; i < x; i++)
             {
-                var div = totalQuizzes / totalQuizTypes;
-                for (int i = 0; i < totalQuizTypes; i++)
-                {
-                    result.Add(div);
-                }
+                result.Add(1); 
             }
-            else
+
+            int remaining = y - x;
+
+            while (remaining > 0)
             {
-                var div = totalQuizzes / (totalQuizTypes - 1);
-                for (int i = 0; i < totalQuizTypes; i++)
-                {
-                    result.Add(div);
-                }
-                result.Add(totalQuizzes % totalQuizTypes);
+                int index = rand.Next(0, x);
+                result[index]++;
+                remaining--;
             }
+
             return result;
         }
     }
