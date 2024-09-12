@@ -24,7 +24,17 @@ namespace Events
                 {
                     throw new InvalidOperationException("Error while executing");
                 }
-                return results;
+
+                return results
+                    .Take(questionsCount)
+                    .Select(q => new Quiz
+                    {
+                        Question = q.Question.Replace("**", "'"),
+                        Options = q.Options.Select(o => o.Replace("**", "'")).ToList(),
+                        RightOptionIndex = q.RightOptionIndex,
+                        ExplanationInVietnamese = q.ExplanationInVietnamese.Replace("**", "'"),
+                    })
+                    .ToList();
             }
             else
             {
