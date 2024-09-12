@@ -16,7 +16,7 @@ namespace Events
 
         public static async Task<List<Quiz>> GenerateQuizes(string apiKey, string topic, List<QuizzType> quizzTypes, EnglishLevel level, short questionsCount)
         {
-            if(quizzTypes.Count <= 15)
+            if(questionsCount <= 15)
             {
                 var results = await GenerateQuizesForLessThan15(apiKey, topic, quizzTypes, level, questionsCount);
 
