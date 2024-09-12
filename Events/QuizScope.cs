@@ -81,7 +81,7 @@ namespace Events
                 var userLevel = GeneralHelper.GetEnumDescription(level);
                 var types = string.Join(", ", quizzTypes.Select(t => GeneralHelper.GetEnumDescription(t)).ToList());
 
-                promptBuilder.AppendLine($"You are an English teacher with over 20 years of experience. My English level according to the CEFR standard is {userLevel}. ");
+                promptBuilder.AppendLine($"You are an English teacher with over 20 years of experience, you have worked in a Vietnamese high school for over 10 years. I am a Vietnamese whose English level according to the CEFR standard is {userLevel}. ");
                 promptBuilder.Append($"Please provide a set of multiple-choice English questions consisting of {questionsCount} to {questionsCount + 5} questions related to the topic '{topic.Trim()}' for practice. ");
                 promptBuilder.Append("The content of the questions should not exceed my English level. ");
                 promptBuilder.Append($"Each question in the quiz should have only 4 options with exactly 1 correct choice, and the quiz should be of the types: {types}");
@@ -128,7 +128,7 @@ namespace Events
                 var userLevel = GeneralHelper.GetEnumDescription(level);
                 var type = GeneralHelper.GetEnumDescription(quizzType);
 
-                promptBuilder.AppendLine($"You are an English teacher with over 20 years of experience. My English level according to the CEFR standard is {userLevel}. ");
+                promptBuilder.AppendLine($"You are an English teacher with over 20 years of experience, you have worked in a Vietnamese high school for over 10 years. I am a Vietnamese whose English level according to the CEFR standard is {userLevel}. ");
                 promptBuilder.Append($"Please provide a set of multiple-choice English questions consisting of {questionsCount} to {questionsCount + 5} questions related to the topic '{topic.Trim()}' for practice. ");
                 promptBuilder.Append("The content of the questions should not exceed my English level. ");
                 promptBuilder.Append($"Each question in the quiz should have only 4 options with exactly 1 correct choice, and the type of the quizzes must be: {type}");
