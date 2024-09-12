@@ -94,7 +94,6 @@ namespace EngAce.Api.Controllers
         /// <response code="400">The error message if an error occurs during the suggestion process.</response>
         /// <response code="401">The error message if the access key is invalid.</response>
         [HttpGet("Suggest3Topics")]
-        [ResponseCache(Duration = ReviewScope.OneHourAsCachingAge, Location = ResponseCacheLocation.Any, NoStore = false)]
         public async Task<ActionResult<List<string>>> Suggest3Topics(EnglishLevel englishLevel = EnglishLevel.Intermediate)
         {
             if (string.IsNullOrEmpty(_accessKey))
