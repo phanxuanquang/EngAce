@@ -38,7 +38,7 @@ namespace Events
                 Parts =
                 [
                     new() {
-                        Text = $"Hãy ghi nhớ và thực hiện đúng theo mệnh lệnh của tôi lúc bắt đầu cuộc hội thoại.\nCaau hỏi của tôi: {conversation.Question.Trim()}"
+                        Text = conversation.Question.Trim()
                     }
                 ]
             };
