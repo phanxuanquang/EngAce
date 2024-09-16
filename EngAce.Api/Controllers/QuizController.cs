@@ -155,7 +155,7 @@ namespace EngAce.Api.Controllers
         /// </returns>
         /// <response code="200">Returns a dictionary of quiz types and their descriptions.</response>
         [HttpGet("GetQuizTypes")]
-        [ResponseCache(Duration = ReviewScope.OneHourAsCachingAge, Location = ResponseCacheLocation.Any, NoStore = false)]
+        [ResponseCache(Duration = QuizScope.ThreeDaysAsCachingAge, Location = ResponseCacheLocation.Any, NoStore = false)]
         public ActionResult<Dictionary<int, string>> GetQuizTypes()
         {
             var descriptions = Enum

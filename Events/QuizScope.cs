@@ -129,7 +129,7 @@ namespace Events
                 var type = GeneralHelper.GetEnumDescription(quizzType);
 
                 promptBuilder.AppendLine($"You are an English teacher with over 20 years of experience, you have worked in a Vietnamese high school for over 10 years. I am a Vietnamese whose English level according to the CEFR standard is {userLevel}. ");
-                promptBuilder.Append($"Please provide a set of multiple-choice English questions consisting of {questionsCount} to {questionsCount + 5} questions related to the topic '{topic.Trim()}' for practice. ");
+                promptBuilder.Append($"Please provide a set of multiple-choice English questions consisting of up-to {questionsCount + 5} questions related to the topic '{topic.Trim()}' for practice. ");
                 promptBuilder.Append("The content of the questions should not exceed my English level. ");
                 promptBuilder.Append($"Each question in the quiz should have only 4 options with exactly 1 correct choice, and the type of the quizzes must be: {type}");
                 promptBuilder.AppendLine("Return an empty array if the topic is meaningless, or cannot be determined, or cannot be understood.");
@@ -159,7 +159,14 @@ namespace Events
                 promptBuilder.AppendLine("The output:");
 
                 var response = await Generator.GenerateContent(apiKey, promptBuilder.ToString(), true, 50);
-                return [.. JsonConvert.DeserializeObject<List<Quiz>>(response)];
+
+                return JsonConvert.DeserializeObject<List<Quiz>>(response)
+                    .Select(quiz =>
+                    {
+                        quiz.Question = $"({NameAttribute.GetEnumName(quizzType)}) {quiz.Question}";
+                        return quiz;
+                    })
+                    .ToList();
             }
             catch
             {
