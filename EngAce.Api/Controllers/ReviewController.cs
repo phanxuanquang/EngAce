@@ -56,7 +56,8 @@ namespace EngAce.Api.Controllers
             }
             catch
             {
-                return BadRequest("Có lỗi xảy ra! Vui lòng kiểm tra lại nội dung bài viết.");
+                return Created("Success", "## CẢNH BÁO\n EngAce đang bận đi pha cà phê nên tạm thời vắng mặt. Bạn hiền vui lòng ngồi chơi 3 phút rồi gửi lại cho EngAce nhận xét nha.\nYêu bạn hiền nhiều lắm luôn á!");
+
             }
         }
     }

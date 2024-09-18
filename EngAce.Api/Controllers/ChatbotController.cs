@@ -27,7 +27,12 @@ namespace EngAce.Api.Controllers
         {
             if (string.IsNullOrWhiteSpace(request.Question))
             {
-                return BadRequest("The question must not be empty");
+                return Ok("Gửi vội vậy bạn hiền! Chưa nhập câu hỏi kìa.");
+            }
+
+            if (GeneralHelper.GetTotalWords(request.Question) > 15)
+            {
+                return Ok("Hỏi ngắn thôi cha nội, mắc hỏi quá hay gì 💢\nKiếm câu nào ngắn hơn 15 từ mà hỏi.");
             }
 
             try
@@ -40,7 +45,7 @@ namespace EngAce.Api.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Cannot generate answer");
-                return BadRequest(ex);
+                return Ok("Nhắn từ từ thôi cha nội, vội đi đẻ hay gì 💢\nNgồi đợi 1 phút cho tui đi gặm gói mì tôm đã.");
             }
         }
     }

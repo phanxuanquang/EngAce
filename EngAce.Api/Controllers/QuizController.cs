@@ -77,7 +77,7 @@ namespace EngAce.Api.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Topic: {Topic} - Quizz Types: {Types}", request.Topic, string.Join("-", request.QuizzTypes.Select(t => t.ToString())));
-                return BadRequest("Có lỗi xảy ra! Vui lòng thử lại sau 3 phút.");
+                return BadRequest("Hệ thống mắc đi đẻ, vui lòng đợi 3 phút rồi thử lại nha!");
             }
         }
 
