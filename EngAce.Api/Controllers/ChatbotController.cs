@@ -30,9 +30,9 @@ namespace EngAce.Api.Controllers
                 return Ok("Gửi vội vậy bạn hiền! Chưa nhập câu hỏi kìa.");
             }
 
-            if (GeneralHelper.GetTotalWords(request.Question) > 15)
+            if (GeneralHelper.GetTotalWords(request.Question) > 20)
             {
-                return Ok("Hỏi ngắn thôi bạn hiền, bộ mắc hỏi quá hay gì 💢\nKiếm câu nào ngắn hơn 15 từ mà hỏi.");
+                return Ok("Hỏi ngắn thôi bạn hiền, bộ mắc hỏi quá hay gì 💢\nHỏi câu nào dưới 20 từ thôi, để thời gian cho tui suy nghĩ với chứ.");
             }
 
             try
