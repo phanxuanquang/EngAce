@@ -71,7 +71,8 @@ namespace EngAce.Api.Controllers
                 var quizzes = await QuizScope.GenerateQuizes(_accessKey, request.Topic, request.QuizzTypes, englishLevel, totalQuestions);
                 _cache.Set(cacheKey, quizzes, TimeSpan.FromMinutes(totalQuestions));
 
-                _logger.LogInformation("Topic: {Topic} - Quizz Types: {Types}", request.Topic, string.Join("-", request.QuizzTypes.Select(t => t.ToString())));
+                _logger.LogInformation("{_accessKey} generated: {Topic} - Quizz Types: {Types}", _accessKey[..10], request.Topic, string.Join("-", request.QuizzTypes.Select(t => t.ToString())));
+
                 return Created("Success", quizzes);
             }
             catch (Exception ex)

@@ -32,20 +32,20 @@ namespace EngAce.Api.Controllers
 
             if (GeneralHelper.GetTotalWords(request.Question) > 15)
             {
-                return Ok("Hỏi ngắn thôi cha nội, mắc hỏi quá hay gì 💢\nKiếm câu nào ngắn hơn 15 từ mà hỏi.");
+                return Ok("Hỏi ngắn thôi bạn hiền, bộ mắc hỏi quá hay gì 💢\nKiếm câu nào ngắn hơn 15 từ mà hỏi.");
             }
 
             try
             {
                 var result = await ChatScope.GenerateAnswer(_accessKey, request);
 
-                _logger.LogInformation("The question of user {_accessKey}: {Question}", _accessKey[..10], request.Question);
+                _logger.LogInformation("{_accessKey} asked: {Question}", _accessKey[..10], request.Question);
                 return Ok(result);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Cannot generate answer");
-                return Ok("Nhắn từ từ thôi cha nội, vội đi đẻ hay gì 💢\nNgồi đợi 1 phút cho tui đi gặm gói mì tôm đã.");
+                return Ok("Nhắn từ từ thôi bạn hiền, bộ mắc đi đẻ quá hay gì 💢\nNgồi đợi 1 phút cho tui đi uống ly cà phê đã.");
             }
         }
     }

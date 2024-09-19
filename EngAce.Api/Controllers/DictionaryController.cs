@@ -81,7 +81,8 @@ namespace EngAce.Api.Controllers
             {
                 var result = await SearchScope.Search(_accessKey, useEnglishToExplain, keyword, context);
                 _cache.Set(cacheKey, result, TimeSpan.FromHours(1));
-                _logger.LogInformation("Keyword: {Keyword} - Context: {Context}", keyword, context);
+
+                _logger.LogInformation("{_accessKey} searched: {Keyword} - Context: {Context}", _accessKey[..10], keyword, context);
                 return Created("Success", result);
             }
             catch (Exception ex)

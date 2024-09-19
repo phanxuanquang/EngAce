@@ -16,11 +16,11 @@ namespace Events
 
         public static async Task<List<Quiz>> GenerateQuizes(string apiKey, string topic, List<QuizzType> quizzTypes, EnglishLevel level, short questionsCount)
         {
-            if(questionsCount <= 15)
+            if (questionsCount <= 15)
             {
                 var results = await GenerateQuizesForLessThan15(apiKey, topic, quizzTypes, level, questionsCount);
 
-                if(results == null || results.Count == 0)
+                if (results == null || results.Count == 0)
                 {
                     throw new InvalidOperationException("Error while executing");
                 }
