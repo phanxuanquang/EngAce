@@ -117,7 +117,11 @@ namespace EngAce.Api.Controllers
             {
                 var topics = await QuizScope.SuggestTopcis(_accessKey, englishLevel);
 
-                var selectedTopics = topics.OrderBy(x => Guid.NewGuid()).Take(totalTopics).ToList();
+                var selectedTopics = topics
+                    .OrderBy(x => Guid.NewGuid())
+                    .Take(totalTopics)
+                    .ToList();
+
                 _cache.Set(cacheKey, topics, TimeSpan.FromDays(QuizScope.ThreeDaysAsCachingAge));
 
                 return Created("Success", selectedTopics);
@@ -136,7 +140,7 @@ namespace EngAce.Api.Controllers
         /// </returns>
         /// <response code="200">Returns a dictionary of English levels and their descriptions.</response>
         [HttpGet("GetEnglishLevels")]
-        [ResponseCache(Duration = QuizScope.ThreeDaysAsCachingAge, Location = ResponseCacheLocation.Any, NoStore = false)]
+        [ResponseCache(Duration = QuizScope.MaxTimeAsCachingAge, Location = ResponseCacheLocation.Any, NoStore = false)]
         public ActionResult<Dictionary<int, string>> GetEnglishLevels()
         {
             var descriptions = Enum
@@ -156,7 +160,7 @@ namespace EngAce.Api.Controllers
         /// </returns>
         /// <response code="200">Returns a dictionary of quiz types and their descriptions.</response>
         [HttpGet("GetQuizTypes")]
-        [ResponseCache(Duration = QuizScope.ThreeDaysAsCachingAge, Location = ResponseCacheLocation.Any, NoStore = false)]
+        [ResponseCache(Duration = QuizScope.MaxTimeAsCachingAge, Location = ResponseCacheLocation.Any, NoStore = false)]
         public ActionResult<Dictionary<int, string>> GetQuizTypes()
         {
             var descriptions = Enum

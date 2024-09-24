@@ -9,7 +9,7 @@ namespace Events
     {
         public static async Task<string> GenerateAnswer(string apiKey, Conversation conversation)
         {
-            if (conversation.ChatHistory.Count > 20 && conversation.ChatHistory.Count % 2 == 0)
+            if (conversation.ChatHistory.Count > 30 && conversation.ChatHistory.Count % 2 == 0)
             {
                 conversation.ChatHistory = conversation.ChatHistory.Take(10).ToList();
             }

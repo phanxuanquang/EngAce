@@ -28,6 +28,7 @@ namespace EngAce.Api.Controllers
         /// <response code="400">The error message if the input validation fails or if an error occurs during the search.</response>
         /// <response code="401">Invalid Access Key</response>
         [HttpGet("Search")]
+        [ResponseCache(Duration = QuizScope.ThreeDaysAsCachingAge, Location = ResponseCacheLocation.Any, NoStore = false)]
         public async Task<ActionResult<string>> Search(string keyword, string? context, bool useEnglishToExplain = false)
         {
             if (string.IsNullOrEmpty(_accessKey))
