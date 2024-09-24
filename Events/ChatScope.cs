@@ -11,7 +11,7 @@ namespace Events
         {
             if (conversation.ChatHistory.Count > 30 && conversation.ChatHistory.Count % 2 == 0)
             {
-                conversation.ChatHistory = conversation.ChatHistory.Take(10).ToList();
+                conversation.ChatHistory = conversation.ChatHistory.TakeLast(10).ToList();
             }
 
             conversation.ChatHistory.InsertRange(0, InitPrompts());
