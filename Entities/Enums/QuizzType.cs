@@ -16,7 +16,7 @@ namespace Entities.Enums
         [Name("Câu gián tiếp"), Description("Indirect Speech (Câu gián tiếp)")]
         IndirectSpeech = 4,
 
-        [Name("(Điền vào chỗ trống"), Description("Sentence Completion (Điền vào chỗ trống)")]
+        [Name("Điền vào chỗ trống"), Description("Sentence Completion (Điền vào chỗ trống)")]
         FillTheBlank = 5,
 
         [Name("Đọc hiểu văn bản"), Description("Reading Comprehension (Đọc hiểu văn bản)")]
