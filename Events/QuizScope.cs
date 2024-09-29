@@ -112,7 +112,7 @@ namespace Events
                 promptBuilder.AppendLine("]");
                 promptBuilder.AppendLine("The output:");
 
-                var response = await Generator.GenerateContent(apiKey, promptBuilder.ToString(), true, 50);
+                var response = await Generator.GenerateContent(apiKey, promptBuilder.ToString(), true, 30);
                 return [.. JsonConvert.DeserializeObject<List<Quiz>>(response)];
             }
             catch
@@ -159,7 +159,7 @@ namespace Events
                 promptBuilder.AppendLine("]");
                 promptBuilder.AppendLine("The output:");
 
-                var response = await Generator.GenerateContent(apiKey, promptBuilder.ToString(), true, 50);
+                var response = await Generator.GenerateContent(apiKey, promptBuilder.ToString(), true, 30);
 
                 return JsonConvert.DeserializeObject<List<Quiz>>(response)
                     .Select(quiz =>
