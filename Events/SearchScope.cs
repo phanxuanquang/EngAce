@@ -10,14 +10,13 @@ namespace Events
         {
             var promptBuilder = new StringBuilder();
             keyword = keyword.Trim();
-            context = context.Trim();
 
             if (useEnglish)
             {
                 promptBuilder.Append("You are a highly advanced English-Vietnamese dictionary that applies AI technology for lookup tasks. Your job is to help me explain English words.");
-                promptBuilder.AppendLine("If the input word/phrase is meaningless, nonexistent in English, unexplainable, or too vulgar, you should output 'Cannot explain'.");
+                promptBuilder.AppendLine("If the input word/phrase is meaningless, nonexistent in English, unexplainable, or too vulgar, you should output 'Cannot explain'. ");
                 promptBuilder.Append($"Please provide an explanation for '{keyword}'");
-                promptBuilder.Append(!string.IsNullOrEmpty(context) ? $" in the context of '{context}'." : string.Empty);
+                promptBuilder.Append(!string.IsNullOrEmpty(context) ? $" in the context of '{context.Trim()}'." : string.Empty);
                 promptBuilder.AppendLine("Your output must include 11 sections as below:");
                 promptBuilder.AppendLine($"- Title: '{keyword.ToUpper()}'");
                 promptBuilder.AppendLine($"- Pronunciation and part of speech of '{keyword}', if the input is not a word but an idiom, omit the pronunciation.");
