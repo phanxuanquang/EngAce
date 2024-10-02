@@ -49,13 +49,12 @@ namespace Events
                 instructionBuilder.AppendLine("- Cung cấp thông tin về nguồn gốc hoặc lịch sử của từ nếu có.");
                 instructionBuilder.AppendLine("- Bao gồm các dạng biến đổi như thì quá khứ, thì hiện tại, dạng số nhiều, dạng so sánh,... nếu có.");
                 instructionBuilder.AppendLine("- Chia sẻ một số thông tin thú vị ít người biết về từ hoặc cụm từ đó nếu có.");
-                instructionBuilder.AppendLine("Cách trình bày output của bạn phải rõ ràng và chi tiết, nhưng không được dài dòng không cần thiết.");
 
                 promptBuilder.Append($"Hãy cung cấp lời giải thích thật chi tiết của '{keyword}'");
                 promptBuilder.Append(!string.IsNullOrEmpty(context) ? $" trong ngữ cảnh '{context}'." : string.Empty);
             }
 
-            return await Gemini.Generator.GenerateContent(apiKey, instructionBuilder.ToString(), promptBuilder.ToString().Trim(), false, 100);
+            return await Gemini.Generator.GenerateContent(apiKey, instructionBuilder.ToString(), promptBuilder.ToString().Trim(), false, 50);
         }
     }
 }

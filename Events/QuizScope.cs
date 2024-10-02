@@ -86,7 +86,7 @@ namespace Events
                 promptBuilder.AppendLine($"Generate a set of multiple-choice English questions consisting of {questionsCount} to {questionsCount + 5} questions related to the topic '{topic.Trim()}' for me to practice, the quiz should be of the types: {types}");
                 promptBuilder.AppendLine("The output:");
 
-                var response = await Generator.GenerateContent(apiKey, InitInstruction(), promptBuilder.ToString(), true, 50);
+                var response = await Generator.GenerateContent(apiKey, InitInstruction(), promptBuilder.ToString(), true, 30);
                 return [.. JsonConvert.DeserializeObject<List<Quiz>>(response)];
             }
             catch
@@ -100,14 +100,31 @@ namespace Events
             try
             {
                 var promptBuilder = new StringBuilder();
+                var instructionBuilder = new StringBuilder();
                 var userLevel = GeneralHelper.GetEnumDescription(level);
                 var type = GeneralHelper.GetEnumDescription(quizzType);
+
+                instructionBuilder.AppendLine("You are an experienced IELTS teacher with over 20 years of experience, currently teaching in Vietnam.");
+                instructionBuilder.Append("I am looking for a list of interesting and engaging topics that match my current English proficiency level, as well as topics that can help me stay motivated in my learning journey.");
+                instructionBuilder.AppendLine("Please suggest at least 40 completely different topics, each containing fewer than 5 words, that you think are most suitable and interesting for practicing English.");
+                instructionBuilder.AppendLine("The topics should cover a variety of themes, such as daily life, culture, education, environment, travel, etc., to keep the practice diverse and engaging.");
+                instructionBuilder.AppendLine();
+                instructionBuilder.AppendLine("The list of suggested topics should be returned as a JSON array corresponding to the List<string> data type in C# programming language.");
+                instructionBuilder.AppendLine("To make the format clear, here's an example of the expected output:");
+                instructionBuilder.AppendLine("[");
+                instructionBuilder.AppendLine("  \"Family traditions\",");
+                instructionBuilder.AppendLine("  \"Modern technology\",");
+                instructionBuilder.AppendLine("  \"Travel experiences\",");
+                instructionBuilder.AppendLine("  \"Global warming\"");
+                instructionBuilder.AppendLine("]");
+                instructionBuilder.AppendLine();
+                instructionBuilder.AppendLine("Make sure that each topic is unique, concise, and relevant for practicing English at different levels, especially intermediate to advanced.");
 
                 promptBuilder.Append($"I am a Vietnamese learner with an English level of {userLevel} according to the CEFR standard.");
                 promptBuilder.AppendLine($"Generate a set of multiple-choice English questions consisting of {questionsCount} to {questionsCount + 5} questions related to the topic '{topic.Trim()}' for me to practice, the type of the questions must be: {type}");
                 promptBuilder.AppendLine("The output:");
 
-                var response = await Generator.GenerateContent(apiKey, promptBuilder.ToString(), true, 50);
+                var response = await Generator.GenerateContent(apiKey, instructionBuilder.ToString(), promptBuilder.ToString(), true, 30);
 
                 return JsonConvert.DeserializeObject<List<Quiz>>(response)
                     .Select(quiz =>
