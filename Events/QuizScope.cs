@@ -59,10 +59,10 @@ namespace Events
                 }
 
                 var random = new Random();
-                return quizes
+
+                return quizes.Count == 0 ? quizes : quizes
                     .AsParallel()
                     .OrderBy(x => random.Next())
-                    .Take(questionsCount)
                     .Select(q => new Quiz
                     {
                         Question = q.Question.Replace("**", "'"),
@@ -100,33 +100,17 @@ namespace Events
             try
             {
                 var promptBuilder = new StringBuilder();
-                var instructionBuilder = new StringBuilder();
                 var userLevel = GeneralHelper.GetEnumDescription(level);
                 var type = GeneralHelper.GetEnumDescription(quizzType);
-
-                instructionBuilder.AppendLine("You are an experienced IELTS teacher with over 20 years of experience, currently teaching in Vietnam.");
-                instructionBuilder.Append("I am looking for a list of interesting and engaging topics that match my current English proficiency level, as well as topics that can help me stay motivated in my learning journey.");
-                instructionBuilder.AppendLine("Please suggest at least 40 completely different topics, each containing fewer than 5 words, that you think are most suitable and interesting for practicing English.");
-                instructionBuilder.AppendLine("The topics should cover a variety of themes, such as daily life, culture, education, environment, travel, etc., to keep the practice diverse and engaging.");
-                instructionBuilder.AppendLine();
-                instructionBuilder.AppendLine("The list of suggested topics should be returned as a JSON array corresponding to the List<string> data type in C# programming language.");
-                instructionBuilder.AppendLine("To make the format clear, here's an example of the expected output:");
-                instructionBuilder.AppendLine("[");
-                instructionBuilder.AppendLine("  \"Family traditions\",");
-                instructionBuilder.AppendLine("  \"Modern technology\",");
-                instructionBuilder.AppendLine("  \"Travel experiences\",");
-                instructionBuilder.AppendLine("  \"Global warming\"");
-                instructionBuilder.AppendLine("]");
-                instructionBuilder.AppendLine();
-                instructionBuilder.AppendLine("Make sure that each topic is unique, concise, and relevant for practicing English at different levels, especially intermediate to advanced.");
 
                 promptBuilder.Append($"I am a Vietnamese learner with an English level of {userLevel} according to the CEFR standard.");
                 promptBuilder.AppendLine($"Generate a set of multiple-choice English questions consisting of {questionsCount} to {questionsCount + 5} questions related to the topic '{topic.Trim()}' for me to practice, the type of the questions must be: {type}");
                 promptBuilder.AppendLine("The output:");
 
-                var response = await Generator.GenerateContent(apiKey, instructionBuilder.ToString(), promptBuilder.ToString(), true, 30);
+                var response = await Generator.GenerateContent(apiKey, InitInstruction(), promptBuilder.ToString(), true, 30);
 
                 return JsonConvert.DeserializeObject<List<Quiz>>(response)
+                    .Take(questionsCount)
                     .Select(quiz =>
                     {
                         quiz.Question = $"({NameAttribute.GetEnumName(quizzType)}) {quiz.Question}";
@@ -180,7 +164,7 @@ namespace Events
             instructionBuilder.AppendLine("class Quiz");
             instructionBuilder.AppendLine("{");
             instructionBuilder.AppendLine("    string Question; // The question content in English. Ensure it matches my level and is grammatically correct.");
-            instructionBuilder.AppendLine("    List<string> Options; // A list of 4 distinct choices. There must be only 1 correct option.");
+            instructionBuilder.AppendLine("    List<string> Options; // A list of 4 unique choices. There must be only 1 correct choice.");
             instructionBuilder.AppendLine("    int RightOptionIndex; // The index (0-3) of the correct option in the 'Options' list. Ensure this is the most accurate and logical answer.");
             instructionBuilder.AppendLine("    string ExplanationInVietnamese; // A brief, clear explanation in Vietnamese that is suitable for my English level.");
             instructionBuilder.AppendLine("}");
