@@ -78,41 +78,15 @@ namespace Events
         {
             try
             {
-                var promptBuilder = new StringBuilder();
                 var userLevel = GeneralHelper.GetEnumDescription(level);
                 var types = string.Join(", ", quizzTypes.Select(t => GeneralHelper.GetEnumDescription(t)).ToList());
+                var promptBuilder = new StringBuilder();
 
-                promptBuilder.AppendLine($"You are an English teacher with over 20 years of experience, you have worked in a Vietnamese high school for over 10 years. I am a Vietnamese whose English level according to the CEFR standard is {userLevel}. ");
-                promptBuilder.Append($"Please provide a set of multiple-choice English questions consisting of {questionsCount} to {questionsCount + 5} questions related to the topic '{topic.Trim()}' for practice. ");
-                promptBuilder.Append("The content of the questions should not exceed my English level. ");
-                promptBuilder.Append($"Each question in the quiz should have only 4 options with exactly 1 correct choice, and the quiz should be of the types: {types}");
-                promptBuilder.AppendLine("Return an empty array if the topic is meaningless, or cannot be determined, or cannot be understood.");
-                promptBuilder.AppendLine("The output should be a JSON array corresponding to the following C# class: ");
-                promptBuilder.AppendLine("class Quiz");
-                promptBuilder.AppendLine("{");
-                promptBuilder.AppendLine("    string Question; // The question content in English, ensure it matches my level");
-                promptBuilder.AppendLine("    List<string> Options; // 4 choices for the user to select, ensure that the options are distinct, and there is only 1 correct option for the question.");
-                promptBuilder.AppendLine("    int RightOptionIndex; // Index of the correct option in the 'Options' array, ensure this is the index of the most accurate and reasonable choice for the question (index range is from 0 to 3)");
-                promptBuilder.AppendLine("    string ExplanationInVietnamese; // Short explanation in Vietnamese in a clear and reasonable manner, suitable for my English level");
-                promptBuilder.AppendLine("}");
-                promptBuilder.AppendLine("In order to help to do the task more correctly and effectively, here is an example of the response I want:");
-                promptBuilder.AppendLine("[");
-                promptBuilder.AppendLine("    {");
-                promptBuilder.AppendLine("        \"Question\": \"Question content no. 1\",");
-                promptBuilder.AppendLine("        \"Options\": [\"Option 1\", \"Option 2\", \"Option 3\", \"Option 4\"],");
-                promptBuilder.AppendLine("        \"RightOptionIndex\": 0,");
-                promptBuilder.AppendLine("        \"ExplanationInVietnamese\": \"The short explanation for the correct answer in Vietnamese\"");
-                promptBuilder.AppendLine("    },");
-                promptBuilder.AppendLine("    {");
-                promptBuilder.AppendLine("        \"Question\": \"Question content no. 2\",");
-                promptBuilder.AppendLine("        \"Options\": [\"Option 1\", \"Option 2\", \"Option 3\", \"Option 4\"],");
-                promptBuilder.AppendLine("        \"RightOptionIndex\": 2,");
-                promptBuilder.AppendLine("        \"ExplanationInVietnamese\": \"The short explanation for the correct answer in Vietnamese\"");
-                promptBuilder.AppendLine("    }");
-                promptBuilder.AppendLine("]");
+                promptBuilder.Append($"I am a Vietnamese learner with an English level of {userLevel} according to the CEFR standard.");
+                promptBuilder.AppendLine($"Generate a set of multiple-choice English questions consisting of {questionsCount} to {questionsCount + 5} questions related to the topic '{topic.Trim()}' for me to practice, the quiz should be of the types: {types}");
                 promptBuilder.AppendLine("The output:");
 
-                var response = await Generator.GenerateContent(apiKey, promptBuilder.ToString(), true, 50);
+                var response = await Generator.GenerateContent(apiKey, InitInstruction(), promptBuilder.ToString(), true, 50);
                 return [.. JsonConvert.DeserializeObject<List<Quiz>>(response)];
             }
             catch
@@ -129,37 +103,11 @@ namespace Events
                 var userLevel = GeneralHelper.GetEnumDescription(level);
                 var type = GeneralHelper.GetEnumDescription(quizzType);
 
-                promptBuilder.AppendLine($"You are an English teacher with over 20 years of experience, you have worked in a Vietnamese high school for over 10 years. I am a Vietnamese whose English level according to the CEFR standard is {userLevel}. ");
-                promptBuilder.Append($"Please provide a set of multiple-choice English questions consisting of up-to {questionsCount + 5} questions related to the topic '{topic.Trim()}' for practice. ");
-                promptBuilder.Append("The content of the questions should not exceed my English level. ");
-                promptBuilder.Append($"Each question in the quiz should have only 4 options with exactly 1 correct choice, and the type of the quizzes must be: {type}");
-                promptBuilder.AppendLine("Return an empty array if the topic is meaningless, or cannot be determined, or cannot be understood.");
-                promptBuilder.AppendLine("The output should be a JSON array corresponding to the following C# class: ");
-                promptBuilder.AppendLine("class Quiz");
-                promptBuilder.AppendLine("{");
-                promptBuilder.AppendLine("    string Question; // The question content in English, ensure it matches my level");
-                promptBuilder.AppendLine("    List<string> Options; // 4 choices for the user to select, ensure that the options are distinct, and there is only 1 correct option for the question.");
-                promptBuilder.AppendLine("    int RightOptionIndex; // Index of the correct option in the 'Options' array, ensure this is the index of the most accurate and reasonable choice for the question (index range is from 0 to 3)");
-                promptBuilder.AppendLine("    string ExplanationInVietnamese; // Short explanation in Vietnamese in a clear and reasonable manner, suitable for my English level");
-                promptBuilder.AppendLine("}");
-                promptBuilder.AppendLine("In order to help to do the task more correctly and effectively, here is an example of the response I want:");
-                promptBuilder.AppendLine("[");
-                promptBuilder.AppendLine("    {");
-                promptBuilder.AppendLine("        \"Question\": \"Question content no. 1\",");
-                promptBuilder.AppendLine("        \"Options\": [\"Option 1\", \"Option 2\", \"Option 3\", \"Option 4\"],");
-                promptBuilder.AppendLine("        \"RightOptionIndex\": 0,");
-                promptBuilder.AppendLine("        \"ExplanationInVietnamese\": \"The short explanation for the correct answer in Vietnamese\"");
-                promptBuilder.AppendLine("    },");
-                promptBuilder.AppendLine("    {");
-                promptBuilder.AppendLine("        \"Question\": \"Question content no. 2\",");
-                promptBuilder.AppendLine("        \"Options\": [\"Option 1\", \"Option 2\", \"Option 3\", \"Option 4\"],");
-                promptBuilder.AppendLine("        \"RightOptionIndex\": 2,");
-                promptBuilder.AppendLine("        \"ExplanationInVietnamese\": \"The short explanation for the correct answer in Vietnamese\"");
-                promptBuilder.AppendLine("    }");
-                promptBuilder.AppendLine("]");
+                promptBuilder.Append($"I am a Vietnamese learner with an English level of {userLevel} according to the CEFR standard.");
+                promptBuilder.AppendLine($"Generate a set of multiple-choice English questions consisting of {questionsCount} to {questionsCount + 5} questions related to the topic '{topic.Trim()}' for me to practice, the type of the questions must be: {type}");
                 promptBuilder.AppendLine("The output:");
 
-                var response = await Generator.GenerateContent(apiKey, promptBuilder.ToString(), true, 50);
+                var response = await Generator.GenerateContent(apiKey, InitInstruction(), promptBuilder.ToString(), true, 50);
 
                 return JsonConvert.DeserializeObject<List<Quiz>>(response)
                     .Select(quiz =>
@@ -178,23 +126,67 @@ namespace Events
         public static async Task<List<string>> SuggestTopcis(string apiKey, EnglishLevel level)
         {
             var promptBuilder = new StringBuilder();
+
             var userLevel = GeneralHelper.GetEnumDescription(level);
 
-            promptBuilder.AppendLine($"You are an IELTS teacher with over 20 years of experience, teaching in Vietnam. My English level according to the CEFR standard is {userLevel}.");
-            promptBuilder.Append($"I am looking for interesting topics to practice English that match my current level, and I also want to have more motivation for learning.");
-            promptBuilder.AppendLine("Please suggest at least 40 completely different topics with less than 5 words that you think are most suitable and interesting for practicing English.");
-            promptBuilder.Append("The list of suggested topics should be a JSON array corresponding to the List<string> data type in C# programming language.");
-            promptBuilder.AppendLine("In order to help you to do the task more correctly and more effectively, here is an example of the response I want:");
+            var instruction = "You are an experienced IELTS teacher with over 20 years of experience, currently teaching in Vietnam. I am looking for a list of interesting and engaging topics that match my current English proficiency level, as well as topics that can help me stay motivated in my learning journey.";
+
+            promptBuilder.AppendLine($"My current English proficiency level is '{userLevel}' according to the CEFR standard.");
+            promptBuilder.AppendLine("Please suggest at least 40 completely different topics, each containing fewer than 5 words, that you think are most suitable and interesting for practicing English.");
+            promptBuilder.AppendLine("The topics should cover a variety of themes, such as daily life, culture, education, environment, travel, etc., to keep the practice diverse and engaging.");
+            promptBuilder.AppendLine();
+            promptBuilder.AppendLine("The list of suggested topics should be returned as a JSON array corresponding to the List<string> data type in C# programming language.");
+            promptBuilder.AppendLine("To make the format clear, here's an example of the expected output:");
             promptBuilder.AppendLine("[");
-            promptBuilder.AppendLine("  \"Topic 1\",");
-            promptBuilder.AppendLine("  \"Topic 2\",");
-            promptBuilder.AppendLine("  \"Topic 3\",");
-            promptBuilder.AppendLine("  \"Topic 4\"");
+            promptBuilder.AppendLine("  \"Family traditions\",");
+            promptBuilder.AppendLine("  \"Modern technology\",");
+            promptBuilder.AppendLine("  \"Travel experiences\",");
+            promptBuilder.AppendLine("  \"Global warming\"");
             promptBuilder.AppendLine("]");
+            promptBuilder.AppendLine();
+            promptBuilder.AppendLine("Make sure that each topic is unique, concise, and relevant for practicing English at different levels, especially intermediate to advanced.");
             promptBuilder.Append("Your response:");
 
-            var response = await Generator.GenerateContent(apiKey, promptBuilder.ToString(), true, 75);
+            var response = await Generator.GenerateContent(apiKey, instruction, promptBuilder.ToString(), true, 75);
             return [.. JsonConvert.DeserializeObject<List<string>>(response)];
+        }
+
+        private static string InitInstruction()
+        {
+            var instructionBuilder = new StringBuilder();
+            instructionBuilder.AppendLine($"You are an experienced English teacher with over 20 years of experience, having taught in a Vietnamese high school for over 10 years.");
+            instructionBuilder.AppendLine("You should a set of multiple-choice English questions that match my English level, ensuring that the difficulty is appropriate and aligned with the CEFR standard, and each question must have only 4 options with exactly 1 correct choice.");
+            instructionBuilder.AppendLine("Return an empty array if the input topic is unclear, irrelevant, or cannot be understood.");
+            instructionBuilder.AppendLine();
+            instructionBuilder.AppendLine("The output should be a valid JSON array corresponding to the following C# class definition:");
+            instructionBuilder.AppendLine();
+            instructionBuilder.AppendLine("class Quiz");
+            instructionBuilder.AppendLine("{");
+            instructionBuilder.AppendLine("    string Question; // The question content in English. Ensure it matches my level and is grammatically correct.");
+            instructionBuilder.AppendLine("    List<string> Options; // A list of 4 distinct choices. There must be only 1 correct option.");
+            instructionBuilder.AppendLine("    int RightOptionIndex; // The index (0-3) of the correct option in the 'Options' list. Ensure this is the most accurate and logical answer.");
+            instructionBuilder.AppendLine("    string ExplanationInVietnamese; // A brief, clear explanation in Vietnamese that is suitable for my English level.");
+            instructionBuilder.AppendLine("}");
+            instructionBuilder.AppendLine();
+            instructionBuilder.AppendLine("Ensure the questions are practical, engaging, and fit my English proficiency level, using language that is not overly complex.");
+            instructionBuilder.AppendLine("Your response should prioritize clarity and consistency.");
+            instructionBuilder.AppendLine();
+            instructionBuilder.AppendLine("Here is an example of the expected response format:");
+            instructionBuilder.AppendLine("[");
+            instructionBuilder.AppendLine("    {");
+            instructionBuilder.AppendLine("        \"Question\": \"What is the capital of England?\",");
+            instructionBuilder.AppendLine("        \"Options\": [\"Paris\", \"Berlin\", \"London\", \"Rome\"],");
+            instructionBuilder.AppendLine("        \"RightOptionIndex\": 2,");
+            instructionBuilder.AppendLine("        \"ExplanationInVietnamese\": \"London là thủ đô của Anh.\"");
+            instructionBuilder.AppendLine("    },");
+            instructionBuilder.AppendLine("    {");
+            instructionBuilder.AppendLine("        \"Question\": \"Which one is a fruit?\",");
+            instructionBuilder.AppendLine("        \"Options\": [\"Carrot\", \"Apple\", \"Bread\", \"Chicken\"],");
+            instructionBuilder.AppendLine("        \"RightOptionIndex\": 1,");
+            instructionBuilder.AppendLine("        \"ExplanationInVietnamese\": \"'Apple' là tên một loại trái cây.\"");
+            instructionBuilder.AppendLine("    }");
+            instructionBuilder.AppendLine("]");
+            return instructionBuilder.ToString();
         }
     }
 }

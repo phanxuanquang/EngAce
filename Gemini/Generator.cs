@@ -10,12 +10,22 @@ namespace Gemini
     {
         private static readonly HttpClient Client = new();
 
-        public static async Task<string> GenerateContent(string apiKey, string query, bool useJson = true, double creativeLevel = 50, GenerativeModel model = GenerativeModel.Gemini_15_Flash)
+        public static async Task<string> GenerateContent(string apiKey, string? instruction, string query, bool useJson = true, double creativeLevel = 50, GenerativeModel model = GenerativeModel.Gemini_15_Flash)
         {
             var endpoint = GetUriWithHeadersIfAny(apiKey, model);
 
             var request = new
             {
+                systemInstruction = new
+                {
+                    parts = new[]
+                    {
+                        new
+                        {
+                            text = instruction,
+                        }
+                    }
+                },
                 contents = new[]
                 {
                     new
