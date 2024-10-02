@@ -22,7 +22,7 @@ function responsiveFontSizes({ xs, sm, md, lg, xl }) {
   };
 }
 
-const FONT_PRIMARY = "'Open Sans', sans-serif";
+const FONT_PRIMARY = "'Be Vietnam Pro', sans-serif";
 
 const typography = {
   fontFamily: FONT_PRIMARY,
