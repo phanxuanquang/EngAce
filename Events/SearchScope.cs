@@ -11,7 +11,6 @@ namespace Events
             var instructionBuilder = new StringBuilder();
             var promptBuilder = new StringBuilder();
             keyword = keyword.Trim();
-            context = context.Trim();
 
             if (useEnglish)
             {

@@ -107,7 +107,7 @@ namespace Events
                 promptBuilder.AppendLine($"Generate a set of multiple-choice English questions consisting of {questionsCount} to {questionsCount + 5} questions related to the topic '{topic.Trim()}' for me to practice, the type of the questions must be: {type}");
                 promptBuilder.AppendLine("The output:");
 
-                var response = await Generator.GenerateContent(apiKey, InitInstruction(), promptBuilder.ToString(), true, 50);
+                var response = await Generator.GenerateContent(apiKey, promptBuilder.ToString(), true, 50);
 
                 return JsonConvert.DeserializeObject<List<Quiz>>(response)
                     .Select(quiz =>
