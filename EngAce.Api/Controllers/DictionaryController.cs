@@ -89,7 +89,7 @@ namespace EngAce.Api.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Cannot search for the explaination of '{Keyword}' in the context '{Context}'", keyword, context);
-                return Created("Success", "## CẢNH BÁO\n EngAce đang bận đi pha cà phê nên tạm thời vắng mặt. Bạn hiền vui lòng ngồi chơi 3 phút rồi tra lại thử nha.\nYêu bạn hiền nhiều lắm luôn á!");
+                return Created("Success", "## CẢNH BÁO\n EngAce đang bận đi pha cà phê nên tạm thời vắng mặt. bé yêu vui lòng ngồi chơi 3 phút rồi tra lại thử nha.\nYêu bé yêu nhiều lắm luôn á!");
             }
         }
     }

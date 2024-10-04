@@ -108,7 +108,7 @@ namespace Gemini
                 return endpoint;
             }
 
-            Client.DefaultRequestHeaders.Add("x-goog-user-project", "engace-426517");
+            Client.DefaultRequestHeaders.Add("project-name-here", "project-id-here");
             Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessKey);
 

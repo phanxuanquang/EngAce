@@ -27,12 +27,12 @@ namespace EngAce.Api.Controllers
         {
             if (string.IsNullOrWhiteSpace(request.Question))
             {
-                return Ok("Gửi vội vậy bạn hiền! Chưa nhập câu hỏi kìa.");
+                return Ok("Gửi vội vậy bé yêu! Chưa nhập câu hỏi kìa.");
             }
 
-            if (GeneralHelper.GetTotalWords(request.Question) > 20)
+            if (GeneralHelper.GetTotalWords(request.Question) > 30)
             {
-                return Ok("Hỏi ngắn thôi bạn hiền, bộ mắc hỏi quá hay gì 💢\nHỏi câu nào dưới 20 từ thôi, để thời gian cho tui suy nghĩ với chứ.");
+                return Ok("Hỏi ngắn thôi bé yêu, bộ mắc hỏi quá hay gì 💢\nHỏi câu nào dưới 30 từ thôi, để thời gian cho anh suy nghĩ với chứ.");
             }
 
             try
@@ -45,7 +45,7 @@ namespace EngAce.Api.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Cannot generate answer");
-                return Ok("Nhắn từ từ thôi bạn hiền, bộ mắc đi đẻ quá hay gì 💢\nNgồi đợi 1 phút cho tui đi uống ly cà phê đã.");
+                return Ok("Nhắn từ từ thôi bé yêu, bộ mắc đi đẻ quá hay gì 💢\nNgồi đợi 1 phút cho anh đi uống ly cà phê đã.");
             }
         }
     }

@@ -10,7 +10,7 @@ namespace Events
     public static class ReviewScope
     {
         public const short MinTotalWords = 30;
-        public const short MaxTotalWords = 300;
+        public const short MaxTotalWords = 500;
         public const int OneHourAsCachingAge = 3600;
         public static async Task<Comment> GenerateReview(string apiKey, EnglishLevel level, string content)
         {

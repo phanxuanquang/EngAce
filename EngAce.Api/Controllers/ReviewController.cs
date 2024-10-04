@@ -56,7 +56,7 @@ namespace EngAce.Api.Controllers
             }
             catch
             {
-                return Created("Success", "## CẢNH BÁO\n EngAce đang bận đi pha cà phê nên tạm thời vắng mặt. Bạn hiền vui lòng ngồi chơi 3 phút rồi gửi lại cho EngAce nhận xét nha.\nYêu bạn hiền nhiều lắm luôn á!");
+                return Created("Success", "## CẢNH BÁO\n EngAce đang bận đi pha cà phê nên tạm thời vắng mặt. bé yêu vui lòng ngồi chơi 3 phút rồi gửi lại cho EngAce nhận xét nha.\nYêu bé yêu nhiều lắm luôn á!");
             }
         }
     }
