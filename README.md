@@ -16,24 +16,30 @@ This project is licensed under the **Creative Commons Attribution-NonCommercial-
 ## :rotating_light: Features
 EngAce offers a suite of tools and functionalities aimed at making English learning more accessible, enjoyable, and efficient. The app is designed with four main features as below.
 
-### 1. AI Dictionary
-The AI Dictionary is a powerful tool that allows users to look up definitions in both English-to-English and English-to-Vietnamese formats. Key features include:
+### 1. Intelligent Dictionary
+![Image](https://i.imgur.com/31vNBVJ.png)
+A comprehensive English dictionary tailored for Vietnamese learners, offering detailed explanations, idioms, phrasal verbs, and even more. It provides in-depth Vietnamese context when needed, eliminating the hassle of extensive research Key features include:
 - Illustrative Examples: Each definition comes with example sentences to help users understand the word in context.
 - Contextual Search: Users can search for words based on specific contexts, making it easier to understand different usages of a word.
 
-### 2. Practice Exercises
-EngAce provides personalized practice exercises to help users improve their English skills. Features include:
+### 2. Personalized Quizzes
+![Image](https://i.imgur.com/urR5QGz.png)
+![Image](https://i.imgur.com/yLNRIHS.png)
+EngAce provides personalized practice exercises to help users improve their English skills. The feature includes:
 - Custom Quizzes: Users can generate multiple-choice quizzes tailored to their proficiency level and the topics they want to practice.
 - Adaptive Learning: The app adapts to the user's performance, providing progressively challenging questions to ensure continuous improvement.
-- Support up to 100 quizzes per request, and up to 10 different types of quizz for users to select.
+- Support up to 100 quizzes per request, and up to 12 different types of quizz for users to select.
 
-### 3. Writing Assistant
-The AI Writing Assistant is designed to help users enhance their writing skills through real-time feedback and suggestions. Features include:
+### 3. Intelligent Writing Review
+![Image](https://i.imgur.com/WUGGkDD.png)
+![Image](https://i.imgur.com/wYxijYI.png)
+Instantly receive detailed feedback and constructive suggestions to enhance writing skills, helping users improve their English writing with precision. The feature includes:
 - Writing Review: Users can submit their writing pieces and receive detailed feedback on grammar, style, and coherence.
 - Improvement Suggestions: The AI provides constructive suggestions to help users refine and improve their writing.
 
 ### 4. Chat with AI Expert
-EngAce includes an AI-powered chatbot that acts as an English learning companion. Features include:
+![Image](https://i.imgur.com/3QV8pZG.png)
+EngAce includes an AI-powered chatbot that acts as an English learning companion. The feature include:
 - Interactive Discussions: Users can engage in conversations with the chatbot on various English learning topics.
 - Learning Tips: The chatbot provides tips and advice to help users overcome common learning challenges.
 - Q&A Support: Users can ask the chatbot questions related to English learning and receive informative answers.
