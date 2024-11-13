@@ -14,6 +14,76 @@ namespace Events
         public const sbyte MaxTotalQuestions = 100;
         public const int ThreeDaysAsCachingAge = 259200;
         public const int MaxTimeAsCachingAge = int.MaxValue;
+        public const string Instruction = @"
+You are an expert English teacher with over 20 years of teaching experience, and you have spent more than 10 years teaching English to high school students in Vietnam. Your deep understanding of language learning challenges allows you to create highly effective, engaging, and pedagogically sound multiple-choice questions. Below are the detailed requirements for the question set generation:
+
+### 1. **English Proficiency Level**:
+   - I will provide my English proficiency level according to the CEFR (Common European Framework of Reference for Languages), which will fall into one of the following categories:
+     - **A1**: Beginner (simple sentences, basic vocabulary, greetings, introductions).
+     - **A2**: Elementary (basic understanding of short texts, simple phrases and expressions).
+     - **B1**: Intermediate (understands main points of clear standard input on familiar topics, can handle most situations).
+     - **B2**: Upper-intermediate (can produce clear, detailed text on familiar and unfamiliar subjects).
+     - **C1**: Advanced (can produce well-structured and detailed text on complex subjects, understanding implicit meanings).
+     - **C2**: Proficient (near-native fluency, understanding highly detailed and complex texts).
+   
+   - Based on the level I provide, your task is to **generate questions appropriate to that level**. For example:
+     - **A1**: Short, simple questions with basic vocabulary.
+     - **B2**: Complex questions involving conditional sentences, more challenging vocabulary, and topics that require deeper understanding.
+
+### 2. **Question Creation Guidelines**:
+   - **Clarity and Precision**: Your questions should be **clear, direct, and unambiguous**. Avoid using unnecessarily complicated language. Each question should be grammatically correct and easy to understand for the given proficiency level.
+   - **Question Types**: Focus on practical, real-world scenarios. Examples of types of questions:
+     - **Vocabulary**: Asking for meanings of common words or phrases.
+     - **Grammar**: Correct usage of tenses, articles, prepositions, etc.
+     - **Contextual Understanding**: Questions that involve understanding the main ideas of simple or complex texts.
+     - **Practical Situations**: Everyday conversation topics (e.g., ordering food, booking a hotel, etc.).
+   
+   - **Choices**: For each question, provide **4 unique choices**. One choice must be the **correct** answer, and the remaining three should be plausible but incorrect answers.
+     - The choices should be logically consistent and should not introduce ambiguity.
+     - Ensure that the incorrect options are not obvious mistakes but are reasonable distractors based on common learner errors.
+   
+   - **Correct Answer**: Ensure the correct answer is indisputable. Do not make the question too easy or too tricky.
+
+### 3. **Explanation of Correct Answer**:
+   - After each question, provide a **brief explanation in Vietnamese** for why the correct answer is right. The explanation should be:
+     - **Clear and concise**, suitable for the proficiency level.
+     - **Avoid overwhelming details**; focus on the key learning points.
+     - Provide **examples or context** if needed to make the explanation clearer. For instance, if the correct answer involves a specific grammar point, explain that with a simple example.
+   - If the explanation requires a specific language rule, be sure to give a short rule or exception (e.g., usage of ""a"" vs. ""an"" or the difference between present perfect and past simple).
+
+### 4. **Priority in Question Creation**:
+   - **Engagement**: Questions should be engaging and reflect real-world scenarios that are interesting and useful for language learners. For example, instead of asking about random vocabulary, relate it to daily life (e.g., “What do you usually eat for breakfast?”).
+   - **Clarity and Consistency**: The explanations, choices, and the reasoning behind the correct answers should all be **consistent** and **easy to follow**.
+   - **Motivation**: Keep the questions positive and encouraging. If the question or explanation is too difficult, adjust the difficulty to motivate further learning.
+
+## Output Format:
+### Structured in JSON Format:
+   - Return your response in a **valid JSON array**, each object containing the following fields:
+     - `Question`: The question text in English. Ensure it is grammatically correct and clearly stated for the given level.
+     - `Options`: A list of 4 unique choices, where one is the correct answer. Each choice should be a valid option in the context of the question.
+     - `RightOptionIndex`: The **index (0-3)** of the correct answer in the `Options` list. Ensure this index is correct based on the correct choice.
+     - `ExplanationInVietnamese`: A **brief explanation** of why the correct answer is correct, written in simple, clear Vietnamese.
+   
+   - Ensure that the **JSON structure is properly formatted** and valid, adhering to JSON syntax conventions.
+
+### Example Output:
+
+```json
+[
+    {
+        ""Question"": ""What is the capital of Japan?"",
+        ""Options"": [""Seoul"", ""Beijing"", ""Tokyo"", ""Bangkok""],
+        ""RightOptionIndex"": 2,
+        ""ExplanationInVietnamese"": ""Tokyo là thủ đô của Nhật Bản.""
+    },
+    {
+        ""Question"": ""Which of the following is a vegetable?"",
+        ""Options"": [""Potato"", ""Apple"", ""Chicken"", ""Cake""],
+        ""RightOptionIndex"": 0,
+        ""ExplanationInVietnamese"": ""'Potato' là một loại rau củ, khác với các loại thực phẩm còn lại.""
+    }
+]
+```";
 
         public static async Task<List<Quiz>> GenerateQuizes(string apiKey, string topic, List<QuizzType> quizzTypes, EnglishLevel level, short questionsCount)
         {
@@ -89,7 +159,7 @@ namespace Events
                 promptBuilder.AppendLine($"Generate a set of multiple-choice English questions consisting of {questionsCount} to {questionsCount + 5} questions related to the topic '{topic.Trim()}' for me to practice, the quiz should be of the types: {types}");
                 promptBuilder.AppendLine("The output:");
 
-                var response = await Generator.GenerateContent(apiKey, InitInstruction(), promptBuilder.ToString(), true, 30);
+                var response = await Generator.GenerateContent(apiKey, Instruction, promptBuilder.ToString(), true, 30);
                 return [.. JsonConvert.DeserializeObject<List<Quiz>>(response)];
             }
             catch
@@ -106,14 +176,16 @@ namespace Events
                 var userLevel = GeneralHelper.GetEnumDescription(level);
                 var type = GeneralHelper.GetEnumDescription(quizzType);
 
-                promptBuilder.AppendLine($"I am a Vietnamese learner with the English proficiency level of '{userLevel}' according to the CEFR standard.");
-                promptBuilder.AppendLine("This is the decription of my level according to the CEFR standard:");
+                promptBuilder.AppendLine($"I am a Vietnamese learner with the English proficiency level of **{userLevel}** according to the CEFR standard.");
+                promptBuilder.AppendLine();
+                promptBuilder.AppendLine("## The decription of my level according to the CEFR standard:");
+                promptBuilder.AppendLine();
                 promptBuilder.AppendLine(GetLevelDescription(level));
                 promptBuilder.AppendLine();
+                promptBuilder.AppendLine("## Your task:");
                 promptBuilder.AppendLine($"Generate a set of multiple-choice English questions consisting of {questionsCount} to {questionsCount + 5} questions related to the topic '{topic.Trim()}' for me to practice, the type of the questions must be: {type}");
-                promptBuilder.AppendLine("The output:");
 
-                var response = await Generator.GenerateContent(apiKey, InitInstruction(), promptBuilder.ToString(), true, 30);
+                var response = await Generator.GenerateContent(apiKey, Instruction, promptBuilder.ToString(), true, 30);
 
                 return JsonConvert.DeserializeObject<List<Quiz>>(response)
                     .Take(questionsCount)
@@ -146,57 +218,20 @@ namespace Events
             promptBuilder.AppendLine();
             promptBuilder.AppendLine("The list of suggested topics should be returned as a JSON array corresponding to the List<string> data type in C# programming language.");
             promptBuilder.AppendLine("To make the format clear, here's an example of the expected output:");
+            promptBuilder.AppendLine();
+            promptBuilder.AppendLine("```json");
             promptBuilder.AppendLine("[");
             promptBuilder.AppendLine("  \"Family traditions\",");
             promptBuilder.AppendLine("  \"Modern technology\",");
             promptBuilder.AppendLine("  \"Travel experiences\",");
             promptBuilder.AppendLine("  \"Global warming\"");
             promptBuilder.AppendLine("]");
+            promptBuilder.AppendLine("```");
             promptBuilder.AppendLine();
             promptBuilder.AppendLine("Make sure that each topic is unique, concise, and relevant for practicing English at different levels, especially intermediate to advanced.");
-            promptBuilder.Append("Your response:");
 
             var response = await Generator.GenerateContent(apiKey, instruction, promptBuilder.ToString(), true, 75);
             return [.. JsonConvert.DeserializeObject<List<string>>(response)];
-        }
-
-        private static string InitInstruction()
-        {
-            var instructionBuilder = new StringBuilder();
-            instructionBuilder.AppendLine("You are an experienced English teacher with over 20 years of experience, having taught in a Vietnamese high school for over 10 years.");
-            instructionBuilder.AppendLine("I will let you know about my current English proficiency level according to the CEFR standard, and the topic that I want to practice.");
-            instructionBuilder.AppendLine("You should generate a set of unique multiple-choice English questions that the difficulty is appropriate and aligned with my current English proficiency level, and each question must have only unique 4 choices with exactly 1 correct choice.");
-            instructionBuilder.AppendLine("Return an empty array if the input topic is unclear, irrelevant, or cannot be understood.");
-            instructionBuilder.AppendLine();
-            instructionBuilder.AppendLine("The output should be a valid JSON array corresponding to the following C# class definition:");
-            instructionBuilder.AppendLine();
-            instructionBuilder.AppendLine("class Quiz");
-            instructionBuilder.AppendLine("{");
-            instructionBuilder.AppendLine("    string Question; // The question content in English. Ensure it matches my level and is grammatically correct.");
-            instructionBuilder.AppendLine("    List<string> Options; // A list of 4 unique choices. There must be only 1 correct choice.");
-            instructionBuilder.AppendLine("    int RightOptionIndex; // The index (0-3) of the correct option in the 'Options' list. Ensure this is the most accurate and logical answer.");
-            instructionBuilder.AppendLine("    string ExplanationInVietnamese; // A brief, clear explanation in Vietnamese that is suitable for my English level.");
-            instructionBuilder.AppendLine("}");
-            instructionBuilder.AppendLine();
-            instructionBuilder.AppendLine("Ensure the questions are practical, engaging, and fit my English proficiency level, using language that is not overly complex.");
-            instructionBuilder.AppendLine("Your response should prioritize clarity and consistency.");
-            instructionBuilder.AppendLine();
-            instructionBuilder.AppendLine("Here is an example of the expected response format:");
-            instructionBuilder.AppendLine("[");
-            instructionBuilder.AppendLine("    {");
-            instructionBuilder.AppendLine("        \"Question\": \"What is the capital of England?\",");
-            instructionBuilder.AppendLine("        \"Options\": [\"Paris\", \"Berlin\", \"London\", \"Rome\"],");
-            instructionBuilder.AppendLine("        \"RightOptionIndex\": 2,");
-            instructionBuilder.AppendLine("        \"ExplanationInVietnamese\": \"London là thủ đô của Anh.\"");
-            instructionBuilder.AppendLine("    },");
-            instructionBuilder.AppendLine("    {");
-            instructionBuilder.AppendLine("        \"Question\": \"Which one is a fruit?\",");
-            instructionBuilder.AppendLine("        \"Options\": [\"Carrot\", \"Apple\", \"Bread\", \"Chicken\"],");
-            instructionBuilder.AppendLine("        \"RightOptionIndex\": 1,");
-            instructionBuilder.AppendLine("        \"ExplanationInVietnamese\": \"'Apple' là tên một loại trái cây.\"");
-            instructionBuilder.AppendLine("    }");
-            instructionBuilder.AppendLine("]");
-            return instructionBuilder.ToString();
         }
         private static string GetLevelDescription(EnglishLevel level)
         {
@@ -319,7 +354,7 @@ namespace Events
             {
                 case EnglishLevel.Beginner:
                     return A1_Description;
-                case EnglishLevel.Elementary: 
+                case EnglishLevel.Elementary:
                     return A2_Description;
                 case EnglishLevel.Intermediate:
                     return B1_Description;
@@ -329,7 +364,7 @@ namespace Events
                     return C1_Description;
                 case EnglishLevel.Proficient:
                     return C2_Description;
-                default: 
+                default:
                     return string.Empty;
             }
         }

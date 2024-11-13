@@ -113,23 +113,29 @@ namespace Events
             instructionBuilder.AppendLine();
             instructionBuilder.AppendLine("Your output must be a JSON object structured according to the following C# class:");
             instructionBuilder.AppendLine();
+            instructionBuilder.AppendLine("```cs");
             instructionBuilder.AppendLine("class ReviewerResponse");
             instructionBuilder.AppendLine("{");
-            instructionBuilder.AppendLine("    string GeneralComment;  // The high-detailed review for the essay.");
+            instructionBuilder.AppendLine("    string GeneralComment;  // The high-detailed review for the essay in Vietnamese.");
             instructionBuilder.AppendLine("    string ImprovedContent; // Revised version of the essay following your review.");
             instructionBuilder.AppendLine("}");
+            instructionBuilder.AppendLine("```");
             instructionBuilder.AppendLine();
             instructionBuilder.AppendLine("If my essay is nonsensical, unclear, or cannot be analyzed, the 'GeneralComment' field should contain 'Unable to comment,' and the 'ImprovedContent' field should be left empty.");
             instructionBuilder.AppendLine();
             instructionBuilder.AppendLine("Here is an example of the output:");
+            instructionBuilder.AppendLine();
+            instructionBuilder.AppendLine("```json");
             instructionBuilder.AppendLine("{");
-            instructionBuilder.AppendLine("  \"GeneralComment\": \"Your essay has a good writing style, but there are some grammatical and spelling errors. For example, the second sentence uses the wrong verb tense. You should use the past perfect tense instead of the present perfect tense.\"");
+            instructionBuilder.AppendLine("  \"GeneralComment\": \"Bài viết của bạn có phong cách viết tốt, nhưng vẫn còn một số lỗi ngữ pháp và chính tả. Ví dụ, câu thứ hai sử dụng thì động từ sai. Bạn nên dùng thì quá khứ hoàn thành thay vì thì hiện tại hoàn thành.\"");
             instructionBuilder.AppendLine("  \"ImprovedContent\": \"**The second sentence** has been corrected to use the past perfect tense. The rest of the essay remains unchanged.\"");
             instructionBuilder.AppendLine("}");
+            instructionBuilder.AppendLine("```");
 
-            promptBuilder.AppendLine($"My current English proficiency level according to CEFR standard is '{userLevel}'. ");
-            promptBuilder.AppendLine("Below is my writting for you to review: ");
-            promptBuilder.AppendLine($"{content.Trim()}");
+            promptBuilder.AppendLine($"## My current English proficiency level according to CEFR standard:");
+            promptBuilder.AppendLine(userLevel);
+            promptBuilder.AppendLine("## My writting for you to review: ");
+            promptBuilder.AppendLine(content.Trim());
 
             var result = await Generator.GenerateContent(apiKey, instructionBuilder.ToString(), promptBuilder.ToString(), true, 30, GenerativeModel.Gemini_15_Flash);
             return JsonConvert.DeserializeObject<Comment>(result);
