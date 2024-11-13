@@ -221,6 +221,9 @@ For all valid English words and phrases, the output should consist of the follow
                 promptBuilder.AppendLine("## Context:");
                 promptBuilder.AppendLine($"- {context.Trim()}");
             }
+            promptBuilder.AppendLine("## The output in ");
+            promptBuilder.Append(useEnglish ? "English" : "Vietnamese");
+            promptBuilder.Append(":");
 
             return await Gemini.Generator.GenerateContent(apiKey, useEnglish ? instructionforEnglish : instructionforVietnamese, promptBuilder.ToString().Trim(), false, 50);
         }
