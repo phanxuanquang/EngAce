@@ -9,6 +9,7 @@ namespace Events
         public static async Task<string> Search(string apiKey, bool useEnglish, string keyword, string context)
         {
             var translationDirection = useEnglish ? "English-English" : "English-Vietnamese";
+            var outputLanguage = useEnglish ? "English" : "Vietnamese";
 
             var instruction = @$"
 You are an advanced and highly accurate **{translationDirection}** dictionary powered by AI, designed to provide deep, context-aware explanations of English words and phrases.
@@ -50,6 +51,8 @@ Your primary goal is to help Vietnamese users fully understand the meaning, usag
 
 10. **If the input contains a word with multiple meanings**, provide explanations for each meaning, with emphasis on the most common usages.
     - Explain how context influences the meaning, and provide clear examples for each interpretation.
+
+11. The language of the output **must be {outputLanguage}** because the readers are {outputLanguage} people.
 
 ## Output Structure:
 
