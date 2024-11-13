@@ -105,7 +105,7 @@ For all valid English words or phrases, your response should consist of the foll
     - Include any common mistakes or pitfalls learners might encounter when using this word, and give tips on how to avoid them.
     - If the word is frequently misused or misunderstood, provide clarification to help distinguish the correct usage from common errors.
 
-12. **Những hiểu lầm phổ biến:**
+12. **Những lỗi phổ biến:**
     - Highlight any common errors that learners make when using the word, such as misusing it in sentences, misunderstanding its meaning, or confusing it with similar words.
     - Provide at least 5 common examples of incorrect usage and how to correct them.";
 
