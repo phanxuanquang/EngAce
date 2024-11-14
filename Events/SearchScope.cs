@@ -31,15 +31,15 @@ Người dùng có thể nhập vào từ hoặc cụm từ tiếng Anh để tr
 
    - **Dịch nghĩa và giải thích tiếng Việt theo ngữ cảnh hoặc các nghĩa phổ biến**:
      - Dịch nghĩa tiếng Việt chính xác cho từ hoặc cụm từ.
-     - Nếu có ngữ cảnh, cung cấp giải thích chi tiết bằng tiếng Việt cho nghĩa trong ngữ cảnh đó.
+     - Nếu có ngữ cảnh, cung cấp giải nghĩa chi tiết bằng tiếng Việt cho nghĩa trong ngữ cảnh đó.
      - Nếu không có ngữ cảnh, liệt kê tối đa 10 nghĩa phổ biến với giải thích đầy đủ bằng tiếng Việt, bao gồm các sắc thái ý nghĩa, mức độ trang trọng và ngữ cảnh phù hợp.
 
-   - **Ví dụ sử dụng và từ vựng liên quan (tiếng Anh và tiếng Việt)**:
-     - Cung cấp ít nhất 5 câu ví dụ bằng tiếng Anh và tiếng Việt, thể hiện cách sử dụng từ trong các ngữ cảnh thực tế.
-     - Nếu có thể, bổ sung từ vựng liên quan bằng tiếng Anh và tiếng Việt để giúp người dùng mở rộng vốn từ.
+   - **Ví dụ sử dụng và từ vựng tiếng Anh liên quan**:
+     - Cung cấp ít nhất 5 câu ví dụ bằng tiếng Anh, thể hiện cách sử dụng từ trong các ngữ cảnh thực tế.
+     - Nếu có thể, bổ sung từ vựng liên quan bằng tiếng Anh để giúp người dùng mở rộng vốn từ.
 
-   - **Từ đồng nghĩa và trái nghĩa (tiếng Anh và tiếng Việt)**:
-     - Cung cấp tối thiểu 3 từ đồng nghĩa và 3 từ trái nghĩa bằng tiếng Anh, mỗi từ kèm theo bản dịch tiếng Việt và giải thích ngắn gọn.
+   - **Từ đồng nghĩa và trái nghĩa**:
+     - Cung cấp tối thiểu 3 từ đồng nghĩa và 3 từ trái nghĩa bằng tiếng Anh, kèm theo giải thích ngắn gọn.
    
    - **Cụm từ, thành ngữ phổ biến chứa từ (tiếng Anh và tiếng Việt)**:
      - Liệt kê các cụm từ, thành ngữ phổ biến chứa từ/cụm từ, kèm bản dịch và giải thích chi tiết trong tiếng Việt.
@@ -47,13 +47,13 @@ Người dùng có thể nhập vào từ hoặc cụm từ tiếng Anh để tr
 
    - **Từ gốc và từ phái sinh**:
      - Giải thích từ nguyên, bao gồm các ngôn ngữ gốc hoặc thời kỳ lịch sử nếu có.
-     - Liệt kê các từ phái sinh nếu có, bao gồm các từ biến thể, kèm theo bản dịch tiếng Việt.
+     - Liệt kê các từ phái sinh nếu có, bao gồm các từ biến thể, kèm theo giải thích ngắn gọn.
 
    - **Nguồn gốc lịch sử**:
      - Cung cấp thông tin chi tiết về lịch sử của từ, bao gồm bối cảnh hoặc thời kỳ mà từ xuất hiện, và nếu có sự thay đổi ý nghĩa theo thời gian, giải thích quá trình này bằng tiếng Việt.
 
    - **Các dạng biến đổi**:
-     - Bao gồm tất cả các dạng biến đổi (quá khứ, hiện tại, số nhiều, thể bị động, v.v.) và giải thích cách dùng từng dạng bằng tiếng Việt.
+     - Bao gồm tất cả các dạng biến đổi (quá khứ, hiện tại, số nhiều, thể bị động, v.v.) và giải thích cách dùng từng dạng.
 
    - **Thông tin thú vị ít người biết**:
      - Cung cấp các thông tin thú vị hoặc ít người biết về từ/cụm từ, như cách dùng đặc biệt trong văn hóa, sự khác biệt vùng miền, hoặc tiếng lóng, với bản dịch và giải thích tiếng Việt.";
