@@ -152,12 +152,21 @@ You are an expert English teacher with over 20 years of teaching experience, and
                 var types = string.Join(", ", quizzTypes.Select(t => GeneralHelper.GetEnumDescription(t)).ToList());
                 var promptBuilder = new StringBuilder();
 
-                promptBuilder.AppendLine($"I am a Vietnamese learner with the English proficiency level of '{userLevel}' according to the CEFR standard.");
-                promptBuilder.AppendLine("This is the decription of my level according to the CEFR standard:");
+                promptBuilder.AppendLine($"I am a Vietnamese learner with the English proficiency level of `{userLevel}` according to the CEFR standard.");
+                promptBuilder.AppendLine();
+                promptBuilder.AppendLine("## The decription of my level according to the CEFR standard:");
+                promptBuilder.AppendLine();
                 promptBuilder.AppendLine(GetLevelDescription(level));
                 promptBuilder.AppendLine();
+                promptBuilder.AppendLine("## Your task:");
+                promptBuilder.AppendLine();
                 promptBuilder.AppendLine($"Generate a set of multiple-choice English questions consisting of {questionsCount} to {questionsCount + 5} questions related to the topic '{topic.Trim()}' for me to practice, the quiz should be of the types: {types}");
-                promptBuilder.AppendLine("The output:");
+                promptBuilder.AppendLine();
+                promptBuilder.AppendLine("The generated questions should be of the types:");
+                foreach ( var type in quizzTypes )
+                {
+                    promptBuilder.AppendLine($"- {GeneralHelper.GetEnumDescription(type)}");
+                }
 
                 var response = await Generator.GenerateContent(apiKey, Instruction, promptBuilder.ToString(), true, 30);
                 return [.. JsonConvert.DeserializeObject<List<Quiz>>(response)];
@@ -176,16 +185,17 @@ You are an expert English teacher with over 20 years of teaching experience, and
                 var userLevel = GeneralHelper.GetEnumDescription(level);
                 var type = GeneralHelper.GetEnumDescription(quizzType);
 
-                promptBuilder.AppendLine($"I am a Vietnamese learner with the English proficiency level of **{userLevel}** according to the CEFR standard.");
+                promptBuilder.AppendLine($"I am a Vietnamese learner with the English proficiency level of `{userLevel}` according to the CEFR standard.");
                 promptBuilder.AppendLine();
                 promptBuilder.AppendLine("## The decription of my level according to the CEFR standard:");
                 promptBuilder.AppendLine();
                 promptBuilder.AppendLine(GetLevelDescription(level));
                 promptBuilder.AppendLine();
                 promptBuilder.AppendLine("## Your task:");
+                promptBuilder.AppendLine();
                 promptBuilder.AppendLine($"Generate a set of multiple-choice English questions consisting of {questionsCount} to {questionsCount + 5} questions related to the topic '{topic.Trim()}' for me to practice, the type of the questions must be: {type}");
 
-                var response = await Generator.GenerateContent(apiKey, Instruction, promptBuilder.ToString(), true, 30);
+                var response = await Generator.GenerateContent(apiKey, Instruction, promptBuilder.ToString(), true, 40);
 
                 return JsonConvert.DeserializeObject<List<Quiz>>(response)
                     .Take(questionsCount)
