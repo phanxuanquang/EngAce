@@ -152,7 +152,7 @@ You are an expert English teacher with over 20 years of teaching experience, and
                 var types = string.Join(", ", quizzTypes.Select(t => GeneralHelper.GetEnumDescription(t)).ToList());
                 var promptBuilder = new StringBuilder();
 
-                promptBuilder.AppendLine($"I am a Vietnamese learner with the English proficiency level of `{userLevel}` according to the CEFR standard.");
+                promptBuilder.AppendLine($"I am a English learner with the English proficiency level of `{userLevel}` according to the CEFR standard.");
                 promptBuilder.AppendLine();
                 promptBuilder.AppendLine("## The decription of my level according to the CEFR standard:");
                 promptBuilder.AppendLine();
@@ -243,6 +243,7 @@ You are an expert English teacher with over 20 years of teaching experience, and
             var response = await Generator.GenerateContent(apiKey, instruction, promptBuilder.ToString(), true, 75);
             return [.. JsonConvert.DeserializeObject<List<string>>(response)];
         }
+
         private static string GetLevelDescription(EnglishLevel level)
         {
             var A1_Description = @"Level A1 (Beginner)
@@ -359,24 +360,16 @@ You are an expert English teacher with over 20 years of teaching experience, and
             - **Verbs**: 'elucidate', 'expound'.
             - **Topics**: Advanced academic and professional settings.";
 
-
-            switch (level)
+            return level switch
             {
-                case EnglishLevel.Beginner:
-                    return A1_Description;
-                case EnglishLevel.Elementary:
-                    return A2_Description;
-                case EnglishLevel.Intermediate:
-                    return B1_Description;
-                case EnglishLevel.UpperIntermediate:
-                    return B2_Description;
-                case EnglishLevel.Advanced:
-                    return C1_Description;
-                case EnglishLevel.Proficient:
-                    return C2_Description;
-                default:
-                    return string.Empty;
-            }
+                EnglishLevel.Beginner => A1_Description,
+                EnglishLevel.Elementary => A2_Description,
+                EnglishLevel.Intermediate => B1_Description,
+                EnglishLevel.UpperIntermediate => B2_Description,
+                EnglishLevel.Advanced => C1_Description,
+                EnglishLevel.Proficient => C2_Description,
+                _ => string.Empty,
+            };
         }
     }
 }
