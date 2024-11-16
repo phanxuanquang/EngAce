@@ -223,7 +223,7 @@ You are an expert English teacher with over 20 years of teaching experience, and
             promptBuilder.AppendLine("This is the decription of my English proficiency according to the CEFR standard:");
             promptBuilder.AppendLine(GetLevelDescription(level));
             promptBuilder.AppendLine();
-            promptBuilder.AppendLine("Please suggest at least 40 completely different topics, each containing fewer than 5 words, that you think are most suitable and interesting for practicing English and match the description of my CEFR level as mentioned above.");
+            promptBuilder.AppendLine("Please suggest at least 20 completely different topics, each containing fewer than 5 words, that you think are most suitable and interesting for practicing English and match the description of my CEFR level as mentioned above.");
             promptBuilder.AppendLine("The topics should cover a variety of themes, such as daily life, culture, education, environment, travel, etc., to keep the practice diverse and engaging.");
             promptBuilder.AppendLine();
             promptBuilder.AppendLine("The list of suggested topics should be returned as a JSON array corresponding to the List<string> data type in C# programming language.");
