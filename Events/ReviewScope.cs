@@ -137,7 +137,7 @@ namespace Events
             promptBuilder.AppendLine("## My writting for you to review: ");
             promptBuilder.AppendLine(content.Trim());
 
-            var result = await Generator.GenerateContent(apiKey, instructionBuilder.ToString(), promptBuilder.ToString(), true, 30, GenerativeModel.Gemini_20_Flash);
+            var result = await Generator.GenerateContent(apiKey, instructionBuilder.ToString(), promptBuilder.ToString(), true, 30, GenerativeModel.Gemini_20_Flash_Thinking);
             return JsonConvert.DeserializeObject<Comment>(result);
         }
     }
