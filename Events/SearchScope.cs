@@ -117,7 +117,7 @@ Users will input English words or phrases with their context (may be included) f
                 promptBuilder.AppendLine($"- {context.Trim()}");
             }
 
-            return await Gemini.Generator.GenerateContent(apiKey, useEnglish ? instructionforEnglish : instructionforVietnamese, promptBuilder.ToString().Trim(), false, 50);
+            return await Gemini.Generator.GenerateContent(apiKey, useEnglish ? instructionforEnglish : instructionforVietnamese, promptBuilder.ToString().Trim(), false, 50, Gemini.GenerativeModel.Gemini_20_Flash_Lite);
         }
     }
 }

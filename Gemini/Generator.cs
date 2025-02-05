@@ -10,7 +10,7 @@ namespace Gemini
     {
         private static readonly HttpClient Client = new();
 
-        public static async Task<string> GenerateContent(string apiKey, string? instruction, string query, bool useJson = true, double creativeLevel = 50, GenerativeModel model = GenerativeModel.Gemini_15_Flash)
+        public static async Task<string> GenerateContent(string apiKey, string? instruction, string query, bool useJson = true, double creativeLevel = 50, GenerativeModel model = GenerativeModel.Gemini_20_Flash)
         {
             var endpoint = GetUriWithHeadersIfAny(apiKey, model);
 
@@ -83,7 +83,7 @@ namespace Gemini
 
         public static async Task<string> GenerateResponseForConversation(string apiKey, ChatRequest.Request requestData)
         {
-            var endpoint = GetUriWithHeadersIfAny(apiKey, GenerativeModel.Gemini_15_Flash);
+            var endpoint = GetUriWithHeadersIfAny(apiKey, GenerativeModel.Gemini_20_Flash_Lite);
 
             var body = new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8, "application/json");
             var response = await Client.PostAsync(endpoint, body);
