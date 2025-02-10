@@ -1,8 +1,8 @@
 ﻿using Entities;
 using Entities.Enums;
-using Gemini;
+using Gemini.NET;
 using Helper;
-using Newtonsoft.Json;
+using Helpers;
 using System.Text;
 
 namespace Events
@@ -163,13 +163,23 @@ You are an expert English teacher with over 20 years of teaching experience, and
                 promptBuilder.AppendLine($"Generate a set of multiple-choice English questions consisting of {questionsCount} to {questionsCount + 5} questions related to the topic '{topic.Trim()}' for me to practice, the quiz should be of the types: {types}");
                 promptBuilder.AppendLine();
                 promptBuilder.AppendLine("The generated questions should be of the types:");
-                foreach ( var type in quizzTypes )
+                foreach (var type in quizzTypes)
                 {
                     promptBuilder.AppendLine($"- {GeneralHelper.GetEnumDescription(type)}");
                 }
 
-                var response = await Generator.GenerateContent(apiKey, Instruction, promptBuilder.ToString(), true, 30);
-                return [.. JsonConvert.DeserializeObject<List<Quiz>>(response)];
+                var generator = new Generator(apiKey);
+
+                var apiRequest = new ApiRequestBuilder()
+                    .WithSystemInstruction(Instruction)
+                    .WithPrompt(promptBuilder.ToString())
+                    .WithDefaultGenerationConfig(0.3F, Models.Enums.ResponseMimeType.Json)
+                    .DisableAllSafetySettings()
+                    .Build();
+
+                var response = await generator.GenerateContentAsync(apiRequest);
+
+                return [.. JsonHelper.AsObject<List<Quiz>>(response.Result)];
             }
             catch
             {
@@ -195,9 +205,19 @@ You are an expert English teacher with over 20 years of teaching experience, and
                 promptBuilder.AppendLine();
                 promptBuilder.AppendLine($"Generate a set of multiple-choice English questions consisting of {questionsCount} to {questionsCount + 5} questions related to the topic '{topic.Trim()}' for me to practice, the type of the questions must be: {type}");
 
-                var response = await Generator.GenerateContent(apiKey, Instruction, promptBuilder.ToString(), true, 40);
+                var generator = new Generator(apiKey);
 
-                return JsonConvert.DeserializeObject<List<Quiz>>(response)
+                var apiRequest = new ApiRequestBuilder()
+                    .WithSystemInstruction(Instruction)
+                    .WithPrompt(promptBuilder.ToString())
+                    .WithDefaultGenerationConfig(1, Models.Enums.ResponseMimeType.Json)
+                    .DisableAllSafetySettings()
+                    .Build();
+
+                //var response = await GeminiGenerator.GenerateContent(apiKey, Instruction, promptBuilder.ToString(), true, 40);
+                var response = await generator.GenerateContentAsync(apiRequest);
+
+                return JsonHelper.AsObject<List<Quiz>>(response.Result)
                     .Take(questionsCount)
                     .Select(quiz =>
                     {
@@ -240,8 +260,17 @@ You are an expert English teacher with over 20 years of teaching experience, and
             promptBuilder.AppendLine();
             promptBuilder.AppendLine("Make sure that each topic is unique, concise, and relevant for practicing English at different levels, especially intermediate to advanced.");
 
-            var response = await Generator.GenerateContent(apiKey, instruction, promptBuilder.ToString(), true, 75);
-            return [.. JsonConvert.DeserializeObject<List<string>>(response)];
+            var generator = new Generator(apiKey);
+
+            var apiRequest = new ApiRequestBuilder()
+                .WithSystemInstruction(instruction)
+                .WithPrompt(promptBuilder.ToString())
+                .WithDefaultGenerationConfig(0.7F, Models.Enums.ResponseMimeType.Json)
+                .DisableAllSafetySettings()
+                .Build();
+
+            var response = await generator.GenerateContentAsync(apiRequest);
+            return [.. JsonHelper.AsObject<List<string>>(response.Result)];
         }
 
         private static string GetLevelDescription(EnglishLevel level)

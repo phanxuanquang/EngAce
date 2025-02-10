@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using Gemini.NET;
+using Models.Enums;
+using System.Text;
 
 namespace Events
 {
@@ -117,7 +119,21 @@ Users will input English words or phrases with their context (may be included) f
                 promptBuilder.AppendLine($"- {context.Trim()}");
             }
 
-            return await Gemini.Generator.GenerateContent(apiKey, useEnglish ? instructionforEnglish : instructionforVietnamese, promptBuilder.ToString().Trim(), false, 50, Gemini.GenerativeModel.Gemini_20_Flash_Lite);
+            var generator = new Generator(apiKey)
+                .ExcludesSearchEntryPointFromResponse()
+                .ExcludesGroundingDetailFromResponse();
+
+            var apiRequest = new ApiRequestBuilder()
+                .WithSystemInstruction(useEnglish ? instructionforEnglish : instructionforVietnamese)
+                .WithPrompt(promptBuilder.ToString())
+                .WithDefaultGenerationConfig(0.5F)
+                .DisableAllSafetySettings()
+                .EnableGrounding()
+                .Build();
+
+            var response = await generator.GenerateContentAsync(apiRequest, ModelVersion.Gemini_20_Flash);
+
+            return response.Result;
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Gemini
 {
-    public static class Generator
+    public static class GeminiGenerator
     {
         private static readonly HttpClient Client = new();
 

@@ -21,16 +21,15 @@ namespace EngAce.Api.Controllers
                 return Unauthorized("Invalid Access Key");
             }
 
-            try
+            var isValidApiKey = await HealthcheckScope.Healthcheck(_accessKey);
+            if (isValidApiKey)
             {
-                var result = await HealthcheckScope.Healthcheck(_accessKey);
                 _logger.LogInformation("Gemini API Key: {ApiKey}", _accessKey);
-
-                return Ok(result);
+                return Ok(isValidApiKey);
             }
-            catch (Exception ex)
+            else
             {
-                return Unauthorized(ex.Message);
+                return Unauthorized("Invalid Access Key");
             }
         }
     }

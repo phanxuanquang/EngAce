@@ -1,8 +1,9 @@
 ﻿using Entities;
 using Entities.Enums;
-using Gemini;
+using Gemini.NET;
 using Helper;
-using Newtonsoft.Json;
+using Helpers;
+using Models.Enums;
 using System.Text;
 
 namespace Events
@@ -137,8 +138,18 @@ namespace Events
             promptBuilder.AppendLine("## My writting for you to review: ");
             promptBuilder.AppendLine(content.Trim());
 
-            var result = await Generator.GenerateContent(apiKey, instructionBuilder.ToString(), promptBuilder.ToString(), true, 30, GenerativeModel.Gemini_20_Flash_Thinking);
-            return JsonConvert.DeserializeObject<Comment>(result);
+            var generator = new Generator(apiKey);
+
+            var apiRequest = new ApiRequestBuilder()
+                .WithSystemInstruction(instructionBuilder.ToString())
+                .WithPrompt(promptBuilder.ToString())
+                .WithDefaultGenerationConfig(0.5F, ResponseMimeType.Json)
+                .DisableAllSafetySettings()
+                .Build();
+
+            var response = await generator.GenerateContentAsync(apiRequest, ModelVersion.Gemini_20_Flash_Thinking);
+
+            return JsonHelper.AsObject<Comment>(response.Result);
         }
     }
 }
