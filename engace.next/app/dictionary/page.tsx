@@ -273,7 +273,7 @@ export default function DictionaryPage() {
                   <li>
                     Nhấn vào biểu tượng ✨ để thêm ngữ cảnh (không bắt buộc)
                   </li>
-                  <li>Nhấn "Tra cứu" hoặc Enter để xem kết quả chi tiết</li>
+                  <li>Nhấn Tra cứu hoặc Enter để xem kết quả chi tiết</li>
                 </ul>
               </div>
             </div>

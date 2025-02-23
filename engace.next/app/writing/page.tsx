@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { PenLine, Send, Sparkles } from "lucide-react";
+import { PenLine, Sparkles } from "lucide-react";
 import { getUserPreferences } from "@/lib/localStorage";
 import Navbar from "@/components/Navbar";
 
@@ -158,7 +158,7 @@ export default function WritingPage() {
                 <ul className="list-decimal ml-6 space-y-2">
                   <li>Nhập đề bài hoặc yêu cầu cần viết</li>
                   <li>Nhập nội dung bài viết của bạn</li>
-                  <li>Nhấn "Nhận đánh giá" để xem phân tích chi tiết</li>
+                  <li>Nộp bài để xem phân tích chi tiết</li>
                 </ul>
               </div>
             </div>

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { ArrowLeft, Copy, Sparkles, CheckCircle2 } from "lucide-react"
 import { API_DOMAIN } from "@/lib/config"
@@ -16,7 +16,7 @@ interface ReviewRequest {
 
 const isBrowser = typeof window !== 'undefined'
 
-export default function WritingResultPage() {
+function WritingResultContent() {
   const [result, setResult] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -166,5 +166,27 @@ export default function WritingResultPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function WritingResultPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-100 via-green-50 to-emerald-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+        <div className="flex flex-col items-center space-y-4">
+          <div className="relative h-12 w-12">
+            <div className="absolute inset-0 animate-ping rounded-full bg-green-400 opacity-25"></div>
+            <div className="relative flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-green-500 to-emerald-500">
+              <Sparkles className="h-6 w-6 text-white" />
+            </div>
+          </div>
+          <p className="text-slate-600 dark:text-slate-400">
+            Loading...
+          </p>
+        </div>
+      </div>
+    }>
+      <WritingResultContent />
+    </Suspense>
   )
 }

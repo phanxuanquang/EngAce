@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeft, Copy, Sparkles, CheckCircle2 } from "lucide-react";
 import { API_DOMAIN } from "@/lib/config";
@@ -10,7 +10,7 @@ import MarkdownRenderer from "@/components/MarkdownRenderer";
 
 const isBrowser = typeof window !== "undefined";
 
-export default function DictionaryResultPage() {
+function DictionaryResultContent() {
   const [result, setResult] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -140,7 +140,7 @@ export default function DictionaryResultPage() {
                   </div>
                 </div>
                 <p className="text-slate-600 dark:text-slate-400">
-                  Đang tìm kiếm "{keyword}"...
+                  Đang tra cứu...
                 </p>
               </div>
             ) : error ? (
@@ -168,5 +168,27 @@ export default function DictionaryResultPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function DictionaryResultPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="flex flex-col items-center space-y-4">
+          <div className="relative h-12 w-12">
+            <div className="absolute inset-0 animate-ping rounded-full bg-blue-400 opacity-25"></div>
+            <div className="relative flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-purple-500">
+              <Sparkles className="h-6 w-6 text-white" />
+            </div>
+          </div>
+          <p className="text-slate-600 dark:text-slate-400">
+            Loading...
+          </p>
+        </div>
+      </div>
+    }>
+      <DictionaryResultContent />
+    </Suspense>
   );
 }

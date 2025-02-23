@@ -40,7 +40,7 @@ export default function ProficiencyForm({ formData }: ProficiencyFormProps) {
         hasCompletedOnboarding: true,
       })
       router.push("/dashboard")
-    } catch (err) {
+    } catch {
       setError("Đã có lỗi xảy ra. Vui lòng thử lại.")
     }
   }
