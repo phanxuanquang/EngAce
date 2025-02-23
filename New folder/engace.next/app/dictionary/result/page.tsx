@@ -140,7 +140,7 @@ export default function DictionaryResultPage() {
                   </div>
                 </div>
                 <p className="text-slate-600 dark:text-slate-400">
-                  Đang tìm kiếm "{keyword}"...
+                  Đang tra cứu...
                 </p>
               </div>
             ) : error ? (
