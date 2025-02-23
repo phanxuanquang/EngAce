@@ -26,7 +26,7 @@ interface CodeProps {
 
 const components = {
   h1: ({ children }: ComponentProps) => (
-    <h1 className="text-4xl font-bold py-2">
+    <h1 className="text-4xl font-extrabold py-2">
       {children}
     </h1>
   ),

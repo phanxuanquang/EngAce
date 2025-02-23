@@ -2,7 +2,7 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ArrowLeft, Copy, Sparkles, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, Copy, Sparkles, CheckCircle2, Search } from "lucide-react";
 import { API_DOMAIN } from "@/lib/config";
 import { getUserPreferences } from "@/lib/localStorage";
 import Navbar from "@/components/Navbar";
@@ -135,8 +135,8 @@ function DictionaryResultContent() {
               <div className="flex flex-col items-center justify-center space-y-4 py-12">
                 <div className="relative h-12 w-12">
                   <div className="absolute inset-0 animate-ping rounded-full bg-blue-400 opacity-25"></div>
-                  <div className="relative flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-purple-500">
-                    <Sparkles className="h-6 w-6 text-white" />
+                  <div className="relative flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-cyan-400">
+                    <Search className="h-6 w-6 text-white" />
                   </div>
                 </div>
                 <p className="text-slate-600 dark:text-slate-400">
