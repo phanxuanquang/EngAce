@@ -90,7 +90,9 @@ export default function DictionaryPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-100 via-blue-50 to-purple-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+    <div className="min-h-screen relative flex items-center justify-center overflow-hidden bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-400 via-purple-400 to-blue-600">
+      <div className="absolute -top-40 -left-40 h-80 w-80 rounded-full bg-purple-400 blur-3xl opacity-30"></div>
+      <div className="absolute -bottom-40 -right-40 h-80 w-80 rounded-full bg-blue-400 blur-3xl opacity-30"></div>
       <Navbar />
 
       {/* Main Content */}
@@ -174,7 +176,7 @@ export default function DictionaryPage() {
                 disabled={isSubmitting || !keyword.trim()}
                 className={`group relative w-full transform overflow-hidden rounded-xl px-6 py-4 text-lg font-medium text-white shadow-lg transition-all duration-200 ${
                   isSubmitting || !keyword.trim()
-                    ? "cursor-not-allowed bg-slate-400"
+                    ? "cursor-not-allowed bg-slate-500"
                     : "bg-gradient-to-r from-blue-500 to-cyan-400 shadow-blue-500/25 hover:translate-y-[-2px] hover:shadow-xl dark:shadow-blue-900/25"
                 }`}
               >

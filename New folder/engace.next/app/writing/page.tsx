@@ -1,56 +1,58 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
-import { PenLine, Send, Sparkles } from "lucide-react"
-import { getUserPreferences } from "@/lib/localStorage"
-import Navbar from "@/components/Navbar"
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { PenLine, Send, Sparkles } from "lucide-react";
+import { getUserPreferences } from "@/lib/localStorage";
+import Navbar from "@/components/Navbar";
 
-const VISITED_KEY = "has-visited-writing"
-const isBrowser = typeof window !== 'undefined'
+const VISITED_KEY = "has-visited-writing";
+const isBrowser = typeof window !== "undefined";
 
 export default function WritingPage() {
-  const [title, setTitle] = useState("")
-  const [content, setContent] = useState("")
-  const [showGuide, setShowGuide] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [charCount, setCharCount] = useState(0)
-  const router = useRouter()
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [showGuide, setShowGuide] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [charCount, setCharCount] = useState(0);
+  const router = useRouter();
 
   useEffect(() => {
-    const preferences = getUserPreferences()
+    const preferences = getUserPreferences();
     if (!preferences.hasCompletedOnboarding) {
-      router.push("/")
-      return
+      router.push("/");
+      return;
     }
 
     if (isBrowser) {
-      const hasVisited = localStorage.getItem(VISITED_KEY)
+      const hasVisited = localStorage.getItem(VISITED_KEY);
       if (!hasVisited) {
-        setShowGuide(true)
-        localStorage.setItem(VISITED_KEY, "true")
+        setShowGuide(true);
+        localStorage.setItem(VISITED_KEY, "true");
       }
     }
-  }, [router])
+  }, [router]);
 
   useEffect(() => {
-    setCharCount(content.length)
-  }, [content])
+    setCharCount(content.length);
+  }, [content]);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!title.trim() || !content.trim() || isSubmitting) return
+    e.preventDefault();
+    if (!title.trim() || !content.trim() || isSubmitting) return;
 
-    setIsSubmitting(true)
+    setIsSubmitting(true);
 
-    const searchParams = new URLSearchParams()
-    searchParams.set("title", title.trim())
-    searchParams.set("content", content.trim())
-    router.push(`/writing/result?${searchParams.toString()}`)
-  }
+    const searchParams = new URLSearchParams();
+    searchParams.set("title", title.trim());
+    searchParams.set("content", content.trim());
+    router.push(`/writing/result?${searchParams.toString()}`);
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-100 via-green-50 to-emerald-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+    <div className="min-h-screen relative flex items-center justify-center overflow-hidden bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-400 via-purple-400 to-blue-600">
+      <div className="absolute -top-40 -left-40 h-80 w-80 rounded-full bg-purple-400 blur-3xl opacity-30"></div>
+      <div className="absolute -bottom-40 -right-40 h-80 w-80 rounded-full bg-blue-400 blur-3xl opacity-30"></div>
       <Navbar />
 
       <div className="container mx-auto px-4 pt-20 pb-8">
@@ -64,7 +66,8 @@ export default function WritingPage() {
               Luyện viết thông minh
             </h1>
             <p className="mx-auto max-w-xl text-slate-600 dark:text-slate-400">
-              Nhận phản hồi chi tiết và gợi ý cải thiện để nâng cao kỹ năng viết tiếng Anh của bạn.
+              Nhận phản hồi chi tiết và gợi ý cải thiện để nâng cao kỹ năng viết
+              tiếng Anh của bạn.
             </p>
           </div>
 
@@ -119,13 +122,12 @@ export default function WritingPage() {
               disabled={isSubmitting || !title.trim() || !content.trim()}
               className={`group relative w-full transform overflow-hidden rounded-xl px-6 py-4 text-lg font-medium text-white shadow-lg transition-all duration-200 ${
                 isSubmitting || !title.trim() || !content.trim()
-                  ? "cursor-not-allowed bg-slate-400"
+                  ? "cursor-not-allowed bg-slate-500"
                   : "bg-gradient-to-r from-green-600 to-emerald-600 shadow-green-500/25 hover:translate-y-[-2px] hover:shadow-xl dark:shadow-green-900/25"
               }`}
             >
               <div className="relative z-10 flex items-center justify-center space-x-2">
-                <span>Nhận đánh giá</span>
-                <Send className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-1" />
+                <span>Nộp bài</span>
               </div>
               <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-green-700 to-emerald-700 transition-transform duration-500 group-hover:translate-x-0" />
             </button>
@@ -145,18 +147,14 @@ export default function WritingPage() {
                 Chào mừng đến với Luyện viết!
               </h2>
               <div className="space-y-4 text-slate-600 dark:text-slate-300">
-                <p>
-                  Tính năng Luyện viết thông minh của EngAce giúp bạn:
-                </p>
+                <p>Tính năng Luyện viết thông minh của EngAce giúp bạn:</p>
                 <ul className="list-disc ml-6 space-y-2">
                   <li>Nhận phản hồi chi tiết về bài viết của bạn</li>
                   <li>Phát hiện lỗi ngữ pháp và cách diễn đạt</li>
                   <li>Gợi ý cải thiện để nâng cao chất lượng bài viết</li>
                   <li>Phân tích cấu trúc và tính mạch lạc của văn bản</li>
                 </ul>
-                <p className="font-medium mt-4">
-                  Để bắt đầu:
-                </p>
+                <p className="font-medium mt-4">Để bắt đầu:</p>
                 <ul className="list-decimal ml-6 space-y-2">
                   <li>Nhập đề bài hoặc yêu cầu cần viết</li>
                   <li>Nhập nội dung bài viết của bạn</li>
@@ -175,5 +173,5 @@ export default function WritingPage() {
         </div>
       )}
     </div>
-  )
+  );
 }

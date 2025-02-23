@@ -1,98 +1,109 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
-import { ArrowLeft, Volume2, Copy, BookOpen } from "lucide-react"
-import ReactMarkdown from "react-markdown"
-import remarkGfm from "remark-gfm"
-import { getUserPreferences } from "@/lib/localStorage"
-import Navbar from "@/components/Navbar"
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { ArrowLeft, Copy, Sparkles, CheckCircle2 } from "lucide-react";
+import { API_DOMAIN } from "@/lib/config";
+import { getUserPreferences } from "@/lib/localStorage";
+import Navbar from "@/components/Navbar";
+import MarkdownRenderer from "@/components/MarkdownRenderer";
 
-type SearchResult = {
-  content: string
-  timestamp: Date
-}
+const isBrowser = typeof window !== "undefined";
 
-type MarkdownProps = {
-  children: string
-}
-
-const MarkdownRenderer = ({ children }: MarkdownProps) => (
-  <div className="prose max-w-none dark:prose-invert prose-headings:border-b prose-headings:border-slate-200 dark:prose-headings:border-slate-700">
-    <ReactMarkdown remarkPlugins={[remarkGfm]}>{children}</ReactMarkdown>
-  </div>
-)
-
-export default function ResultPage() {
-  const [result, setResult] = useState<SearchResult | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const keyword = searchParams.get("keyword")
-  const context = searchParams.get("context")
+export default function DictionaryResultPage() {
+  const [result, setResult] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const keyword = searchParams.get("keyword");
+  const context = searchParams.get("context");
 
   useEffect(() => {
+    if (!isBrowser) return;
+
+    const preferences = getUserPreferences();
+    if (!preferences.hasCompletedOnboarding) {
+      router.push("/");
+      return;
+    }
+
     if (!keyword) {
-      router.push("/dictionary")
-      return
+      router.push("/dictionary");
+      return;
     }
 
     const fetchResult = async () => {
-      setIsLoading(true)
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500))
-      
-      setResult({
-        content: `# ${keyword}
+      try {
+        setIsLoading(true);
+        setError(null);
 
-## Định nghĩa
+        const preferences = getUserPreferences();
+        if (!preferences.geminiApiKey) {
+          throw new Error(
+            "API key not found. Please complete the onboarding process."
+          );
+        }
 
-1. **Nghĩa chính**: Example definition in Vietnamese
-2. **Nghĩa phụ**: Secondary meaning in Vietnamese
+        // Construct search URL with parameters
+        const searchUrl = new URL(`${API_DOMAIN}/api/Dictionary/Search`);
+        searchUrl.searchParams.append("keyword", keyword);
+        if (context) {
+          searchUrl.searchParams.append("context", context);
+        }
 
-## Ví dụ
+        const response = await fetch(searchUrl.toString(), {
+          method: "GET",
+          headers: {
+            accept: "text/plain",
+            Authentication: preferences.geminiApiKey,
+          },
+        });
 
-1. "*Here's an example sentence using the word*"
-   - Đây là câu ví dụ sử dụng từ này
+        if (!response.ok) {
+          throw new Error(
+            (await response.text()) || "Failed to fetch dictionary results"
+          );
+        }
 
-2. "*Another example in a different context*"
-   - Một ví dụ khác trong ngữ cảnh khác
+        const data = await response.text();
+        setResult(data);
+      } catch (err) {
+        console.error("Search error:", err);
+        setError(
+          err instanceof Error
+            ? err.message
+            : "An error occurred while searching"
+        );
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-## Thành ngữ/Cụm từ liên quan
-
-- **${keyword} out**: Meaning of phrasal verb
-- **${keyword} up**: Another phrasal verb meaning
-
-## Ghi chú
-
-- Cách phát âm: /example/
-- Loại từ: Danh từ, Động từ
-- Mức độ phổ biến: Thường xuyên được sử dụng`,
-        timestamp: new Date(),
-      })
-      setIsLoading(false)
-    }
-
-    fetchResult()
-  }, [keyword, router])
+    fetchResult();
+  }, [keyword, context, router]);
 
   const handleCopy = () => {
-    if (result) {
-      navigator.clipboard.writeText(result.content)
-    }
-  }
+    if (!isBrowser || !result) return;
+    navigator.clipboard.writeText(result);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
+    <div className="min-h-screen relative flex items-center justify-center overflow-hidden bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-400 via-purple-400 to-blue-600">
+      <div className="absolute -top-40 -left-40 h-80 w-80 rounded-full bg-purple-400 blur-3xl opacity-30"></div>
+      <div className="absolute -bottom-40 -right-40 h-80 w-80 rounded-full bg-blue-400 blur-3xl opacity-30"></div>
       <Navbar />
 
-      <div className="container mx-auto px-4 pt-20 pb-8">
-        {/* Header */}
-        <div className="mx-auto max-w-3xl">
-          <div className="mb-8 flex items-center justify-between">
+      <div className="container mx-auto px-4 pt-20 pb-4">
+        <div className="mx-auto max-w-4xl">
+          {/* Header */}
+          <div className="mb-4 flex items-center justify-between">
             <button
               onClick={() => router.back()}
-              className="flex items-center space-x-2 text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors"
+              className="flex items-center space-x-2 rounded-lg bg-white/80 px-4 py-2 text-slate-600 shadow-md backdrop-blur-sm transition-all hover:bg-white hover:text-slate-900 dark:bg-slate-800/80 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
             >
               <ArrowLeft className="h-5 w-5" />
               <span>Quay lại</span>
@@ -101,54 +112,61 @@ export default function ResultPage() {
             {result && (
               <button
                 onClick={handleCopy}
-                className="flex items-center space-x-2 rounded-lg bg-slate-100 px-4 py-2 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 transition-colors"
+                className="flex items-center space-x-2 rounded-lg bg-white/80 px-4 py-2 text-slate-600 shadow-md backdrop-blur-sm transition-all hover:bg-white hover:text-slate-900 dark:bg-slate-800/80 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
               >
-                <Copy className="h-4 w-4" />
-                <span>Sao chép</span>
+                {copied ? (
+                  <>
+                    <CheckCircle2 className="h-5 w-5 text-green-500" />
+                    <span className="text-green-500">Đã sao chép</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy className="h-5 w-5" />
+                    <span>Sao chép</span>
+                  </>
+                )}
               </button>
             )}
           </div>
 
-          {/* Search Summary */}
-          <div className="mb-8 rounded-lg bg-white p-6 shadow-lg dark:bg-slate-800">
-            <div className="flex items-center space-x-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900">
-                <BookOpen className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+          {/* Result Content */}
+          <div className="rounded-2xl bg-white/80 p-6 shadow-lg backdrop-blur-sm transition-all duration-300 hover:shadow-xl dark:bg-slate-800/80">
+            {isLoading ? (
+              <div className="flex flex-col items-center justify-center space-y-4 py-12">
+                <div className="relative h-12 w-12">
+                  <div className="absolute inset-0 animate-ping rounded-full bg-blue-400 opacity-25"></div>
+                  <div className="relative flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-purple-500">
+                    <Sparkles className="h-6 w-6 text-white" />
+                  </div>
+                </div>
+                <p className="text-slate-600 dark:text-slate-400">
+                  Đang tìm kiếm "{keyword}"...
+                </p>
               </div>
-              <div>
-                <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
-                  {keyword}
-                </h1>
-                {context && (
-                  <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                    Ngữ cảnh: {context}
-                  </p>
-                )}
+            ) : error ? (
+              <div className="flex flex-col items-center justify-center space-y-4 py-12">
+                <p className="text-center text-red-500 dark:text-red-400">
+                  {error}
+                </p>
+                <button
+                  onClick={() => router.back()}
+                  className="rounded-lg bg-slate-100 px-4 py-2 text-slate-600 hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-400 dark:hover:bg-slate-600"
+                >
+                  Thử lại
+                </button>
               </div>
-            </div>
+            ) : result ? (
+              <div className="animate-fadeIn">
+                <MarkdownRenderer>{result}</MarkdownRenderer>
+              </div>
+            ) : (
+              <div className="text-center text-slate-600 dark:text-slate-400">
+                Không tìm thấy kết quả cho từ khóa này.
+              </div>
+            )}
           </div>
-        </div>
-
-        {/* Search Results */}
-        <div className="mx-auto max-w-3xl">
-          {isLoading ? (
-            <div className="flex flex-col items-center space-y-4 rounded-lg bg-white p-8 text-center shadow-lg dark:bg-slate-800">
-              <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent"></div>
-              <p className="text-slate-600 dark:text-slate-400">Đang tải kết quả...</p>
-            </div>
-          ) : result ? (
-            <div className="animate-fadeIn rounded-lg bg-white p-6 shadow-lg dark:bg-slate-800">
-              <MarkdownRenderer>{result.content}</MarkdownRenderer>
-            </div>
-          ) : (
-            <div className="rounded-lg bg-white p-6 text-center shadow-lg dark:bg-slate-800">
-              <p className="text-slate-600 dark:text-slate-400">
-                Không tìm thấy kết quả cho từ khóa này
-              </p>
-            </div>
-          )}
         </div>
       </div>
     </div>
-  )
+  );
 }

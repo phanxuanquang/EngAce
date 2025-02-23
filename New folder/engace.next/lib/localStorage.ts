@@ -4,6 +4,7 @@ type UserPreferences = {
   age: number;
   geminiApiKey: string;
   hasCompletedOnboarding: boolean;
+  proficiencyLevel: number;
 };
 
 const STORAGE_KEY = 'user-preferences';

@@ -3,7 +3,7 @@
  */
 
 // Get API domain from environment variables with fallback
-export const API_DOMAIN = process.env.NEXT_PUBLIC_API_DOMAIN || 'http://localhost:5000'
+export const API_DOMAIN = process.env.NEXT_PUBLIC_API_DOMAIN || 'https://localhost:5000'
 
 /**
  * Get full API URL for a given endpoint

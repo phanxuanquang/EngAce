@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { ArrowLeft, Copy, Sparkles, CheckCircle2 } from "lucide-react"
-import ReactMarkdown from "react-markdown"
+import MarkdownRenderer from "@/components/MarkdownRenderer";
 import remarkGfm from "remark-gfm"
 import { getUserPreferences } from "@/lib/localStorage"
 import Navbar from "@/components/Navbar"
@@ -13,12 +13,6 @@ const isBrowser = typeof window !== 'undefined'
 type MarkdownProps = {
   children: string
 }
-
-const MarkdownRenderer = ({ children }: MarkdownProps) => (
-  <div className="prose max-w-none dark:prose-invert prose-p:my-2">
-    <ReactMarkdown remarkPlugins={[remarkGfm]}>{children}</ReactMarkdown>
-  </div>
-)
 
 export default function WritingResultPage() {
   const [result, setResult] = useState<string | null>(null)
@@ -102,13 +96,15 @@ Bài viết của bạn thể hiện sự hiểu biết tốt về chủ đề. 
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-100 via-green-50 to-emerald-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+    <div className="min-h-screen relative flex items-center justify-center overflow-hidden bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-400 via-purple-400 to-blue-600">
+      <div className="absolute -top-40 -left-40 h-80 w-80 rounded-full bg-purple-400 blur-3xl opacity-30"></div>
+      <div className="absolute -bottom-40 -right-40 h-80 w-80 rounded-full bg-blue-400 blur-3xl opacity-30"></div>
       <Navbar />
 
       <div className="container mx-auto px-4 pt-20 pb-8">
         <div className="mx-auto max-w-4xl">
           {/* Header */}
-          <div className="mb-8 flex items-center justify-between">
+          <div className="mb-4 flex items-center justify-between">
             <button
               onClick={() => router.back()}
               className="flex items-center space-x-2 rounded-lg bg-white/80 px-4 py-2 text-slate-600 shadow-md backdrop-blur-sm transition-all hover:bg-white hover:text-slate-900 dark:bg-slate-800/80 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"

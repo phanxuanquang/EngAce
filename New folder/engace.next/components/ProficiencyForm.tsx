@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { saveUserPreferences } from "@/lib/localStorage"
+import { PROFICIENCY_LEVELS } from "@/lib/constants"
 import {
   Select,
   SelectContent,
@@ -11,41 +12,13 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 
-const PROFICIENCY_LEVELS = [
-  {
-    id: 1,
-    name: "Beginner",
-    description: "Bạn có thể hiểu và sử dụng các cụm từ quen thuộc hàng ngày và các câu cơ bản. Bạn có thể giới thiệu bản thân và người khác, hỏi và trả lời về thông tin cá nhân.",
-  },
-  {
-    id: 2,
-    name: "Elementary",
-    description: "Bạn có thể hiểu được các câu và cụm từ thường gặp liên quan đến các lĩnh vực cơ bản. Bạn có thể mô tả đơn giản về bản thân, môi trường xung quanh và các vấn đề thuộc nhu cầu thiết yếu.",
-  },
-  {
-    id: 3,
-    name: "Intermediate",
-    description: "Bạn có thể hiểu được các ý chính của văn bản phổ thông. Bạn có thể xử lý hầu hết các tình huống khi đi du lịch. Bạn có thể viết văn bản đơn giản về các chủ đề quen thuộc.",
-  },
-  {
-    id: 4,
-    name: "Upper Intermediate",
-    description: "Bạn có thể hiểu ý chính của văn bản phức tạp. Bạn có thể giao tiếp trôi chảy và tự nhiên với người bản ngữ. Bạn có thể viết văn bản chi tiết về nhiều chủ đề khác nhau.",
-  },
-  {
-    id: 5,
-    name: "Advanced",
-    description: "Bạn có thể hiểu được các văn bản dài và phức tạp. Bạn có thể diễn đạt trôi chảy và tự nhiên. Bạn có thể sử dụng ngôn ngữ linh hoạt và hiệu quả cho các mục đích xã hội, học thuật và chuyên môn.",
-  },
-  {
-    id: 6,
-    name: "Mastery",
-    description: "Bạn có thể hiểu dễ dàng hầu hết mọi thứ nghe hoặc đọc được. Bạn có thể tóm tắt thông tin từ các nguồn nói và viết khác nhau. Bạn có thể diễn đạt rất trôi chảy và chính xác.",
-  },
-]
-
 type ProficiencyFormProps = {
-  formData: any
+  formData: {
+    fullName: string
+    gender: string
+    age: number
+    geminiApiKey: string
+  }
 }
 
 export default function ProficiencyForm({ formData }: ProficiencyFormProps) {
@@ -89,9 +62,9 @@ export default function ProficiencyForm({ formData }: ProficiencyFormProps) {
         <div className="space-y-6">
           {/* Header */}
           <div className="space-y-2 text-center">
-            <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-100">
+            <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-100">
               TRÌNH ĐỘ TIẾNG ANH
-            </h2>
+            </h1>
             <p className="text-white/80">
               Chọn trình độ phù hợp với bạn để EngAce có thể cung cấp nội dung học tập phù hợp nhất.
             </p>
@@ -111,7 +84,7 @@ export default function ProficiencyForm({ formData }: ProficiencyFormProps) {
                   {PROFICIENCY_LEVELS.map((level) => (
                     <SelectItem
                       key={level.id}
-                      value={level.id.toString()}
+                      value={String(level.id)}
                       className="focus:bg-blue-500/20"
                     >
                       {level.name}
@@ -119,15 +92,20 @@ export default function ProficiencyForm({ formData }: ProficiencyFormProps) {
                   ))}
                 </SelectContent>
               </Select>
-              {error && <p className="text-sm text-red-300">{error}</p>}
             </div>
 
-            {/* Level Description */}
+            {/* Description */}
             {selectedLevel && (
               <div className="animate-fadeIn rounded-xl bg-white/5 p-4 backdrop-blur-sm border border-white/10">
                 <p className="text-sm text-white/90">
                   {PROFICIENCY_LEVELS.find((l) => l.id === selectedLevel)?.description}
                 </p>
+              </div>
+            )}
+
+            {error && (
+              <div className="animate-fadeIn rounded-lg bg-red-500/10 border border-red-500/20 p-3">
+                <p className="text-sm text-red-300 text-center">{error}</p>
               </div>
             )}
 

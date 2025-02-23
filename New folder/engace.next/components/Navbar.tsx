@@ -2,9 +2,17 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { Moon, Sun, LogOut, Menu, X } from "lucide-react"
-import { getUserPreferences } from "@/lib/localStorage"
+import { Moon, Sun, LogOut, Menu, X, GraduationCap } from "lucide-react"
+import { getUserPreferences, saveUserPreferences } from "@/lib/localStorage"
 import { useTheme } from "@/contexts/ThemeContext"
+import { PROFICIENCY_LEVELS } from "@/lib/constants"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 export default function Navbar() {
   const router = useRouter()
@@ -12,6 +20,14 @@ export default function Navbar() {
   const [showMobileMenu, setShowMobileMenu] = useState(false)
   const [showLogoutDialog, setShowLogoutDialog] = useState(false)
   const preferences = getUserPreferences()
+
+  const handleLevelChange = (value: string) => {
+    const levelId = parseInt(value, 10)
+    saveUserPreferences({
+      ...preferences,
+      proficiencyLevel: levelId
+    })
+  }
 
   const handleLogout = () => {
     localStorage.clear()
@@ -63,6 +79,30 @@ export default function Navbar() {
 
             {/* Desktop Actions */}
             <div className="hidden md:flex items-center space-x-4">
+              {/* Level Selector */}
+              <div className="flex items-center space-x-2 px-2">
+                <GraduationCap className="h-5 w-5 text-slate-600 dark:text-slate-400" />
+                <Select 
+                  defaultValue={String(preferences.proficiencyLevel || 1)}
+                  onValueChange={handleLevelChange}
+                >
+                  <SelectTrigger className="w-[180px] bg-transparent border-slate-200 dark:border-slate-700">
+                    <SelectValue placeholder="Chọn trình độ" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {PROFICIENCY_LEVELS.map(level => (
+                      <SelectItem 
+                        key={level.id} 
+                        value={String(level.id)}
+                        className="cursor-pointer"
+                      >
+                        {level.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
               <button
                 onClick={toggleTheme}
                 className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
@@ -89,6 +129,30 @@ export default function Navbar() {
           {showMobileMenu && (
             <div className="md:hidden pt-4 pb-2 border-t border-slate-200 dark:border-slate-700 mt-4">
               <div className="flex flex-col space-y-4">
+                {/* Mobile Level Selector */}
+                <div className="flex items-center space-x-2">
+                  <GraduationCap className="h-5 w-5 text-slate-600 dark:text-slate-400 ml-2" />
+                  <Select 
+                    defaultValue={String(preferences.proficiencyLevel || 1)}
+                    onValueChange={handleLevelChange}
+                  >
+                    <SelectTrigger className="w-full bg-transparent border-slate-200 dark:border-slate-700">
+                      <SelectValue placeholder="Chọn trình độ" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {PROFICIENCY_LEVELS.map(level => (
+                        <SelectItem 
+                          key={level.id} 
+                          value={String(level.id)}
+                          className="cursor-pointer"
+                        >
+                          {level.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
                 <div className="flex items-center justify-between">
                   <button
                     onClick={toggleTheme}

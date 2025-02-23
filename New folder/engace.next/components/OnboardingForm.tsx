@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
+import { Loader2 } from "lucide-react"
 import {
   Select,
   SelectContent,
@@ -13,16 +13,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { API_DOMAIN } from "@/lib/config"
 import ProficiencyForm from "@/components/ProficiencyForm"
 
 const formSchema = z.object({
-  fullName: z.string().min(2, "Name must be at least 2 characters"),
+  fullName: z.string().min(2, "Tên không hợp lệ"),
   gender: z.enum(["male", "female", "other"]),
   age: z
     .number()
-    .min(13, "Must be at least 13 years old")
-    .max(120, "Invalid age"),
-  geminiApiKey: z.string().min(1, "API key is required"),
+    .min(7, "Người dùng phải từ 7 tuổi trở lên")
+    .max(60, "Người dùng phải dưới 60 tuổi"),
+  geminiApiKey: z.string().min(1, "Vui lòng nhập API key"),
 })
 
 type FormData = z.infer<typeof formSchema>
@@ -31,6 +32,7 @@ export default function OnboardingForm() {
   const [error, setError] = useState<string>("")
   const [currentStep, setCurrentStep] = useState(1)
   const [formData, setFormData] = useState<FormData | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
 
   const {
     register,
@@ -49,10 +51,30 @@ export default function OnboardingForm() {
 
   const onSubmit = async (data: FormData) => {
     try {
+      setIsLoading(true)
+      setError("")
+
+      // Health check API call
+      const response = await fetch(`${API_DOMAIN}/api/Healthcheck`, {
+        method: 'GET',
+        headers: {
+          'accept': 'text/plain',
+          'Authentication': data.geminiApiKey
+        }
+      })
+
+      if (!response.ok) {
+        const errorText = await response.text()
+        throw new Error(errorText || 'Health check failed')
+      }
+
+      // If health check succeeds, proceed
       setFormData(data)
       setCurrentStep(2)
     } catch (err) {
-      setError("An error occurred. Please try again.")
+      setError(err instanceof Error ? err.message : "API key validation failed. Please check your key and try again.")
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -89,6 +111,7 @@ export default function OnboardingForm() {
                 {...register("fullName")}
                 placeholder="A dễ thương"
                 className="bg-white/10 border-white/20 text-white placeholder-white/50 backdrop-blur-sm transition-colors focus:bg-white/20"
+                disabled={isLoading}
               />
               {errors.fullName && (
                 <p className="text-sm text-red-300">{errors.fullName.message}</p>
@@ -105,6 +128,7 @@ export default function OnboardingForm() {
                   setValue("gender", value as "male" | "female" | "other")
                 }
                 defaultValue="other"
+                disabled={isLoading}
               >
                 <SelectTrigger className="bg-white/10 border-white/20 text-white backdrop-blur-sm transition-colors focus:bg-white/20">
                   <SelectValue placeholder="Nam" />
@@ -129,6 +153,7 @@ export default function OnboardingForm() {
                 min={7}
                 max={60}
                 className="bg-white/10 border-white/20 text-white placeholder-white/50 backdrop-blur-sm transition-colors focus:bg-white/20"
+                disabled={isLoading}
               />
               {errors.age && (
                 <p className="text-sm text-red-300">{errors.age.message}</p>
@@ -144,7 +169,9 @@ export default function OnboardingForm() {
                 {...register("geminiApiKey")}
                 type="password"
                 placeholder="Enter your Gemini API key"
-                className="bg-white/10 border-white/20 text-white placeholder-white/50 backdrop-blur-sm transition-colors focus:bg-white/20"
+                className="bg-white/10 border
+                0 text-white placeholder-white/50 backdrop-blur-sm transition-colors focus:bg-white/20"
+                disabled={isLoading}
               />
               {errors.geminiApiKey && (
                 <p className="text-sm text-red-300">
@@ -164,13 +191,27 @@ export default function OnboardingForm() {
               </p>
             </div>
 
-            {error && <p className="text-sm text-red-300">{error}</p>}
+            {error && (
+              <div className="animate-fadeIn rounded-lg bg-red-500/10 border border-red-500/20 p-3">
+                <p className="text-sm text-red-300 text-center">{error}</p>
+              </div>
+            )}
 
             <button
               type="submit"
+              disabled={isLoading}
               className="w-full px-6 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-[1.02] focus:scale-[0.98] active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed relative overflow-hidden group"
             >
-              <div className="relative z-10">Tiếp tục</div>
+              <div className="relative z-10 flex items-center justify-center space-x-2">
+                {isLoading ? (
+                  <>
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                    <span>Đang xác thực...</span>
+                  </>
+                ) : (
+                  <span>Tiếp tục</span>
+                )}
+              </div>
               <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 transition-transform duration-200 group-hover:translate-x-0 -translate-x-full"></div>
             </button>
           </form>
