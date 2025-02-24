@@ -10,26 +10,23 @@ interface InfoDialogProps {
 export default function InfoDialog({ isOpen, onClose }: InfoDialogProps) {
   if (!isOpen) return null;
 
-  const content = `
-## Giới thiệu về EngAce  
+  const content = `## Giới thiệu về EngAce  
 
-**EngAce** là nền tảng **miễn phí** sử dụng trí tuệ nhân tạo để nâng tầm trải nghiệm học tiếng Anh cho người Việt. Với mục tiêu mang lại phương pháp học hiệu quả, cá nhân hóa và thú vị, EngAce kết hợp sức mạnh của AI với bộ công cụ phong phú, giúp người dùng nâng cao kỹ năng tiếng Anh một cách toàn diện.  
+**EngAce** là nền tảng **miễn phí** sử dụng AI để nâng tầm trải nghiệm học tiếng Anh dành riêng cho người Việt. Nền tảng được thiết kế để đáp ứng nhu cầu học tập đa dạng của từng cá nhân, từ việc tra cứu từ điển thông minh, luyện tập qua các bài kiểm tra tùy chỉnh, đến cải thiện kỹ năng viết và trò chuyện với trợ lý AI. Tất cả đều hướng đến việc giúp người học tiếp cận tiếng Anh theo cách tự nhiên nhất, giảm bớt khó khăn và nâng cao khả năng sử dụng ngôn ngữ một cách linh hoạt.  
 
-Ứng dụng được thiết kế để đáp ứng nhu cầu học tập đa dạng của từng cá nhân, từ việc tra cứu từ điển thông minh, luyện tập qua các bài kiểm tra tùy chỉnh, đến cải thiện kỹ năng viết và trò chuyện với trợ lý AI. Tất cả đều hướng đến việc giúp người học tiếp cận tiếng Anh theo cách tự nhiên nhất, giảm bớt khó khăn và nâng cao khả năng sử dụng ngôn ngữ một cách linh hoạt.  
-
-### Các tính năng chính  
+### Tính năng chính  
 
 - **Từ điển thông minh**: Cung cấp nghĩa chi tiết, ví dụ minh họa, thành ngữ, cụm động từ, cùng với khả năng tìm kiếm theo ngữ cảnh để giúp người dùng hiểu sâu hơn về cách sử dụng từ.  
-- **Bài tập cá nhân hóa**: Hệ thống bài tập trắc nghiệm tự động điều chỉnh theo trình độ người học, hỗ trợ lên đến 100 câu hỏi mỗi lần và 12 dạng bài tập khác nhau.  
-- **Đánh giá và cải thiện kỹ năng viết**: AI cung cấp phản hồi chi tiết về ngữ pháp, phong cách và tính mạch lạc trong bài viết, đồng thời đưa ra gợi ý cải thiện giúp người học nâng cao khả năng viết tiếng Anh.  
-- **Trò chuyện với gia sư ảo**: Trợ lý ảo hỗ trợ học tiếng Anh thông qua các cuộc hội thoại tương tác, cung cấp mẹo học tập và giải đáp thắc mắc liên quan đến ngôn ngữ.  
+- **Bài tập cá nhân hóa**: Hệ thống bài tập trắc nghiệm tự động điều chỉnh theo trình độ người học, hỗ trợ lên đến 100 câu hỏi mỗi lần và lên đến 12 dạng bài tập khác nhau.  
+- **Luyện viết**: AI cung cấp phản hồi chi tiết về ngữ pháp, phong cách và tính mạch lạc trong bài viết, đồng thời đưa ra gợi ý cải thiện bài viết.  
+- **Trò chuyện với gia sư ảo**: Trợ lý ảo hỗ trợ học tiếng Anh thông qua các cuộc hội thoại tương tác.  
 
-### Nhóm tác giả  
+### Tác giả  
 
-EngAce được phát triển bởi nhóm sinh viên trường Đại học Công nghệ Thông tin, với mong muốn tạo ra một công cụ hỗ trợ học tiếng Anh hiệu quả hơn:  
+EngAce được phát triển bởi nhóm sinh viên trường Đại học Công nghệ Thông tin:  
 
-- **[Phan Xuân Quang](https://github.com/phanxuanquang)** – Thiết kế sản phẩm, phát triển backend, DevOps, tinh chỉnh mô hình AI.  
-- **[Bùi Minh Tuấn](https://github.com/tuan20520342)** – Phát triển frontend, đảm bảo trải nghiệm người dùng mượt mà và tối ưu.  
+- [Phan Xuân Quang](https://github.com/phanxuanquang)  
+- [Bùi Minh Tuấn](https://github.com/tuan20520342)  
 `.trim();
 
   return (

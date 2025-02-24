@@ -157,6 +157,10 @@ export default function ChatPage() {
 
       // Construct URL with query parameters
       const url = new URL(`${API_DOMAIN}/api/Chatbot/GenerateAnswer`);
+      url.searchParams.append("username", preferences.fullName || 'guest');
+      url.searchParams.append("gender", preferences.gender || 'Unknown');
+      url.searchParams.append("age", (preferences.age || 18).toString());
+      url.searchParams.append("englishLevel", (preferences.proficiencyLevel || 1).toString());
       url.searchParams.append("enableReasoning", enableReasoning.toString());
       url.searchParams.append("enableSearching", enableSearching.toString());
 

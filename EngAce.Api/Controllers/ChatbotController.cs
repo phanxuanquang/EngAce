@@ -1,7 +1,10 @@
-﻿using Entities;
+﻿using EngAce.Api.DTO;
+using Entities;
+using Entities.Enums;
 using Events;
 using Helper;
 using Microsoft.AspNetCore.Mvc;
+using System.Text;
 
 namespace EngAce.Api.Controllers
 {
@@ -12,9 +15,8 @@ namespace EngAce.Api.Controllers
         private readonly ILogger<ChatbotController> _logger = logger;
         private readonly string _accessKey = HttpContextHelper.GetAccessKey();
 
-
         [HttpPost("GenerateAnswer")]
-        public async Task<ActionResult<string>> GenerateAnswer([FromBody] Conversation request, bool enableReasoning = false, bool enableSearching = false)
+        public async Task<ActionResult<string>> GenerateAnswer([FromBody] Conversation request, string username, string gender, sbyte age, EnglishLevel englishLevel, bool enableReasoning = false, bool enableSearching = false)
         {
             if (string.IsNullOrWhiteSpace(request.Question))
             {
@@ -28,7 +30,7 @@ namespace EngAce.Api.Controllers
 
             try
             {
-                var result = await ChatScope.GenerateAnswer(_accessKey, request, enableReasoning, enableSearching);
+                var result = await ChatScope.GenerateAnswer(_accessKey, request, username, gender, age, englishLevel, enableReasoning, enableSearching);
 
                 _logger.LogInformation("{_accessKey} asked: {Question}", _accessKey[..10], request.Question);
                 return Ok(result);
