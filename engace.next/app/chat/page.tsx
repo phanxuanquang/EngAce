@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { Send, Brain, Search } from "lucide-react";
+import { Send, Brain, Search, Image, X } from "lucide-react";
 import { getUserPreferences } from "@/lib/localStorage";
 import { API_DOMAIN } from "@/lib/config";
 import Navbar from "@/components/Navbar";
@@ -13,6 +13,7 @@ type Message = {
   id: string;
   content: string;
   sender: "user" | "ai";
+  images?: string[];
   timestamp: Date;
 };
 
@@ -22,6 +23,7 @@ interface ChatRequest {
     Message: string;
   }[];
   Question: string;
+  imagesAsBase64?: string[];
 }
 
 const VISITED_KEY = "has-visited-chat";
@@ -33,7 +35,9 @@ export default function ChatPage() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [enableReasoning, setEnableReasoning] = useState(false);
   const [enableSearching, setEnableSearching] = useState(false);
+  const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const preferences = getUserPreferences();
 
@@ -68,14 +72,54 @@ export default function ChatPage() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const getImageUrls = (images: File[]): string[] => {
+    return images.map(image => URL.createObjectURL(image));
+  };
+
+  useEffect(() => {
+    // Cleanup object URLs when component unmounts
+    return () => {
+      messages.forEach(msg => msg.images?.forEach(URL.revokeObjectURL));
+    };
+  }, [messages]);
+
+  const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(event.target.files || []);
+    setSelectedImages((prev) => [...prev, ...files]);
+  };
+
+  const handleImageClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const convertImagesToBase64 = async (images: File[]): Promise<string[]> => {
+    const base64Promises = images.map((image) => {
+      return new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          if (typeof reader.result === 'string') {
+            resolve(reader.result);
+          } else {
+            reject(new Error('Failed to convert image to base64'));
+          }
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(image);
+      });
+    });
+    return Promise.all(base64Promises);
+  };
+
   const handleSend = async () => {
     if (!inputMessage.trim() || isProcessing) return;
 
+    const imageUrls = selectedImages.length > 0 ? getImageUrls(selectedImages) : undefined;
     const userMessage: Message = {
       id: Date.now().toString(),
       content: inputMessage,
       sender: "user",
       timestamp: new Date(),
+      images: imageUrls,
     };
 
     setMessages((prev) => [...prev, userMessage]);
@@ -89,12 +133,17 @@ export default function ChatPage() {
         Message: msg.content,
       }));
 
+      const imagesAsBase64 = selectedImages.length > 0 
+        ? await convertImagesToBase64(selectedImages)
+        : undefined;
+
       const requestData: ChatRequest = {
         ChatHistory: [
           ...chatHistory,
           { FromUser: true, Message: inputMessage },
         ],
         Question: inputMessage,
+        imagesAsBase64,
       };
 
       const headers: HeadersInit = {
@@ -111,6 +160,8 @@ export default function ChatPage() {
       url.searchParams.append("enableReasoning", enableReasoning.toString());
       url.searchParams.append("enableSearching", enableSearching.toString());
 
+      setSelectedImages([]);
+      
       const response = await fetch(url.toString(), {
         method: "POST",
         headers,
@@ -130,6 +181,7 @@ export default function ChatPage() {
       };
 
       setMessages((prev) => [...prev, aiMessage]);
+      
     } catch (error) {
       console.error("Chat error:", error);
       const errorMessage: Message = {
@@ -137,6 +189,7 @@ export default function ChatPage() {
         content: "Xin lỗi, đã có lỗi xảy ra. Vui lòng thử lại sau.",
         sender: "ai",
         timestamp: new Date(),
+        images: undefined,
       };
       setMessages((prev) => [...prev, errorMessage]);
     } finally {
@@ -176,6 +229,19 @@ export default function ChatPage() {
                   >
                     <MarkdownRenderer>{message.content}</MarkdownRenderer>
                   </div>
+                  {message.images && message.images.length > 0 && (
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      {message.images.map((imageUrl, index) => (
+                        <img
+                          key={index}
+                          src={imageUrl}
+                          alt={`Attached ${index + 1}`}
+                          className="max-w-[200px] h-auto rounded-lg"
+                          loading="lazy"
+                        />
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
@@ -192,6 +258,20 @@ export default function ChatPage() {
         <div className="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 rounded-b-xl p-4 shadow-lg space-y-3">
           {/* Text Input */}
           <div className="flex items-center space-x-2">
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleImageSelect}
+              accept="image/*"
+              multiple
+              className="hidden"
+            />
+            <button
+              onClick={handleImageClick}
+              className="rounded-lg p-2.5 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
+            >
+              <Image className="h-5 w-5" />
+            </button>
             <textarea
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
@@ -218,10 +298,35 @@ export default function ChatPage() {
               <Send className={`h-5 w-5 ${isProcessing ? "opacity-50" : ""}`} />
             </button>
           </div>
+          {/* Image Preview */}
+          {selectedImages.length > 0 && (
+            <div className="border-t border-slate-200 dark:border-slate-700 pt-3">
+              <div className="flex items-center gap-2 overflow-x-auto">
+                {selectedImages.map((image, index) => (
+                  <div key={index} className="relative group">
+                    <img
+                      src={URL.createObjectURL(image)}
+                      alt={`Preview ${index + 1}`}
+                      className="h-16 w-16 object-cover rounded-lg border border-slate-200 dark:border-slate-700"
+                    />
+                    <button
+                      onClick={() => setSelectedImages(prev => prev.filter((_, i) => i !== index))}
+                      className="absolute -top-1.5 -right-1.5 p-0.5 rounded-full bg-red-500 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
           {/* Toggle Buttons */}
           <div className="flex items-center justify-start space-x-4">
             <button
-              onClick={() => setEnableReasoning(!enableReasoning)}
+              onClick={() => {
+                setEnableReasoning(!enableReasoning);
+                if (!enableReasoning) setEnableSearching(false);
+              }}
               className={`flex items-center space-x-2 rounded-lg px-3 py-1.5 text-sm transition-all ${
                 enableReasoning
                   ? "bg-gradient-to-r from-blue-500/20 to-blue-600/20 text-blue-700 dark:from-blue-600/30 dark:to-blue-700/30 dark:text-blue-300"
@@ -232,7 +337,10 @@ export default function ChatPage() {
               <span>Suy luận sâu</span>
             </button>
             <button
-              onClick={() => setEnableSearching(!enableSearching)}
+              onClick={() => {
+                setEnableSearching(!enableSearching);
+                if (!enableSearching) setEnableReasoning(false);
+              }}
               className={`flex items-center space-x-2 rounded-lg px-3 py-1.5 text-sm transition-all ${
                 enableSearching
                   ? "bg-gradient-to-r from-green-500/20 to-green-600/20 text-green-700 dark:from-green-600/30 dark:to-green-700/30 dark:text-green-300"

@@ -1,8 +1,8 @@
 ﻿using Entities;
 using Entities.Enums;
 using Gemini.NET;
+using Gemini.NET.Helpers;
 using Helper;
-using Helpers;
 using System.Text;
 
 namespace Events

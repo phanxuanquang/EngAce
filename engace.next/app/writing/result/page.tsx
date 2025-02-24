@@ -98,7 +98,7 @@ function WritingResultContent() {
       <div className="container mx-auto px-4 pt-20 pb-8">
         <div className="mx-auto max-w-4xl">
           {/* Header */}
-          <div className="mb-8 flex items-center justify-between">
+          <div className="mb-4 flex items-center justify-between">
             <button
               onClick={() => router.back()}
               className="flex items-center space-x-2 rounded-lg bg-white/80 px-4 py-2 text-slate-600 shadow-md backdrop-blur-sm transition-all hover:bg-white hover:text-slate-900 dark:bg-slate-800/80 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"

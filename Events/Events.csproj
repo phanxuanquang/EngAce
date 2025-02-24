@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Gemini.NET" Version="1.1.1" />
+    <PackageReference Include="Gemini.NET" Version="2.1.0" />
   </ItemGroup>
 
   <ItemGroup>

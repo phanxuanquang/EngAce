@@ -8,7 +8,7 @@ namespace Events
 {
     public static class ChatScope
     {
-        public static async Task<string> GenerateAnswer(string apiKey, Conversation conversation)
+        public static async Task<string> GenerateAnswer(string apiKey, Conversation conversation, bool enableReasoning, bool enableSearching)
         {
             var instructionBuilder = new StringBuilder();
 
@@ -64,10 +64,76 @@ namespace Events
                     })
                     .ToList())
                 .DisableAllSafetySettings()
-                .WithDefaultGenerationConfig()
-                .Build();
+                .WithDefaultGenerationConfig();
 
-            var response = await generator.GenerateContentAsync(apiRequest, ModelVersion.Gemini_20_Flash_Lite);
+            if (conversation.ImagesAsBase64 != null)
+            {
+                apiRequest.WithBase64Images(conversation.ImagesAsBase64);
+            }
+
+            if (enableReasoning)
+            {
+                var responseWithReasoning = await generator.GenerateContentAsync(apiRequest.Build(), ModelVersion.Gemini_20_Flash_Thinking);
+                return responseWithReasoning.Result;
+            }
+
+            if (enableSearching)
+            {
+                apiRequest.EnableGrounding();
+
+                var responseWithSearching = await generator
+                    .IncludesGroundingDetailInResponse()
+                    .GenerateContentAsync(apiRequest.Build(), ModelVersion.Gemini_20_Flash);
+
+                if (responseWithSearching.GroundingDetail?.Sources?.Any() == false 
+                    && responseWithSearching.GroundingDetail?.SearchSuggestions?.Any() == false
+                    && responseWithSearching.GroundingDetail?.ReliableInformation?.Any() == false)
+                {
+                    return responseWithSearching.Result;
+                }
+
+                var stringBuilder = new StringBuilder();
+                stringBuilder.AppendLine(responseWithSearching.Result);
+                stringBuilder.AppendLine();
+                stringBuilder.AppendLine("---");
+
+                if (responseWithSearching.GroundingDetail?.Sources?.Any() == true)
+                {
+                    stringBuilder.AppendLine();
+                    stringBuilder.AppendLine("### **Reference Sources**");
+                    stringBuilder.AppendLine();
+                    foreach (var source in responseWithSearching.GroundingDetail.Sources.ToList())
+                    {
+                        stringBuilder.AppendLine($"- [**{source.Domain}**]({source.Url})");
+                    }
+                }
+
+                if (responseWithSearching.GroundingDetail?.ReliableInformation?.Any() == true)
+                {
+                    stringBuilder.AppendLine();
+                    stringBuilder.AppendLine("### **Verified Parts**");
+                    stringBuilder.AppendLine();
+                    foreach (var part in responseWithSearching.GroundingDetail.ReliableInformation.ToList())
+                    {
+                        stringBuilder.AppendLine($"- {part}");
+                    }
+                }
+
+                if(responseWithSearching.GroundingDetail?.SearchSuggestions?.Any() == true)
+                {
+                    stringBuilder.AppendLine();
+                    stringBuilder.AppendLine("### **Search Suggestions**");
+                    stringBuilder.AppendLine();
+                    foreach (var suggestion in responseWithSearching.GroundingDetail.SearchSuggestions.ToList())
+                    {
+                        stringBuilder.AppendLine($"- [{suggestion}](https://www.google.com/search?q={suggestion})");
+                    }
+                }
+
+                return stringBuilder.ToString().Trim();
+            }
+
+            var response = await generator.GenerateContentAsync(apiRequest.Build(), ModelVersion.Gemini_20_Flash_Lite);
             return response.Result;
         }
     }

@@ -12,18 +12,9 @@ namespace EngAce.Api.Controllers
         private readonly ILogger<ChatbotController> _logger = logger;
         private readonly string _accessKey = HttpContextHelper.GetAccessKey();
 
-        /// <summary>
-        /// Generates an answer from the chat history and user's question
-        /// </summary>
-        /// <param name="request">The conversation request containing the question.</param>
-        /// <returns>
-        /// An <see cref="ActionResult{T}"/> containing the generated answer as a string if the operation is successful,
-        /// or a bad request response if the question is empty or an error occurs during the generation.
-        /// </returns>
-        /// <response code="200">The generated answer as a string.</response>
-        /// <response code="400">The error message if the question is empty or if an exception occurs.</response>
+
         [HttpPost("GenerateAnswer")]
-        public async Task<ActionResult<string>> GenerateAnswer([FromBody] Conversation request)
+        public async Task<ActionResult<string>> GenerateAnswer([FromBody] Conversation request, bool enableReasoning = false, bool enableSearching = false)
         {
             if (string.IsNullOrWhiteSpace(request.Question))
             {
@@ -37,7 +28,7 @@ namespace EngAce.Api.Controllers
 
             try
             {
-                var result = await ChatScope.GenerateAnswer(_accessKey, request);
+                var result = await ChatScope.GenerateAnswer(_accessKey, request, enableReasoning, enableSearching);
 
                 _logger.LogInformation("{_accessKey} asked: {Question}", _accessKey[..10], request.Question);
                 return Ok(result);

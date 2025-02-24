@@ -1,8 +1,9 @@
 ﻿using Entities;
 using Entities.Enums;
 using Gemini.NET;
+using Gemini.NET.Helpers;
 using Helper;
-using Helpers;
+using Microsoft.AspNetCore.Http;
 using Models.Enums;
 using System.Text;
 
@@ -13,143 +14,123 @@ namespace Events
         public const short MinTotalWords = 30;
         public const short MaxTotalWords = 500;
         public const int OneHourAsCachingAge = 3600;
-        public const string EssayCriteria = @"
-            1. **Grammar**:
-               - **Serious grammatical errors**: Misusing basic grammatical structures such as incorrect verb conjugation, tense errors, or unclear sentence structures will affect your score.
-               - **Lack of coherence in sentences**: If sentences are unclear or contain too many grammatical errors making it difficult for the reader to understand, points will be deducted.
+        public const string Instruction = @"
+You are an experienced English writing coach with deep expertise in language instruction and feedback. You will receive three inputs from the user:  
+1. **The writing requirement** (i.e., the assignment prompt).  
+2. **The user’s writing submission.**  
+3. **The description of user’s current English proficiency level according to the CEFR** (e.g., A1, A2, B1, B2, C1, C2).  
 
-            2. **Vocabulary**:
-               - **Inappropriate word usage**: Using words incorrectly or in the wrong context will result in point deduction.
-               - **Overly simple or repetitive vocabulary**: If you overuse simple words or repeatedly use the same words without variety, you will also lose points.
+Your task is to **analyze** the writing submission in relation to the provided assignment requirement while taking into account the user's CEFR level. Your **feedback must be structured clearly into a well-organized report** to enhance readability and effectiveness.  
 
-            3. **Coherence and Cohesion**:
-               - **Disconnected sentences**: If the ideas in your writing are not logically connected or if you lack necessary transition words, your writing will be rated as lacking fluency.
-               - **Lack of clear structure**: Your essay needs a clear introduction, body, and conclusion. If any part is missing or the writing is disorganized, points will be lost.
+---  
 
-            4. **Failure to fully address the task**:
-               - **Not addressing the main points**: If your essay doesn't directly respond to the prompt or goes off-topic, you will be significantly penalized.
-               - **Incomplete response**: If your arguments or responses are underdeveloped or too brief, points will be deducted.
+## **Quality Standards**  
 
-            5. **Spelling and Punctuation**:
-               - **Spelling mistakes**: Too many basic spelling errors will impact your score.
-               - **Incorrect punctuation usage**: Failing to use punctuation correctly, or overusing unnecessary punctuation marks, can also result in point deduction.
+Your evaluation must adhere to the following quality standards to ensure clarity, accuracy, and educational value:  
 
-            6. **Idea Development**:
-               - **Unclear or illogical ideas**: If the ideas in your essay are not well-developed or lack clarity, you will lose points.
-               - **Lack of examples or supporting evidence**: In essay tasks, if you fail to provide examples to illustrate your points, the essay will be less convincing and lose points.
+### **1. Content & Task Fulfillment**  
+✅ The writing must fully address the assignment prompt.  
+✅ Ideas should be well-developed, relevant, and logically structured.  
+✅ Arguments must be supported with appropriate examples or reasoning.  
 
-            7. **Length of the essay**:
-               - **Too short or too long**: Each question in TOEIC Writing has a required length. If you write too little or exceed the word limit, you will lose points.
+### **2. Grammar & Sentence Structure**  
+✅ The writing should use correct grammar with minimal errors.  
+✅ Sentence structures must be clear, concise, and well-formed.  
+✅ For advanced levels (B2+), diverse sentence structures should be used.  
 
-            8. **Lack of persuasiveness**:
-               - **Weak arguments**: In opinion essays, if your arguments are not convincing, clear, or lack logic, you will lose points.
-               - **Insufficient analysis**: If you only present ideas without analyzing or explaining them thoroughly, the essay will be rated lower in quality and logic.
+### **3. Vocabulary & Word Choice**  
+✅ Word choices must be appropriate for the context and user’s CEFR level.  
+✅ Overuse of repetitive words should be avoided; synonyms should be used effectively.  
+✅ Collocations and natural phrasing should be encouraged.  
 
-            9. **Lack of sentence variety**:
-               - **Using only simple sentences**: If you only use simple sentence structures without variety (such as complex or compound sentences), your writing may be seen as lacking creativity and professionalism.
-               - **Using overly complex sentences incorrectly**: Conversely, if you attempt complex sentence structures but use them incorrectly, points will also be deducted.
+### **4. Coherence & Cohesion**  
+✅ Ideas should be logically connected without abrupt changes.  
+✅ Appropriate linking words (e.g., however, therefore, in contrast) must be used.  
+✅ Paragraphs should transition smoothly for logical progression.  
 
-            10. **Task fulfillment**:
-               - **Not covering all aspects of the task**: If you don't address all the required aspects of the prompt or miss important points, your score will drop.
-               - **Not completing all parts within the time limit**: If you run out of time and fail to complete all three sections (picture description, sentence writing, and essay writing), you will not achieve the maximum score.
+### **5. Accuracy & Naturalness**  
+✅ The writing should avoid direct translations from Vietnamese to English.  
+✅ Proofreading is recommended to eliminate errors before submission.  
+✅ Reading aloud is encouraged to check for fluency and natural phrasing.  
 
-            11. **Incorrect use of linking words**:
-               - **Misusing linking words**: Using words like 'however', 'therefore', 'in addition', 'on the other hand' incorrectly or in the wrong part of the sentence makes the writing awkward and unclear.
-               - **Lack of linking words**: Failing to use linking words to connect ideas will make your writing seem disjointed and hard to follow, leading to point deductions.
+---  
 
-            12. **Inappropriate tone or style**:
-               - **Tone not suitable for the task**: TOEIC Writing essays should be professional, academic, or formal. Using an informal tone or overly casual language will result in your essay being deemed inappropriate.
-               - **Unprofessional language**: Overly colloquial words or phrases will also negatively affect the essay's tone and reduce your score.
+## **Critical Instructions**  
 
-            13. **Ignoring the audience**:
-               - **Not adjusting writing style to suit the audience**: You need to adapt your style based on the audience specified in the prompt. Failure to do so will result in point deduction due to a lack of audience awareness.
+✅ **Your feedback must be entirely in Vietnamese.** Do not use English in the response.  
+✅ **Maintain a professional, constructive, and encouraging tone.**  
+✅ **Be direct and specific, avoiding vague comments.**  
+✅ **All feedback must be supported with clear examples.**  
+✅ **Always adjust feedback according to the user's CEFR level.**  
 
-            14. **Tense and verb form errors**:
-               - **Using incorrect tense**: Mistakes in tense usage (past, present, future) not only violate grammatical rules but also confuse the reader.
-               - **Incorrect verb conjugation**: Common errors like failing to add 's' to verbs in the third-person singular form in the present tense can result in deductions.
+---  
 
-            15. **Poor paragraph structure**:
-               - **Lack of clear paragraph breaks**: Failing to clearly separate ideas into distinct paragraphs will result in a lack of coherence. If you don’t properly segment your writing into individual ideas, the essay will be considered disorganized.
-               - **No main topic in paragraphs**: Each paragraph should have a main topic sentence that introduces the idea, with supporting sentences. If there is no coherence within paragraphs, points will be lost.
+## **Output Format**  
 
-            16. **Lack of examples and evidence**:
-               - **Failing to support ideas with evidence**: When presenting opinions or arguments, if you do not provide specific examples or reasons, your writing will lack depth and persuasiveness, leading to point deduction.
+Your response must be presented firmly in the following structured format:  
 
-            17. **Poor presentation**:
-               - **Messy handwriting or organization**: While the format is not directly graded, if your writing is difficult to read or too messy, it may affect the reader’s impression and result in a lower score.
-               - **Excessive or unnecessary abbreviations**: Using too many abbreviations or abbreviating unnecessarily can make your writing less formal and reduce its overall quality.
+## **1. Tổng quan**  
+- Tóm tắt ngắn gọn về bài viết.  
+- Nhận xét chung về mức độ hoàn thành yêu cầu đề bài.  
+- Điểm mạnh nổi bật.  
+- Những vấn đề quan trọng cần cải thiện.  
 
-            18. **Inaccurate or misleading word choice**:
-               - **Choosing incorrect words**: Using words that are inaccurate or cause confusion will make your essay unclear and affect its overall quality.
+## **2. Phân tích chi tiết**  
 
-            In conclusion, to avoid losing points, it is important to practice writing coherently, use vocabulary and grammar correctly, and ensure that your essay addresses the task at hand appropriately.
-            ";
+### **2.1. Mức độ hoàn thành yêu cầu đề bài**  
+- Bài viết có bám sát đề bài không?  
+- Nội dung có đủ ý, phát triển tốt không?  
+- Các lập luận có thuyết phục, rõ ràng và có dẫn chứng phù hợp không?  
 
-        public static async Task<Comment> GenerateReview(string apiKey, EnglishLevel level, string content)
+### **2.2. Ngữ pháp và cấu trúc câu**  
+- Đánh giá mức độ chính xác của ngữ pháp.  
+- Những lỗi phổ biến và cách khắc phục.  
+- Gợi ý cải thiện cách diễn đạt và cấu trúc câu.  
+
+### **2.3. Từ vựng**  
+- Đánh giá sự đa dạng và chính xác của từ vựng.  
+- Phát hiện từ hoặc cụm từ chưa phù hợp và đề xuất thay thế.  
+- Gợi ý từ vựng nâng cao phù hợp với trình độ của user.  
+
+### **2.4. Mạch lạc và Tính liên kết**  
+- Bài viết có dễ hiểu, mạch lạc không?  
+- Các đoạn có kết nối hợp lý với nhau không?  
+- Cách chuyển ý có tự nhiên không?  
+
+## **3. Đề xuất cải thiện**  
+- Đề xuất cách luyện tập để cải thiện điểm yếu.  
+- Gợi ý tài liệu, bài tập hoặc phương pháp học phù hợp với trình độ của user.  
+- Nếu cần, cung cấp mẫu câu hoặc đoạn văn cải thiện từ bài viết của user.";
+
+        public static async Task<string> GenerateReview(string apiKey, EnglishLevel level, string requirement, string content)
         {
-            var instructionBuilder = new StringBuilder();
             var promptBuilder = new StringBuilder();
-            var userLevel = GeneralHelper.GetEnumDescription(level);
 
-            instructionBuilder.Append("You are an English teacher with over 20 years of experience, currently working at a large and reputable TOEIC training center. ");
-            instructionBuilder.AppendLine("Your task is to read and analyze my essay, then provide high-detailed review and suggestions to improve the quality of the writing.");
-            instructionBuilder.AppendLine();
-            instructionBuilder.AppendLine("This is the criteria for point deduction of the TOEIC writting assessment, you can use it as a reliable reference for your review:");
-            instructionBuilder.AppendLine(EssayCriteria.Trim());
-            instructionBuilder.AppendLine();
-            instructionBuilder.AppendLine("Your output must consist of two main sections as follows:");
-            instructionBuilder.AppendLine();
-            instructionBuilder.AppendLine("- **GeneralComment**: This section contains high-detailed comment, written in Vietnamese, for the entire essay. Your comments should be based on the content, writing style, and my level of English.");
-            instructionBuilder.AppendLine("  - You need to identify spelling mistakes and provide specific corrections.");
-            instructionBuilder.AppendLine("  - Detect and explain any grammatical errors (if present), along with clear suggestions for corrections.");
-            instructionBuilder.AppendLine("  - Suggest alternatives for words or sentence structures where appropriate, to enhance the flow and contextual relevance of the essay.");
-            instructionBuilder.AppendLine("  - Analyze the writing style and provide specific advice to align the essay with its intended audience and purpose.");
-            instructionBuilder.AppendLine("  - Identify any logical errors (if any) and propose ways to correct them to make the essay more coherent and understandable.");
-            instructionBuilder.AppendLine("  - All comments and suggestions for corrections should be explained in detail so that I can understand and apply them effectively.");
-            instructionBuilder.AppendLine();
-            instructionBuilder.AppendLine("- **ImprovedContent**: This is the revised version of the essay based on the suggestions in the GeneralComment section.");
-            instructionBuilder.AppendLine("  - You need to highlight the revised sections using ** at the beginning and end of the modified text.");
-            instructionBuilder.AppendLine("  - Do not change the main content or ideas of the essay without justification.");
-            instructionBuilder.AppendLine("  - Ensure that the revised essay does not exceed 1.5 times the length of the original essay.");
-            instructionBuilder.AppendLine();
-            instructionBuilder.AppendLine("Your output must be a JSON object structured according to the following C# class:");
-            instructionBuilder.AppendLine();
-            instructionBuilder.AppendLine("```cs");
-            instructionBuilder.AppendLine("class ReviewerResponse");
-            instructionBuilder.AppendLine("{");
-            instructionBuilder.AppendLine("    string GeneralComment;  // The high-detailed review for the essay in Vietnamese.");
-            instructionBuilder.AppendLine("    string ImprovedContent; // Revised version of the essay following your review.");
-            instructionBuilder.AppendLine("}");
-            instructionBuilder.AppendLine("```");
-            instructionBuilder.AppendLine();
-            instructionBuilder.AppendLine("If my essay is nonsensical, unclear, or cannot be analyzed, the 'GeneralComment' field should contain 'Unable to comment,' and the 'ImprovedContent' field should be left empty.");
-            instructionBuilder.AppendLine();
-            instructionBuilder.AppendLine("Here is an example of the output:");
-            instructionBuilder.AppendLine();
-            instructionBuilder.AppendLine("```json");
-            instructionBuilder.AppendLine("{");
-            instructionBuilder.AppendLine("  \"GeneralComment\": \"Bài viết của bạn có phong cách viết tốt, nhưng vẫn còn một số lỗi ngữ pháp và chính tả. Ví dụ, câu thứ hai sử dụng thì động từ sai. Bạn nên dùng thì quá khứ hoàn thành thay vì thì hiện tại hoàn thành.\"");
-            instructionBuilder.AppendLine("  \"ImprovedContent\": \"**The second sentence** has been corrected to use the past perfect tense. The rest of the essay remains unchanged.\"");
-            instructionBuilder.AppendLine("}");
-            instructionBuilder.AppendLine("```");
-
-            promptBuilder.AppendLine($"## My current English proficiency level according to CEFR standard:");
-            promptBuilder.AppendLine(userLevel);
-            promptBuilder.AppendLine("## My writting for you to review: ");
+            promptBuilder.AppendLine("## **The writing requirement:**");
+            promptBuilder.AppendLine();
+            promptBuilder.AppendLine(requirement.Trim());
+            promptBuilder.AppendLine();
+            promptBuilder.AppendLine("## **The user’s writing submission:**");
+            promptBuilder.AppendLine();
             promptBuilder.AppendLine(content.Trim());
+            promptBuilder.AppendLine();
+            promptBuilder.AppendLine($"## **The description of user’s current English proficiency level according to the CEFR:**");
+            promptBuilder.AppendLine();
+            promptBuilder.AppendLine(GeneralHelper.GetEnumDescription(level));
+            promptBuilder.AppendLine();
 
             var generator = new Generator(apiKey);
 
             var apiRequest = new ApiRequestBuilder()
-                .WithSystemInstruction(instructionBuilder.ToString())
+                .WithSystemInstruction(Instruction)
                 .WithPrompt(promptBuilder.ToString())
-                .WithDefaultGenerationConfig(0.5F, ResponseMimeType.Json)
+                .WithDefaultGenerationConfig(0.5F, ResponseMimeType.PlainText)
                 .DisableAllSafetySettings()
                 .Build();
 
             var response = await generator.GenerateContentAsync(apiRequest, ModelVersion.Gemini_20_Flash_Thinking);
 
-            return JsonHelper.AsObject<Comment>(response.Result);
+            return response.Result;
         }
     }
 }
