@@ -9,11 +9,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { getUserPreferences } from "@/lib/localStorage";
 import Navbar from "@/components/Navbar";
 
-interface AssignmentType {
-  id: string;
-  name: string;
-}
-
 export default function AssignmentPage() {
   const [topic, setTopic] = useState("");
   const [questionCount, setQuestionCount] = useState<number>(10);
@@ -41,8 +36,6 @@ export default function AssignmentPage() {
         const types = await typesResponse.json();
         setAssignmentTypes(types);
 
-        // Fetch topic suggestions
-        const apiKey = localStorage.getItem("apiKey");
         const topicsResponse = await fetch(
           "https://localhost:5000/api/Assignment/Suggest3Topics?englishLevel=3",
           {
