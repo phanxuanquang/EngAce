@@ -109,7 +109,7 @@ export default function OnboardingForm() {
               </label>
               <Input
                 {...register("fullName")}
-                placeholder="A dễ thương"
+                placeholder="Quang đẹp trai"
                 className="bg-white/10 border-white/20 text-white placeholder-white/50 backdrop-blur-sm transition-colors focus:bg-white/20"
                 disabled={isLoading}
               />
@@ -127,7 +127,7 @@ export default function OnboardingForm() {
                 onValueChange={(value) =>
                   setValue("gender", value as "male" | "female" | "other")
                 }
-                defaultValue="other"
+                defaultValue="male"
                 disabled={isLoading}
               >
                 <SelectTrigger className="bg-white/10 border-white/20 text-white backdrop-blur-sm transition-colors focus:bg-white/20">
@@ -187,7 +187,7 @@ export default function OnboardingForm() {
                   className="text-blue-200 hover:text-blue-100 underline"
                 >
                   Google AI Studio
-                </a>
+                </a>.
               </p>
             </div>
 

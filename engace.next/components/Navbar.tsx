@@ -1,38 +1,51 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { Moon, Sun, LogOut, Menu, X, GraduationCap } from "lucide-react"
-import { getUserPreferences, saveUserPreferences } from "@/lib/localStorage"
-import { useTheme } from "@/contexts/ThemeContext"
-import { PROFICIENCY_LEVELS } from "@/lib/constants"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import {
+  Moon,
+  Sun,
+  LogOut,
+  Menu,
+  X,
+  GraduationCap,
+  MessageCircleHeart,
+  Info,
+} from "lucide-react";
+import { getUserPreferences, saveUserPreferences } from "@/lib/localStorage";
+import { useTheme } from "@/contexts/ThemeContext";
+import { PROFICIENCY_LEVELS } from "@/lib/constants";
+import InfoDialog from "./InfoDialog";
+import FeedbackDialog from "./FeedbackDialog";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 
 export default function Navbar() {
-  const router = useRouter()
-  const { isDark, toggleTheme } = useTheme()
-  const [showMobileMenu, setShowMobileMenu] = useState(false)
-  const [showLogoutDialog, setShowLogoutDialog] = useState(false)
-  const preferences = getUserPreferences()
+  const router = useRouter();
+  const { isDark, toggleTheme } = useTheme();
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+  const [showFeedbackDialog, setShowFeedbackDialog] = useState(false);
+  const [showInfoDialog, setShowInfoDialog] = useState(false);
+  const preferences = getUserPreferences();
 
   const handleLevelChange = (value: string) => {
-    const levelId = parseInt(value, 10)
+    const levelId = parseInt(value, 10);
     saveUserPreferences({
       ...preferences,
-      proficiencyLevel: levelId
-    })
-  }
+      proficiencyLevel: levelId,
+    });
+  };
 
   const handleLogout = () => {
-    localStorage.clear()
-    router.push("/")
-  }
+    localStorage.clear();
+    router.push("/");
+  };
 
   return (
     <>
@@ -47,7 +60,9 @@ export default function Navbar() {
               >
                 EngAce
               </button>
-              <span className="text-sm text-slate-600 dark:text-slate-400">|</span>
+              <span className="text-sm text-slate-600 dark:text-slate-400">
+                |
+              </span>
               <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
                 {preferences.fullName}
               </span>
@@ -82,7 +97,7 @@ export default function Navbar() {
               {/* Level Selector */}
               <div className="flex items-center space-x-2 px-2">
                 <GraduationCap className="h-5 w-5 text-slate-600 dark:text-slate-400" />
-                <Select 
+                <Select
                   defaultValue={String(preferences.proficiencyLevel || 1)}
                   onValueChange={handleLevelChange}
                 >
@@ -90,9 +105,9 @@ export default function Navbar() {
                     <SelectValue placeholder="Chọn trình độ" />
                   </SelectTrigger>
                   <SelectContent>
-                    {PROFICIENCY_LEVELS.map(level => (
-                      <SelectItem 
-                        key={level.id} 
+                    {PROFICIENCY_LEVELS.map((level) => (
+                      <SelectItem
+                        key={level.id}
                         value={String(level.id)}
                         className="cursor-pointer"
                       >
@@ -116,6 +131,22 @@ export default function Navbar() {
               </button>
 
               <button
+                onClick={() => setShowFeedbackDialog(true)}
+                className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                aria-label="Submit feedback"
+              >
+                <MessageCircleHeart className="h-5 w-5 text-slate-600 dark:text-slate-400" />
+              </button>
+
+              <button
+                onClick={() => setShowInfoDialog(true)}
+                className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                aria-label="Project information"
+              >
+                <Info className="h-5 w-5 text-slate-600 dark:text-slate-400" />
+              </button>
+
+              <button
                 onClick={() => setShowLogoutDialog(true)}
                 className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors"
               >
@@ -132,7 +163,7 @@ export default function Navbar() {
                 {/* Mobile Level Selector */}
                 <div className="flex items-center space-x-2">
                   <GraduationCap className="h-5 w-5 text-slate-600 dark:text-slate-400 ml-2" />
-                  <Select 
+                  <Select
                     defaultValue={String(preferences.proficiencyLevel || 1)}
                     onValueChange={handleLevelChange}
                   >
@@ -140,9 +171,9 @@ export default function Navbar() {
                       <SelectValue placeholder="Chọn trình độ" />
                     </SelectTrigger>
                     <SelectContent>
-                      {PROFICIENCY_LEVELS.map(level => (
-                        <SelectItem 
-                          key={level.id} 
+                      {PROFICIENCY_LEVELS.map((level) => (
+                        <SelectItem
+                          key={level.id}
                           value={String(level.id)}
                           className="cursor-pointer"
                         >
@@ -153,27 +184,52 @@ export default function Navbar() {
                   </Select>
                 </div>
 
-                <div className="flex items-center justify-between">
-                  <button
-                    onClick={toggleTheme}
-                    className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                    aria-label="Toggle theme"
-                  >
-                    {isDark ? (
-                      <Sun className="h-5 w-5 text-slate-600 dark:text-slate-400" />
-                    ) : (
-                      <Moon className="h-5 w-5 text-slate-600 dark:text-slate-400" />
-                    )}
-                  </button>
+                <button
+                  onClick={toggleTheme}
+                  className="flex items-center space-x-2 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                  aria-label="Theme switch"
+                >
+                  <div className="flex items-center space-x-2">
+                    {isDark ? <Sun className="h-5 w-5 text-slate-600 dark:text-slate-400" /> : <Moon className="h-5 w-5 text-slate-600 dark:text-slate-400" />}
+                    <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
+                      {isDark ? 'Bật chế độ sáng' : 'Bật chế độ tối'}
+                    </span>
+                  </div>
+                </button>
 
-                  <button
-                    onClick={() => setShowLogoutDialog(true)}
-                    className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors"
-                  >
-                    <LogOut className="h-4 w-4" />
-                    <span className="text-sm font-medium">Đăng xuất</span>
-                  </button>
-                </div>
+                <button
+                  onClick={() => setShowFeedbackDialog(true)}
+                  className="flex items-center space-x-2 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                  aria-label="Submit feedback"
+                >
+                  <div className="flex items-center space-x-2">
+                    <MessageCircleHeart className="h-5 w-5 text-slate-600 dark:text-slate-400" />
+                    <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
+                      Phản hồi từ người dùng
+                    </span>
+                  </div>
+                </button>
+
+                <button
+                  onClick={() => setShowInfoDialog(true)}
+                  className="flex items-center space-x-2 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                  aria-label="Project information"
+                >
+                  <div className="flex items-center space-x-2">
+                    <Info className="h-5 w-5 text-slate-600 dark:text-slate-400" />
+                    <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
+                      Thông tin về EngAce
+                    </span>
+                  </div>
+                </button>
+
+                <button
+                  onClick={() => setShowLogoutDialog(true)}
+                  className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors"
+                >
+                  <LogOut className="h-4 w-4" />
+                  <span className="text-sm font-medium">Đăng xuất</span>
+                </button>
               </div>
             </div>
           )}
@@ -188,7 +244,8 @@ export default function Navbar() {
               Đăng xuất
             </h2>
             <p className="text-slate-600 dark:text-slate-400 mb-6">
-              Bạn có chắc chắn muốn đăng xuất? Tất cả dữ liệu học tập của bạn sẽ bị xóa.
+              Bạn có chắc chắn muốn đăng xuất? Tất cả dữ liệu học tập của bạn sẽ
+              bị xóa.
             </p>
             <div className="flex justify-end space-x-4">
               <button
@@ -207,6 +264,17 @@ export default function Navbar() {
           </div>
         </div>
       )}
+
+      {/* Dialogs */}
+      <InfoDialog
+        isOpen={showInfoDialog}
+        onClose={() => setShowInfoDialog(false)}
+      />
+      <FeedbackDialog
+        isOpen={showFeedbackDialog}
+        onClose={() => setShowFeedbackDialog(false)}
+        userName={preferences.fullName || "Guest"}
+      />
     </>
-  )
+  );
 }

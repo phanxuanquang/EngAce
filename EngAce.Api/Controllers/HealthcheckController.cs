@@ -11,8 +11,6 @@ namespace EngAce.Api.Controllers
         private readonly string _accessKey = HttpContextHelper.GetAccessKey();
         private readonly ILogger<HealthcheckController> _logger = logger;
 
-        /// <response code="200">"Hello World"</response>
-        /// <response code="401">Invalid Access Key</response>
         [HttpGet]
         public async Task<ActionResult<string>> Healthcheck()
         {
@@ -31,6 +29,14 @@ namespace EngAce.Api.Controllers
             {
                 return Unauthorized("Invalid Access Key");
             }
+        }
+
+        [HttpPost("SendFeedback")]
+        public async Task<IActionResult> SendFeedback([FromBody] string userFeedback, string userName)
+        {
+            _logger.LogInformation($"{userName}'s feedback: {userFeedback}");
+
+            return NoContent();
         }
     }
 }

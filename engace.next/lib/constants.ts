@@ -38,3 +38,5 @@ export const PROFICIENCY_LEVELS = [
 ] as const;
 
 export type ProficiencyLevel = typeof PROFICIENCY_LEVELS[number];
+
+export const FEEDBACK_DIALOG_INTERVAL_DAYS = 70;

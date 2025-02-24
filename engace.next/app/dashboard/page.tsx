@@ -1,10 +1,13 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Book, PenLine, GraduationCap, MessageCircle } from "lucide-react";
 import { getUserPreferences } from "@/lib/localStorage";
 import Navbar from "@/components/Navbar";
+import FeedbackDialog from "@/components/FeedbackDialog";
+import InfoDialog from "@/components/InfoDialog";
+import { FEEDBACK_DIALOG_INTERVAL_DAYS } from "@/lib/constants";
 
 const features = [
   {
@@ -48,18 +51,60 @@ const features = [
 export default function Dashboard() {
   const router = useRouter();
   const preferences = getUserPreferences();
+  const [showInfoDialog, setShowInfoDialog] = useState(false);
+  const [showFeedbackDialog, setShowFeedbackDialog] = useState(false);
 
   useEffect(() => {
     if (!preferences.hasCompletedOnboarding) {
       router.push("/");
+      return;
+    }
+
+    // Show info dialog if user hasn't seen it before
+    const hasSeenInfo = localStorage.getItem("hasSeenInfo");
+    if (!hasSeenInfo) {
+      setShowInfoDialog(true);
+      localStorage.setItem("hasSeenInfo", "true");
     }
   }, [router, preferences.hasCompletedOnboarding]);
+
+  useEffect(() => {
+    // Check if user has completed onboarding
+    if (!preferences.hasCompletedOnboarding) return;
+
+    // Get the first entry date from localStorage or set it if not exists
+    const firstEntryDate = localStorage.getItem("firstEntryDate");
+    if (!firstEntryDate) {
+      localStorage.setItem("firstEntryDate", new Date().toISOString());
+      return;
+    }
+
+    // Calculate days since first entry
+    const daysSinceFirstEntry = Math.floor(
+      (Date.now() - new Date(firstEntryDate).getTime()) / (1000 * 60 * 60 * 24)
+    );
+
+    // Show feedback dialog if days is divisible by FEEDBACK_DIALOG_INTERVAL_DAYS
+    if (daysSinceFirstEntry > 0 && daysSinceFirstEntry % FEEDBACK_DIALOG_INTERVAL_DAYS === 0) {
+      setShowFeedbackDialog(true);
+    }
+  }, [preferences.hasCompletedOnboarding]);
 
   return (
     <div className="min-h-screen relative flex items-center justify-center overflow-hidden bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-400 via-purple-400 to-blue-600">
       <div className="absolute -top-40 -left-40 h-80 w-80 rounded-full bg-purple-400 blur-3xl opacity-30"></div>
       <div className="absolute -bottom-40 -right-40 h-80 w-80 rounded-full bg-blue-400 blur-3xl opacity-30"></div>
       <Navbar />
+
+      {/* Info Dialog */}
+      <InfoDialog isOpen={showInfoDialog} onClose={() => setShowInfoDialog(false)} />
+
+      {/* Feedback Dialog */}
+      <FeedbackDialog
+        isOpen={showFeedbackDialog}
+        onClose={() => setShowFeedbackDialog(false)}
+        userName={preferences.fullName || ""}
+      />
 
       {/* Main content with padding-top to account for fixed navbar */}
       <div className="container mx-auto px-8 min-h-screen pt-20 flex items-center justify-center py-6">
