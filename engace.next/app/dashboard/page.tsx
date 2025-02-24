@@ -20,12 +20,12 @@ const features = [
     gradient: "from-blue-500 to-cyan-400",
   },
   {
-    title: "LUYỆN ĐỀ",
+    title: "BÀI TẬP",
     englishTitle: "Bài tập cá nhân hóa",
     description:
       "Luyện tập với các bài kiểm tra được điều chỉnh theo trình độ và sở thích của bạn.",
     icon: GraduationCap,
-    href: "/exercises",
+    href: "/assignment",
     gradient: "from-purple-500 to-pink-400",
   },
   {

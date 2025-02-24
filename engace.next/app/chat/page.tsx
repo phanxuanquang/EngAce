@@ -363,14 +363,11 @@ export default function ChatPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
           <div className="w-full max-w-lg transform rounded-2xl bg-white p-8 shadow-2xl dark:bg-slate-800">
             <div className="mb-6">
-              <div className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900">
-                <span className="text-3xl">💬</span>
-              </div>
               <h2 className="mb-4 text-2xl font-bold text-slate-900 dark:text-white">
-                Chào mừng đến với Tư Vấn AI!
+                Trò chuyện cùng gia sư ảo
               </h2>
               <div className="space-y-4 text-slate-600 dark:text-slate-300">
-                <p>Đây là nơi bạn có thể tương tác với trợ lý AI để:</p>
+                <p>Đây là nơi bạn có thể tương tác với gia sư ảo để:</p>
                 <ul className="list-disc ml-6 space-y-2">
                   <li>
                     Tham gia các cuộc thảo luận về nhiều chủ đề học tiếng Anh

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { PenLine, Sparkles } from "lucide-react";
+import { PenLine } from "lucide-react";
 import { getUserPreferences } from "@/lib/localStorage";
 import Navbar from "@/components/Navbar";
 
@@ -140,11 +140,8 @@ export default function WritingPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm transition-opacity">
           <div className="w-full max-w-lg transform rounded-2xl bg-white p-8 shadow-2xl dark:bg-slate-800">
             <div className="mb-6">
-              <div className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-green-500 to-emerald-500 shadow-lg shadow-green-500/25 dark:shadow-green-900/25">
-                <Sparkles className="h-7 w-7 text-white" />
-              </div>
               <h2 className="mb-4 bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-2xl font-bold text-transparent">
-                Chào mừng đến với Luyện viết!
+                Luyện viết thông minh
               </h2>
               <div className="space-y-4 text-slate-600 dark:text-slate-300">
                 <p>Tính năng Luyện viết thông minh của EngAce giúp bạn:</p>

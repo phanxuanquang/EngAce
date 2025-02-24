@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
   Search,
-  Book,
   History,
   Sparkles,
   BookOpen,
@@ -248,11 +247,8 @@ export default function DictionaryPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
           <div className="w-full max-w-lg transform rounded-2xl bg-white p-8 shadow-2xl dark:bg-slate-800">
             <div className="mb-6">
-              <div className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-purple-500">
-                <Book className="h-7 w-7 text-white" />
-              </div>
               <h2 className="mb-4 text-2xl font-bold text-slate-900 dark:text-white">
-                Chào mừng đến với Từ điển!
+                Từ điển thông minh
               </h2>
               <div className="space-y-4 text-slate-600 dark:text-slate-300">
                 <p>
