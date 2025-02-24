@@ -10,10 +10,10 @@ namespace EngAce.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class QuizController(IMemoryCache cache, ILogger<QuizController> logger) : ControllerBase
+    public class AssignmentController(IMemoryCache cache, ILogger<AssignmentController> logger) : ControllerBase
     {
         private readonly IMemoryCache _cache = cache;
-        private readonly ILogger<QuizController> _logger = logger;
+        private readonly ILogger<AssignmentController> _logger = logger;
         private readonly string _accessKey = HttpContextHelper.GetAccessKey();
 
         /// <summary>
@@ -159,9 +159,9 @@ namespace EngAce.Api.Controllers
         /// An <see cref="ActionResult{T}"/> containing a dictionary of quiz types and their descriptions if the operation is successful.
         /// </returns>
         /// <response code="200">Returns a dictionary of quiz types and their descriptions.</response>
-        [HttpGet("GetQuizTypes")]
+        [HttpGet("GetAssignmentTypes")]
         [ResponseCache(Duration = QuizScope.MaxTimeAsCachingAge, Location = ResponseCacheLocation.Any, NoStore = false)]
-        public ActionResult<Dictionary<int, string>> GetQuizTypes()
+        public ActionResult<Dictionary<int, string>> GetAssignmentTypes()
         {
             var descriptions = Enum
                 .GetValues(typeof(QuizzType))
