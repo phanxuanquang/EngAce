@@ -1,20 +1,21 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import * as z from "zod"
-import { Input } from "@/components/ui/input"
-import { Loader2 } from "lucide-react"
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Loader2 } from "lucide-react";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { API_DOMAIN } from "@/lib/config"
-import ProficiencyForm from "@/components/ProficiencyForm"
+} from "@/components/ui/select";
+import { API_DOMAIN } from "@/lib/config";
+import ProficiencyForm from "@/components/ProficiencyForm";
 
 const formSchema = z.object({
   fullName: z.string().min(2, "Tên không hợp lệ"),
@@ -24,15 +25,15 @@ const formSchema = z.object({
     .min(7, "Người dùng phải từ 7 tuổi trở lên")
     .max(60, "Người dùng phải dưới 60 tuổi"),
   geminiApiKey: z.string().min(1, "Vui lòng nhập API key"),
-})
+});
 
-type FormData = z.infer<typeof formSchema>
+type FormData = z.infer<typeof formSchema>;
 
 export default function OnboardingForm() {
-  const [error, setError] = useState<string>("")
-  const [currentStep, setCurrentStep] = useState(1)
-  const [formData, setFormData] = useState<FormData | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string>("");
+  const [currentStep, setCurrentStep] = useState(1);
+  const [formData, setFormData] = useState<FormData | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     register,
@@ -47,39 +48,43 @@ export default function OnboardingForm() {
       age: undefined,
       geminiApiKey: "",
     },
-  })
+  });
 
   const onSubmit = async (data: FormData) => {
     try {
-      setIsLoading(true)
-      setError("")
+      setIsLoading(true);
+      setError("");
 
       // Health check API call
       const response = await fetch(`${API_DOMAIN}/api/Healthcheck`, {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'accept': 'text/plain',
-          'Authentication': data.geminiApiKey
-        }
-      })
+          accept: "text/plain",
+          Authentication: data.geminiApiKey,
+        },
+      });
 
       if (!response.ok) {
-        const errorText = await response.text()
-        throw new Error(errorText || 'Health check failed')
+        const errorText = await response.text();
+        throw new Error(errorText || "Health check failed");
       }
 
       // If health check succeeds, proceed
-      setFormData(data)
-      setCurrentStep(2)
+      setFormData(data);
+      setCurrentStep(2);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "API key validation failed. Please check your key and try again.")
+      setError(
+        err instanceof Error
+          ? err.message
+          : "API key validation failed. Please check your key and try again."
+      );
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   if (currentStep === 2 && formData) {
-    return <ProficiencyForm formData={formData} />
+    return <ProficiencyForm formData={formData} />;
   }
 
   return (
@@ -87,42 +92,41 @@ export default function OnboardingForm() {
       {/* Decorative blobs */}
       <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-purple-400 blur-3xl opacity-30"></div>
       <div className="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-blue-400 blur-3xl opacity-30"></div>
-      
+
       {/* Glass card */}
       <div className="relative w-full max-w-md p-8 rounded-2xl shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] bg-white/10 backdrop-blur-lg border border-white/20 transition-transform duration-300 hover:scale-[1.01]">
         <div className="space-y-6">
           {/* Header */}
           <div className="space-y-2 text-center">
-            <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-100">
+            <h1 className="text-4xl font-bold bg-clip-text bg-gradient-to-r from-white to-blue-100">
               CHÀO MỪNG
             </h1>
-            <p className="text-white/80">
-              EngAce muốn biết một số thông tin cơ bản để hỗ trợ bạn tốt nhất nha!
+            <p className="opacity-70">
+              EngAce muốn biết một số thông tin cơ bản để hỗ trợ bạn học tập tốt
+              nhất
             </p>
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             {/* Name Input */}
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-white/90">
-                Tên của bạn là
-              </label>
+            <div className="space-y-4">
+              <Label htmlFor="email">Tên của bạn là</Label>
               <Input
                 {...register("fullName")}
+                autoComplete="off"
                 placeholder="Quang đẹp trai"
-                className="bg-white/10 border-white/20 text-white placeholder-white/50 backdrop-blur-sm transition-colors focus:bg-white/20"
                 disabled={isLoading}
               />
               {errors.fullName && (
-                <p className="text-sm text-red-300">{errors.fullName.message}</p>
+                <p className="text-sm text-red-300">
+                  {errors.fullName.message}
+                </p>
               )}
             </div>
 
             {/* Gender Select */}
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-white/90">
-                Giới tính của bạn là
-              </label>
+            <div className="space-y-4">
+              <Label>Giới tính của bạn là</Label>
               <Select
                 onValueChange={(value) =>
                   setValue("gender", value as "male" | "female" | "other")
@@ -130,7 +134,7 @@ export default function OnboardingForm() {
                 defaultValue="male"
                 disabled={isLoading}
               >
-                <SelectTrigger className="bg-white/10 border-white/20 text-white backdrop-blur-sm transition-colors focus:bg-white/20">
+                <SelectTrigger>
                   <SelectValue placeholder="Nam" />
                 </SelectTrigger>
                 <SelectContent>
@@ -142,17 +146,15 @@ export default function OnboardingForm() {
             </div>
 
             {/* Age Input */}
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-white/90">
-                Tuổi của bạn là
-              </label>
+            <div className="space-y-4">
+              <Label>Tuổi của bạn là</Label>
               <Input
                 {...register("age", { valueAsNumber: true })}
+                autoComplete="off"
                 type="number"
                 placeholder="16"
                 min={7}
                 max={60}
-                className="bg-white/10 border-white/20 text-white placeholder-white/50 backdrop-blur-sm transition-colors focus:bg-white/20"
                 disabled={isLoading}
               />
               {errors.age && (
@@ -161,16 +163,13 @@ export default function OnboardingForm() {
             </div>
 
             {/* API Key Input */}
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-white/90">
-                Gemini API Key
-              </label>
+            <div className="space-y-4">
+              <Label>Gemini API Key</Label>
               <Input
                 {...register("geminiApiKey")}
+                autoComplete="off"
                 type="password"
                 placeholder="Enter your Gemini API key"
-                className="bg-white/10 border
-                0 text-white placeholder-white/50 backdrop-blur-sm transition-colors focus:bg-white/20"
                 disabled={isLoading}
               />
               {errors.geminiApiKey && (
@@ -178,7 +177,7 @@ export default function OnboardingForm() {
                   {errors.geminiApiKey.message}
                 </p>
               )}
-              <p className="text-sm text-white/70">
+              <p className="text-sm opacity-70">
                 Bạn có thể lấy API từ{" "}
                 <a
                   href="https://aistudio.google.com/app/apikey"
@@ -187,7 +186,8 @@ export default function OnboardingForm() {
                   className="text-blue-200 hover:text-blue-100 underline"
                 >
                   Google AI Studio
-                </a>.
+                </a>
+                .
               </p>
             </div>
 
@@ -218,5 +218,5 @@ export default function OnboardingForm() {
         </div>
       </div>
     </div>
-  )
+  );
 }

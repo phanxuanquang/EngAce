@@ -66,8 +66,7 @@ export default function WritingPage() {
               Luyện viết thông minh
             </h1>
             <p className="mx-auto max-w-xl text-slate-600 dark:text-slate-400">
-              Nhận phản hồi chi tiết và gợi ý cải thiện để nâng cao kỹ năng viết
-              tiếng Anh của bạn.
+              Nhận phản hồi chi tiết để nâng cao kỹ năng viết tiếng Anh của bạn.
             </p>
           </div>
 
