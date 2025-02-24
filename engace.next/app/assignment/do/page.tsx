@@ -41,7 +41,7 @@ export default function DoAssignmentPage() {
       setQuestions(parsedQuestions);
       setSelectedAnswers(new Array(parsedQuestions.length).fill(-1));
       setTimeRemaining(parsedQuestions.length * 60); // Set time based on question count
-    } catch (err) {
+    } catch {
       setError("Không thể tải bài tập. Vui lòng thử lại.");
       setShowError(true);
     }

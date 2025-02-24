@@ -6,8 +6,8 @@ import { ThemeProvider } from "@/contexts/ThemeContext"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "EngAce - AI-Powered English Learning",
-  description: "EngAce is a cutting-edge, generative AI-powered application designed to revolutionize the way Vietnamese learn English.",
+  title: "EngAce - Học tiếng Anh cùng theo cách của bạn",
+  description: "Nền tảng miễn phí sử dụng AI để nâng tầm trải nghiệm học tiếng Anh dành riêng cho người Việt",
   icons: {
     icon: "/favicon.ico",
   },
