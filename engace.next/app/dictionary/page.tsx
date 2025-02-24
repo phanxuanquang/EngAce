@@ -103,7 +103,7 @@ export default function DictionaryPage() {
               <BookOpen className="h-10 w-10" />
             </div>
             <h1 className="mb-4 text-4xl font-bold text-slate-900 dark:text-white">
-              Từ điển thông minh
+              TỪ ĐIỂN
             </h1>
             <p className="mx-auto max-w-xl text-slate-600 dark:text-slate-400">
               Tra cứu từ vựng với định nghĩa chi tiết, ví dụ thực tế và gợi ý sử

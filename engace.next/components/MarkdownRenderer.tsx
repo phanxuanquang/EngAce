@@ -71,7 +71,7 @@ const components = {
     </strong>
   ),
   blockquote: ({ children }: ComponentProps) => (
-    <blockquote className="my-4 border-l-4 border-blue-500/50 pl-4 not-italic text-white-600 dark:text-white-400">
+    <blockquote className="my-3 border-l-4 border-blue-500/50 pl-4 not-italic text-white-600 dark:text-white-400">
       {children}
     </blockquote>
   ),

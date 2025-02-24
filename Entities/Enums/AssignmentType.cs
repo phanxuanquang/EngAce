@@ -2,7 +2,7 @@
 
 namespace Entities.Enums
 {
-    public enum QuizzType
+    public enum AssignmentType
     {
         [Name("Chọn từ thích hợp nhất"), Description("Most Suitable Word (Chọn từ thích hợp nhất)")]
         WordChoice = 1,

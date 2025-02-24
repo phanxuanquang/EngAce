@@ -62,7 +62,7 @@ export default function ProficiencyForm({ formData }: ProficiencyFormProps) {
         <div className="space-y-6">
           {/* Header */}
           <div className="space-y-2 text-center">
-            <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-100">
+            <h1 className="text-3xl py-2 font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-100">
               TRÌNH ĐỘ TIẾNG ANH
             </h1>
             <p className="text-white/80">

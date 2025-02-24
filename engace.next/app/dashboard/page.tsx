@@ -85,21 +85,26 @@ export default function Dashboard() {
     );
 
     // Show feedback dialog if days is divisible by FEEDBACK_DIALOG_INTERVAL_DAYS
-    if (daysSinceFirstEntry > 0 && daysSinceFirstEntry % FEEDBACK_DIALOG_INTERVAL_DAYS === 0) {
+    if (
+      daysSinceFirstEntry > 0 &&
+      daysSinceFirstEntry % FEEDBACK_DIALOG_INTERVAL_DAYS === 0
+    ) {
       setShowFeedbackDialog(true);
     }
   }, [preferences.hasCompletedOnboarding]);
 
   return (
     <div className="min-h-screen relative flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-50/95 via-purple-50/98 to-slate-100/95 dark:from-slate-950/95 dark:via-purple-900/40 dark:to-slate-950/95 transition-all duration-1000">
-      
       <div className="absolute top-0 left-0 w-[40rem] h-[40rem] bg-gradient-to-br from-purple-400/20 to-blue-400/20 blur-[160px] animate-pulse-slow"></div>
       <div className="absolute bottom-0 right-0 w-[40rem] h-[40rem] bg-gradient-to-br from-blue-400/20 to-purple-400/20 blur-[160px] animate-pulse-slow delay-1000"></div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.05),rgba(255,255,255,0))]"></div>
       <Navbar />
 
       {/* Info Dialog */}
-      <InfoDialog isOpen={showInfoDialog} onClose={() => setShowInfoDialog(false)} />
+      <InfoDialog
+        isOpen={showInfoDialog}
+        onClose={() => setShowInfoDialog(false)}
+      />
 
       {/* Feedback Dialog */}
       <FeedbackDialog
@@ -114,11 +119,11 @@ export default function Dashboard() {
           {features.map((feature) => {
             const Icon = feature.icon;
             return (
-                <button
+              <button
                 key={feature.href}
                 onClick={() => router.push(feature.href)}
-                className="group relative overflow-hidden rounded-xl bg-white/40 backdrop-blur-xl p-8 shadow-lg transition-all hover:shadow-2xl dark:bg-slate-900/40 hover:-translate-y-2 duration-300 border border-white/20 dark:border-slate-700/30 hover:bg-white/50 dark:hover:bg-slate-800/50 before:absolute before:inset-0 before:bg-gradient-to-br before:from-white/30 before:to-transparent before:opacity-0 before:transition-opacity hover:before:opacity-100"
-                >
+                className="group relative overflow-hidden rounded-xl bg-white/60 backdrop-blur-xl p-8 shadow-lg transition-all hover:shadow-2xl dark:bg-slate-900/50 hover:-translate-y-2 duration-300 border border-white/20 dark:border-slate-700/30 hover:bg-white/50 dark:hover:bg-slate-800/50 before:absolute before:inset-0 before:bg-gradient-to-br before:from-white/30 before:to-transparent before:opacity-0 before:transition-opacity hover:before:opacity-100"
+              >
                 <div className="relative z-10">
                   <div
                     className={`mb-6 inline-flex items-center justify-center rounded-2xl p-4 bg-gradient-to-br ${feature.gradient}`}

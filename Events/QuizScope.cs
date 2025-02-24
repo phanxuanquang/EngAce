@@ -3,6 +3,7 @@ using Entities.Enums;
 using Gemini.NET;
 using Gemini.NET.Helpers;
 using Helper;
+using Models.Enums;
 using System.Text;
 
 namespace Events
@@ -85,7 +86,7 @@ You are an expert English teacher with over 20 years of teaching experience, and
 ]
 ```";
 
-        public static async Task<List<Quiz>> GenerateQuizes(string apiKey, string topic, List<QuizzType> quizzTypes, EnglishLevel level, short questionsCount)
+        public static async Task<List<Quiz>> GenerateQuizes(string apiKey, string topic, List<AssignmentType> quizzTypes, EnglishLevel level, short questionsCount)
         {
             if (questionsCount <= 15)
             {
@@ -115,7 +116,7 @@ You are an expert English teacher with over 20 years of teaching experience, and
 
                 for (int i = 0; i < quizTypeQuestionCount.Count; i++)
                 {
-                    tasks.Add(GenerateQuizesByType(apiKey, topic, (QuizzType)(i + 1), level, quizTypeQuestionCount[i]));
+                    tasks.Add(GenerateQuizesByType(apiKey, topic, (AssignmentType)(i + 1), level, quizTypeQuestionCount[i]));
                 }
 
                 var results = await Task.WhenAll(tasks);
@@ -144,50 +145,43 @@ You are an expert English teacher with over 20 years of teaching experience, and
             }
         }
 
-        private static async Task<List<Quiz>> GenerateQuizesForLessThan15(string apiKey, string topic, List<QuizzType> quizzTypes, EnglishLevel level, int questionsCount)
+        private static async Task<List<Quiz>> GenerateQuizesForLessThan15(string apiKey, string topic, List<AssignmentType> quizzTypes, EnglishLevel level, int questionsCount)
         {
-            try
+            var userLevel = GeneralHelper.GetEnumDescription(level);
+            var types = string.Join(", ", quizzTypes.Select(t => GeneralHelper.GetEnumDescription(t)).ToList());
+            var promptBuilder = new StringBuilder();
+
+            promptBuilder.AppendLine($"I am a English learner with the English proficiency level of `{userLevel}` according to the CEFR standard.");
+            promptBuilder.AppendLine();
+            promptBuilder.AppendLine("## The decription of my level according to the CEFR standard:");
+            promptBuilder.AppendLine();
+            promptBuilder.AppendLine(GetLevelDescription(level));
+            promptBuilder.AppendLine();
+            promptBuilder.AppendLine("## Your task:");
+            promptBuilder.AppendLine();
+            promptBuilder.AppendLine($"Generate a set of multiple-choice English questions consisting of {questionsCount} to {questionsCount + 5} questions related to the topic '{topic.Trim()}' for me to practice, the quiz should be of the types: {types}");
+            promptBuilder.AppendLine();
+            promptBuilder.AppendLine("The generated questions should be of the types:");
+            foreach (var type in quizzTypes)
             {
-                var userLevel = GeneralHelper.GetEnumDescription(level);
-                var types = string.Join(", ", quizzTypes.Select(t => GeneralHelper.GetEnumDescription(t)).ToList());
-                var promptBuilder = new StringBuilder();
-
-                promptBuilder.AppendLine($"I am a English learner with the English proficiency level of `{userLevel}` according to the CEFR standard.");
-                promptBuilder.AppendLine();
-                promptBuilder.AppendLine("## The decription of my level according to the CEFR standard:");
-                promptBuilder.AppendLine();
-                promptBuilder.AppendLine(GetLevelDescription(level));
-                promptBuilder.AppendLine();
-                promptBuilder.AppendLine("## Your task:");
-                promptBuilder.AppendLine();
-                promptBuilder.AppendLine($"Generate a set of multiple-choice English questions consisting of {questionsCount} to {questionsCount + 5} questions related to the topic '{topic.Trim()}' for me to practice, the quiz should be of the types: {types}");
-                promptBuilder.AppendLine();
-                promptBuilder.AppendLine("The generated questions should be of the types:");
-                foreach (var type in quizzTypes)
-                {
-                    promptBuilder.AppendLine($"- {GeneralHelper.GetEnumDescription(type)}");
-                }
-
-                var generator = new Generator(apiKey);
-
-                var apiRequest = new ApiRequestBuilder()
-                    .WithSystemInstruction(Instruction)
-                    .WithPrompt(promptBuilder.ToString())
-                    .WithDefaultGenerationConfig(0.3F, Models.Enums.ResponseMimeType.Json)
-                    .DisableAllSafetySettings()
-                    .Build();
-
-                var response = await generator.GenerateContentAsync(apiRequest);
-
-                return [.. JsonHelper.AsObject<List<Quiz>>(response.Result)];
+                promptBuilder.AppendLine($"- {GeneralHelper.GetEnumDescription(type)}");
             }
-            catch
-            {
-                return [];
-            }
+
+            var generator = new Generator(apiKey);
+
+            var apiRequest = new ApiRequestBuilder()
+                .WithSystemInstruction(Instruction)
+                .WithPrompt(promptBuilder.ToString())
+                .WithDefaultGenerationConfig(0.3F, ResponseMimeType.Json)
+                .DisableAllSafetySettings()
+                .Build();
+
+            var response = await generator.GenerateContentAsync(apiRequest, ModelVersion.Gemini_20_Flash_Lite);
+
+            return [.. JsonHelper.AsObject<List<Quiz>>(response.Result)];
         }
 
-        private static async Task<List<Quiz>> GenerateQuizesByType(string apiKey, string topic, QuizzType quizzType, EnglishLevel level, int questionsCount)
+        private static async Task<List<Quiz>> GenerateQuizesByType(string apiKey, string topic, AssignmentType quizzType, EnglishLevel level, int questionsCount)
         {
             try
             {
@@ -210,12 +204,11 @@ You are an expert English teacher with over 20 years of teaching experience, and
                 var apiRequest = new ApiRequestBuilder()
                     .WithSystemInstruction(Instruction)
                     .WithPrompt(promptBuilder.ToString())
-                    .WithDefaultGenerationConfig(1, Models.Enums.ResponseMimeType.Json)
+                    .WithDefaultGenerationConfig(0.5F, ResponseMimeType.Json)
                     .DisableAllSafetySettings()
                     .Build();
 
-                //var response = await GeminiGenerator.GenerateContent(apiKey, Instruction, promptBuilder.ToString(), true, 40);
-                var response = await generator.GenerateContentAsync(apiRequest);
+                var response = await generator.GenerateContentAsync(apiRequest, ModelVersion.Gemini_20_Flash_Lite);
 
                 return JsonHelper.AsObject<List<Quiz>>(response.Result)
                     .Take(questionsCount)
