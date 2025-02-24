@@ -39,7 +39,7 @@ const features = [
   },
   {
     title: "TƯ VẤN",
-    englishTitle: "Trò chuyện với AI",
+    englishTitle: "Trò chuyện với gia sư ảo",
     description:
       "Tương tác với gia sư AI để được hướng dẫn và hỗ trợ tự học tiếng Anh.",
     icon: MessageCircle,
@@ -91,9 +91,11 @@ export default function Dashboard() {
   }, [preferences.hasCompletedOnboarding]);
 
   return (
-    <div className="min-h-screen relative flex items-center justify-center overflow-hidden bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-400 via-purple-400 to-blue-600">
-      <div className="absolute -top-40 -left-40 h-80 w-80 rounded-full bg-purple-400 blur-3xl opacity-30"></div>
-      <div className="absolute -bottom-40 -right-40 h-80 w-80 rounded-full bg-blue-400 blur-3xl opacity-30"></div>
+    <div className="min-h-screen relative flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-50/95 via-purple-50/98 to-slate-100/95 dark:from-slate-950/95 dark:via-purple-900/40 dark:to-slate-950/95 transition-all duration-1000">
+      
+      <div className="absolute top-0 left-0 w-[40rem] h-[40rem] bg-gradient-to-br from-purple-400/20 to-blue-400/20 blur-[160px] animate-pulse-slow"></div>
+      <div className="absolute bottom-0 right-0 w-[40rem] h-[40rem] bg-gradient-to-br from-blue-400/20 to-purple-400/20 blur-[160px] animate-pulse-slow delay-1000"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.05),rgba(255,255,255,0))]"></div>
       <Navbar />
 
       {/* Info Dialog */}
@@ -112,11 +114,11 @@ export default function Dashboard() {
           {features.map((feature) => {
             const Icon = feature.icon;
             return (
-              <button
+                <button
                 key={feature.href}
                 onClick={() => router.push(feature.href)}
-                className="group relative overflow-hidden rounded-xl bg-white/80 backdrop-blur-lg p-8 shadow-lg transition-all hover:shadow-2xl dark:bg-slate-700/60 hover:-translate-y-2 duration-300 border border-slate-200/30 dark:border-slate-700/30 before:absolute before:inset-0 before:bg-gradient-to-br before:from-white/20 before:to-transparent before:opacity-0 before:transition-opacity hover:before:opacity-100"
-              >
+                className="group relative overflow-hidden rounded-xl bg-white/40 backdrop-blur-xl p-8 shadow-lg transition-all hover:shadow-2xl dark:bg-slate-900/40 hover:-translate-y-2 duration-300 border border-white/20 dark:border-slate-700/30 hover:bg-white/50 dark:hover:bg-slate-800/50 before:absolute before:inset-0 before:bg-gradient-to-br before:from-white/30 before:to-transparent before:opacity-0 before:transition-opacity hover:before:opacity-100"
+                >
                 <div className="relative z-10">
                   <div
                     className={`mb-6 inline-flex items-center justify-center rounded-2xl p-4 bg-gradient-to-br ${feature.gradient}`}

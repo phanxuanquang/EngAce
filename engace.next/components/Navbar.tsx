@@ -93,7 +93,7 @@ export default function Navbar() {
             </div>
 
             {/* Desktop Actions */}
-            <div className="hidden md:flex items-center space-x-4">
+            <div className="hidden md:flex items-center space-x-2">
               {/* Level Selector */}
               <div className="flex items-center space-x-2 px-2">
                 <GraduationCap className="h-5 w-5 text-slate-600 dark:text-slate-400" />
@@ -101,7 +101,7 @@ export default function Navbar() {
                   defaultValue={String(preferences.proficiencyLevel || 1)}
                   onValueChange={handleLevelChange}
                 >
-                  <SelectTrigger className="w-[180px] bg-transparent border-slate-200 dark:border-slate-700">
+                  <SelectTrigger className="w-[180px] border-slate-200 dark:border-slate-700">
                     <SelectValue placeholder="Chọn trình độ" />
                   </SelectTrigger>
                   <SelectContent>

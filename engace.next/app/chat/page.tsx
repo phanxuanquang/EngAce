@@ -220,7 +220,7 @@ export default function ChatPage() {
                 <div
                   className={`max-w-[80%] md:max-w-[70%] rounded-2xl px-4 py-3 ${
                     message.sender === "user"
-                      ? "bg-slate-400 dark:bg-slate-700"
+                      ? "bg-gray-300 dark:bg-gray-700"
                       : "bg-slate-200 dark:bg-slate-900"
                   }`}
                 >
