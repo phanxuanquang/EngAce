@@ -22,13 +22,10 @@ interface FormErrors {
   fullName?: string;
   age?: string;
   gender?: string;
-  apiKey?: string;
+  geminiApiKey?: string;
 }
 
-export default function UserProfileDialog({
-  isOpen,
-  onClose,
-}: UserProfileDialogProps) {
+export default function UserProfileDialog({ isOpen, onClose }: UserProfileDialogProps) {
   const preferences = getUserPreferences();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -37,7 +34,7 @@ export default function UserProfileDialog({
     fullName: preferences.fullName || "",
     age: preferences.age?.toString() || "",
     gender: preferences.gender || "",
-    apiKey: (preferences as any).apiKey || "",
+    geminiApiKey: preferences.geminiApiKey || "",
   });
 
   const validateForm = (): boolean => {
@@ -59,8 +56,8 @@ export default function UserProfileDialog({
       isValid = false;
     }
 
-    if (!formData.apiKey.trim()) {
-      errors.apiKey = "Vui lòng nhập API Key";
+    if (!formData.geminiApiKey.trim()) {
+      errors.geminiApiKey = "Vui lòng nhập API Key";
       isValid = false;
     }
 
@@ -79,7 +76,7 @@ export default function UserProfileDialog({
         method: "GET",
         headers: {
           accept: "text/plain",
-          Authentication: formData.apiKey,
+          Authentication: formData.geminiApiKey,
         },
       });
 
@@ -93,7 +90,7 @@ export default function UserProfileDialog({
         fullName: formData.fullName,
         age: formData.age ? parseInt(formData.age, 10) : undefined,
         gender: formData.gender,
-        apiKey: formData.apiKey,
+        geminiApiKey: formData.geminiApiKey,
       });
 
       onClose();
@@ -138,10 +135,7 @@ export default function UserProfileDialog({
           <div className="px-4 sm:px-6 py-4">
             <div className="space-y-4">
               <div>
-                <label
-                  htmlFor="fullName"
-                  className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1"
-                >
+                <label htmlFor="fullName" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
                   Họ và tên
                 </label>
                 <div className="relative">
@@ -150,9 +144,7 @@ export default function UserProfileDialog({
                     type="text"
                     placeholder="Nhập họ và tên"
                     value={formData.fullName}
-                    onChange={(e) =>
-                      setFormData({ ...formData, fullName: e.target.value })
-                    }
+                    onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                     className={`w-full pl-10 pr-4 py-2 rounded-lg border ${
                       formErrors.fullName
                         ? "border-red-500 focus:ring-red-500"
@@ -171,10 +163,7 @@ export default function UserProfileDialog({
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label
-                    htmlFor="age"
-                    className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1"
-                  >
+                  <label htmlFor="age" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
                     Tuổi
                   </label>
                   <input
@@ -182,11 +171,9 @@ export default function UserProfileDialog({
                     type="number"
                     placeholder="Nhập tuổi"
                     value={formData.age}
-                    onChange={(e) =>
-                      setFormData({ ...formData, age: e.target.value })
-                    }
-                    min={7}
-                    max={60}
+                    onChange={(e) => setFormData({ ...formData, age: e.target.value })}
+                    min={1}
+                    max={100}
                     className={`w-full px-4 py-2 rounded-lg border ${
                       formErrors.age
                         ? "border-red-500 focus:ring-red-500"
@@ -202,25 +189,13 @@ export default function UserProfileDialog({
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="gender"
-                    className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1"
-                  >
+                  <label htmlFor="gender" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
                     Giới tính
                   </label>
-                  <Select
-                    value={formData.gender}
-                    onValueChange={(value) =>
-                      setFormData({ ...formData, gender: value })
-                    }
-                  >
+                  <Select value={formData.gender} onValueChange={(value) => setFormData({ ...formData, gender: value })}>
                     <SelectTrigger
                       id="gender"
-                      className={
-                        formErrors.gender
-                          ? "border-red-500 focus:ring-red-500"
-                          : ""
-                      }
+                      className={formErrors.gender ? "border-red-500 focus:ring-red-500" : ""}
                     >
                       <SelectValue placeholder="Chọn giới tính" />
                     </SelectTrigger>
@@ -240,47 +215,30 @@ export default function UserProfileDialog({
               </div>
 
               <div>
-                <label
-                  htmlFor="apiKey"
-                  className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1"
-                >
-                  Gemini API Key
+                <label htmlFor="geminiApiKey" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                  API Key
                 </label>
                 <div className="relative">
                   <input
-                    id="apiKey"
+                    id="geminiApiKey"
                     type="password"
                     placeholder="Nhập API Key"
-                    value={formData.apiKey}
-                    onChange={(e) =>
-                      setFormData({ ...formData, apiKey: e.target.value })
-                    }
+                    value={formData.geminiApiKey}
+                    onChange={(e) => setFormData({ ...formData, geminiApiKey: e.target.value })}
                     className={`w-full pl-10 pr-4 py-2 rounded-lg border ${
-                      formErrors.apiKey || error
+                      formErrors.geminiApiKey || error
                         ? "border-red-500 focus:ring-red-500"
                         : "border-slate-200 dark:border-slate-700 focus:ring-blue-500"
                     } bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 transition-all text-sm sm:text-base`}
                   />
                   <Key className="absolute left-3 top-2.5 h-5 w-5 text-slate-400" />
                 </div>
-                {(formErrors.apiKey || error) && (
+                {(formErrors.geminiApiKey || error) && (
                   <div className="flex items-center mt-1 text-xs sm:text-sm text-red-500">
                     <AlertCircle className="w-4 h-4 mr-1" />
-                    {formErrors.apiKey || error}
+                    {formErrors.geminiApiKey || error}
                   </div>
                 )}
-                <p className="text-sm mt-2 text-slate-500 dark:text-slate-400">
-                  Bạn có thể lấy API từ{" "}
-                  <a
-                    href="https://aistudio.google.com/app/apikey"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-500 underline"
-                  >
-                    Google AI Studio
-                  </a>
-                  .
-                </p>
               </div>
             </div>
 

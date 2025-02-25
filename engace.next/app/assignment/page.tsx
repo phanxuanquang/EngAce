@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { GraduationCap, Sparkles, Loader2 } from "lucide-react";
 import Navbar from "@/components/Navbar";
@@ -26,25 +26,8 @@ export default function AssignmentPage() {
   const [error, setError] = useState<string>("");
   const [showError, setShowError] = useState(false);
 
-  useEffect(() => {
-    if (!preferences.hasCompletedOnboarding) {
-      router.push("/");
-      return;
-    }
 
-    // Fetch initial data
-    const fetchInitialData = async () => {
-      try {
-        await Promise.all([fetchAssignmentTypes(), fetchSuggestedTopics()]);
-      } finally {
-        setIsInitialLoading(false);
-      }
-    };
-
-    fetchInitialData();
-  }, [router, preferences.hasCompletedOnboarding]);
-
-  const fetchAssignmentTypes = async () => {
+  const fetchAssignmentTypes = useCallback(async () => {
     try {
       const response = await fetch(
         `${API_DOMAIN}/api/Assignment/GetAssignmentTypes`,
@@ -67,9 +50,9 @@ export default function AssignmentPage() {
     } catch (error) {
       console.error("Error fetching assignment types:", error);
     }
-  };
+  }, [preferences.geminiApiKey]);
 
-  const fetchSuggestedTopics = async () => {
+  const fetchSuggestedTopics = useCallback(async () => {
     try {
       const response = await fetch(
         `${API_DOMAIN}/api/Assignment/SuggestTopics?englishLevel=${preferences.proficiencyLevel}`,
@@ -86,7 +69,25 @@ export default function AssignmentPage() {
     } catch (error) {
       console.error("Error fetching suggested topics:", error);
     }
-  };
+  }, [preferences.geminiApiKey, preferences.proficiencyLevel]);
+
+  useEffect(() => {
+    if (!preferences.hasCompletedOnboarding) {
+      router.push("/");
+      return;
+    }
+
+    // Fetch initial data
+    const fetchInitialData = async () => {
+      try {
+        await Promise.all([fetchAssignmentTypes(), fetchSuggestedTopics()]);
+      } finally {
+        setIsInitialLoading(false);
+      }
+    };
+
+    fetchInitialData();
+  }, [router, preferences.hasCompletedOnboarding, fetchAssignmentTypes, fetchSuggestedTopics]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

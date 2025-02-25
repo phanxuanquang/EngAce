@@ -12,7 +12,7 @@ import {
   MessageCircleHeart,
   Info,
 } from "lucide-react";
-import { getUserPreferences, saveUserPreferences } from "@/lib/localStorage";
+import { getUserPreferences } from "@/lib/localStorage";
 import { useTheme } from "@/contexts/ThemeContext";
 import InfoDialog from "./InfoDialog";
 import FeedbackDialog from "./FeedbackDialog";

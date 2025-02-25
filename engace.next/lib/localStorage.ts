@@ -1,8 +1,16 @@
+type AssignmentData = {
+  prompt: string;
+  answer?: string;
+  feedback?: string;
+  score?: number;
+  timestamp?: number;
+};
+
 type UserPreferences = {
   fullName: string;
   gender: string;
   age: number;
-  apiKey: string;
+  geminiApiKey: string;
   hasCompletedOnboarding: boolean;
   proficiencyLevel: number;
 };
@@ -45,7 +53,7 @@ export const hasCompletedOnboarding = (): boolean => {
   return preferences.hasCompletedOnboarding || false;
 };
 
-export const setAssignmentData = (id: string, data: any): boolean => {
+export const setAssignmentData = (id: string, data: AssignmentData): boolean => {
   if (!isBrowser) return false;
   
   try {
@@ -57,7 +65,7 @@ export const setAssignmentData = (id: string, data: any): boolean => {
   }
 };
 
-export const getAssignmentData = (id: string): any | null => {
+export const getAssignmentData = (id: string): AssignmentData | null => {
   if (!isBrowser) return null;
   
   try {
