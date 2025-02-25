@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Clock } from "lucide-react";
 import Navbar from "@/components/Navbar";
@@ -15,9 +15,17 @@ type Question = {
   ExplanationInVietnamese: string;
 };
 
-export default function DoAssignmentPage() {
-  const router = useRouter();
+function AssignmentContent() {
   const searchParams = useSearchParams();
+  const data = searchParams.get("data");
+  
+  return (
+    <AssignmentContainer data={data} />
+  );
+}
+
+function AssignmentContainer({ data }: { data: string | null }) {
+  const router = useRouter();
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
@@ -28,10 +36,13 @@ export default function DoAssignmentPage() {
   const [showSubmitConfirm, setShowSubmitConfirm] = useState(false);
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 
-  // Initialize questions from URL
+  const handleSubmit = useCallback(() => {
+    if (isSubmitted) return;
+    setIsSubmitted(true);
+  }, [isSubmitted]);
+
   useEffect(() => {
     try {
-      const data = searchParams.get("data");
       if (!data) throw new Error("No assignment data found");
 
       const parsedQuestions = JSON.parse(decodeURIComponent(data));
@@ -45,9 +56,8 @@ export default function DoAssignmentPage() {
       setError("Không thể tải bài tập. Vui lòng thử lại.");
       setShowError(true);
     }
-  }, [searchParams]);
+  }, [data]);
 
-  // Timer countdown
   useEffect(() => {
     if (isSubmitted || timeRemaining <= 0) return;
 
@@ -63,7 +73,8 @@ export default function DoAssignmentPage() {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [isSubmitted, timeRemaining]);
+  }, [isSubmitted, timeRemaining, handleSubmit]);
+  
 
   const handleAnswerSelect = (optionIndex: number) => {
     if (isSubmitted) return;
@@ -73,11 +84,6 @@ export default function DoAssignmentPage() {
       newAnswers[currentQuestionIndex] = optionIndex;
       return newAnswers;
     });
-  };
-
-  const handleSubmit = () => {
-    if (isSubmitted) return;
-    setIsSubmitted(true);
   };
 
   const handleCancel = () => {
@@ -102,9 +108,9 @@ export default function DoAssignmentPage() {
       <Navbar />
 
       <div className="container mx-auto px-4 min-h-[calc(100vh-96px)]">
-      <div className="mx-auto max-w-3xl w-full pt-8">
-        {/* Progress and Timer Bar */}
-        <div className="mb-4 rounded-md bg-white/60 backdrop-blur-xl p-4 shadow-lg border border-white/20 dark:bg-slate-800/60 dark:border-slate-700/30">
+        <div className="mx-auto max-w-3xl w-full pt-8">
+          {/* Progress and Timer Bar */}
+          <div className="mb-4 rounded-md bg-white/60 backdrop-blur-xl p-4 shadow-lg border border-white/20 dark:bg-slate-800/60 dark:border-slate-700/30">
             <div className="mb-4 flex items-center justify-between">
               <div className="text-lg font-semibold text-slate-900 dark:text-white/90">
                 Câu {currentQuestionIndex + 1}/{questions.length}
@@ -234,5 +240,13 @@ export default function DoAssignmentPage() {
         cancelText="Tiếp tục làm bài"
       />
     </div>
+  );
+}
+
+export default function DoAssignmentPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen relative bg-gradient-to-br from-slate-50/95 via-purple-50/98 to-slate-100/95 dark:from-slate-950/95 dark:via-purple-900/40 dark:to-slate-950/95 overflow-hidden pt-16">Loading...</div>}>
+      <AssignmentContent />
+    </Suspense>
   );
 }
