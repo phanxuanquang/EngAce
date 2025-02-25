@@ -3,9 +3,9 @@ using Entities.Enums;
 using Gemini.NET;
 using Gemini.NET.Client_Models;
 using Gemini.NET.Helpers;
-using Helper;
 using Models.Enums;
 using System.Text;
+using System.Web;
 
 namespace Events
 {
@@ -144,7 +144,7 @@ I rely on you to **make my English learning journey effective and enjoyable**.";
                     .IncludesSearchEntryPointInResponse()
                     .GenerateContentAsync(apiRequest.Build(), ModelVersion.Gemini_20_Flash);
 
-                if (responseWithSearching.GroundingDetail?.Sources?.Any() == false 
+                if (responseWithSearching.GroundingDetail?.Sources?.Any() == false
                     && responseWithSearching.GroundingDetail?.SearchSuggestions?.Any() == false
                     && responseWithSearching.GroundingDetail?.ReliableInformation?.Any() == false)
                 {
@@ -159,7 +159,7 @@ I rely on you to **make my English learning journey effective and enjoyable**.";
                 if (responseWithSearching.GroundingDetail?.Sources?.Any() == true)
                 {
                     stringBuilder.AppendLine();
-                    stringBuilder.AppendLine("### **Reference Sources**");
+                    stringBuilder.AppendLine("## **Nguồn tham khảo**");
                     stringBuilder.AppendLine();
                     foreach (var source in responseWithSearching.GroundingDetail.Sources.ToList())
                     {
@@ -167,25 +167,20 @@ I rely on you to **make my English learning journey effective and enjoyable**.";
                     }
                 }
 
-                if (responseWithSearching.GroundingDetail?.ReliableInformation?.Any() == true)
+                if (responseWithSearching.GroundingDetail?.SearchSuggestions?.Any() == true)
                 {
                     stringBuilder.AppendLine();
-                    stringBuilder.AppendLine("### **Verified Parts**");
+                    stringBuilder.AppendLine("## **Gợi ý tra cứu**");
                     stringBuilder.AppendLine();
-                    foreach (var part in responseWithSearching.GroundingDetail.ReliableInformation.ToList())
-                    {
-                        stringBuilder.AppendLine($"- {part}");
-                    }
-                }
+                    string baseUrl = "https://www.google.com/search";
 
-                if(responseWithSearching.GroundingDetail?.SearchSuggestions?.Any() == true)
-                {
-                    stringBuilder.AppendLine();
-                    stringBuilder.AppendLine("### **Search Suggestions**");
-                    stringBuilder.AppendLine();
                     foreach (var suggestion in responseWithSearching.GroundingDetail.SearchSuggestions.ToList())
                     {
-                        stringBuilder.AppendLine($"- [{suggestion}](https://www.google.com/search?q={suggestion})");
+                        var uriBuilder = new UriBuilder(baseUrl);
+                        var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+                        query["q"] = suggestion;
+
+                        stringBuilder.AppendLine($"- [{suggestion}]({query.ToString()})");
                     }
                 }
 

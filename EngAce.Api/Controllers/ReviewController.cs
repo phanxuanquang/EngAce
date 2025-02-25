@@ -1,5 +1,4 @@
 ﻿using EngAce.Api.DTO;
-using Entities;
 using Entities.Enums;
 using Events;
 using Helper;
@@ -22,7 +21,7 @@ namespace EngAce.Api.Controllers
                 return Unauthorized("Invalid Access Key");
             }
             var content = request.Content.Trim();
-                 
+
             if (GeneralHelper.GetTotalWords(content) < ReviewScope.MinTotalWords)
             {
                 return BadRequest($"Bài viết phải dài tối thiểu {ReviewScope.MinTotalWords} từ.");

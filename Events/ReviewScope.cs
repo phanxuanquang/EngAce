@@ -1,9 +1,6 @@
-﻿using Entities;
-using Entities.Enums;
+﻿using Entities.Enums;
 using Gemini.NET;
-using Gemini.NET.Helpers;
 using Helper;
-using Microsoft.AspNetCore.Http;
 using Models.Enums;
 using System.Text;
 

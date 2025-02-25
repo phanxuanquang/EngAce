@@ -1,10 +1,8 @@
-﻿using EngAce.Api.DTO;
-using Entities;
+﻿using Entities;
 using Entities.Enums;
 using Events;
 using Helper;
 using Microsoft.AspNetCore.Mvc;
-using System.Text;
 
 namespace EngAce.Api.Controllers
 {
