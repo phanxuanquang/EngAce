@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { UserRound, Key, X, Loader2, AlertCircle } from "lucide-react";
+import { PROFICIENCY_LEVELS } from "@/lib/constants";
 import {
   Select,
   SelectContent,
@@ -23,19 +24,36 @@ interface FormErrors {
   age?: string;
   gender?: string;
   geminiApiKey?: string;
+  proficiencyLevel?: string;
 }
 
-export default function UserProfileDialog({ isOpen, onClose }: UserProfileDialogProps) {
+export default function UserProfileDialog({
+  isOpen,
+  onClose,
+}: UserProfileDialogProps) {
   const preferences = getUserPreferences();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [formErrors, setFormErrors] = useState<FormErrors>({});
+  const [selectedLevelDescription, setSelectedLevelDescription] = useState<
+    string
+  >("");
   const [formData, setFormData] = useState({
     fullName: preferences.fullName || "",
     age: preferences.age?.toString() || "",
     gender: preferences.gender || "",
     geminiApiKey: preferences.geminiApiKey || "",
+    proficiencyLevel: preferences.proficiencyLevel?.toString() || "",
   });
+
+  // Update description when proficiency level changes
+  const handleProficiencyChange = (value: string) => {
+    setFormData({ ...formData, proficiencyLevel: value });
+    const level = PROFICIENCY_LEVELS.find(
+      (level) => level.id.toString() === value
+    );
+    setSelectedLevelDescription(level?.description || "");
+  };
 
   const validateForm = (): boolean => {
     const errors: FormErrors = {};
@@ -58,6 +76,11 @@ export default function UserProfileDialog({ isOpen, onClose }: UserProfileDialog
 
     if (!formData.geminiApiKey.trim()) {
       errors.geminiApiKey = "Vui lòng nhập API Key";
+      isValid = false;
+    }
+
+    if (!formData.proficiencyLevel) {
+      errors.proficiencyLevel = "Vui lòng chọn trình độ";
       isValid = false;
     }
 
@@ -91,6 +114,9 @@ export default function UserProfileDialog({ isOpen, onClose }: UserProfileDialog
         age: formData.age ? parseInt(formData.age, 10) : undefined,
         gender: formData.gender,
         geminiApiKey: formData.geminiApiKey,
+        proficiencyLevel: formData.proficiencyLevel
+          ? parseInt(formData.proficiencyLevel, 10)
+          : undefined,
       });
 
       onClose();
@@ -135,7 +161,10 @@ export default function UserProfileDialog({ isOpen, onClose }: UserProfileDialog
           <div className="px-4 sm:px-6 py-4">
             <div className="space-y-4">
               <div>
-                <label htmlFor="fullName" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                <label
+                  htmlFor="fullName"
+                  className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1"
+                >
                   Họ và tên
                 </label>
                 <div className="relative">
@@ -144,7 +173,9 @@ export default function UserProfileDialog({ isOpen, onClose }: UserProfileDialog
                     type="text"
                     placeholder="Nhập họ và tên"
                     value={formData.fullName}
-                    onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, fullName: e.target.value })
+                    }
                     className={`w-full pl-10 pr-4 py-2 rounded-lg border ${
                       formErrors.fullName
                         ? "border-red-500 focus:ring-red-500"
@@ -163,7 +194,10 @@ export default function UserProfileDialog({ isOpen, onClose }: UserProfileDialog
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="age" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                  <label
+                    htmlFor="age"
+                    className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1"
+                  >
                     Tuổi
                   </label>
                   <input
@@ -171,7 +205,9 @@ export default function UserProfileDialog({ isOpen, onClose }: UserProfileDialog
                     type="number"
                     placeholder="Nhập tuổi"
                     value={formData.age}
-                    onChange={(e) => setFormData({ ...formData, age: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, age: e.target.value })
+                    }
                     min={1}
                     max={100}
                     className={`w-full px-4 py-2 rounded-lg border ${
@@ -189,13 +225,25 @@ export default function UserProfileDialog({ isOpen, onClose }: UserProfileDialog
                 </div>
 
                 <div>
-                  <label htmlFor="gender" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                  <label
+                    htmlFor="gender"
+                    className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1"
+                  >
                     Giới tính
                   </label>
-                  <Select value={formData.gender} onValueChange={(value) => setFormData({ ...formData, gender: value })}>
+                  <Select
+                    value={formData.gender}
+                    onValueChange={(value) =>
+                      setFormData({ ...formData, gender: value })
+                    }
+                  >
                     <SelectTrigger
                       id="gender"
-                      className={formErrors.gender ? "border-red-500 focus:ring-red-500" : ""}
+                      className={
+                        formErrors.gender
+                          ? "border-red-500 focus:ring-red-500"
+                          : ""
+                      }
                     >
                       <SelectValue placeholder="Chọn giới tính" />
                     </SelectTrigger>
@@ -215,8 +263,53 @@ export default function UserProfileDialog({ isOpen, onClose }: UserProfileDialog
               </div>
 
               <div>
-                <label htmlFor="geminiApiKey" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-                  API Key
+                <label
+                  htmlFor="proficiencyLevel"
+                  className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1"
+                >
+                  Trình độ tiếng Anh của bạn
+                </label>
+                <Select
+                  value={formData.proficiencyLevel}
+                  onValueChange={handleProficiencyChange}
+                >
+                  <SelectTrigger
+                    id="proficiencyLevel"
+                    className={
+                      formErrors.proficiencyLevel
+                        ? "border-red-500 focus:ring-red-500"
+                        : ""
+                    }
+                  >
+                    <SelectValue placeholder="Chọn trình độ" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {PROFICIENCY_LEVELS.map((level) => (
+                      <SelectItem key={level.id} value={level.id.toString()}>
+                        {level.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {formErrors.proficiencyLevel && (
+                  <div className="flex items-center mt-1 text-xs sm:text-sm text-red-500">
+                    <AlertCircle className="w-4 h-4 mr-1" />
+                    {formErrors.proficiencyLevel}
+                  </div>
+                )}
+                {selectedLevelDescription && (
+                  <div className="mt-2 text-sm text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-900 p-3 rounded-lg border border-slate-200 dark:border-slate-700">
+                    {selectedLevelDescription}
+                  </div>
+                )}
+              </div>
+
+              <div>
+                <label
+                  htmlFor="geminiApiKey"
+                  className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1"
+                >
+                  Gemini API Key
                 </label>
                 <div className="relative">
                   <input
@@ -224,7 +317,9 @@ export default function UserProfileDialog({ isOpen, onClose }: UserProfileDialog
                     type="password"
                     placeholder="Nhập API Key"
                     value={formData.geminiApiKey}
-                    onChange={(e) => setFormData({ ...formData, geminiApiKey: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, geminiApiKey: e.target.value })
+                    }
                     className={`w-full pl-10 pr-4 py-2 rounded-lg border ${
                       formErrors.geminiApiKey || error
                         ? "border-red-500 focus:ring-red-500"
