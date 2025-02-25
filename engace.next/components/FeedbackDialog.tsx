@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { API_DOMAIN } from "@/lib/config";
 import { Loader2, X, AlertCircle, CheckCircle2 } from "lucide-react";
 
 interface FeedbackDialogProps {
@@ -51,7 +52,7 @@ export default function FeedbackDialog({
 
     try {
       const response = await fetch(
-        `https://localhost:5000/api/Healthcheck/SendFeedback?userName=${encodeURIComponent(
+        `${API_DOMAIN}/api/Healthcheck/SendFeedback?userName=${encodeURIComponent(
           userName
         )}`,
         {

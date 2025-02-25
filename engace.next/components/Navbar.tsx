@@ -8,22 +8,15 @@ import {
   LogOut,
   Menu,
   X,
-  GraduationCap,
+  UserCircle,
   MessageCircleHeart,
   Info,
 } from "lucide-react";
 import { getUserPreferences, saveUserPreferences } from "@/lib/localStorage";
 import { useTheme } from "@/contexts/ThemeContext";
-import { PROFICIENCY_LEVELS } from "@/lib/constants";
 import InfoDialog from "./InfoDialog";
 import FeedbackDialog from "./FeedbackDialog";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import UserProfileDialog from "./UserProfileDialog";
 import ConfirmDialog from "@/components/ConfirmDialog";
 
 export default function Navbar() {
@@ -33,15 +26,8 @@ export default function Navbar() {
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const [showFeedbackDialog, setShowFeedbackDialog] = useState(false);
   const [showInfoDialog, setShowInfoDialog] = useState(false);
+  const [showProfileDialog, setShowProfileDialog] = useState(false);
   const preferences = getUserPreferences();
-
-  const handleLevelChange = (value: string) => {
-    const levelId = parseInt(value, 10);
-    saveUserPreferences({
-      ...preferences,
-      proficiencyLevel: levelId,
-    });
-  };
 
   const handleLogout = () => {
     localStorage.clear();
@@ -95,29 +81,12 @@ export default function Navbar() {
 
             {/* Desktop Actions */}
             <div className="hidden md:flex items-center space-x-2">
-              {/* Level Selector */}
-              <div className="flex items-center space-x-2 px-2">
-                <GraduationCap className="h-5 w-5 text-slate-600 dark:text-slate-400" />
-                <Select
-                  defaultValue={String(preferences.proficiencyLevel || 1)}
-                  onValueChange={handleLevelChange}
-                >
-                  <SelectTrigger className="w-[180px] border-slate-200 dark:border-slate-700">
-                    <SelectValue placeholder="Chọn trình độ" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {PROFICIENCY_LEVELS.map((level) => (
-                      <SelectItem
-                        key={level.id}
-                        value={String(level.id)}
-                        className="cursor-pointer"
-                      >
-                        {level.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+              <button
+                onClick={() => setShowProfileDialog(true)}
+                className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              >
+                <UserCircle className="h-5 w-5 text-slate-600 dark:text-slate-400" />
+              </button>
 
               <button
                 onClick={toggleTheme}
@@ -161,29 +130,15 @@ export default function Navbar() {
           {showMobileMenu && (
             <div className="md:hidden pt-4 pb-2 border-t border-slate-200 dark:border-slate-700 mt-4">
               <div className="flex flex-col space-y-4">
-                {/* Mobile Level Selector */}
-                <div className="flex items-center space-x-2">
-                  <GraduationCap className="h-5 w-5 text-slate-600 dark:text-slate-400 ml-2" />
-                  <Select
-                    defaultValue={String(preferences.proficiencyLevel || 1)}
-                    onValueChange={handleLevelChange}
-                  >
-                    <SelectTrigger className="w-full bg-transparent border-slate-200 dark:border-slate-700">
-                      <SelectValue placeholder="Chọn trình độ" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {PROFICIENCY_LEVELS.map((level) => (
-                        <SelectItem
-                          key={level.id}
-                          value={String(level.id)}
-                          className="cursor-pointer"
-                        >
-                          {level.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+                <button
+                  onClick={() => setShowProfileDialog(true)}
+                  className="flex items-center space-x-2 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                >
+                  <UserCircle className="h-5 w-5 text-slate-600 dark:text-slate-400" />
+                  <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
+                    Cập nhật thông tin
+                  </span>
+                </button>
 
                 <button
                   onClick={toggleTheme}
@@ -191,9 +146,13 @@ export default function Navbar() {
                   aria-label="Theme switch"
                 >
                   <div className="flex items-center space-x-2">
-                    {isDark ? <Sun className="h-5 w-5 text-slate-600 dark:text-slate-400" /> : <Moon className="h-5 w-5 text-slate-600 dark:text-slate-400" />}
+                    {isDark ? (
+                      <Sun className="h-5 w-5 text-slate-600 dark:text-slate-400" />
+                    ) : (
+                      <Moon className="h-5 w-5 text-slate-600 dark:text-slate-400" />
+                    )}
                     <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
-                      {isDark ? 'Bật chế độ sáng' : 'Bật chế độ tối'}
+                      {isDark ? "Bật chế độ sáng" : "Bật chế độ tối"}
                     </span>
                   </div>
                 </button>
@@ -237,7 +196,12 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {/* Logout Confirmation Dialog */}
+      {/* Dialogs */}
+      <UserProfileDialog
+        isOpen={showProfileDialog}
+        onClose={() => setShowProfileDialog(false)}
+      />
+
       <ConfirmDialog
         isOpen={showLogoutDialog}
         onClose={() => setShowLogoutDialog(false)}
@@ -247,7 +211,6 @@ export default function Navbar() {
         confirmText="Xác nhận"
       />
 
-      {/* Dialogs */}
       <InfoDialog
         isOpen={showInfoDialog}
         onClose={() => setShowInfoDialog(false)}

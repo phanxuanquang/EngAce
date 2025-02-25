@@ -147,38 +147,45 @@ You are an expert English teacher with over 20 years of teaching experience, and
 
         private static async Task<List<Quiz>> GenerateQuizesForLessThan15(string apiKey, string topic, List<AssignmentType> quizzTypes, EnglishLevel level, int questionsCount)
         {
-            var userLevel = GeneralHelper.GetEnumDescription(level);
-            var types = string.Join(", ", quizzTypes.Select(t => GeneralHelper.GetEnumDescription(t)).ToList());
-            var promptBuilder = new StringBuilder();
-
-            promptBuilder.AppendLine($"I am a English learner with the English proficiency level of `{userLevel}` according to the CEFR standard.");
-            promptBuilder.AppendLine();
-            promptBuilder.AppendLine("## The decription of my level according to the CEFR standard:");
-            promptBuilder.AppendLine();
-            promptBuilder.AppendLine(GetLevelDescription(level));
-            promptBuilder.AppendLine();
-            promptBuilder.AppendLine("## Your task:");
-            promptBuilder.AppendLine();
-            promptBuilder.AppendLine($"Generate a set of multiple-choice English questions consisting of {questionsCount} to {questionsCount + 5} questions related to the topic '{topic.Trim()}' for me to practice, the quiz should be of the types: {types}");
-            promptBuilder.AppendLine();
-            promptBuilder.AppendLine("The generated questions should be of the types:");
-            foreach (var type in quizzTypes)
+            try
             {
-                promptBuilder.AppendLine($"- {GeneralHelper.GetEnumDescription(type)}");
+                var userLevel = GeneralHelper.GetEnumDescription(level);
+                var types = string.Join(", ", quizzTypes.Select(t => GeneralHelper.GetEnumDescription(t)).ToList());
+                var promptBuilder = new StringBuilder();
+
+                promptBuilder.AppendLine($"I am a English learner with the English proficiency level of `{userLevel}` according to the CEFR standard.");
+                promptBuilder.AppendLine();
+                promptBuilder.AppendLine("## The decription of my level according to the CEFR standard:");
+                promptBuilder.AppendLine();
+                promptBuilder.AppendLine(GetLevelDescription(level));
+                promptBuilder.AppendLine();
+                promptBuilder.AppendLine("## Your task:");
+                promptBuilder.AppendLine();
+                promptBuilder.AppendLine($"Generate a set of multiple-choice English questions consisting of {questionsCount} to {questionsCount + 5} questions related to the topic '{topic.Trim()}' for me to practice, the quiz should be of the types: {types}");
+                promptBuilder.AppendLine();
+                promptBuilder.AppendLine("The generated questions should be of the types:");
+                foreach (var type in quizzTypes)
+                {
+                    promptBuilder.AppendLine($"- {GeneralHelper.GetEnumDescription(type)}");
+                }
+
+                var generator = new Generator(apiKey);
+
+                var apiRequest = new ApiRequestBuilder()
+                    .WithSystemInstruction(Instruction)
+                    .WithPrompt(promptBuilder.ToString())
+                    .WithDefaultGenerationConfig(0.3F, ResponseMimeType.Json)
+                    .DisableAllSafetySettings()
+                    .Build();
+
+                var response = await generator.GenerateContentAsync(apiRequest, ModelVersion.Gemini_20_Flash_Lite);
+
+                return [.. JsonHelper.AsObject<List<Quiz>>(response.Result)];
             }
-
-            var generator = new Generator(apiKey);
-
-            var apiRequest = new ApiRequestBuilder()
-                .WithSystemInstruction(Instruction)
-                .WithPrompt(promptBuilder.ToString())
-                .WithDefaultGenerationConfig(0.3F, ResponseMimeType.Json)
-                .DisableAllSafetySettings()
-                .Build();
-
-            var response = await generator.GenerateContentAsync(apiRequest, ModelVersion.Gemini_20_Flash_Lite);
-
-            return [.. JsonHelper.AsObject<List<Quiz>>(response.Result)];
+            catch
+            {
+                return [];
+            }
         }
 
         private static async Task<List<Quiz>> GenerateQuizesByType(string apiKey, string topic, AssignmentType quizzType, EnglishLevel level, int questionsCount)

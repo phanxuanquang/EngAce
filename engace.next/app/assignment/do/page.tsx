@@ -6,6 +6,7 @@ import { Clock } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import ErrorDialog from "@/components/ErrorDialog";
 import AssignmentResult from "@/components/AssignmentResult";
+import { getAssignmentData, clearAssignmentData } from "@/lib/localStorage";
 import ConfirmDialog from "@/components/ConfirmDialog";
 
 type Question = {
@@ -17,14 +18,14 @@ type Question = {
 
 function AssignmentContent() {
   const searchParams = useSearchParams();
-  const data = searchParams.get("data");
+  const id = searchParams.get("id");
   
   return (
-    <AssignmentContainer data={data} />
+    <AssignmentContainer id={id} />
   );
 }
 
-function AssignmentContainer({ data }: { data: string | null }) {
+function AssignmentContainer({ id }: { id: string | null }) {
   const router = useRouter();
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -43,20 +44,20 @@ function AssignmentContainer({ data }: { data: string | null }) {
 
   useEffect(() => {
     try {
-      if (!data) throw new Error("No assignment data found");
+      if (!id) throw new Error("No assignment data found");
 
-      const parsedQuestions = JSON.parse(decodeURIComponent(data));
-      if (!Array.isArray(parsedQuestions))
-        throw new Error("Invalid assignment data");
+      const questions = getAssignmentData(id);
+      if (!questions || !Array.isArray(questions))
+        throw new Error("Invalid assignment data format");
 
-      setQuestions(parsedQuestions);
-      setSelectedAnswers(new Array(parsedQuestions.length).fill(-1));
-      setTimeRemaining(parsedQuestions.length * 60); // Set time based on question count
+      setQuestions(questions);
+      setSelectedAnswers(new Array(questions.length).fill(-1));
+      setTimeRemaining(questions.length * 60); // Set time based on question count
     } catch {
       setError("Không thể tải bài tập. Vui lòng thử lại.");
       setShowError(true);
     }
-  }, [data]);
+  }, [id]);
 
   useEffect(() => {
     if (isSubmitted || timeRemaining <= 0) return;
@@ -88,6 +89,9 @@ function AssignmentContainer({ data }: { data: string | null }) {
 
   const handleCancel = () => {
     setShowCancelConfirm(false);
+    if (id) {
+      clearAssignmentData(id);
+    }
     router.push("/assignment");
   };
 

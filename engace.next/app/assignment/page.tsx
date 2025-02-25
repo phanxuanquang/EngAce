@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { GraduationCap, Sparkles, Loader2 } from "lucide-react";
 import Navbar from "@/components/Navbar";
-import { getUserPreferences } from "@/lib/localStorage";
+import { getUserPreferences, setAssignmentData } from "@/lib/localStorage";
 import ErrorDialog from "@/components/ErrorDialog";
 import { API_DOMAIN } from "@/lib/config";
 
@@ -103,16 +103,21 @@ export default function AssignmentPage() {
         body: JSON.stringify({
           Topic: topic,
           AssignmentTypes: selectedTypes.map((id) => parseInt(id)),
-          englishLevel: preferences.proficiencyLevel,
-          totalQuestions: 15,
+          EnglishLevel: preferences.proficiencyLevel,
+          TotalQuestions: questionCount,
         }),
       });
 
       if (!response.ok) throw new Error("Failed to generate assignment");
 
       const questions = await response.json();
+      const timestamp = Date.now();
+      
+      // Store questions data in localStorage with a timestamp as identifier
+      setAssignmentData(timestamp.toString(), questions);
+      
       router.push(
-        `/assignment/do?data=${encodeURIComponent(JSON.stringify(questions))}`
+        `/assignment/do?id=${timestamp}`
       );
     } catch (err) {
       console.error("Error generating assignment:", err);
@@ -212,24 +217,20 @@ export default function AssignmentPage() {
                 )}
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-4">
                 <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
                   Số lượng câu hỏi
                 </label>
                 <input
                   type="number"
                   value={questionCount}
-                  onChange={(e) =>
-                    setQuestionCount(
-                      Math.min(
-                        100,
-                        Math.max(10, parseInt(e.target.value) || 10)
-                      )
-                    )
-                  }
-                  min="10"
-                  max="100"
-                  className="w-full border border-slate-200 dark:border-slate-700 rounded-md border-slate-200 bg-white px-4 py-2 text-slate-900 focus:border-purple-500 focus:outline-none focus:ring-4 focus:ring-purple-500/10 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:focus:border-purple-400 dark:focus:ring-purple-400/10"
+                  onChange={(e) => setQuestionCount(Number(e.target.value))}
+                  autoComplete="off"
+                  placeholder="10"
+                  min={5}
+                  max={100}
+                  disabled={isLoading}
+                  className="w-full border border-slate-200 dark:border-slate-700 rounded-md bg-white px-4 py-2 text-slate-900 focus:border-purple-500 focus:outline-none focus:ring-4 focus:ring-purple-500/10 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:focus:border-purple-400 dark:focus:ring-purple-400/10"
                 />
               </div>
 

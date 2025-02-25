@@ -17,7 +17,7 @@ namespace EngAce.Api.Controllers
         private readonly string _accessKey = HttpContextHelper.GetAccessKey();
 
         [HttpPost("Generate")]
-        public async Task<ActionResult<List<Quiz>>> Generate([FromBody] GenerateQuizzes request, EnglishLevel englishLevel = EnglishLevel.Intermediate, short totalQuestions = 10)
+        public async Task<ActionResult<List<Quiz>>> Generate([FromBody] GenerateQuizzes request)
         {
             if (string.IsNullOrEmpty(_accessKey))
             {
@@ -36,17 +36,17 @@ namespace EngAce.Api.Controllers
                 return BadRequest($"Chủ đề không được chứa nhiều hơn {QuizScope.MaxTotalWordsOfTopic} từ");
             }
 
-            if (totalQuestions < QuizScope.MinTotalQuestions || totalQuestions > QuizScope.MaxTotalQuestions)
+            if (request.TotalQuestions < QuizScope.MinTotalQuestions || request.TotalQuestions > QuizScope.MaxTotalQuestions)
             {
                 return BadRequest($"Số lượng câu hỏi phải nằm trong khoảng {QuizScope.MinTotalQuestions} đến {QuizScope.MaxTotalQuestions}");
             }
 
-            if (totalQuestions < request.AssignmentTypes.Count)
+            if (request.TotalQuestions < request.AssignmentTypes.Count)
             {
                 return BadRequest($"Tổng số câu hỏi không được nhỏ hơn số loại câu hỏi mà bạn chọn");
             }
 
-            var cacheKey = $"GenerateQuiz-{request.Topic.ToLower()}-{string.Join(string.Empty, request.AssignmentTypes)}-{englishLevel}-{totalQuestions}";
+            var cacheKey = $"GenerateQuiz-{request.Topic.ToLower()}-{string.Join(string.Empty, request.AssignmentTypes)}-{request.EnglishLevel}-{request.TotalQuestions}";
             if (_cache.TryGetValue(cacheKey, out var cachedQuizzes))
             {
                 return Ok(cachedQuizzes);
@@ -54,8 +54,8 @@ namespace EngAce.Api.Controllers
 
             try
             {
-                var quizzes = await QuizScope.GenerateQuizes(_accessKey, request.Topic, request.AssignmentTypes, englishLevel, totalQuestions);
-                _cache.Set(cacheKey, quizzes, TimeSpan.FromMinutes(totalQuestions));
+                var quizzes = await QuizScope.GenerateQuizes(_accessKey, request.Topic, request.AssignmentTypes, request.EnglishLevel, request.TotalQuestions);
+                _cache.Set(cacheKey, quizzes, TimeSpan.FromMinutes(request.TotalQuestions));
 
                 _logger.LogInformation("{_accessKey} generated: {Topic} - Quizz Types: {Types}", _accessKey[..10], request.Topic, string.Join("-", request.AssignmentTypes.Select(t => t.ToString())));
 

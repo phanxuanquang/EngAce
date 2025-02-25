@@ -2,12 +2,13 @@ type UserPreferences = {
   fullName: string;
   gender: string;
   age: number;
-  geminiApiKey: string;
+  apiKey: string;
   hasCompletedOnboarding: boolean;
   proficiencyLevel: number;
 };
 
 const STORAGE_KEY = 'user-preferences';
+const ASSIGNMENT_PREFIX = 'assignment-';
 
 const isBrowser = typeof window !== 'undefined';
 
@@ -42,4 +43,34 @@ export const hasCompletedOnboarding = (): boolean => {
   
   const preferences = getUserPreferences();
   return preferences.hasCompletedOnboarding || false;
+};
+
+export const setAssignmentData = (id: string, data: any): boolean => {
+  if (!isBrowser) return false;
+  
+  try {
+    localStorage.setItem(ASSIGNMENT_PREFIX + id, JSON.stringify(data));
+    return true;
+  } catch (error) {
+    console.error('Error saving assignment data:', error);
+    return false;
+  }
+};
+
+export const getAssignmentData = (id: string): any | null => {
+  if (!isBrowser) return null;
+  
+  try {
+    const stored = localStorage.getItem(ASSIGNMENT_PREFIX + id);
+    return stored ? JSON.parse(stored) : null;
+  } catch (error) {
+    console.error('Error getting assignment data:', error);
+    return null;
+  }
+};
+
+export const clearAssignmentData = (id: string): void => {
+  if (!isBrowser) return;
+  
+  localStorage.removeItem(ASSIGNMENT_PREFIX + id);
 };

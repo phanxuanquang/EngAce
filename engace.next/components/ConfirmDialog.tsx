@@ -32,7 +32,7 @@ export default function ConfirmDialog({
 }: ConfirmDialogProps) {
   return (
     <AlertDialog open={isOpen} onOpenChange={onClose}>
-      <AlertDialogContent className="bg-white/70 backdrop-blur-md border border-white/20 shadow-xl dark:bg-slate-800/70 dark:border-slate-700/20">
+      <AlertDialogContent className="bg-white backdrop-blur-md border border-white/20 shadow-xl dark:bg-slate-800/70 dark:border-slate-700/20">
         <AlertDialogHeader>
           <AlertDialogTitle className="text-slate-900 dark:text-white">
             {title}
@@ -43,7 +43,7 @@ export default function ConfirmDialog({
         </AlertDialogHeader>
         <AlertDialogFooter className="flex justify-end">
           <AlertDialogCancel
-            className="bg-white/50 backdrop-blur-sm border border-slate-200/50 text-slate-700 hover:bg-white/80 dark:bg-slate-700/50 dark:border-slate-600/50 dark:text-slate-300 dark:hover:bg-slate-600/80"
+            className="bg-slate-500/20 backdrop-blur-sm border border-slate-200/50 text-slate-700 hover:bg-slate-500/40 dark:bg-slate-700/50 dark:border-slate-600/50 dark:text-slate-300 dark:hover:bg-slate-600/80"
             onClick={onClose}
           >
             {cancelText}
