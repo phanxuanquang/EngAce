@@ -1,4 +1,4 @@
-![Untitled-2-Recovered](https://github.com/user-attachments/assets/9b2c68a8-0ba2-4655-9c7f-3ce227c8eb86)
+![Untitled-2-Recovered](https://i.imgur.com/nt98Q22.png)
 
 EngAce is a cutting-edge, generative AI-powered application designed to revolutionize the way Vietnamese learn English. This app provides a personalized learning experience tailored to each user's unique needs and preferences. EngAce combines the power of artificial intelligence with a comprehensive set of features to create an engaging and effective English learning environment. This repository contains the full source code, documentation, and resources for the EngAce app.
 ____________________________
