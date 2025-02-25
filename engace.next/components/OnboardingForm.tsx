@@ -94,14 +94,14 @@ export default function OnboardingForm() {
       <div className="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-blue-400 blur-3xl opacity-30"></div>
 
       {/* Glass card */}
-      <div className="relative w-full max-w-md p-8 rounded-2xl shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] bg-white/10 backdrop-blur-lg border border-white/20 transition-transform duration-300 hover:scale-[1.01]">
+      <div className="relative w-full max-w-md p-8 rounded-2xl shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] bg-white/10 backdrop-blur-lg border border-white/20 transition-transform duration-300">
         <div className="space-y-6">
           {/* Header */}
           <div className="space-y-2 text-center">
             <h1 className="text-4xl font-bold bg-clip-text bg-gradient-to-r from-white to-blue-100">
               CHÀO MỪNG
             </h1>
-            <p className="opacity-70">
+            <p className="opacity-70 text-sm">
               EngAce muốn biết một số thông tin cơ bản để hỗ trợ bạn học tập tốt
               nhất
             </p>

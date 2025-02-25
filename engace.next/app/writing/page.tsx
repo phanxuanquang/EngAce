@@ -2,8 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { PenLine } from "lucide-react";
+import { PenLine, Loader2, Upload } from "lucide-react";
 import { getUserPreferences } from "@/lib/localStorage";
+import { Button } from "@/components/ui/button";
+import { API_DOMAIN } from "@/lib/config";
 import Navbar from "@/components/Navbar";
 
 const VISITED_KEY = "has-visited-writing";
@@ -14,11 +16,12 @@ export default function WritingPage() {
   const [content, setContent] = useState("");
   const [showGuide, setShowGuide] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isExtracting, setIsExtracting] = useState(false);
   const [charCount, setCharCount] = useState(0);
   const router = useRouter();
+  const preferences = getUserPreferences();
 
   useEffect(() => {
-    const preferences = getUserPreferences();
     if (!preferences.hasCompletedOnboarding) {
       router.push("/");
       return;
@@ -47,6 +50,49 @@ export default function WritingPage() {
     searchParams.set("title", title.trim());
     searchParams.set("content", content.trim());
     router.push(`/writing/result?${searchParams.toString()}`);
+  };
+
+  const convertToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        if (typeof reader.result === "string") {
+          resolve(reader.result);
+        }
+      };
+      reader.onerror = (error) => reject(error);
+    });
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      setIsExtracting(true);
+      const base64 = await convertToBase64(file);
+
+      const response = await fetch(
+        `${API_DOMAIN}/api/Healthcheck/ExtractTextFromImage`,
+        {
+          method: "POST",
+          headers: {
+            accept: "text/plain",
+            Authentication: preferences.geminiApiKey || "",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(base64),
+        }
+      );
+
+      const extractedText = await response.text();
+      setContent(extractedText);
+    } catch (error) {
+      console.error("Error extracting text:", error);
+    } finally {
+      setIsExtracting(false);
+    }
   };
 
   return (
@@ -98,6 +144,37 @@ export default function WritingPage() {
                   <span className="text-lg font-medium text-slate-900 dark:text-white">
                     Nội dung bài viết của bạn
                   </span>
+                  <div className="relative">
+                    <input
+                      type="file"
+                      id="imageUpload"
+                      className="hidden"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      disabled={isExtracting}
+                    />
+                    <Button
+                      variant="outline"
+                      className="text-sm bg-slate-600/10 text-slate-900 dark:bg-slate-500/50 dark:text-white"
+                      size="sm"
+                      onClick={() =>
+                        document.getElementById("imageUpload")?.click()
+                      }
+                      disabled={isExtracting}
+                    >
+                      {isExtracting ? (
+                        <>
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          Đang trích xuất
+                        </>
+                      ) : (
+                        <>
+                          <Upload className="h-4 w-4" />
+                          Nhập bài viết từ ảnh
+                        </>
+                      )}
+                    </Button>
+                  </div>
                 </div>
                 <div className="relative">
                   <textarea

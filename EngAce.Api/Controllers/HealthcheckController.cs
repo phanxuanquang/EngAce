@@ -38,5 +38,35 @@ namespace EngAce.Api.Controllers
 
             return NoContent();
         }
+
+        [HttpPost("ExtractTextFromImage")]
+        public async Task<ActionResult<string>> ExtractTextFromImage([FromBody] string base64Image)
+        {
+            if (string.IsNullOrEmpty(base64Image))
+            {
+                return BadRequest("Base64 image is required");
+            }
+
+            if (string.IsNullOrEmpty(_accessKey))
+            {
+                return Unauthorized("Invalid Access Key");
+            }
+
+            try
+            {
+                var content = await HealthcheckScope.ExtractTextFromImage(_accessKey, base64Image);
+
+                if (string.IsNullOrEmpty(content))
+                {
+                    return BadRequest("Failed to extract text from image");
+                }
+
+                return Ok(content);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
