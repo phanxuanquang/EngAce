@@ -141,6 +141,7 @@ I rely on you to **make my English learning journey effective and enjoyable**.";
 
                 var responseWithSearching = await generator
                     .IncludesGroundingDetailInResponse()
+                    .IncludesSearchEntryPointInResponse()
                     .GenerateContentAsync(apiRequest.Build(), ModelVersion.Gemini_20_Flash);
 
                 if (responseWithSearching.GroundingDetail?.Sources?.Any() == false 
