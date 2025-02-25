@@ -159,7 +159,7 @@ I rely on you to **make my English learning journey effective and enjoyable**.";
                 if (responseWithSearching.GroundingDetail?.Sources?.Any() == true)
                 {
                     stringBuilder.AppendLine();
-                    stringBuilder.AppendLine("## **Nguồn tham khảo**");
+                    stringBuilder.AppendLine("#### **Nguồn tham khảo**");
                     stringBuilder.AppendLine();
                     foreach (var source in responseWithSearching.GroundingDetail.Sources.ToList())
                     {
@@ -170,17 +170,12 @@ I rely on you to **make my English learning journey effective and enjoyable**.";
                 if (responseWithSearching.GroundingDetail?.SearchSuggestions?.Any() == true)
                 {
                     stringBuilder.AppendLine();
-                    stringBuilder.AppendLine("## **Gợi ý tra cứu**");
+                    stringBuilder.AppendLine("#### **Gợi ý tra cứu**");
                     stringBuilder.AppendLine();
-                    string baseUrl = "https://www.google.com/search";
 
                     foreach (var suggestion in responseWithSearching.GroundingDetail.SearchSuggestions.ToList())
                     {
-                        var uriBuilder = new UriBuilder(baseUrl);
-                        var query = HttpUtility.ParseQueryString(uriBuilder.Query);
-                        query["q"] = suggestion;
-
-                        stringBuilder.AppendLine($"- [{suggestion}]({query.ToString()})");
+                        stringBuilder.AppendLine($"- [{suggestion}](https://www.google.com/search?q={suggestion.Replace(" ", "+")})");
                     }
                 }
 
