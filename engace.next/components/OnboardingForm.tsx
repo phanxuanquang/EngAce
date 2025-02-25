@@ -24,7 +24,7 @@ const formSchema = z.object({
     .number()
     .min(7, "Người dùng phải từ 7 tuổi trở lên")
     .max(60, "Người dùng phải dưới 60 tuổi"),
-  geminiApiKey: z.string().min(1, "Vui lòng nhập API key"),
+  geminiApiKey: z.string().min(39, "API key không hợp lệ").regex(/^AIza/, "API key phải bắt đầu bằng 'AIza'"),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -146,7 +146,7 @@ export default function OnboardingForm() {
             </div>
 
             {/* Age Input */}
-            <div className="space-y-4">
+            <div className="space-y-1">
               <Label>Tuổi của bạn là</Label>
               <Input
                 {...register("age", { valueAsNumber: true })}
@@ -163,7 +163,7 @@ export default function OnboardingForm() {
             </div>
 
             {/* API Key Input */}
-            <div className="space-y-4">
+            <div className="space-y-1">
               <Label>Gemini API Key</Label>
               <Input
                 {...register("geminiApiKey")}
@@ -173,7 +173,7 @@ export default function OnboardingForm() {
                 disabled={isLoading}
               />
               {errors.geminiApiKey && (
-                <p className="text-sm text-red-300">
+                <p className="text-sm text-red-300 mb-2">
                   {errors.geminiApiKey.message}
                 </p>
               )}
