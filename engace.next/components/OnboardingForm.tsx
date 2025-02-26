@@ -24,7 +24,10 @@ const formSchema = z.object({
     .number()
     .min(7, "Người dùng phải từ 7 tuổi trở lên")
     .max(60, "Người dùng phải dưới 60 tuổi"),
-  geminiApiKey: z.string().min(39, "API key không hợp lệ").regex(/^AIza/, "API key phải bắt đầu bằng 'AIza'"),
+  geminiApiKey: z
+    .string()
+    .min(39, "API key không hợp lệ")
+    .regex(/^AIza/, "API key phải bắt đầu bằng 'AIza'"),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -177,17 +180,16 @@ export default function OnboardingForm() {
                   {errors.geminiApiKey.message}
                 </p>
               )}
-              <p className="text-xs opacity-80 mt-2">
+              <p className="text-xs opacity-80 mt-3">
                 Bạn có thể lấy API Key từ{" "}
                 <a
                   href="https://aistudio.google.com/app/apikey"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-800 underline font-semibold"
+                  className="text-blue-600 underline font-semibold dark:text-blue-400"
                 >
                   Google AI Studio
                 </a>
-                .
               </p>
             </div>
 
