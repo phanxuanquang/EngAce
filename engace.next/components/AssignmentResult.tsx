@@ -124,6 +124,11 @@ export default function AssignmentResult({
                       </div>
                       <p className="text-slate-600 dark:text-slate-300">
                         {question.ExplanationInVietnamese}
+
+                        <p className="italic mt-2">
+                          EngAce đôi khi vẫn mắc sai sót. Bạn nên tự kiểm chứng
+                          lại kết quả nha.
+                        </p>
                       </p>
                     </div>
                   </div>

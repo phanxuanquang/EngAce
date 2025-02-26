@@ -119,6 +119,13 @@ export default function DictionaryPage() {
                   type="text"
                   value={keyword}
                   onChange={(e) => setKeyword(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      if (keyword.trim() && !isSubmitting)
+                        handleSearch(e);
+                    }
+                  }}
                   className="w-full rounded-2xl border-2 border-slate-200 bg-white px-6 py-4 pr-12 text-lg text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:focus:border-blue-400 dark:focus:ring-blue-400/10"
                   placeholder="Nhập từ hoặc cụm từ cần tra cứu..."
                   required

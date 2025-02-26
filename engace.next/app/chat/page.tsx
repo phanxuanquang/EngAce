@@ -57,7 +57,7 @@ export default function ChatPage() {
       {
         id: "welcome",
         content:
-          "Xin chào! Tôi là EngAce, trợ lý ảo được cá nhân hóa để giúp bạn học tiếng Anh. 👋\n\nBạn có thể sử dụng cú pháp **markdown** để giúp tin nhắn được trình bày tốt hơn.",
+          `Chào ${preferences.fullName}! Mình là EngAce, trợ lý ảo được thiết kế riêng để hỗ trợ bạn học tiếng Anh nè. 😊\n\nMình luôn cố gắng hỗ trợ bạn tốt nhất, nhưng đôi khi vẫn có thể mắc sai sót, nên bạn nhớ kiểm tra lại những thông tin quan trọng nha!`,
         sender: "ai",
         timestamp: new Date(),
       },

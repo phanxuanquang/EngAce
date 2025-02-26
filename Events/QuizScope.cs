@@ -174,7 +174,7 @@ You are an expert English teacher with over 20 years of teaching experience, and
                 var apiRequest = new ApiRequestBuilder()
                     .WithSystemInstruction(Instruction)
                     .WithPrompt(promptBuilder.ToString())
-                    .WithDefaultGenerationConfig(0.3F, ResponseMimeType.Json)
+                    .WithDefaultGenerationConfig(0.5F, ResponseMimeType.Json)
                     .DisableAllSafetySettings()
                     .Build();
 

@@ -177,13 +177,13 @@ export default function OnboardingForm() {
                   {errors.geminiApiKey.message}
                 </p>
               )}
-              <p className="text-sm opacity-70">
-                Bạn có thể lấy API từ{" "}
+              <p className="text-xs opacity-80 mt-2">
+                Bạn có thể lấy API Key từ{" "}
                 <a
                   href="https://aistudio.google.com/app/apikey"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-200 hover:text-blue-100 underline"
+                  className="text-blue-800 underline font-semibold"
                 >
                   Google AI Studio
                 </a>

@@ -11,21 +11,17 @@ export default function InfoDialog({ isOpen, onClose }: InfoDialogProps) {
   if (!isOpen) return null;
 
   const content = `
-**EngAce** là nền tảng **miễn phí** sử dụng AI để nâng tầm trải nghiệm học tiếng Anh dành riêng cho người Việt. Nền tảng được thiết kế để đáp ứng nhu cầu học tập đa dạng của từng cá nhân, từ việc tra cứu từ điển thông minh, luyện tập qua các bài kiểm tra tùy chỉnh, đến cải thiện kỹ năng viết và trò chuyện với trợ lý AI. Tất cả đều hướng đến việc giúp người học tiếp cận tiếng Anh theo cách tự nhiên nhất, giảm bớt khó khăn và nâng cao khả năng sử dụng ngôn ngữ một cách linh hoạt.  
+**EngAce** là nền tảng hỗ trợ học tiếng Anh **miễn phí** tích hợp AI, với mục tiêu giúp việc tự học trở nên tự nhiên và hiệu quả hơn. EngAce cá nhân hóa trải nghiệm học tập với các tính năng **độc quyền** như:
 
-### Tính năng chính  
+- **Từ điển thông minh**: Cung cấp nghĩa, ví dụ minh họa, thành ngữ, cụm động từ và *tìm kiếm theo ngữ cảnh*, giúp hiểu sâu cách dùng từ.
+- **Bài tập cá nhân hóa**: Hệ thống bộ đề được tùy biến theo trình độ lên đến 100 câu hỏi và hàng chục dạng bài tập đa dạng.
+- **Luyện viết**: AI đánh giá chi tiết về ngữ pháp, phong cách và mạch lạc, đồng thời gợi ý cải thiện bài viết.
+- **Gia sư ảo**: Hỗ trợ tự học tiếng Anh qua các cuộc hội thoại tương tác, tương tự như một giáo viên.
 
-- **Từ điển thông minh**: Cung cấp nghĩa chi tiết, ví dụ minh họa, thành ngữ, cụm động từ, cùng với khả năng tìm kiếm theo ngữ cảnh để giúp người dùng hiểu sâu hơn về cách sử dụng từ.  
-- **Bài tập cá nhân hóa**: Hệ thống bài tập trắc nghiệm tự động điều chỉnh theo trình độ người học, hỗ trợ lên đến 100 câu hỏi mỗi lần và lên đến 12 dạng bài tập khác nhau.  
-- **Luyện viết**: AI cung cấp phản hồi chi tiết về ngữ pháp, phong cách và tính mạch lạc trong bài viết, đồng thời đưa ra gợi ý cải thiện bài viết.  
-- **Trò chuyện với gia sư ảo**: Trợ lý ảo hỗ trợ học tiếng Anh thông qua các cuộc hội thoại tương tác.  
-
-### Tác giả  
-
-EngAce được phát triển bởi nhóm sinh viên trường **Đại học Công nghệ Thông tin**:  
+EngAce được tạo ra bởi nhóm tác giả:
 
 - [Phan Xuân Quang](https://github.com/phanxuanquang)  
-- [Bùi Minh Tuấn](https://github.com/tuan20520342)  
+- [Bùi Minh Tuấn](https://github.com/tuan20520342) 
 `.trim();
 
   return (

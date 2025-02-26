@@ -190,6 +190,7 @@ export default function WritingPage() {
                   </div>
                 </div>
               </label>
+              <label className="text-xs italic opacity-70">EngAce vẫn có thể mắc sai sót. Bạn nên tự kiểm chứng lại kết quả nha.</label>
             </div>
 
             {/* Submit Button */}
@@ -225,7 +226,7 @@ export default function WritingPage() {
                   <li>Nhận phản hồi chi tiết về bài viết của bạn</li>
                   <li>Phát hiện lỗi ngữ pháp và cách diễn đạt</li>
                   <li>Gợi ý cải thiện để nâng cao chất lượng bài viết</li>
-                  <li>Phân tích cấu trúc và tính mạch lạc của văn bản</li>
+                  <li>Phân tích cấu trúc và tính mạch lạc của bài viết</li>
                 </ul>
                 <p className="font-medium mt-4">Để bắt đầu:</p>
                 <ul className="list-decimal ml-6 space-y-2">
