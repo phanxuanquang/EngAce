@@ -111,7 +111,7 @@ export default function WritingPage() {
             <h1 className="mb-4 py-2 bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-4xl font-bold text-transparent">
               LUYỆN VIẾT
             </h1>
-            <p className="mx-auto max-w-xl text-slate-600 dark:text-slate-400">
+            <p className="mx-auto max-w-xl text-slate-600 dark:text-slate-400 text-sm">
               Nhận phản hồi chi tiết để nâng cao kỹ năng viết tiếng Anh của bạn.
             </p>
           </div>
@@ -122,7 +122,7 @@ export default function WritingPage() {
             <div className="group rounded-2xl bg-white/80 p-6 shadow-lg backdrop-blur-sm transition-all duration-200 hover:bg-white hover:shadow-xl dark:bg-slate-800/80 dark:hover:bg-slate-800">
               <label className="block space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-lg font-medium text-slate-900 dark:text-white">
+                  <span className="font-medium text-slate-900 dark:text-white">
                     Đề bài
                   </span>
                 </div>
@@ -141,8 +141,8 @@ export default function WritingPage() {
             <div className="group rounded-2xl bg-white/80 p-6 shadow-lg backdrop-blur-sm transition-all duration-200 hover:bg-white hover:shadow-xl dark:bg-slate-800/80 dark:hover:bg-slate-800">
               <label className="block space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-lg font-medium text-slate-900 dark:text-white">
-                    Nội dung bài viết của bạn
+                  <span className="font-medium text-slate-900 dark:text-white">
+                    Bài viết của bạn
                   </span>
                   <div className="relative">
                     <input
@@ -170,7 +170,7 @@ export default function WritingPage() {
                       ) : (
                         <>
                           <Upload className="h-4 w-4" />
-                          Nhập bài viết từ ảnh
+                          Nhập từ ảnh
                         </>
                       )}
                     </Button>

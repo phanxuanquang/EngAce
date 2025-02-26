@@ -172,7 +172,7 @@ export default function AssignmentPage() {
             <h1 className="mb-4 text-4xl font-bold text-slate-900 dark:text-white">
               BÀI TẬP
             </h1>
-            <p className="mx-auto max-w-xl text-slate-600 dark:text-slate-400">
+            <p className="mx-auto max-w-xl text-slate-600 dark:text-slate-400 text-sm">
               Thiết lập bài tập phù hợp với nhu cầu học tập của bạn với các chủ
               đề và dạng bài tập đa dạng.
             </p>

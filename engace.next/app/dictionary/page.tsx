@@ -105,7 +105,7 @@ export default function DictionaryPage() {
             <h1 className="mb-4 text-4xl font-bold text-slate-900 dark:text-white">
               TỪ ĐIỂN
             </h1>
-            <p className="mx-auto max-w-xl text-slate-600 dark:text-slate-400">
+            <p className="mx-auto max-w-xl text-slate-600 dark:text-slate-400 text-sm">
               Tra cứu từ vựng với định nghĩa chi tiết, ví dụ thực tế và gợi ý sử
               dụng trong nhiều ngữ cảnh khác nhau.
             </p>
@@ -126,7 +126,7 @@ export default function DictionaryPage() {
                         handleSearch(e);
                     }
                   }}
-                  className="w-full rounded-2xl border-2 border-slate-200 bg-white px-6 py-4 pr-12 text-lg text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:focus:border-blue-400 dark:focus:ring-blue-400/10"
+                  className="w-full rounded-2xl border-2 border-slate-200 bg-white px-6 py-3 pr-12 text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:focus:border-blue-400 dark:focus:ring-blue-400/10"
                   placeholder="Nhập từ hoặc cụm từ cần tra cứu..."
                   required
                 />
@@ -180,7 +180,7 @@ export default function DictionaryPage() {
               <button
                 type="submit"
                 disabled={isSubmitting || !keyword.trim()}
-                className={`group relative w-full transform overflow-hidden rounded-xl px-6 py-4 text-lg font-medium text-white shadow-lg transition-all duration-200 ${
+                className={`group relative w-full transform overflow-hidden rounded-xl px-6 py-4 font-medium text-white shadow-lg transition-all duration-200 ${
                   isSubmitting || !keyword.trim()
                     ? "cursor-not-allowed bg-slate-500"
                     : "bg-gradient-to-r from-blue-500 to-cyan-400 shadow-blue-500/25 hover:translate-y-[-2px] hover:shadow-xl dark:shadow-blue-900/25"

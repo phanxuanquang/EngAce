@@ -56,8 +56,7 @@ export default function ChatPage() {
     setMessages([
       {
         id: "welcome",
-        content:
-          `Chào ${preferences.fullName}! Mình là EngAce, trợ lý ảo được thiết kế riêng để hỗ trợ bạn học tiếng Anh nè. 😊\n\nMình luôn cố gắng hỗ trợ bạn tốt nhất, nhưng đôi khi vẫn có thể mắc sai sót, nên bạn nhớ kiểm tra lại những thông tin quan trọng nha!`,
+        content: `Chào ${preferences.fullName}! Mình là EngAce, trợ lý ảo được thiết kế riêng để hỗ trợ bạn học tiếng Anh nè. 😊\n\nMình luôn cố gắng hỗ trợ bạn tốt nhất, nhưng đôi khi vẫn có thể mắc sai sót, nên bạn nhớ kiểm tra lại những thông tin quan trọng nha!`,
         sender: "ai",
         timestamp: new Date(),
       },
@@ -73,13 +72,13 @@ export default function ChatPage() {
   };
 
   const getImageUrls = (images: File[]): string[] => {
-    return images.map(image => URL.createObjectURL(image));
+    return images.map((image) => URL.createObjectURL(image));
   };
 
   useEffect(() => {
     // Cleanup object URLs when component unmounts
     return () => {
-      messages.forEach(msg => msg.images?.forEach(URL.revokeObjectURL));
+      messages.forEach((msg) => msg.images?.forEach(URL.revokeObjectURL));
     };
   }, [messages]);
 
@@ -97,10 +96,10 @@ export default function ChatPage() {
       return new Promise<string>((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = () => {
-          if (typeof reader.result === 'string') {
+          if (typeof reader.result === "string") {
             resolve(reader.result);
           } else {
-            reject(new Error('Failed to convert image to base64'));
+            reject(new Error("Failed to convert image to base64"));
           }
         };
         reader.onerror = reject;
@@ -113,7 +112,8 @@ export default function ChatPage() {
   const handleSend = async () => {
     if (!inputMessage.trim() || isProcessing) return;
 
-    const imageUrls = selectedImages.length > 0 ? getImageUrls(selectedImages) : undefined;
+    const imageUrls =
+      selectedImages.length > 0 ? getImageUrls(selectedImages) : undefined;
     const userMessage: Message = {
       id: Date.now().toString(),
       content: inputMessage,
@@ -133,9 +133,10 @@ export default function ChatPage() {
         Message: msg.content,
       }));
 
-      const imagesAsBase64 = selectedImages.length > 0 
-        ? await convertImagesToBase64(selectedImages)
-        : undefined;
+      const imagesAsBase64 =
+        selectedImages.length > 0
+          ? await convertImagesToBase64(selectedImages)
+          : undefined;
 
       const requestData: ChatRequest = {
         ChatHistory: [
@@ -157,15 +158,18 @@ export default function ChatPage() {
 
       // Construct URL with query parameters
       const url = new URL(`${API_DOMAIN}/api/Chatbot/GenerateAnswer`);
-      url.searchParams.append("username", preferences.fullName || 'guest');
-      url.searchParams.append("gender", preferences.gender || 'Unknown');
+      url.searchParams.append("username", preferences.fullName || "guest");
+      url.searchParams.append("gender", preferences.gender || "Unknown");
       url.searchParams.append("age", (preferences.age || 18).toString());
-      url.searchParams.append("englishLevel", (preferences.proficiencyLevel || 1).toString());
+      url.searchParams.append(
+        "englishLevel",
+        (preferences.proficiencyLevel || 1).toString()
+      );
       url.searchParams.append("enableReasoning", enableReasoning.toString());
       url.searchParams.append("enableSearching", enableSearching.toString());
 
       setSelectedImages([]);
-      
+
       const response = await fetch(url.toString(), {
         method: "POST",
         headers,
@@ -185,7 +189,6 @@ export default function ChatPage() {
       };
 
       setMessages((prev) => [...prev, aiMessage]);
-      
     } catch (error) {
       console.error("Chat error:", error);
       const errorMessage: Message = {
@@ -272,7 +275,7 @@ export default function ChatPage() {
             />
             <button
               onClick={handleImageClick}
-              className="rounded-lg p-2.5 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
+              className="rounded-lg p-1 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
             >
               <Image className="h-5 w-5" />
             </button>
@@ -285,10 +288,10 @@ export default function ChatPage() {
                   handleSend();
                 }
               }}
-              placeholder="Aa... (Shift + Enter để xuống dòng)"
+              placeholder="Shift + Enter để xuống dòng"
               disabled={isProcessing}
               required
-              className={`flex-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-transparent px-4 py-2 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none disabled:opacity-50 disabled:cursor-not-allowed transition-opacity duration-200`}
+              className={`text-sm xs:text-xs flex-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-transparent px-4 py-2 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none disabled:opacity-50 disabled:cursor-not-allowed transition-opacity duration-200`}
             />
             <button
               onClick={handleSend}
@@ -314,7 +317,11 @@ export default function ChatPage() {
                       className="h-16 w-16 object-cover rounded-lg border border-slate-200 dark:border-slate-700"
                     />
                     <button
-                      onClick={() => setSelectedImages(prev => prev.filter((_, i) => i !== index))}
+                      onClick={() =>
+                        setSelectedImages((prev) =>
+                          prev.filter((_, i) => i !== index)
+                        )
+                      }
                       className="absolute -top-1.5 -right-1.5 p-0.5 rounded-full bg-red-500 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200"
                     >
                       <X className="h-3 w-3" />
@@ -331,7 +338,7 @@ export default function ChatPage() {
                 setEnableReasoning(!enableReasoning);
                 if (!enableReasoning) setEnableSearching(false);
               }}
-              className={`flex items-center space-x-2 rounded-lg px-3 py-1.5 text-sm transition-all ${
+              className={`flex items-center space-x-2 rounded-lg px-3 py-1.5 text-xs transition-all ${
                 enableReasoning
                   ? "bg-gradient-to-r from-blue-500/20 to-blue-600/20 text-blue-700 dark:from-blue-600/30 dark:to-blue-700/30 dark:text-blue-300"
                   : "bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-400"
@@ -345,7 +352,7 @@ export default function ChatPage() {
                 setEnableSearching(!enableSearching);
                 if (!enableSearching) setEnableReasoning(false);
               }}
-              className={`flex items-center space-x-2 rounded-lg px-3 py-1.5 text-sm transition-all ${
+              className={`flex items-center space-x-2 rounded-lg px-3 py-1.5 text-xs transition-all ${
                 enableSearching
                   ? "bg-gradient-to-r from-green-500/20 to-green-600/20 text-green-700 dark:from-green-600/30 dark:to-green-700/30 dark:text-green-300"
                   : "bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-400"
