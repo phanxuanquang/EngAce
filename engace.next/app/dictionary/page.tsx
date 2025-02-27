@@ -2,13 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import {
-  Search,
-  History,
-  Sparkles,
-  BookOpen,
-  ChevronDown,
-} from "lucide-react";
+import { Search, History, Sparkles, BookOpen, ChevronDown } from "lucide-react";
 import { getUserPreferences } from "@/lib/localStorage";
 import Navbar from "@/components/Navbar";
 
@@ -21,25 +15,127 @@ type RecentSearch = {
   timestamp: Date;
 };
 
+// 100 diverse vocabulary items including words, phrasal verbs, idioms, and business terms
 const SAMPLE_SEARCHES = [
+  // Common vocabulary
   "accomplish",
   "resilient",
   "endeavor",
   "persistent",
   "innovative",
   "efficient",
+  "versatile",
+  "meticulous",
+  "profound",
+  "ambiguous",
+  "diligent",
+  "authentic",
+  "genuine",
+  "spontaneous",
+  "tremendous",
+  "significant",
+  "inevitable",
+  "dynamic",
+  "crucial",
+  "essential",
+  // Phrasal verbs
+  "break down",
+  "carry out",
+  "look up to",
+  "give up",
+  "put off",
+  "figure out",
+  "get along",
+  "bring up",
+  "hold on",
+  "come across",
+  "take off",
+  "look forward to",
+  "run into",
+  "catch up",
+  "stand out",
+  "turn down",
+  "work out",
+  "put up with",
+  "set up",
+  "hang out",
+  // Academic vocabulary
+  "methodology",
+  "hypothesis",
+  "empirical",
+  "paradigm",
+  "synthesis",
+  "preliminary",
+  "subsequent",
+  "comprehensive",
+  "fundamental",
+  "perspective",
+  "theoretical",
+  "analytical",
+  "coherent",
+  "correlate",
+  "derivative",
+  "qualitative",
+  "quantitative",
+  "abstract",
+  "conceptual",
+  "implicit",
+  // Idioms
+  "piece of cake",
+  "break the ice",
+  "hit the nail on the head",
+  "under the weather",
+  "bite the bullet",
+  "blessing in disguise",
+  "cost an arm and a leg",
+  "pull yourself together",
+  "beat around the bush",
+  "once in a blue moon",
+  "get cold feet",
+  "let the cat out of the bag",
+  "kill two birds with one stone",
+  "barking up the wrong tree",
+  "cut corners",
+  "spill the beans",
+  "tie the knot",
+  "paint the town red",
+  "call it a day",
+  "face the music",
+  // Business vocabulary
+  "outsource",
+  "stakeholder",
+  "leverage",
+  "implementation",
+  "initiative",
+  "benchmark",
+  "sustainable",
+  "optimize",
+  "facilitate",
+  "strategize",
+  "incentivize",
+  "monetize",
+  "scalable",
+  "synergy",
+  "metrics",
+  "portfolio",
+  "acquisition",
+  "revenue",
+  "diversify",
+  "innovative",
 ];
 
 export default function DictionaryPage() {
   const [keyword, setKeyword] = useState("");
   const [context, setContext] = useState("");
   const [showGuide, setShowGuide] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [showContextInput, setShowContextInput] = useState(false);
   const [recentSearches, setRecentSearches] = useState<RecentSearch[]>([]);
   const [showRecent, setShowRecent] = useState(true);
   const router = useRouter();
   const preferences = getUserPreferences();
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [displayedSearches, setDisplayedSearches] = useState<string[]>([]);
 
   useEffect(() => {
     if (!preferences.hasCompletedOnboarding) {
@@ -58,12 +154,30 @@ export default function DictionaryPage() {
     if (savedSearches) {
       setRecentSearches(JSON.parse(savedSearches));
     }
+
+    // Randomly select 5 sample searches
+    const shuffled = [...SAMPLE_SEARCHES].sort(() => 0.5 - Math.random());
+    setDisplayedSearches(shuffled.slice(0, 5));
   }, [router, preferences.hasCompletedOnboarding]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (!keyword.trim() || isSubmitting) return;
 
+    const trimmedKeyword = keyword.trim();
+    const trimmedContext = context.trim();
+
+    // Validate keyword length
+    if (trimmedKeyword.length > 30) {
+      setError("Từ khóa không được vượt quá 30 ký tự");
+      return;
+    }
+
+    // Validate context length
+    if (trimmedContext && trimmedContext.length > trimmedKeyword.length * 5) {
+      setError("Ngữ cảnh không được vượt quá 5 lần độ dài của từ khóa");
+      return;
+    }
     setIsSubmitting(true);
     // Save to recent searches
     const newSearch: RecentSearch = {
@@ -114,16 +228,25 @@ export default function DictionaryPage() {
           {/* Search Form */}
           <div className="relative mb-8 space-y-6">
             <form onSubmit={handleSearch} className="space-y-4">
+              {error && (
+                <div className="animate-fadeIn rounded-lg bg-red-50 p-4 text-sm text-red-600 dark:bg-red-900/50 dark:text-red-400">
+                  <div className="flex items-center space-x-2">
+                    <span className="font-medium">Lỗi:</span>
+                    <span>{error}</span>
+                  </div>
+                </div>
+              )}
+
               <div className="relative">
                 <input
                   type="text"
                   value={keyword}
                   onChange={(e) => setKeyword(e.target.value)}
                   onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
+                    setError(null);
+                    if (e.key === "Enter") {
                       e.preventDefault();
-                      if (keyword.trim() && !isSubmitting)
-                        handleSearch(e);
+                      if (keyword.trim() && !isSubmitting) handleSearch(e);
                     }
                   }}
                   className="w-full rounded-2xl border-2 border-slate-200 bg-white px-6 py-3 pr-12 text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:focus:border-blue-400 dark:focus:ring-blue-400/10"
@@ -144,9 +267,12 @@ export default function DictionaryPage() {
                 <div className="animate-fadeIn">
                   <textarea
                     value={context}
-                    onChange={(e) => setContext(e.target.value)}
+                    onChange={(e) => {
+                      setError(null);
+                      setContext(e.target.value);
+                    }}
                     className="w-full rounded-xl border-2 border-slate-200 bg-white px-4 py-3 text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:focus:border-blue-400 dark:focus:ring-blue-400/10"
-                    placeholder="Thêm ngữ cảnh để nhận kết quả chính xác hơn..."
+                    placeholder="Thêm ngữ cảnh để nhận kết quả chính xác hơn. Ngữ cảnh là đoạn văn bản chứa từ khóa cần tra cứu."
                     rows={3}
                   />
                 </div>
@@ -156,10 +282,10 @@ export default function DictionaryPage() {
               <div className="rounded-xl bg-white p-4 shadow-md dark:bg-slate-800">
                 <div className="mb-4 flex items-center space-x-2 text-slate-900 dark:text-white">
                   <Sparkles className="h-5 w-5" />
-                  <h2 className="font-semibold">Gợi ý tìm kiếm</h2>
+                  <h2 className="font-semibold">Gợi ý tra cứu</h2>
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  {SAMPLE_SEARCHES.map((word, index) => (
+                  {displayedSearches.map((word, index) => (
                     <button
                       key={index}
                       onClick={() => {

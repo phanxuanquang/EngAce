@@ -13,23 +13,9 @@ namespace EngAce.Api.Controllers
         private readonly ILogger<DictionaryController> _logger = logger;
         private readonly string _accessKey = HttpContextHelper.GetAccessKey();
 
-        /// <summary>
-        /// Searches for a given keyword within an optional context
-        /// </summary>
-        /// <param name="keyword">The keyword to search for (must be in English).</param>
-        /// <param name="context">The optional context for the search (must be in English, contain the keyword, and have less than 100 words)</param>
-        /// <param name="useEnglishToExplain">Indicates whether the explanation should be in English.</param>
-        /// <returns>
-        /// An <see cref="ActionResult{T}"/> containing the search result as a string if the operation is successful,
-        /// or an error response if validation fails or an exception occurs during the search.
-        /// </returns>
-        /// <response code="200">The search result from the cache if available.</response>
-        /// <response code="201">The search result after performing the search successfully.</response>
-        /// <response code="400">The error message if the input validation fails or if an error occurs during the search.</response>
-        /// <response code="401">Invalid Access Key</response>
         [HttpGet("Search")]
         [ResponseCache(Duration = QuizScope.ThreeDaysAsCachingAge, Location = ResponseCacheLocation.Any, NoStore = false)]
-        public async Task<ActionResult<string>> Search(string keyword, string? context, bool useEnglishToExplain = false)
+        public async Task<ActionResult<string>> Search(string keyword, string? context)
         {
             if (string.IsNullOrEmpty(_accessKey))
             {
@@ -44,7 +30,7 @@ namespace EngAce.Api.Controllers
             context = string.IsNullOrEmpty(context) ? "" : context.Trim();
             keyword = keyword.ToLower().Trim();
 
-            var cacheKey = $"Search-{keyword}-{context.ToLower()}-{useEnglishToExplain}";
+            var cacheKey = $"Search-{keyword}-{context.ToLower()}";
             if (_cache.TryGetValue(cacheKey, out string cachedResult))
             {
                 return Ok(cachedResult);
@@ -80,7 +66,7 @@ namespace EngAce.Api.Controllers
 
             try
             {
-                var result = await SearchScope.Search(_accessKey, useEnglishToExplain, keyword, context);
+                var result = await SearchScope.Search(_accessKey, keyword, context);
                 _cache.Set(cacheKey, result, TimeSpan.FromHours(1));
 
                 _logger.LogInformation("{_accessKey} searched: {Keyword} - Context: {Context}", _accessKey[..10], keyword, context);

@@ -43,7 +43,7 @@ namespace EngAce.Api.Controllers
 
             if (request.TotalQuestions < request.AssignmentTypes.Count)
             {
-                return BadRequest($"Tổng số câu hỏi không được nhỏ hơn số loại câu hỏi mà bạn chọn");
+                return BadRequest($"Số lượng câu hỏi không được nhỏ hơn số dạng câu hỏi mà bạn chọn");
             }
 
             var cacheKey = $"GenerateQuiz-{request.Topic.ToLower()}-{string.Join(string.Empty, request.AssignmentTypes)}-{request.EnglishLevel}-{request.TotalQuestions}";
@@ -134,7 +134,7 @@ namespace EngAce.Api.Controllers
         /// </returns>
         /// <response code="200">Returns a dictionary of quiz types and their descriptions.</response>
         [HttpGet("GetAssignmentTypes")]
-        [ResponseCache(Duration = QuizScope.MaxTimeAsCachingAge, Location = ResponseCacheLocation.Any, NoStore = false)]
+        [ResponseCache(Duration = QuizScope.ThreeDaysAsCachingAge, Location = ResponseCacheLocation.Any, NoStore = false)]
         public ActionResult<Dictionary<int, string>> GetAssignmentTypes()
         {
             var descriptions = Enum

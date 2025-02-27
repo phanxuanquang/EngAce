@@ -5,7 +5,6 @@ using Gemini.NET.Client_Models;
 using Gemini.NET.Helpers;
 using Models.Enums;
 using System.Text;
-using System.Web;
 
 namespace Events
 {
@@ -144,9 +143,9 @@ I rely on you to **make my English learning journey effective and enjoyable**.";
                     .IncludesSearchEntryPointInResponse()
                     .GenerateContentAsync(apiRequest.Build(), ModelVersion.Gemini_20_Flash);
 
-                if (responseWithSearching.GroundingDetail?.Sources?.Any() == false
-                    && responseWithSearching.GroundingDetail?.SearchSuggestions?.Any() == false
-                    && responseWithSearching.GroundingDetail?.ReliableInformation?.Any() == false)
+                if (responseWithSearching.GroundingDetail?.Sources?.Count == 0
+                    && responseWithSearching.GroundingDetail?.SearchSuggestions?.Count == 0
+                    && responseWithSearching.GroundingDetail?.ReliableInformation?.Count == 0)
                 {
                     return responseWithSearching.Result;
                 }
@@ -156,24 +155,24 @@ I rely on you to **make my English learning journey effective and enjoyable**.";
                 stringBuilder.AppendLine();
                 stringBuilder.AppendLine("---");
 
-                if (responseWithSearching.GroundingDetail?.Sources?.Any() == true)
+                if (responseWithSearching.GroundingDetail?.Sources?.Count != 0)
                 {
                     stringBuilder.AppendLine();
                     stringBuilder.AppendLine("#### **Nguồn tham khảo**");
                     stringBuilder.AppendLine();
-                    foreach (var source in responseWithSearching.GroundingDetail.Sources.ToList())
+                    foreach (var source in responseWithSearching.GroundingDetail.Sources)
                     {
                         stringBuilder.AppendLine($"- [**{source.Domain}**]({source.Url})");
                     }
                 }
 
-                if (responseWithSearching.GroundingDetail?.SearchSuggestions?.Any() == true)
+                if (responseWithSearching.GroundingDetail?.SearchSuggestions?.Count != 0)
                 {
                     stringBuilder.AppendLine();
                     stringBuilder.AppendLine("#### **Gợi ý tra cứu**");
                     stringBuilder.AppendLine();
 
-                    foreach (var suggestion in responseWithSearching.GroundingDetail.SearchSuggestions.ToList())
+                    foreach (var suggestion in responseWithSearching.GroundingDetail.SearchSuggestions)
                     {
                         stringBuilder.AppendLine($"- [{suggestion}](https://www.google.com/search?q={suggestion.Replace(" ", "+")})");
                     }

@@ -31,8 +31,8 @@ You are an expert English teacher with over 20 years of teaching experience, and
      - **A1**: Short, simple questions with basic vocabulary.
      - **B2**: Complex questions involving conditional sentences, more challenging vocabulary, and topics that require deeper understanding.
 
-### 2. **Question Creation Guidelines**:
-   - **Clarity and Precision**: Your questions should be **clear, direct, and unambiguous**. Avoid using unnecessarily complicated language. Each question should be grammatically correct and easy to understand for the given proficiency level.
+### 2. **Question Set Generation Guidelines**:
+   - **Clarity and Precision**: The questions should be **clear, direct, and unambiguous**. Avoid using unnecessarily complicated language. Each question should be grammatically correct and easy to understand for the given proficiency level.
    - **Question Types**: Focus on practical, real-world scenarios. Examples of types of questions:
      - **Vocabulary**: Asking for meanings of common words or phrases.
      - **Grammar**: Correct usage of tenses, articles, prepositions, etc.
@@ -52,17 +52,18 @@ You are an expert English teacher with over 20 years of teaching experience, and
      - Provide **examples or context** if needed to make the explanation clearer. For instance, if the correct answer involves a specific grammar point, explain that with a simple example.
    - If the explanation requires a specific language rule, be sure to give a short rule or exception (e.g., usage of ""a"" vs. ""an"" or the difference between present perfect and past simple).
 
-### 4. **Priority in Question Creation**:
+### 4. **Priority in Question Generation**:
    - **Engagement**: Questions should be engaging and reflect real-world scenarios that are interesting and useful for language learners. For example, instead of asking about random vocabulary, relate it to daily life (e.g., “What do you usually eat for breakfast?”).
    - **Clarity and Consistency**: The explanations, choices, and the reasoning behind the correct answers should all be **consistent** and **easy to follow**.
    - **Motivation**: Keep the questions positive and encouraging. If the question or explanation is too difficult, adjust the difficulty to motivate further learning.
 
 ## Output Format:
+
 ### Structured in JSON Format:
    - Return your response in a **valid JSON array**, each object containing the following fields:
      - `Question`: The question text in English. Ensure it is grammatically correct and clearly stated for the given level.
-     - `Options`: A list of 4 unique choices, where one is the correct answer. Each choice should be a valid option in the context of the question.
-     - `RightOptionIndex`: The **index (0-3)** of the correct answer in the `Options` list. Ensure this index is correct based on the correct choice.
+     - `Options`: A list of unique choices (up to 6 choices), where only one choice is the correct answer. Each choice should be a valid option in the context of the question.
+     - `RightOptionIndex`: The **index** of the correct answer in the `Options` list. Ensure this index is correct based on the correct choice.
      - `ExplanationInVietnamese`: A **brief explanation** of why the correct answer is correct, written in simple, clear Vietnamese.
    
    - Ensure that the **JSON structure is properly formatted** and valid, adhering to JSON syntax conventions.
@@ -238,7 +239,7 @@ You are an expert English teacher with over 20 years of teaching experience, and
 
             var userLevel = GeneralHelper.GetEnumDescription(level);
 
-            var instruction = "You are an experienced IELTS teacher with over 20 years of experience, currently teaching in Vietnam. I am looking for a list of interesting and engaging topics that match my current English proficiency level, as well as topics that can help me stay motivated in my learning journey.";
+            var instruction = "You are an experienced English teacher with over 20 years of experience, currently teaching in Vietnam. I am looking for a list of interesting and engaging topics that match my current English proficiency level, as well as topics that can help me stay motivated in my learning journey.";
             promptBuilder.AppendLine($"My current English proficiency level is '{userLevel}' according to the CEFR standard.");
             promptBuilder.AppendLine("This is the decription of my English proficiency according to the CEFR standard:");
             promptBuilder.AppendLine(GetLevelDescription(level));
@@ -265,7 +266,7 @@ You are an expert English teacher with over 20 years of teaching experience, and
             var apiRequest = new ApiRequestBuilder()
                 .WithSystemInstruction(instruction)
                 .WithPrompt(promptBuilder.ToString())
-                .WithDefaultGenerationConfig(0.7F, Models.Enums.ResponseMimeType.Json)
+                .WithDefaultGenerationConfig(0.5F, ResponseMimeType.Json)
                 .DisableAllSafetySettings()
                 .Build();
 

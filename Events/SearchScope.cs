@@ -8,13 +8,11 @@ namespace Events
     {
         public const sbyte MaxKeywordTotalWords = 7;
         public const sbyte MaxContextTotalWords = 15;
-        public static async Task<string> Search(string apiKey, bool useEnglish, string keyword, string context)
-        {
-            var instructionforVietnamese = @"
-Bạn là một **từ điển Anh-Việt thông minh, toàn diện và chuyên sâu**, cung cấp **giải thích rõ ràng, chính xác, dễ hiểu và giàu tính ứng dụng** cho bất kỳ **từ vựng hoặc thành ngữ** nào mà người dùng nhập vào.  
+
+        private const string _instruction = @"Bạn là một **từ điển Anh-Việt thông minh, toàn diện và chuyên sâu**, cung cấp **giải thích rõ ràng, chính xác, dễ hiểu và giàu tính ứng dụng** cho bất kỳ **từ vựng hoặc thành ngữ** nào mà người dùng nhập vào.  
 
 Mục tiêu chính của bạn:  
-1. **Định nghĩa chính xác và dễ hiểu**, phù hợp với từng ngữ cảnh.  
+1. **Giải nghĩa chính xác và dễ hiểu**, phù hợp với từng ngữ cảnh.  
 2. **Ưu tiên nghĩa phù hợp nhất với câu hoặc tình huống được cung cấp**.  
 3. **Hướng dẫn cách sử dụng từ một cách tự nhiên, đúng ngữ pháp và phù hợp với văn phong**.  
 
@@ -132,81 +130,69 @@ Phản hồi bắt buộc phải tuân theo cấu trúc rõ ràng sau (không th
 ✅ **Đảm bảo nội dung toàn diện nhưng không dài dòng, tập trung vào điểm quan trọng**.  
 
 ⚡ **Mục tiêu cuối cùng:** Giúp người học không chỉ **hiểu nghĩa của từ**, mà còn **tự tin sử dụng nó một cách tự nhiên, chính xác và hiệu quả trong giao tiếp thực tế**.";
-
-            var instructionforEnglish = @$"
-You are an expert English-English dictionary with the task of providing comprehensive definitions, explanations, and related information for English words or phrases. Your goal is to help users understand the meaning, usage, and history of the word or phrase they request.
-
-Users will input English words or phrases with their context (may be included) for definition and explanation. Sometimes, the word or phrase may not be valid or may not exist in English, and in such cases, you need to respond accordingly.
-
-**Response Requirements**:
-
-1. **Handle Exceptions**:
-   - **""Cannot define.""** if the word or phrase does not exist in English or is nonsensical.
-   - **""Not an English word.""** if the input is not an English word.
-   - **""Not appropriate for definition.""** if the word is vulgar or inappropriate.
-
-2. **Detailed Response for Valid Words/Phrases**:
-
-   - **Title**:
-     - Display the word or phrase in uppercase (e.g., ""EXAMPLE"").
-   
-   - **Phonetic Spelling and Part of Speech**:
-     - Provide the International Phonetic Alphabet (IPA) pronunciation of the word.
-     - Specify the part of speech (e.g., noun, verb, adjective, etc.). If it's an idiomatic expression, just indicate the type without phonetic spelling.
-
-   - **Definition and Explanation**:
-     - Provide the English definition of the word or phrase.
-     - If the word/phrase is used in a specific context, explain its meaning in that context.
-     - If there is no context, list up to 10 common meanings or uses of the word, explaining the nuances of each meaning and how it can be applied in different situations.
-
-   - **Usage Examples and Related Vocabulary**:
-     - Provide at least 5 example sentences in English that demonstrate how the word/phrase is used in different contexts.
-     - Include related vocabulary or words that commonly appear with the word or phrase, helping users expand their understanding of its usage.
-
-   - **Synonyms and Antonyms**:
-     - List at least 3 synonyms with explanations of how they are similar in meaning.
-     - List at least 3 antonyms with explanations of how they contrast in meaning.
-
-   - **Common Phrases, Idioms, or Expressions Containing the Word**:
-     - Provide well-known phrases, idioms, or expressions that include the word/phrase, with explanations of how they are used.
-     - Provide usage examples for each idiom or phrase.
-
-   - **Word Origin and Etymology**:
-     - Provide information about the word’s origin, including its root language, historical development, and any shifts in meaning over time.
-
-   - **Word Forms and Variations**:
-     - List all possible forms of the word (e.g., past tense, plural, comparative, superlative, etc.).
-     - Provide examples of how each form is used in sentences.
-
-   - **Interesting Facts or Lesser-Known Information**:
-     - Share interesting facts about the word or phrase, such as how it is used in different dialects, historical context, or any uncommon uses or facts that people may not be aware of.";
-
+        public static async Task<string> Search(string apiKey, string keyword, string context)
+        {
             var promptBuilder = new StringBuilder();
             keyword = keyword.Trim();
 
-            promptBuilder.AppendLine("## Keyword:");
+            promptBuilder.AppendLine("## Từ khóa cần tra cứu:");
             promptBuilder.AppendLine($"- {keyword}");
             if (!string.IsNullOrEmpty(context))
             {
-                promptBuilder.AppendLine("## Context of the Keyword:");
+                promptBuilder.AppendLine("## Ngữ cảnh chứa từ khóa cần tra cứu:");
                 promptBuilder.AppendLine($"- {context.Trim()}");
             }
 
             var generator = new Generator(apiKey)
                 .ExcludesSearchEntryPointFromResponse()
-                .ExcludesGroundingDetailFromResponse();
+                .IncludesSearchEntryPointInResponse();
 
             var apiRequest = new ApiRequestBuilder()
-                .WithSystemInstruction(useEnglish ? instructionforEnglish : instructionforVietnamese)
+                .WithSystemInstruction(_instruction)
                 .WithPrompt(promptBuilder.ToString())
                 .WithDefaultGenerationConfig(0.5F)
                 .DisableAllSafetySettings()
                 .EnableGrounding()
                 .Build();
 
-            var response = await generator.GenerateContentAsync(apiRequest, ModelVersion.Gemini_20_Flash);
+            var responseWithSearching = await generator.GenerateContentAsync(apiRequest, ModelVersion.Gemini_20_Flash);
 
-            return response.Result;
+            if (responseWithSearching.GroundingDetail?.Sources?.Count == 0
+                    && responseWithSearching.GroundingDetail?.SearchSuggestions?.Count == 0
+                    && responseWithSearching.GroundingDetail?.ReliableInformation?.Count == 0)
+            {
+                return responseWithSearching.Result;
+            }
+
+            var stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine(responseWithSearching.Result);
+            stringBuilder.AppendLine();
+            stringBuilder.AppendLine("---");
+
+            if (responseWithSearching.GroundingDetail?.Sources?.Count != 0)
+            {
+                stringBuilder.AppendLine();
+                stringBuilder.AppendLine("#### **Nguồn tham khảo**");
+                stringBuilder.AppendLine();
+                foreach (var source in responseWithSearching.GroundingDetail.Sources)
+                {
+                    stringBuilder.AppendLine($"- [**{source.Domain}**]({source.Url})");
+                }
+            }
+
+            if (responseWithSearching.GroundingDetail?.SearchSuggestions?.Count != 0)
+            {
+                stringBuilder.AppendLine();
+                stringBuilder.AppendLine("#### **Gợi ý tìm kiếm trên Google**");
+                stringBuilder.AppendLine();
+
+                foreach (var suggestion in responseWithSearching.GroundingDetail.SearchSuggestions)
+                {
+                    stringBuilder.AppendLine($"- [{suggestion}](https://www.google.com/search?q={suggestion.Replace(" ", "+")})");
+                }
+            }
+
+            return stringBuilder.ToString().Trim();
         }
     }
 }
