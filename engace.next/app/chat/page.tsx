@@ -7,6 +7,7 @@ import { getUserPreferences } from "@/lib/localStorage";
 import { API_DOMAIN } from "@/lib/config";
 import Navbar from "@/components/Navbar";
 import TypingIndicator from "@/components/TypingIndicator";
+import ConfirmDialog from "@/components/ConfirmDialog";
 import MarkdownRenderer from "@/components/MarkdownRenderer";
 
 type Message = {
@@ -27,11 +28,15 @@ interface ChatRequest {
 }
 
 const VISITED_KEY = "has-visited-chat";
+const CHAT_HISTORY_KEY = "chat-history";
 
 export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState("");
   const [showGuide, setShowGuide] = useState(false);
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
+  const [isClearing, setIsClearing] = useState(false);
+  const [hasRestoredMessages, setHasRestoredMessages] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [enableReasoning, setEnableReasoning] = useState(false);
   const [enableSearching, setEnableSearching] = useState(false);
@@ -53,14 +58,29 @@ export default function ChatPage() {
       localStorage.setItem(VISITED_KEY, "true");
     }
 
-    setMessages([
-      {
-        id: "welcome",
-        content: `Chào ${preferences.fullName}! Mình là EngAce, trợ lý ảo được thiết kế riêng để hỗ trợ bạn học tiếng Anh nè. 😊\n\nMình luôn cố gắng hỗ trợ bạn tốt nhất, nhưng đôi khi vẫn có thể mắc sai sót, nên bạn nhớ kiểm tra lại những thông tin quan trọng nha!`,
-        sender: "ai",
-        timestamp: new Date(),
-      },
-    ]);
+    // Load messages from localStorage
+    const savedMessages = localStorage.getItem(CHAT_HISTORY_KEY);
+    if (savedMessages && !hasRestoredMessages) {
+      try {
+        const parsedMessages = JSON.parse(savedMessages);
+        // Convert string timestamps back to Date objects
+        const messagesWithDates = parsedMessages.map((msg: any) => ({
+          ...msg,
+          timestamp: new Date(msg.timestamp),
+        }));
+        setMessages(messagesWithDates);
+      } catch (error) {
+        console.error("Error loading chat history:", error);
+      }
+    } else if (!hasRestoredMessages) {
+      setMessages([{
+          id: "welcome",
+          content: `Chào ${preferences.fullName}! Mình là EngAce, trợ lý ảo được thiết kế riêng để hỗ trợ bạn học tiếng Anh nè. 😊\n\nMình luôn cố gắng hỗ trợ bạn tốt nhất, nhưng đôi khi vẫn có thể mắc sai sót, nên bạn nhớ kiểm tra lại những thông tin quan trọng nha!`,
+          sender: "ai",
+          timestamp: new Date(),
+        }]);
+    }
+    setHasRestoredMessages(true);
   }, [router, preferences.hasCompletedOnboarding]);
 
   useEffect(() => {
@@ -81,6 +101,17 @@ export default function ChatPage() {
       messages.forEach((msg) => msg.images?.forEach(URL.revokeObjectURL));
     };
   }, [messages]);
+
+  // Save messages to localStorage whenever they change
+  useEffect(() => {
+    if (hasRestoredMessages) {
+      localStorage.setItem(CHAT_HISTORY_KEY, JSON.stringify(messages));
+    }
+  }, [messages, hasRestoredMessages]);
+
+  const handleClearChat = () => {
+    setMessages([]);
+  };
 
   const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || []);
@@ -213,6 +244,22 @@ export default function ChatPage() {
         {/* Messages Area */}
         <div className="flex-1 overflow-y-auto rounded-t-xl bg-white dark:bg-slate-800 shadow-lg">
           <div className="p-4 space-y-6">
+            {/* Clear Chat Button */}
+            {messages.length > 0 && (
+              <div className="flex justify-end mb-4">
+                <button
+                  onClick={() => setShowClearConfirm(true)}
+                  disabled={isClearing}
+                  className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all duration-200 ${
+                    isClearing
+                      ? "bg-red-200 text-red-800 cursor-not-allowed"
+                      : "bg-red-100 text-red-800 hover:bg-red-200"
+                  }`}
+                >
+                  Xóa cuộc trò chuyện
+                </button>
+              </div>
+            )}
             {messages.map((message) => (
               <div
                 key={message.id}
@@ -406,6 +453,20 @@ export default function ChatPage() {
           </div>
         </div>
       )}
+
+      {/* Clear Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={showClearConfirm}
+        onClose={() => setShowClearConfirm(false)}
+        onConfirm={() => {
+          setIsClearing(true);
+          handleClearChat();
+          setIsClearing(false);
+        }}
+        title="Xóa lịch sử trò chuyện"
+        message="Bạn có chắc chắn muốn xóa toàn bộ lịch sử trò chuyện không? Hành động này không thể hoàn tác."
+        confirmText="Xóa"
+      />
     </div>
   );
 }
