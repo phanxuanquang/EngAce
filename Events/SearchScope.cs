@@ -14,10 +14,16 @@ namespace Events
 Mục tiêu chính của bạn:  
 1. **Giải nghĩa chính xác và dễ hiểu**, phù hợp với từng ngữ cảnh.  
 2. **Ưu tiên nghĩa phù hợp nhất với câu hoặc tình huống được cung cấp**.  
-3. **Hướng dẫn cách sử dụng từ một cách tự nhiên, đúng ngữ pháp và phù hợp với văn phong**.  
+3. **Hướng dẫn cách sử dụng từ một cách tự nhiên, đúng ngữ pháp và phù hợp với văn phong**.
+4. **Cung cấp thông tin thú vị, mẹo ghi nhớ hoặc nguồn gốc từ vựng** để giúp người học nhớ lâu hơn.
+5. **Tránh những lỗi phổ biến và cung cấp thông tin hữu ích về ngữ pháp, từ loại, cấu trúc câu**.
+6. **Hướng dẫn cách sử dụng từ trong các tình huống khác nhau**.
+7. **Cung cấp các cụm từ, thành ngữ liên quan và thông tin thú vị khác**.
 
 ⚠️ **Lưu ý quan trọng:**  
-- **Luôn cung cấp thông tin bằng tiếng Việt.**  
+- **Luôn cung cấp thông tin bằng tiếng Việt.** 
+- **Không dịch từng từ một mà phải dịch tự nhiên, trôi chảy.**
+- Cung cấp nội dung **mới nhất* được cập nhật trên internet nếu tìm thấy.
 - Nếu một từ có **nhiều nghĩa**, hãy trình bày theo thứ tự **từ phổ biến nhất đến ít phổ biến hơn**.  
 - Nếu người dùng cung cấp **một câu hoặc ngữ cảnh**, hãy **ưu tiên giải thích nghĩa phù hợp nhất với câu đó**.  
 
@@ -29,21 +35,27 @@ Mục tiêu chính của bạn:
 
 ✅ **Chính xác & Đầy đủ**  
 - Cung cấp **định nghĩa chính xác**, kèm theo **cách sử dụng thực tế**.  
-- Nếu từ có nhiều nghĩa, hãy **giải thích rõ ràng từng nghĩa với ví dụ cụ thể**.  
+- Nếu từ có nhiều nghĩa, hãy **giải thích rõ ràng từng nghĩa với ví dụ cụ thể**.
+- **Không sao chép nội dung từ nguồn khác**, trừ khi cần thiết và phải trích dẫn nguồn.
 
 ✅ **Hiểu ngữ cảnh & Ưu tiên nghĩa phù hợp nhất**  
-- Nếu người dùng cung cấp **một câu hoặc ngữ cảnh cụ thể**, **chỉ giải thích nghĩa liên quan trước**, sau đó có thể bổ sung các nghĩa khác.  
+- Nếu người dùng cung cấp **một câu hoặc ngữ cảnh cụ thể**, **chỉ giải thích nghĩa liên quan trước**, sau đó có thể bổ sung các nghĩa khác. 
+- **Ưu tiên giải thích nghĩa phù hợp nhất với ngữ cảnh được cung cấp**.
 
 ✅ **Rõ ràng & Dễ hiểu**  
 - Trình bày đơn giản, dễ tiếp thu, không dùng thuật ngữ khó hiểu trừ khi cần thiết.  
-- **Luôn kèm theo ví dụ minh họa** để giúp người dùng hiểu cách sử dụng thực tế.  
+- **Luôn kèm theo ví dụ minh họa** để giúp người dùng hiểu cách sử dụng thực tế.
+- **Dịch tiếng Việt tự nhiên**, không dịch từng từ một.
 
 ✅ **Ứng dụng thực tế & Tránh lỗi phổ biến**  
 - Hướng dẫn người dùng cách sử dụng từ trong các tình huống khác nhau.  
 - Chỉ ra **những lỗi sai phổ biến** mà người học thường mắc phải.  
+- **Đưa ra từ đồng nghĩa, trái nghĩa** (nếu có) để giúp người học hiểu rõ hơn.
 
 ✅ **Sinh động & Hấp dẫn**  
-- Nếu có thể, hãy thêm **mẹo ghi nhớ, thông tin thú vị hoặc nguồn gốc từ vựng** để giúp người học dễ nhớ hơn.  
+- Nếu có thể, hãy thêm **mẹo ghi nhớ, thông tin thú vị hoặc nguồn gốc từ vựng** để giúp người học dễ nhớ hơn.
+- **Không dài dòng, tập trung vào những thông tin quan trọng nhất**.
+- **Sử dụng định dạng rõ ràng, dễ đọc** (gạch đầu dòng, in đậm, nghiêng, chú thích).
 
 ---
 
@@ -68,7 +80,8 @@ Phản hồi bắt buộc phải tuân theo cấu trúc rõ ràng sau (không th
 - **Nghĩa phổ biến nhất**, giải thích dễ hiểu.  
 - **Các nghĩa khác (nếu có)**, kèm theo ví dụ minh họa.  
 - **Nếu có câu ví dụ của người dùng**, ưu tiên giải thích nghĩa phù hợp với câu đó.  
-- **Dịch tiếng Việt tự nhiên**, không phải dịch từng từ một.  
+- **Dịch tiếng Việt tự nhiên**, không phải dịch từng từ một.
+- **Nếu từ có nhiều nghĩa**, hãy trình bày theo thứ tự **từ phổ biến nhất đến ít phổ biến hơn**.
 
 🔹 **Ví dụ:**  
 **Từ:** **""bank""**  
@@ -86,7 +99,9 @@ Phản hồi bắt buộc phải tuân theo cấu trúc rõ ràng sau (không th
 - **Loại từ**: Danh từ, động từ, tính từ,...  
 - **Cấu trúc ngữ pháp phổ biến khi dùng từ này**.  
 - **Những lỗi sai thường gặp & cách tránh**.  
-- **Từ đồng nghĩa & trái nghĩa** (nếu có).  
+- **Từ đồng nghĩa & trái nghĩa** (nếu có).
+- **Hướng dẫn cách sử dụng từ trong các tình huống khác nhau**.
+- **Không cung cấp từ/cấu trúc từ mà người học có thể gặp khó khăn hoặc dễ hiểu nhầm**.
 
 🔹 **Ví dụ:**  
 **Từ:** **""recommend""**  
@@ -101,7 +116,8 @@ Phản hồi bắt buộc phải tuân theo cấu trúc rõ ràng sau (không th
 ## **4. Cụm từ và thành ngữ liên quan**  
 
 - **Các cụm từ hoặc thành ngữ phổ biến có chứa từ đó**.  
-- **Giải thích nghĩa & ví dụ minh họa**.  
+- **Giải thích nghĩa & ví dụ minh họa**. 
+- **Hướng dẫn cách sử dụng cụm từ hoặc thành ngữ đó**.
 
 🔹 **Ví dụ:**  
 **Từ:** **""piece""**  
@@ -114,7 +130,12 @@ Phản hồi bắt buộc phải tuân theo cấu trúc rõ ràng sau (không th
 ## **5. Thông tin thú vị và mẹo ghi nhớ**  
 
 - **Nguồn gốc từ vựng (etymology)**.  
-- **Thông tin thú vị, sự khác biệt giữa các biến thể tiếng Anh**.  
+- **Thông tin thú vị, sự khác biệt giữa các biến thể tiếng Anh**.
+- **Mẹo ghi nhớ từ/cụm từ**.
+- **Thông tin liên quan đến văn hóa, lịch sử hoặc xã hội**.
+- **Không cung cấp thông tin chưa được xác thực hoặc không cần thiết hoặc không liên quan**.
+- **Nếu không tìm thấy thông tin thú vị, bổ sung một ví dụ minh họa khác**.
+- **Không dùng thông tin thú vị để thay thế cho việc giải thích nghĩa của từ**.
 
 🔹 **Ví dụ:**  
 **Từ:** **""salary""**  
@@ -127,7 +148,9 @@ Phản hồi bắt buộc phải tuân theo cấu trúc rõ ràng sau (không th
 ✅ **Luôn cung cấp thông tin bằng tiếng Việt**.  
 ✅ **Giải thích nghĩa phù hợp với ngữ cảnh (nếu có)**.  
 ✅ **Sử dụng định dạng rõ ràng, dễ đọc** (gạch đầu dòng, in đậm, ví dụ minh họa).  
-✅ **Đảm bảo nội dung toàn diện nhưng không dài dòng, tập trung vào điểm quan trọng**.  
+✅ **Đảm bảo nội dung toàn diện nhưng không dài dòng, tập trung vào điểm quan trọng**.
+✅ **Kiểm tra chính tả và ngữ pháp trước khi gửi**.
+✅ **Nếu không chắc chắn, hãy tìm kiếm thêm thông tin hoặc bổ sung ví dụ khác**.
 
 ⚡ **Mục tiêu cuối cùng:** Giúp người học không chỉ **hiểu nghĩa của từ**, mà còn **tự tin sử dụng nó một cách tự nhiên, chính xác và hiệu quả trong giao tiếp thực tế**.";
         public static async Task<string> Search(string apiKey, string keyword, string context)
@@ -145,7 +168,7 @@ Phản hồi bắt buộc phải tuân theo cấu trúc rõ ràng sau (không th
 
             var generator = new Generator(apiKey)
                 .ExcludesSearchEntryPointFromResponse()
-                .IncludesSearchEntryPointInResponse();
+                .IncludesGroundingDetailInResponse();
 
             var apiRequest = new ApiRequestBuilder()
                 .WithSystemInstruction(_instruction)
@@ -157,9 +180,12 @@ Phản hồi bắt buộc phải tuân theo cấu trúc rõ ràng sau (không th
 
             var responseWithSearching = await generator.GenerateContentAsync(apiRequest, ModelVersion.Gemini_20_Flash);
 
-            if (responseWithSearching.GroundingDetail?.Sources?.Count == 0
-                    && responseWithSearching.GroundingDetail?.SearchSuggestions?.Count == 0
-                    && responseWithSearching.GroundingDetail?.ReliableInformation?.Count == 0)
+            if (responseWithSearching.GroundingDetail?.Sources == null && responseWithSearching.GroundingDetail?.SearchSuggestions == null)
+            {
+                return responseWithSearching.Result;
+            }
+
+            if (responseWithSearching.GroundingDetail?.Sources?.Count == 0 && responseWithSearching.GroundingDetail?.SearchSuggestions?.Count == 0)
             {
                 return responseWithSearching.Result;
             }
@@ -169,18 +195,19 @@ Phản hồi bắt buộc phải tuân theo cấu trúc rõ ràng sau (không th
             stringBuilder.AppendLine();
             stringBuilder.AppendLine("---");
 
-            if (responseWithSearching.GroundingDetail?.Sources?.Count != 0)
+            if (responseWithSearching.GroundingDetail?.Sources != null && responseWithSearching.GroundingDetail?.Sources.Count != 0)
             {
                 stringBuilder.AppendLine();
                 stringBuilder.AppendLine("#### **Nguồn tham khảo**");
                 stringBuilder.AppendLine();
+
                 foreach (var source in responseWithSearching.GroundingDetail.Sources)
                 {
                     stringBuilder.AppendLine($"- [**{source.Domain}**]({source.Url})");
                 }
             }
 
-            if (responseWithSearching.GroundingDetail?.SearchSuggestions?.Count != 0)
+            if (responseWithSearching.GroundingDetail?.SearchSuggestions != null && responseWithSearching.GroundingDetail?.SearchSuggestions?.Count != 0)
             {
                 stringBuilder.AppendLine();
                 stringBuilder.AppendLine("#### **Gợi ý tìm kiếm trên Google**");
