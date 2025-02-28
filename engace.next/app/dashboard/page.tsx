@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Book, PenLine, GraduationCap, MessageCircle, Github } from "lucide-react";
+import { Book, PenLine, GraduationCap, MessageCircle } from "lucide-react";
 import { getUserPreferences } from "@/lib/localStorage";
 import { API_DOMAIN } from "@/lib/config";
 import Navbar from "@/components/Navbar";
