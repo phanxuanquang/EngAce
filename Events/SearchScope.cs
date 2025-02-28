@@ -33,6 +33,8 @@ namespace Events
 
 #  **CẤU TRÚC PHẢN HỒI**  
 
+# **Tiêu đề**: Là từ/cụm từ cần tra cứu viết ở dạng **in hoa và in đậm**
+
 ## **1. PHÁT ÂM**  
 - **Phiên âm IPA** (Anh - Mỹ).  
 - **Trọng âm & cách đọc chuẩn**.  

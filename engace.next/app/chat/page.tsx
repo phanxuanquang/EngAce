@@ -275,10 +275,10 @@ export default function ChatPage() {
       <Navbar />
 
       {/* Chat Container */}
-      <div className="container mx-auto px-4 pt-20 pb-4 h-screen flex flex-col max-w-5xl">
+      <div className="container mx-auto px-2 pt-20 pb-4 h-screen flex flex-col max-w-5xl">
         {/* Messages Area */}
         <div className="flex-1 overflow-y-auto rounded-t-xl bg-white dark:bg-slate-800 shadow-xl border border-slate-200 dark:border-slate-700">
-          <div className="p-4 space-y-4 scroll-smooth">
+          <div className="p-3 space-y-2 scroll-smooth">
             {/* Clear Chat Button */}
             {messages.length > 0 && (
               <div className="flex justify-center">
@@ -308,10 +308,10 @@ export default function ChatPage() {
                   } w-[80%] md:w-[70%]`}
                 >
                   <div
-                    className={`w-fit px-4 py-2 ${
+                    className={`w-fit px-3.5 py-1.5 ${
                       message.sender === "user"
                         ? "bg-gray-100 dark:bg-slate-700 rounded-t-2xl rounded-l-2xl ml-auto"
-                        : "bg-gradient-to-r from-orange-700 to-amber-600 text-white rounded-t-2xl rounded-r-2xl"
+                        : "bg-gradient-to-r from-orange-700/90 to-amber-600/70 text-white rounded-t-2xl rounded-r-2xl"
                     }`}
                   >
                     <div
@@ -339,7 +339,7 @@ export default function ChatPage() {
                       </div>
                     )}
                   </div>
-                  <span className="text-xs text-gray-500">
+                  <span className="text-xs opacity-40">
                     {new Date(message.timestamp).toLocaleTimeString([], {
                       hour: "2-digit",
                       minute: "2-digit",
@@ -358,7 +358,7 @@ export default function ChatPage() {
         </div>
 
         {/* Input Area */}
-        <div className="bg-white dark:bg-slate-800 border border-t-0 border-slate-200 dark:border-slate-700 rounded-b-xl p-4 shadow-xl space-y-3">
+        <div className="bg-white dark:bg-slate-800 border border-t-0 border-slate-200 dark:border-slate-700 rounded-b-xl p-3 shadow-xl space-y-3">
           {/* Text Input */}
           <div className="flex items-center space-x-2">
             <input

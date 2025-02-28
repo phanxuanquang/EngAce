@@ -47,7 +47,7 @@ export default function OnboardingForm() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       fullName: "",
-      gender: "other",
+      gender: "male",
       age: undefined,
       geminiApiKey: "",
     },

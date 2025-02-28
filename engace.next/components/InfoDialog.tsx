@@ -11,7 +11,7 @@ export default function InfoDialog({ isOpen, onClose }: InfoDialogProps) {
   if (!isOpen) return null;
 
   const content = `
-**EngAce** là nền tảng hỗ trợ học tiếng Anh **miễn phí** tích hợp AI, với mục tiêu giúp việc tự học trở nên tự nhiên và hiệu quả hơn. EngAce cá nhân hóa trải nghiệm học tập với các tính năng **độc quyền** như:
+**EngAce** là nền tảng hỗ trợ học tiếng Anh **miễn phí** tích hợp AI nhằm giúp việc tự học trở nên tự nhiên và hiệu quả hơn. EngAce cá nhân hóa trải nghiệm học tập với các tính năng **độc quyền**:
 
 - **Từ điển thông minh**: Cung cấp nghĩa, ví dụ minh họa, thành ngữ, cụm động từ và *tìm kiếm theo ngữ cảnh*, giúp hiểu sâu cách dùng từ.
 - **Bài tập cá nhân hóa**: Hệ thống bộ đề được tùy biến theo trình độ lên đến 100 câu hỏi và hàng chục dạng bài tập đa dạng.
@@ -25,7 +25,7 @@ EngAce được tạo ra bởi nhóm tác giả:
 `.trim();
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-2">
       <div className="w-full max-w-2xl transform rounded-2xl bg-white dark:bg-slate-800 p-6 shadow-2xl max-h-[90vh] overflow-y-auto">
       <div className="flex justify-between items-center pb-1">
         <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-blue-600 dark:from-purple-400 dark:to-blue-400">Giới thiệu về EngAce</h1>
