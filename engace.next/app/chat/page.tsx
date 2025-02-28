@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Send, Brain, Search, Image, X } from "lucide-react";
+import NextImage from "next/image";
 import { getUserPreferences } from "@/lib/localStorage";
 import { API_DOMAIN } from "@/lib/config";
 import Navbar from "@/components/Navbar";
@@ -64,7 +65,7 @@ export default function ChatPage() {
       try {
         const parsedMessages = JSON.parse(savedMessages);
         // Convert string timestamps back to Date objects
-        const messagesWithDates = parsedMessages.map((msg: any) => ({
+        const messagesWithDates = parsedMessages.map((msg: Omit<Message, 'timestamp'> & { timestamp: string }) => ({
           ...msg,
           timestamp: new Date(msg.timestamp),
         }));
@@ -81,7 +82,7 @@ export default function ChatPage() {
         }]);
     }
     setHasRestoredMessages(true);
-  }, [router, preferences.hasCompletedOnboarding]);
+  }, [router, preferences.hasCompletedOnboarding, hasRestoredMessages, preferences.fullName]);
 
   useEffect(() => {
     scrollToBottom();
@@ -286,12 +287,14 @@ export default function ChatPage() {
                   {message.images && message.images.length > 0 && (
                     <div className="mt-2 flex flex-wrap gap-2">
                       {message.images.map((imageUrl, index) => (
-                        <img
+                        <NextImage
                           key={index}
                           src={imageUrl}
                           alt={`Attached ${index + 1}`}
-                          className="max-w-[200px] h-auto rounded-lg"
+                          className="rounded-lg"
                           loading="lazy"
+                          width={200}
+                          height={200}
                         />
                       ))}
                     </div>
@@ -358,10 +361,12 @@ export default function ChatPage() {
               <div className="flex items-center gap-2 overflow-x-auto">
                 {selectedImages.map((image, index) => (
                   <div key={index} className="relative group">
-                    <img
+                    <NextImage
                       src={URL.createObjectURL(image)}
-                      alt={`Preview ${index + 1}`}
+                      alt={`Image preview ${index + 1}`}
                       className="h-16 w-16 object-cover rounded-lg border border-slate-200 dark:border-slate-700"
+                      width={64}
+                      height={64}
                     />
                     <button
                       onClick={() =>

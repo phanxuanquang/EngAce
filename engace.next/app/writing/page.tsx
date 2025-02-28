@@ -34,7 +34,7 @@ export default function WritingPage() {
         localStorage.setItem(VISITED_KEY, "true");
       }
     }
-  }, [router]);
+  }, [router, preferences.hasCompletedOnboarding]);
 
   useEffect(() => {
     setCharCount(content.length);
