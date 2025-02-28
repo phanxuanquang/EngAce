@@ -30,7 +30,7 @@ namespace EngAce.Api.Controllers
             {
                 var result = await ChatScope.GenerateAnswer(_accessKey, request, username, gender, age, englishLevel, enableReasoning, enableSearching);
 
-                _logger.LogInformation($"{_accessKey[..10]} ({username} - {gender}) asked (Reasoning: {enableReasoning} - Grounding: {enableSearching}): {request.Question}");
+                _logger.LogInformation($"{_accessKey[..10]} ({username}) asked (Reasoning: {enableReasoning} - Grounding: {enableSearching}): {request.Question}");
                 return Ok(result);
             }
             catch (Exception ex)

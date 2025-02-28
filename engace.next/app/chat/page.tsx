@@ -65,24 +65,33 @@ export default function ChatPage() {
       try {
         const parsedMessages = JSON.parse(savedMessages);
         // Convert string timestamps back to Date objects
-        const messagesWithDates = parsedMessages.map((msg: Omit<Message, 'timestamp'> & { timestamp: string }) => ({
-          ...msg,
-          timestamp: new Date(msg.timestamp),
-        }));
+        const messagesWithDates = parsedMessages.map(
+          (msg: Omit<Message, "timestamp"> & { timestamp: string }) => ({
+            ...msg,
+            timestamp: new Date(msg.timestamp),
+          })
+        );
         setMessages(messagesWithDates);
       } catch (error) {
         console.error("Error loading chat history:", error);
       }
     } else if (!hasRestoredMessages) {
-      setMessages([{
+      setMessages([
+        {
           id: "welcome",
           content: `Chào ${preferences.fullName}! Mình là EngAce, trợ lý ảo được thiết kế riêng để hỗ trợ bạn học tiếng Anh nè. 😊\n\nMình luôn cố gắng hỗ trợ bạn tốt nhất, nhưng đôi khi vẫn có thể mắc sai sót, nên bạn nhớ kiểm tra lại những thông tin quan trọng nha!`,
           sender: "ai",
           timestamp: new Date(),
-        }]);
+        },
+      ]);
     }
     setHasRestoredMessages(true);
-  }, [router, preferences.hasCompletedOnboarding, hasRestoredMessages, preferences.fullName]);
+  }, [
+    router,
+    preferences.hasCompletedOnboarding,
+    hasRestoredMessages,
+    preferences.fullName,
+  ]);
 
   useEffect(() => {
     scrollToBottom();
@@ -116,7 +125,29 @@ export default function ChatPage() {
 
   const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || []);
-    setSelectedImages((prev) => [...prev, ...files]);
+    const validTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/heic', 'image/heif'];
+    
+    const validFiles = files.filter(file => validTypes.includes(file.type));
+    
+    if (validFiles.length !== files.length) {
+      alert('Chỉ chấp nhận các file ảnh định dạng PNG, JPG, JPEG, HEIC, HEIF');
+      return;
+    }
+
+    // Filter out already selected images by comparing file names and sizes
+    const newFiles = validFiles.filter(newFile => 
+      !selectedImages.some(existingFile => 
+        existingFile.name === newFile.name && 
+        existingFile.size === newFile.size
+      )
+    );
+
+    if (selectedImages.length + newFiles.length > 10) {
+      alert('Chỉ được chọn tối đa 10 ảnh');
+      return;
+    }
+
+    setSelectedImages((prev) => [...prev, ...newFiles]);
   };
 
   const handleImageClick = () => {
@@ -190,7 +221,10 @@ export default function ChatPage() {
 
       // Construct URL with query parameters
       const url = new URL(`${API_DOMAIN}/api/Chatbot/GenerateAnswer`);
-      url.searchParams.append("username", preferences.fullName?.trim() || "guest");
+      url.searchParams.append(
+        "username",
+        preferences.fullName?.trim() || "guest"
+      );
       url.searchParams.append("gender", preferences.gender || "Unknown");
       url.searchParams.append("age", (preferences.age || 16).toString());
       url.searchParams.append(
@@ -241,20 +275,20 @@ export default function ChatPage() {
       <Navbar />
 
       {/* Chat Container */}
-      <div className="container mx-auto px-4 pt-20 pb-4 h-screen flex flex-col">
+      <div className="container mx-auto px-4 pt-20 pb-4 h-screen flex flex-col max-w-5xl">
         {/* Messages Area */}
-        <div className="flex-1 overflow-y-auto rounded-t-xl bg-white dark:bg-slate-800 shadow-lg">
-          <div className="p-4 space-y-6">
+        <div className="flex-1 overflow-y-auto rounded-t-xl bg-white dark:bg-slate-800 shadow-xl border border-slate-200 dark:border-slate-700">
+          <div className="p-4 space-y-4 scroll-smooth">
             {/* Clear Chat Button */}
             {messages.length > 0 && (
-              <div className="flex justify-end mb-4">
+              <div className="flex justify-center">
                 <button
                   onClick={() => setShowClearConfirm(true)}
                   disabled={isClearing}
-                  className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all duration-200 ${
+                  className={`px-4 py-1 text-xs font-semibold rounded-lg transition-all duration-300 shadow-md hover:ring-red-800 hover:ring  ${
                     isClearing
-                      ? "bg-red-200 text-red-800 cursor-not-allowed"
-                      : "bg-red-100 text-red-800 hover:bg-red-200"
+                      ? "bg-red-200 text-red-800 cursor-not-allowed shadow-red-200/50"
+                      : "bg-red-100 text-red-800 hover:bg-red-200 shadow-red-100/50"
                   }`}
                 >
                   Xóa cuộc trò chuyện
@@ -269,36 +303,48 @@ export default function ChatPage() {
                 }`}
               >
                 <div
-                  className={`max-w-[80%] md:max-w-[70%] rounded-2xl px-4 py-3 ${
-                    message.sender === "user"
-                      ? "bg-gray-300 dark:bg-gray-700"
-                      : "bg-slate-200 dark:bg-slate-900"
-                  }`}
+                  className={`flex flex-col space-y-1 ${
+                    message.sender === "user" ? "items-end" : "items-start"
+                  } w-[80%] md:w-[70%]`}
                 >
                   <div
-                    className={`${
+                    className={`w-fit px-4 py-2 ${
                       message.sender === "user"
-                        ? "prose-invert"
-                        : "prose-slate dark:prose-invert"
+                        ? "bg-gray-100 dark:bg-slate-700 rounded-t-2xl rounded-l-2xl ml-auto"
+                        : "bg-gradient-to-r from-orange-700 to-amber-600 text-white rounded-t-2xl rounded-r-2xl"
                     }`}
                   >
-                    <MarkdownRenderer>{message.content}</MarkdownRenderer>
-                  </div>
-                  {message.images && message.images.length > 0 && (
-                    <div className="mt-2 flex flex-wrap gap-2">
-                      {message.images.map((imageUrl, index) => (
-                        <NextImage
-                          key={index}
-                          src={imageUrl}
-                          alt={`Attached ${index + 1}`}
-                          className="rounded-lg"
-                          loading="lazy"
-                          width={200}
-                          height={200}
-                        />
-                      ))}
+                    <div
+                      className={`${
+                        message.sender === "user"
+                          ? "text-slate-900 dark:text-slate-100"
+                          : "text-white"
+                      }`}
+                    >
+                      <MarkdownRenderer>{message.content}</MarkdownRenderer>
                     </div>
-                  )}
+                    {message.images && message.images.length > 0 && (
+                      <div className="mt-2 flex flex-wrap gap-2">
+                        {message.images.map((imageUrl, index) => (
+                          <NextImage
+                            key={index}
+                            src={imageUrl}
+                            alt={`Attached ${index + 1}`}
+                            className="rounded-lg"
+                            loading="lazy"
+                            width={200}
+                            height={200}
+                          />
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  <span className="text-xs text-gray-500">
+                    {new Date(message.timestamp).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </span>
                 </div>
               </div>
             ))}
@@ -312,7 +358,7 @@ export default function ChatPage() {
         </div>
 
         {/* Input Area */}
-        <div className="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 rounded-b-xl p-4 shadow-lg space-y-3">
+        <div className="bg-white dark:bg-slate-800 border border-t-0 border-slate-200 dark:border-slate-700 rounded-b-xl p-4 shadow-xl space-y-3">
           {/* Text Input */}
           <div className="flex items-center space-x-2">
             <input
@@ -323,33 +369,27 @@ export default function ChatPage() {
               multiple
               className="hidden"
             />
-            <button
-              onClick={handleImageClick}
-              className="rounded-lg p-1 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
-            >
-              <Image className="h-5 w-5" />
-            </button>
             <textarea
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
               onKeyPress={(e) => {
-                if (e.key === "Enter" && !e.shiftKey) {
-                  e.preventDefault();
-                  handleSend();
-                }
+          if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            handleSend();
+          }
               }}
               placeholder="Shift + Enter để xuống dòng"
               disabled={isProcessing}
               required
-              className={`text-sm xs:text-xs flex-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-transparent px-4 py-2 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none disabled:opacity-50 disabled:cursor-not-allowed transition-opacity duration-200`}
+              className={`text-sm xs:text-xs flex-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-transparent px-4 py-2.5 text-slate-900 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 max-h-32`}
             />
             <button
               onClick={handleSend}
               disabled={isProcessing || !inputMessage.trim()}
               className={`rounded-lg p-2.5 text-white transition-all duration-200 ${
-                isProcessing || !inputMessage.trim()
-                  ? "bg-slate-400 cursor-not-allowed opacity-50"
-                  : "bg-gradient-to-r from-orange-700 to-amber-600 hover:from-orange-700 hover:to-amber-700"
+          isProcessing || !inputMessage.trim()
+            ? "bg-slate-400 cursor-not-allowed opacity-50"
+            : "bg-gradient-to-r from-orange-700 to-amber-600 hover:from-orange-700 hover:to-amber-700"
               }`}
             >
               <Send className={`h-5 w-5 ${isProcessing ? "opacity-50" : ""}`} />
@@ -357,61 +397,68 @@ export default function ChatPage() {
           </div>
           {/* Image Preview */}
           {selectedImages.length > 0 && (
-            <div className="border-t border-slate-200 dark:border-slate-700 pt-3">
+            <div className="border-t border-slate-200 dark:border-slate-700 pt-3 transition-all duration-300">
               <div className="flex items-center gap-2 overflow-x-auto">
-                {selectedImages.map((image, index) => (
-                  <div key={index} className="relative group">
-                    <NextImage
-                      src={URL.createObjectURL(image)}
-                      alt={`Image preview ${index + 1}`}
-                      className="h-16 w-16 object-cover rounded-lg border border-slate-200 dark:border-slate-700"
-                      width={64}
-                      height={64}
-                    />
-                    <button
-                      onClick={() =>
-                        setSelectedImages((prev) =>
-                          prev.filter((_, i) => i !== index)
-                        )
-                      }
-                      className="absolute -top-1.5 -right-1.5 p-0.5 rounded-full bg-red-500 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                    >
-                      <X className="h-3 w-3" />
-                    </button>
-                  </div>
-                ))}
+              {selectedImages.map((image, index) => (
+                <div key={index} className="relative group">
+                <NextImage
+                  src={URL.createObjectURL(image)}
+                  alt={`Image preview ${index + 1}`}
+                  className="h-16 w-16 object-cover rounded-lg border border-slate-200 dark:border-slate-700 group-hover:opacity-50 transition-opacity duration-200"
+                  width={64}
+                  height={64}
+                />
+                <button
+                  onClick={() =>
+                  setSelectedImages((prev) =>
+                    prev.filter((_, i) => i !== index)
+                  )
+                  }
+                  className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-1.5 rounded-full bg-red-500 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                >
+                  <X className="h-3 w-3" />
+                </button>
+                </div>
+              ))}
               </div>
             </div>
           )}
           {/* Toggle Buttons */}
-          <div className="flex items-center justify-start space-x-4">
+          <div className="grid grid-cols-3 gap-2">
+            <button
+              onClick={handleImageClick}
+              className="text-slate-600 dark:text-slate-400 flex items-center justify-center sm:space-x-2 rounded-lg px-3 py-1.5 text-xs transition-all dark:bg-slate-700 bg-slate-100 w-full"
+            >
+              <Image className="h-4 w-4" />
+              <span className="hidden sm:inline">Đính kèm ảnh</span>
+            </button>
             <button
               onClick={() => {
                 setEnableReasoning(!enableReasoning);
                 if (!enableReasoning) setEnableSearching(false);
               }}
-              className={`flex items-center space-x-2 rounded-lg px-3 py-1.5 text-xs transition-all ${
+              className={`flex items-center justify-center sm:space-x-2 rounded-lg px-3 py-1.5 text-xs transition-all w-full ${
                 enableReasoning
                   ? "bg-gradient-to-r from-blue-500/20 to-blue-600/20 text-blue-700 dark:from-blue-600/30 dark:to-blue-700/30 dark:text-blue-300"
                   : "bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-400"
               }`}
             >
               <Brain className="h-4 w-4" />
-              <span>Suy luận sâu</span>
+              <span className="hidden sm:inline">Suy luận sâu</span>
             </button>
             <button
               onClick={() => {
                 setEnableSearching(!enableSearching);
                 if (!enableSearching) setEnableReasoning(false);
               }}
-              className={`flex items-center space-x-2 rounded-lg px-3 py-1.5 text-xs transition-all ${
+              className={`flex items-center justify-center sm:space-x-2 rounded-lg px-3 py-1.5 text-xs transition-all w-full ${
                 enableSearching
                   ? "bg-gradient-to-r from-green-500/20 to-green-600/20 text-green-700 dark:from-green-600/30 dark:to-green-700/30 dark:text-green-300"
                   : "bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-400"
               }`}
             >
               <Search className="h-4 w-4" />
-              <span>Tìm kiếm trên Google</span>
+              <span className="hidden sm:inline">Tìm kiếm trên Google</span>
             </button>
           </div>
         </div>

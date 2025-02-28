@@ -2,9 +2,10 @@
 
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { ReactNode, useCallback } from "react";
+import { ReactNode } from "react";
 import { FileSpreadsheet } from "lucide-react";
-const XLSX = require("xlsx");
+
+import * as XLSX from "xlsx";
 
 export interface MarkdownRendererProps {
   children: string;
@@ -106,18 +107,18 @@ const components = {
     );
   },
   table: ({ children }: ComponentProps) => {
-    const handleExport = useCallback(() => {
-      const table = document.querySelector("table");
+    const handleExport = () => {
+      const table = document.querySelector("table") as HTMLTableElement;
       if (!table) return;
 
       // Get headers
-      const headers = Array.from(table.querySelectorAll("th")).map(
+      const headers = Array.from(table.querySelectorAll("th") as NodeListOf<HTMLTableCellElement>).map(
         (th) => th.textContent || ""
       );
 
       // Get rows
-      const rows = Array.from(table.querySelectorAll("tbody tr")).map((row) =>
-        Array.from(row.querySelectorAll("td")).map((td) => td.textContent || "")
+      const rows = Array.from(table.querySelectorAll("tbody tr") as NodeListOf<HTMLTableRowElement>).map((row) =>
+        Array.from(row.querySelectorAll("td") as NodeListOf<HTMLTableCellElement>).map((td) => td.textContent || "")
       );
 
       // Create worksheet data
@@ -135,10 +136,12 @@ const components = {
       };
 
       // Apply styles to header row
-      const range = XLSX.utils.decode_range(ws["!ref"]);
-      for (let C = range.s.c; C <= range.e.c; ++C) {
-        const address = XLSX.utils.encode_cell({ r: 0, c: C });
-        ws[address].s = headerStyle;
+      if (ws["!ref"]) {
+        const range = XLSX.utils.decode_range(ws["!ref"]);
+        for (let C = range.s.c; C <= range.e.c; ++C) {
+          const address = XLSX.utils.encode_cell({ r: 0, c: C });
+          ws[address].s = headerStyle;
+        }
       }
 
       // Set column widths
@@ -155,7 +158,7 @@ const components = {
 
       // Save file
       XLSX.writeFile(wb, fileName);
-    }, []);
+    };
 
     return (
       <div className="my-2 w-full overflow-x-auto space-y-1">
