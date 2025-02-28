@@ -1,6 +1,9 @@
-﻿using Events;
+﻿using EngAce.Api.DTO;
+using Events;
 using Helper;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Http;
+using System.Text.Json;
 
 namespace EngAce.Api.Controllers
 {
@@ -62,6 +65,36 @@ namespace EngAce.Api.Controllers
                 }
 
                 return Ok(content);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("GetLatestGithubCommit")]
+        [ResponseCache(Duration = 60 * 60 * 24, Location = ResponseCacheLocation.Any, NoStore = false)]
+        public async Task<ActionResult<CommitInfo>> GetLatestGithubCommit()
+        {
+            try
+            {
+                using var client = new HttpClient();
+                using var request = new HttpRequestMessage(HttpMethod.Get, "https://api.github.com/repos/phanxuanquang/EngAce/commits/master");
+                request.Headers.Add("User-Agent", "request");
+
+                using var response = await client.SendAsync(request);
+                response.EnsureSuccessStatusCode();
+
+                var json = await response.Content.ReadAsStringAsync();
+                using var doc = JsonDocument.Parse(json);
+                var root = doc.RootElement;
+
+                return Ok(new CommitInfo
+                {
+                    ShaCode = root.GetProperty("sha").GetString(),
+                    Message = root.GetProperty("commit").GetProperty("message").GetString(),
+                    Date = root.GetProperty("commit").GetProperty("author").GetProperty("date").GetDateTime()
+                });
             }
             catch (Exception ex)
             {
