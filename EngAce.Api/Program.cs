@@ -87,7 +87,8 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policyBuilder =>
     {
-        policyBuilder.WithOrigins("https://engace.vercel.app")
+        policyBuilder.AllowAnyOrigin()
+        //.WithOrigins("https://engace.vercel.app")
                      .AllowAnyHeader()
                      .AllowAnyMethod();
     });

@@ -2,7 +2,9 @@
 
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { ReactNode } from "react";
+import { ReactNode, useCallback } from "react";
+import { FileSpreadsheet } from "lucide-react";
+const XLSX = require("xlsx");
 
 export interface MarkdownRendererProps {
   children: string;
@@ -103,15 +105,80 @@ const components = {
       </code>
     );
   },
-  table: ({ children }: ComponentProps) => (
-    <div className="my-2 w-full overflow-x-auto">
-      <table className="min-w-full border-collapse border border-slate-100 dark:border-slate-700 text-sm rounded-lg">
-        {children}
-      </table>
-    </div>
-  ),
+  table: ({ children }: ComponentProps) => {
+    const handleExport = useCallback(() => {
+      const table = document.querySelector("table");
+      if (!table) return;
+
+      // Get headers
+      const headers = Array.from(table.querySelectorAll("th")).map(
+        (th) => th.textContent || ""
+      );
+
+      // Get rows
+      const rows = Array.from(table.querySelectorAll("tbody tr")).map((row) =>
+        Array.from(row.querySelectorAll("td")).map((td) => td.textContent || "")
+      );
+
+      // Create worksheet data
+      const wsData = [headers, ...rows];
+
+      // Create workbook and worksheet
+      const wb = XLSX.utils.book_new();
+      const ws = XLSX.utils.aoa_to_sheet(wsData);
+
+      // Style configuration
+      const headerStyle = {
+        font: { bold: true, color: { rgb: "FFFFFF" } },
+        fill: { fgColor: { rgb: "4F46E5" } },
+        alignment: { horizontal: "center" },
+      };
+
+      // Apply styles to header row
+      const range = XLSX.utils.decode_range(ws["!ref"]);
+      for (let C = range.s.c; C <= range.e.c; ++C) {
+        const address = XLSX.utils.encode_cell({ r: 0, c: C });
+        ws[address].s = headerStyle;
+      }
+
+      // Set column widths
+      const colWidths = headers.map(() => ({ wch: 20 }));
+      ws["!cols"] = colWidths;
+
+      // Add worksheet to workbook
+      XLSX.utils.book_append_sheet(wb, ws, "Table Data");
+
+      // Generate filename
+      const fileName = `EngAce-${new Date()
+        .toISOString()
+        .replace(/[:.]/g, "-")}.xlsx`;
+
+      // Save file
+      XLSX.writeFile(wb, fileName);
+    }, []);
+
+    return (
+      <div className="my-2 w-full overflow-x-auto space-y-1">
+        <table className="min-w-full border border-slate-100 dark:border-slate-700 text-sm rounded-lg dark:bg-slate-800/30 bg-slate-400/30">
+          {children}
+        </table>
+        <div className="flex justify-end">
+          <button
+            onClick={handleExport}
+            className="mt-1 text-xs inline-flex items-center gap-1.5 px-2 py-1 rounded
+          bg-green-600 text-white hover:bg-green-700 
+          dark:bg-green-700 dark:hover:bg-green-800
+          transition-colors duration-200"
+          >
+            <FileSpreadsheet size={14} />
+            Xuất thành trang tính
+          </button>
+        </div>
+      </div>
+    );
+  },
   thead: ({ children }: ComponentProps) => (
-    <thead className="bg-slate-100 dark:bg-slate-800 text-sm">{children}</thead>
+    <thead className="bg-slate-400/80 dark:bg-slate-800 text-sm">{children}</thead>
   ),
   tbody: ({ children }: ComponentProps) => (
     <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
@@ -124,7 +191,7 @@ const components = {
     </tr>
   ),
   th: ({ children }: ComponentProps) => (
-    <th className="px-4 py-1 text-left font-semibold text-slate-900 dark:text-slate-100 ">
+    <th className="px-4 py-1.5 text-left text-slate-900 dark:text-slate-100 ">
       {children}
     </th>
   ),
