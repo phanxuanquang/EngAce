@@ -72,12 +72,13 @@ export default function Navbar() {
 
             {/* Desktop Actions */}
             <div className="hidden md:flex items-center space-x-2">
-              <button
+              {/* Ẩn nút UserCircle trên màn hình md và lớn hơn */}
+              {/* <button
                 onClick={() => setShowProfileDialog(true)}
                 className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
               >
                 <UserCircle className="h-5 w-5 text-slate-600 dark:text-slate-400" />
-              </button>
+              </button> */}
 
               <button
                 onClick={toggleTheme}
@@ -109,10 +110,9 @@ export default function Navbar() {
 
               <button
                 onClick={() => setShowLogoutDialog(true)}
-                className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors cursor-pointer"
+                   className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
               >
-                <LogOut className="h-4 w-4" />
-                <span className="text-sm font-medium">Đăng xuất</span>
+                <LogOut className="h-5 w-5 text-slate-600 dark:text-slate-400" />
               </button>
             </div>
           </div>
