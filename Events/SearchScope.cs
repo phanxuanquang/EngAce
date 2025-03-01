@@ -214,7 +214,7 @@ namespace Events
             return new SearchResult
             {
                 Content = response.Result,
-                IpaAudioUrls = internetSearchResult?.IpaAudioUrls,
+                IpaAudioUrls = internetSearchResult?.IpaAudioUrls?.Distinct().ToList(),
             };
         }
 
@@ -297,7 +297,6 @@ namespace Events
                         .SelectMany(r => r.Phonetics)?
                         .Select(p => p.AudioUrl)?
                         .Where(url => !string.IsNullOrEmpty(url))
-                        .Distinct()
                         .ToList(),
                     Content = stringBuilder.ToString()
                 };

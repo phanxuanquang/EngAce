@@ -26,7 +26,6 @@ export default function AssignmentPage() {
   const [error, setError] = useState<string>("");
   const [showError, setShowError] = useState(false);
 
-
   const fetchAssignmentTypes = useCallback(async () => {
     try {
       const response = await fetch(
@@ -87,7 +86,12 @@ export default function AssignmentPage() {
     };
 
     fetchInitialData();
-  }, [router, preferences.hasCompletedOnboarding, fetchAssignmentTypes, fetchSuggestedTopics]);
+  }, [
+    router,
+    preferences.hasCompletedOnboarding,
+    fetchAssignmentTypes,
+    fetchSuggestedTopics,
+  ]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -113,13 +117,11 @@ export default function AssignmentPage() {
 
       const questions = await response.json();
       const timestamp = Date.now();
-      
+
       // Store questions data in localStorage with a timestamp as identifier
       setAssignmentData(timestamp.toString(), questions);
-      
-      router.push(
-        `/assignment/do?id=${timestamp}`
-      );
+
+      router.push(`/assignment/do?id=${timestamp}`);
     } catch (err) {
       console.error("Error generating assignment:", err);
       setError(
@@ -142,16 +144,14 @@ export default function AssignmentPage() {
   if (isInitialLoading) {
     return (
       <div className="min-h-screen h-screen flex items-center justify-center overflow-hidden bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-400 via-pink-400 to-purple-600">
-        <div className="fixed -top-40 -left-40 h-80 w-80 rounded-full bg-pink-400 blur-3xl opacity-30 animate-pulse"></div>
-        <div className="fixed -bottom-40 -right-40 h-80 w-80 rounded-full bg-purple-400 blur-3xl opacity-30 animate-pulse"></div>
-        <div className="relative flex flex-col items-center space-y-6 text-white">
+        <div className="fixed -top-40 -left-40 h-80 w-80 rounded-full bg-pink-400 dark:bg-pink-600 blur-3xl opacity-30 animate-pulse"></div>
+        <div className="fixed -bottom-40 -right-40 h-80 w-80 rounded-full bg-purple-400 dark:bg-purple-600 blur-3xl opacity-30 animate-pulse"></div>
+        <div className="relative flex flex-col items-center space-y-6 text-slate-900 dark:text-white">
           <div className="relative">
-        <div className="absolute inset-0 animate-ping rounded-full bg-white/20"></div>
-        <Loader2 className="h-12 w-12 animate-spin" />
+            <div className="absolute inset-0 animate-ping rounded-full bg-slate-200/50 dark:bg-slate-700/50"></div>
+            <Loader2 className="h-12 w-12 animate-spin text-purple-500" />
           </div>
-          <div className="flex flex-col items-center space-y-2">
-        <p className="text-xl font-medium animate-pulse">Đang tải . . .</p>
-          </div>
+          <div className="flex flex-col items-center space-y-2"></div>
         </div>
       </div>
     );
@@ -167,7 +167,7 @@ export default function AssignmentPage() {
         <div className="mx-auto max-w-3xl">
           <div className="mb-12 text-center">
             <div className="mb-6 inline-flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-500 to-pink-400">
-              <GraduationCap className="h-10 w-10" />
+              <GraduationCap className="h-10 w-10 text-white" />
             </div>
             <h1 className="mb-4 text-4xl font-bold text-slate-900 dark:text-white">
               BÀI TẬP

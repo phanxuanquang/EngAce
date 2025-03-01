@@ -30,15 +30,15 @@ const LoadingSpinner = ({
   return (
     <div className={`flex flex-col items-center justify-center space-y-4 py-12 ${className}`}>
       <div className={`relative ${sizeClasses[size]}`}>
-        <div className={`absolute inset-0 animate-ping rounded-full bg-${color}-400 opacity-25`}></div>
-        <div className={`relative flex ${sizeClasses[size]} items-center justify-center rounded-full bg-gradient-to-r from-${color}-500 to-${color}-400`}>
-          <Icon className={`${iconSizes[size]} text-white`} />
-        </div>
+      <div className={`absolute inset-0 animate-ping rounded-full bg-${color}-400 dark:bg-${color}-500 opacity-25`}></div>
+      <div className={`relative flex ${sizeClasses[size]} items-center justify-center rounded-full bg-gradient-to-r from-${color}-500 to-${color}-400 dark:from-${color}-600 dark:to-${color}-500`}>
+        <Icon className={`${iconSizes[size]} text-primary dark:text-white/90`} />
+      </div>
       </div>
       {text && (
-        <p className="text-slate-600 dark:text-slate-400">
-          {text}
-        </p>
+      <p className="text-slate-600 dark:text-slate-300">
+        {text}
+      </p>
       )}
     </div>
   );

@@ -82,7 +82,7 @@ const components = {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="underline text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300"
+      className="underline hover:text-blue-600 dark:hover:text-blue-300 text-medium"
     >
       {children}
     </a>
@@ -90,7 +90,7 @@ const components = {
   code: ({ inline, className, children }: CodeProps) => {
     if (inline) {
       return (
-        <code className="rounded bg-white-100 px-1.5 py-0.5 text-sm md:text-base text-white-800 dark:bg-white-700 dark:text-white-200">
+        <code className="rounded bg-gray-100 px-1.5 py-0.5 text-sm md:text-base text-gray-800 dark:bg-gray-800 dark:text-gray-200">
           {children}
         </code>
       );

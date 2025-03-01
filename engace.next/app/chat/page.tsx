@@ -311,7 +311,7 @@ export default function ChatPage() {
                     className={`w-fit px-3.5 py-1.5 ${
                       message.sender === "user"
                         ? "bg-gray-100 dark:bg-slate-700 rounded-t-2xl rounded-l-2xl ml-auto"
-                        : "bg-gradient-to-r from-orange-700/90 to-amber-600/70 text-white rounded-t-2xl rounded-r-2xl"
+                        : "bg-amber-600/60 dark:bg-amber-600/60 text-white rounded-t-2xl rounded-r-2xl"
                     }`}
                   >
                     <div
