@@ -18,6 +18,8 @@ import InfoDialog from "./InfoDialog";
 import FeedbackDialog from "./FeedbackDialog";
 import UserProfileDialog from "./UserProfileDialog";
 import ConfirmDialog from "@/components/ConfirmDialog";
+import UserProfile from './UserProfile';
+import { SparklesText } from "./magicui/sparkles-text";
 
 export default function Navbar() {
   const router = useRouter();
@@ -41,17 +43,8 @@ export default function Navbar() {
           <div className="flex items-center justify-between">
             {/* Logo and Name - Desktop */}
             <div className="hidden md:flex items-center space-x-4">
-              <button
-                onClick={() => router.push("/dashboard")}
-                className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent dark:from-blue-400 dark:to-purple-400 hover:opacity-80 transition-opacity"
-              >
-                EngAce
-              </button>
-              <span className="text-sm text-slate-600 dark:text-slate-400">
-                |
-              </span>
               <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
-                {preferences.fullName}
+                <UserProfile />
               </span>
             </div>
 
@@ -70,14 +63,15 @@ export default function Navbar() {
             </div>
 
             {/* Logo - Mobile */}
-            <div className="md:hidden">
-              <button
-                onClick={() => router.push("/dashboard")}
-                className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent dark:from-blue-400 dark:to-purple-400"
-              >
-                EngAce
-              </button>
+            <div className="md:hidden"  onClick={() => router.push("/dashboard")}>
+         
+                <SparklesText text="EngAce" />
             </div>
+
+            <div className="hidden md:flex items-center space-x-4">
+                <SparklesText text="EngAce" />
+            </div>
+
 
             {/* Desktop Actions */}
             <div className="hidden md:flex items-center space-x-2">
