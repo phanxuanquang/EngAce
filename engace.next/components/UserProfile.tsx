@@ -2,10 +2,14 @@
 
 import { useState, useEffect } from 'react';
 import { getUserPreferences } from "@/lib/localStorage";
+import Image from 'next/image';
+import UserProfileDialog from './UserProfileDialog';
 
 export default function UserProfile() {
   const [username, setUsername] = useState('');
   const [greeting, setGreeting] = useState('');
+  const [showInfoDialog, setShowInfoDialog] = useState(false);
+  const [showProfileDialog, setShowProfileDialog] = useState(false);
   
   useEffect(() => {
     // Lấy thông tin người dùng từ localStorage
@@ -40,8 +44,36 @@ export default function UserProfile() {
   if (!username) return null;
   
   return (
-    <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
-      {greeting}, {username}
-    </span>
+    <>
+    <div className="flex items-center gap-3 cursor-pointer" onClick={() => setShowProfileDialog(true)}>
+      <div className="avatar-container relative w-10 h-10"
+      >
+        <div className="avatar-gradient absolute inset-0 rounded-full animate-spin-slow"></div>
+        <div className="avatar-inner absolute inset-[2px] rounded-full bg-white dark:bg-slate-600 flex items-center justify-center overflow-hidden">
+          <Image 
+            src="https://api.dicebear.com/9.x/notionists/webp" 
+            alt="Avatar" 
+            width={36} 
+            height={36}
+            className="object-cover"
+          />
+        </div>
+      </div>
+      <div className="flex flex-col space-y-0">
+        <span className="text-sm text-slate-500 dark:text-slate-400 leading-tight">
+          {greeting}
+        </span>
+        <span className="text-base font-bold text-slate-700 dark:text-slate-200 leading-tight">
+          {username}
+        </span>
+      </div>
+    </div>
+       {/* Dialogs */}
+       <UserProfileDialog
+        isOpen={showProfileDialog}
+        onClose={() => setShowProfileDialog(false)}
+      />
+
+    </>
   );
 } 

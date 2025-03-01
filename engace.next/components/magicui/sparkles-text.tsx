@@ -82,6 +82,14 @@ interface SparklesTextProps {
     first: string;
     second: string;
   };
+  
+  /**
+   * @default false
+   * @type boolean
+   * @description
+   * Whether to use high intensity colors for text
+   * */
+  highIntensity?: boolean;
 }
 
 export const SparklesText: React.FC<SparklesTextProps> = ({
@@ -89,6 +97,7 @@ export const SparklesText: React.FC<SparklesTextProps> = ({
   colors = { first: "#9E7AFF", second: "#FE8BBB" },
   className,
   sparklesCount = 10,
+  highIntensity = false,
   ...props
 }) => {
   const [sparkles, setSparkles] = useState<Sparkle[]>([]);
@@ -128,14 +137,21 @@ export const SparklesText: React.FC<SparklesTextProps> = ({
     return () => clearInterval(interval);
   }, [colors.first, colors.second, sparklesCount]);
 
+  // Define high intensity colors
+  const textColors = highIntensity 
+    ? { first: "#7C3AFF", second: "#FF4A9E" } // Darker, more saturated colors
+    : colors;
+
   return (
     <div
-      className={cn("text-6xl font-bold", className)}
+      className={cn("text-3xl md:text-5xl font-bold", className)}
       {...props}
       style={
         {
           "--sparkles-first-color": `${colors.first}`,
           "--sparkles-second-color": `${colors.second}`,
+          "--text-first-color": `${textColors.first}`,
+          "--text-second-color": `${textColors.second}`,
         } as CSSProperties
       }
     >
@@ -143,7 +159,7 @@ export const SparklesText: React.FC<SparklesTextProps> = ({
         {sparkles.map((sparkle) => (
           <Sparkle key={sparkle.id} {...sparkle} />
         ))}
-        <strong>{text}</strong>
+        <strong className="bg-gradient-to-r from-[var(--text-first-color)] to-[var(--text-second-color)] text-transparent bg-clip-text font-black">{text}</strong>
       </span>
     </div>
   );

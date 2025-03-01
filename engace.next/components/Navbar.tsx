@@ -43,16 +43,14 @@ export default function Navbar() {
           <div className="flex items-center justify-between">
             {/* Logo and Name - Desktop */}
             <div className="hidden md:flex items-center space-x-4">
-              <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
                 <UserProfile />
-              </span>
             </div>
 
             {/* Mobile Menu Button */}
             <div className="md:hidden flex items-center">
               <button
                 onClick={() => setShowMobileMenu(!showMobileMenu)}
-                className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
               >
                 {showMobileMenu ? (
                   <X className="h-6 w-6 text-slate-600 dark:text-slate-400" />
@@ -63,13 +61,12 @@ export default function Navbar() {
             </div>
 
             {/* Logo - Mobile */}
-            <div className="md:hidden"  onClick={() => router.push("/dashboard")}>
-         
+            <div className="md:hidden cursor-pointer" onClick={() => router.push("/dashboard")}>
                 <SparklesText text="EngAce" />
             </div>
 
-            <div className="hidden md:flex items-center space-x-4">
-                <SparklesText text="EngAce" />
+            <div className="hidden md:flex items-center space-x-4 cursor-pointer" onClick={() => router.push("/dashboard")}>
+                <SparklesText text="EngAce" highIntensity={true} />
             </div>
 
 
@@ -77,14 +74,14 @@ export default function Navbar() {
             <div className="hidden md:flex items-center space-x-2">
               <button
                 onClick={() => setShowProfileDialog(true)}
-                className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
               >
                 <UserCircle className="h-5 w-5 text-slate-600 dark:text-slate-400" />
               </button>
 
               <button
                 onClick={toggleTheme}
-                className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
                 aria-label="Toggle theme"
               >
                 {isDark ? (
@@ -96,7 +93,7 @@ export default function Navbar() {
 
               <button
                 onClick={() => setShowFeedbackDialog(true)}
-                className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
                 aria-label="Submit feedback"
               >
                 <MessageCircleHeart className="h-5 w-5 text-slate-600 dark:text-slate-400" />
@@ -104,7 +101,7 @@ export default function Navbar() {
 
               <button
                 onClick={() => setShowInfoDialog(true)}
-                className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
                 aria-label="Project information"
               >
                 <Info className="h-5 w-5 text-slate-600 dark:text-slate-400" />
@@ -112,7 +109,7 @@ export default function Navbar() {
 
               <button
                 onClick={() => setShowLogoutDialog(true)}
-                className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors"
+                className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors cursor-pointer"
               >
                 <LogOut className="h-4 w-4" />
                 <span className="text-sm font-medium">Đăng xuất</span>
@@ -126,7 +123,7 @@ export default function Navbar() {
               <div className="flex flex-col space-y-4">
                 <button
                   onClick={() => setShowProfileDialog(true)}
-                  className="flex items-center space-x-2 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                  className="flex items-center space-x-2 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
                 >
                   <UserCircle className="h-5 w-5 text-slate-600 dark:text-slate-400" />
                   <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
@@ -136,7 +133,7 @@ export default function Navbar() {
 
                 <button
                   onClick={toggleTheme}
-                  className="flex items-center space-x-2 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                  className="flex items-center space-x-2 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
                   aria-label="Theme switch"
                 >
                   <div className="flex items-center space-x-2">
@@ -153,7 +150,7 @@ export default function Navbar() {
 
                 <button
                   onClick={() => setShowFeedbackDialog(true)}
-                  className="flex items-center space-x-2 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                  className="flex items-center space-x-2 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
                   aria-label="Submit feedback"
                 >
                   <div className="flex items-center space-x-2">
@@ -166,7 +163,7 @@ export default function Navbar() {
 
                 <button
                   onClick={() => setShowInfoDialog(true)}
-                  className="flex items-center space-x-2 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                  className="flex items-center space-x-2 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
                   aria-label="Project information"
                 >
                   <div className="flex items-center space-x-2">
@@ -179,7 +176,7 @@ export default function Navbar() {
 
                 <button
                   onClick={() => setShowLogoutDialog(true)}
-                  className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors"
+                  className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors cursor-pointer"
                 >
                   <LogOut className="h-4 w-4" />
                   <span className="text-sm font-medium">Đăng xuất</span>
