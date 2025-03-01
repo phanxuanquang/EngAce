@@ -328,14 +328,15 @@ Cập nhật vào lúc **${formatUpdateDate(updateInfo.Date)}**. Thông tin chi 
                 </div>
                 
                 {/* Main Heading */}
-                <h1 className="text-6xl sm:text-7xl font-bold uppercase text-center">
+                <h1 className="text-6xl sm:text-7xl font-black uppercase text-center">
                   <span className="block text-black dark:text-white">Học tiếng Anh</span>
-                  <span className="block">
                     <WordRotate
                       className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-transparent bg-clip-text"
                       words={["thông minh", "tiện lợi", "dễ dàng"]}
+                      size="xl"
+                      highIntensity={true}
+                      colorScheme="blue-cyan"
                     />
-                  </span>
                 </h1>
               </div>
             </div>
@@ -415,8 +416,40 @@ Cập nhật vào lúc **${formatUpdateDate(updateInfo.Date)}**. Thông tin chi 
                   </div>
 
                   {/* Large Background Icon */}
-                  <div className="absolute -right-10 -bottom-10 opacity-[0.02] group-hover:opacity-[0.05] transition-opacity duration-500">
-                    <Icon className="w-52 h-52 transform -rotate-12 text-gray-800 dark:text-white" />
+                  <div className="absolute -right-10 -bottom-10 opacity-[0.02] group-hover:opacity-[0.08] transition-opacity duration-500">
+                    <motion.div
+                      initial={{ rotate: -12, scale: 1, y: 0 }}
+                      animate={{ 
+                        rotate: hoveredFeature === index ? -5 : -12,
+                        scale: hoveredFeature === index ? 1.25 : 1,
+                        filter: hoveredFeature === index ? "blur(0px)" : "blur(1px)",
+                        y: hoveredFeature === index ? [-5, 0, -5] : 0
+                      }}
+                      transition={{ 
+                        type: "spring", 
+                        stiffness: 100, 
+                        damping: 15,
+                        y: {
+                          duration: 2,
+                          repeat: Infinity,
+                          ease: "easeInOut"
+                        }
+                      }}
+                      className="origin-bottom-right"
+                    >
+                      <Icon 
+                        className={`w-52 h-52 ${
+                          hoveredFeature === index 
+                            ? (
+                                feature.title === "TỪ ĐIỂN" ? "text-blue-500" :
+                                feature.title === "BÀI TẬP" ? "text-purple-500" :
+                                feature.title === "LUYỆN VIẾT" ? "text-green-500" :
+                                "text-orange-500"
+                              )
+                            : 'text-gray-800 dark:text-white'
+                        }`} 
+                      />
+                    </motion.div>
                   </div>
                   
                   {/* Subtle Background Pattern */}

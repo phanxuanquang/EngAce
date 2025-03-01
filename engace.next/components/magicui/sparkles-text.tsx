@@ -90,23 +90,90 @@ interface SparklesTextProps {
    * Whether to use high intensity colors for text
    * */
   highIntensity?: boolean;
+
+  /**
+   * @default "default"
+   * @type "sm" | "default" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl" | "7xl" | "8xl"
+   * @description
+   * The size of the text
+   * */
+  size?: "sm" | "default" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl" | "7xl" | "8xl";
+
+  /**
+   * @default undefined
+   * @type {first: string, second: string}
+   * @description
+   * Custom text colors that override the sparkle colors for text gradient
+   * */
+  textColors?: {
+    first: string;
+    second: string;
+  };
+
+  /**
+   * @default "purple-pink"
+   * @type "purple-pink" | "blue-cyan" | "green-lime" | "orange-red" | "indigo-blue" | "pink-orange" | "teal-green" | "red-pink"
+   * @description
+   * Predefined color schemes for both sparkles and text (if textColors not provided)
+   * */
+  colorScheme?: "purple-pink" | "blue-cyan" | "green-lime" | "orange-red" | "indigo-blue" | "pink-orange" | "teal-green" | "red-pink";
 }
+
+// Predefined color schemes
+const COLOR_SCHEMES = {
+  "purple-pink": { first: "#9E7AFF", second: "#FE8BBB" },
+  "blue-cyan": { first: "#0EA5E9", second: "#22D3EE" },
+  "green-lime": { first: "#10B981", second: "#A3E635" },
+  "orange-red": { first: "#F59E0B", second: "#EF4444" },
+  "indigo-blue": { first: "#6366F1", second: "#3B82F6" },
+  "pink-orange": { first: "#EC4899", second: "#F97316" },
+  "teal-green": { first: "#14B8A6", second: "#22C55E" },
+  "red-pink": { first: "#DC2626", second: "#DB2777" },
+};
+
+// High intensity versions of color schemes
+const HIGH_INTENSITY_SCHEMES = {
+  "purple-pink": { first: "#7C3AFF", second: "#FF4A9E" },
+  "blue-cyan": { first: "#0284C7", second: "#0891B2" },
+  "green-lime": { first: "#059669", second: "#65A30D" },
+  "orange-red": { first: "#D97706", second: "#B91C1C" },
+  "indigo-blue": { first: "#4F46E5", second: "#2563EB" },
+  "pink-orange": { first: "#BE185D", second: "#C2410C" },
+  "teal-green": { first: "#0F766E", second: "#15803D" },
+  "red-pink": { first: "#B91C1C", second: "#9D174D" },
+};
 
 export const SparklesText: React.FC<SparklesTextProps> = ({
   text,
-  colors = { first: "#9E7AFF", second: "#FE8BBB" },
+  colors,
   className,
   sparklesCount = 10,
   highIntensity = false,
+  size = "default",
+  textColors,
+  colorScheme = "purple-pink",
   ...props
 }) => {
+  // Determine the base colors from colorScheme or custom colors
+  const baseColors = colors || COLOR_SCHEMES[colorScheme] || COLOR_SCHEMES["purple-pink"];
+  
+  // Determine sparkle colors
+  const sparkleColors = baseColors;
+  
+  // Determine text colors based on priority: textColors > highIntensity > baseColors
+  const finalTextColors = textColors 
+    ? textColors 
+    : highIntensity 
+      ? HIGH_INTENSITY_SCHEMES[colorScheme] || { first: "#7C3AFF", second: "#FF4A9E" }
+      : baseColors;
+
   const [sparkles, setSparkles] = useState<Sparkle[]>([]);
 
   useEffect(() => {
     const generateStar = (): Sparkle => {
       const starX = `${Math.random() * 100}%`;
       const starY = `${Math.random() * 100}%`;
-      const color = Math.random() > 0.5 ? colors.first : colors.second;
+      const color = Math.random() > 0.5 ? sparkleColors.first : sparkleColors.second;
       const delay = Math.random() * 2;
       const scale = Math.random() * 1 + 0.3;
       const lifespan = Math.random() * 10 + 5;
@@ -135,23 +202,36 @@ export const SparklesText: React.FC<SparklesTextProps> = ({
     const interval = setInterval(updateStars, 100);
 
     return () => clearInterval(interval);
-  }, [colors.first, colors.second, sparklesCount]);
+  }, [sparkleColors.first, sparkleColors.second, sparklesCount]);
 
-  // Define high intensity colors
-  const textColors = highIntensity 
-    ? { first: "#7C3AFF", second: "#FF4A9E" } // Darker, more saturated colors
-    : colors;
+  // Define size classes
+  const sizeClasses = {
+    sm: "text-xl md:text-2xl",
+    default: "text-3xl md:text-5xl",
+    lg: "text-4xl md:text-6xl",
+    xl: "text-5xl md:text-7xl",
+    "2xl": "text-6xl md:text-8xl",
+    "3xl": "text-7xl md:text-9xl",
+    "4xl": "text-8xl",
+    "5xl": "text-9xl",
+    "6xl": "text-[6rem]",
+    "7xl": "text-[7rem]",
+    "8xl": "text-[8rem]",
+  };
+
+  // Get the appropriate size class
+  const sizeClass = sizeClasses[size] || sizeClasses.default;
 
   return (
     <div
-      className={cn("text-3xl md:text-5xl font-bold", className)}
+      className={cn(sizeClass, "font-bold", className)}
       {...props}
       style={
         {
-          "--sparkles-first-color": `${colors.first}`,
-          "--sparkles-second-color": `${colors.second}`,
-          "--text-first-color": `${textColors.first}`,
-          "--text-second-color": `${textColors.second}`,
+          "--sparkles-first-color": `${sparkleColors.first}`,
+          "--sparkles-second-color": `${sparkleColors.second}`,
+          "--text-first-color": `${finalTextColors.first}`,
+          "--text-second-color": `${finalTextColors.second}`,
         } as CSSProperties
       }
     >
