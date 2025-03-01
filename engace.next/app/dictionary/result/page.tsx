@@ -2,7 +2,7 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ArrowLeft, Copy, Sparkles, CheckCircle2, Search } from "lucide-react";
+import { ArrowLeft, Sparkles, Search, Volume2 } from "lucide-react";
 import { API_DOMAIN } from "@/lib/config";
 import { getUserPreferences } from "@/lib/localStorage";
 import Navbar from "@/components/Navbar";
@@ -10,11 +10,17 @@ import MarkdownRenderer from "@/components/MarkdownRenderer";
 
 const isBrowser = typeof window !== "undefined";
 
+interface DictionaryResponse {
+  Content: string;
+  IpaAudioUrls: string[] | null;
+}
+
 function DictionaryResultContent() {
-  const [result, setResult] = useState<string | null>(null);
+  const [result, setResult] = useState<DictionaryResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isPlaying, setIsPlaying] = useState<number | null>(null);
+  const [playError, setPlayError] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [copied, setCopied] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
   const keyword = searchParams.get("keyword");
@@ -56,7 +62,7 @@ function DictionaryResultContent() {
         const response = await fetch(searchUrl.toString(), {
           method: "GET",
           headers: {
-            accept: "text/plain",
+            accept: "application/json",
             Authentication: preferences.geminiApiKey,
           },
         });
@@ -67,7 +73,7 @@ function DictionaryResultContent() {
           );
         }
 
-        const data = await response.text();
+        const data = await response.json();
         setResult(data);
       } catch (err) {
         console.error("Search error:", err);
@@ -84,11 +90,54 @@ function DictionaryResultContent() {
     fetchResult();
   }, [keyword, context, router]);
 
-  const handleCopy = () => {
-    if (!isBrowser || !result) return;
-    navigator.clipboard.writeText(result);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const playAudio = async (url: string, index: number) => {
+    try {
+      setPlayError(null);
+      setIsPlaying(index);
+      const audio = new Audio(url);
+      
+      audio.addEventListener('ended', () => {
+        setIsPlaying(null);
+      });
+      
+      audio.addEventListener('error', () => {
+        setIsPlaying(null);
+        setPlayError(`Không thể phát âm thanh #${index + 1}`);
+      });
+      
+      await audio.play();
+    } catch (error) {
+      console.error('Error playing audio:', error);
+      setIsPlaying(null);
+      setPlayError(`Không thể phát âm thanh #${index + 1}`);
+    }
+  };
+  
+  const renderAudioButtons = () => {
+    if (!result?.IpaAudioUrls?.length) {
+      return null;
+    }
+    
+    return (
+      <div className="flex flex-col items-end gap-2">
+        <div className="flex items-center gap-2">
+          {result.IpaAudioUrls.map((url, index) => (
+            <button
+              key={index}
+              onClick={() => playAudio(url, index)}
+              className={`flex items-center space-x-2 rounded-lg bg-white/80 px-4 py-2 text-slate-600 shadow-md backdrop-blur-sm transition-all hover:bg-white hover:text-slate-900 dark:bg-slate-800/80 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white ${isPlaying === index ? "bg-gradient-to-r from-purple-500 to-pink-500 !text-white" : ""}`}
+              title={isPlaying === index ? "Đang phát..." : "Phát âm"}
+              disabled={isPlaying !== null}
+            >
+              <Volume2 className={`h-5 w-5 ${isPlaying === index ? "text-white animate-pulse" : ""}`} />
+            </button>
+          ))}
+        </div>
+        {playError && (
+          <p className="text-sm text-red-500 dark:text-red-400">{playError}</p>
+        )}
+      </div>
+    );
   };
 
   return (
@@ -100,7 +149,7 @@ function DictionaryResultContent() {
       <div className="container mx-auto px-4 pt-20 pb-4">
         <div className="mx-auto max-w-4xl">
           {/* Header */}
-          <div className="mb-4 flex items-center justify-between">
+          <div className="mb-2 flex items-center justify-between">
             <button
               onClick={() => router.back()}
               className="flex items-center space-x-2 rounded-lg bg-white/80 px-4 py-2 text-slate-600 shadow-md backdrop-blur-sm transition-all hover:bg-white hover:text-slate-900 dark:bg-slate-800/80 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
@@ -109,24 +158,7 @@ function DictionaryResultContent() {
               <span>Quay lại</span>
             </button>
 
-            {result && (
-              <button
-                onClick={handleCopy}
-                className="flex items-center space-x-2 rounded-lg bg-white/80 px-4 py-2 text-slate-600 shadow-md backdrop-blur-sm transition-all hover:bg-white hover:text-slate-900 dark:bg-slate-800/80 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
-              >
-                {copied ? (
-                  <>
-                    <CheckCircle2 className="h-5 w-5 text-green-500" />
-                    <span className="text-green-500">Đã sao chép</span>
-                  </>
-                ) : (
-                  <>
-                    <Copy className="h-5 w-5" />
-                    <span>Sao chép</span>
-                  </>
-                )}
-              </button>
-            )}
+            {result && renderAudioButtons()}
           </div>
 
           {/* Result Content */}
@@ -157,7 +189,7 @@ function DictionaryResultContent() {
               </div>
             ) : result ? (
               <div className="animate-fadeIn">
-                <MarkdownRenderer>{result}</MarkdownRenderer>
+                <MarkdownRenderer>{result.Content}</MarkdownRenderer>
               </div>
             ) : (
               <div className="text-center text-slate-600 dark:text-slate-400">

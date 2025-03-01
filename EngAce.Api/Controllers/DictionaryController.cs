@@ -1,4 +1,5 @@
-﻿using Events;
+﻿using Entities;
+using Events;
 using Helper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
@@ -15,7 +16,7 @@ namespace EngAce.Api.Controllers
 
         [HttpGet("Search")]
         [ResponseCache(Duration = QuizScope.ThreeDaysAsCachingAge, Location = ResponseCacheLocation.Any, NoStore = false)]
-        public async Task<ActionResult<string>> Search(string keyword, string? context)
+        public async Task<ActionResult<SearchResult>> Search(string keyword, string? context)
         {
             if (string.IsNullOrEmpty(_accessKey))
             {

@@ -2,7 +2,6 @@
 using Events;
 using Helper;
 using Microsoft.AspNetCore.Mvc;
-using System.Net.Http;
 using System.Text.Json;
 
 namespace EngAce.Api.Controllers

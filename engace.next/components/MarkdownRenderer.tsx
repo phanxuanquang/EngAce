@@ -37,10 +37,10 @@ const components = {
     </h1>
   ),
   h2: ({ children }: ComponentProps) => (
-    <h2 className="text-lg md:text-lg lg:text-lg font-bold py-2">{children}</h2>
+    <h2 className="text-xl font-bold py-2">{children}</h2>
   ),
   h3: ({ children }: ComponentProps) => (
-    <h3 className="text-xl md:text-xl lg:text-2xl font-bold py-2">
+    <h3 className="text-lg font-bold py-2">
       {children}
     </h3>
   ),
