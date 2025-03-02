@@ -25,10 +25,7 @@ export default function ChatControls({
         <span className="hidden sm:inline">Đính kèm ảnh</span>
       </button>
       <button
-        onClick={() => {
-          onReasoningToggle();
-          if (!enableReasoning) onSearchingToggle();
-        }}
+        onClick={onReasoningToggle}
         className={`flex items-center justify-center sm:space-x-2 rounded-lg px-3 py-1.5 text-xs transition-all w-full ${
           enableReasoning
             ? "bg-gradient-to-r from-blue-500/20 to-blue-600/20 text-blue-700 dark:from-blue-600/30 dark:to-blue-700/30 dark:text-blue-300"
@@ -39,10 +36,7 @@ export default function ChatControls({
         <span className="hidden sm:inline">Suy luận sâu</span>
       </button>
       <button
-        onClick={() => {
-          onSearchingToggle();
-          if (!enableSearching) onReasoningToggle();
-        }}
+        onClick={onSearchingToggle}
         className={`flex items-center justify-center sm:space-x-2 rounded-lg px-3 py-1.5 text-xs transition-all w-full ${
           enableSearching
             ? "bg-gradient-to-r from-green-500/20 to-green-600/20 text-green-700 dark:from-green-600/30 dark:to-green-700/30 dark:text-green-300"

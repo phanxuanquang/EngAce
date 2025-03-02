@@ -174,19 +174,23 @@ Below are the basic information of the user for you to adapt your tone and manne
             var apiRequest = new ApiRequestBuilder()
                 .WithSystemInstruction(instruction)
                 .WithPrompt(conversation.Question.Trim())
-                .WithChatHistory(conversation.ChatHistory
-                    .Select(message => new ChatMessage
-                    {
-                        Role = message.FromUser ? Role.User : Role.Model,
-                        Content = message.Message.Trim()
-                    })
-                    .ToList())
                 .DisableAllSafetySettings()
                 .WithGenerationConfig(new Models.Request.GenerationConfig
                 {
                     MaxOutputTokens = MaxOutputTokens,
                     ResponseMimeType = EnumHelper.GetDescription(ResponseMimeType.PlainText),
                 });
+
+            if(conversation.ChatHistory.Count > 0)
+            {
+                apiRequest.WithChatHistory(conversation.ChatHistory
+                    .Select(message => new ChatMessage
+                    {
+                        Role = message.FromUser ? Role.User : Role.Model,
+                        Content = message.Message.Trim()
+                    })
+                    .ToList());
+            }
 
             if (conversation.ImagesAsBase64 != null)
             {

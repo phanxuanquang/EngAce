@@ -218,6 +218,9 @@ export default function ChatPage() {
 
       setSelectedImages([]);
 
+      setEnableReasoning(false);
+      setEnableSearching(false);
+
       const response = await fetch(url.toString(), {
         method: "POST",
         headers,

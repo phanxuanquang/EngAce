@@ -9,7 +9,7 @@
         public class History
         {
             public bool FromUser { get; set; }
-            public required string Message { get; set; }
+            public string? Message { get; set; }
         }
     }
 }
