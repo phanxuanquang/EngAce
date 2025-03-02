@@ -10,8 +10,33 @@ namespace Events
 {
     public static class ChatScope
     {
+        private const int MaxOutputTokens = 500;
         public static async Task<ChatResponse> GenerateAnswer(string apiKey, Conversation conversation, string username, string gender, sbyte age, EnglishLevel englishLevel, bool enableReasoning, bool enableSearching)
         {
+            var jsonOutputInstruction = enableReasoning || enableSearching 
+                ? string.Empty 
+                : @"
+
+---
+
+## **Output Format (JSON Structure)**
+- All responses **must be in JSON format** with the below structure. Ensure that **all responses** conform to this JSON structure **without exception**:
+  
+```json
+  {
+    ""MessageInMarkdown"": ""Response content well-formatted in Markdown"",
+    ""Suggestions"": [
+      ""Very short and concise follow-up question suggestion 1"",
+      ""Very short and concise Follow-up question suggestion 2"",
+      ""Very short and concise Follow-up question suggestion 3""
+    ]
+  }
+```
+
+- `MessageInMarkdown`: Contains the main response well-formatted in **Markdown**. Maintain a **clear, consice, and structured format** for better readability.
+- `Suggestions`: A list of **up-to 3 very short and concise suggested questions with less than 10 words** based on the current context and the conversation history (if any). Act as the user, asking one of these questions can help to continue the conversation.
+";
+
             var instruction = $@"Your name is **EngAce**, you are an AI developed by **Phan Xuân Quang** and **Bùi Minh Tuấn**. Your **sole purpose** is to assist the user in learning English. You **must not** engage in any other tasks beyond English language learning.  
 
 ### **Your Personality**  
@@ -136,30 +161,10 @@ Below are the basic information of the user for you to adapt your tone and manne
 - If I ask something unrelated to English, **decline immediately** and say:  
   > *""I'm sorry, I can only assist with learning English. Please ask me an English-related question.""*  
 - **Do not** provide help on **any** non-English topics, no exceptions.  
-
----
-
-## **Output Format (JSON Structure)**
-- All responses **must be in JSON format** with the below structure. Ensure that **all responses** conform to this JSON structure **without exception**:
-  
-```json
-  {{
-    ""MessageInMarkdown"": ""Response content well-formatted in Markdown"",
-    ""Suggestions"": [
-      ""Very short and concise follow-up question suggestion 1"",
-      ""Very short and concise Follow-up question suggestion 2"",
-      ""Very short and concise Follow-up question suggestion 3""
-    ]
-  }}
-```
-
-- `MessageInMarkdown`: Contains the main response well-formatted in **Markdown**. Maintain a **clear, consice, and structured format** for better readability.
-- `Suggestions`: A list of **up-to 3 very short and concise suggested questions with less than 10 words** based on the current context and the conversation history (if any). Act as the user, asking one of these questions can help to continue the conversation.
-
+{jsonOutputInstruction}
 ---
 
 ## **Summary of Your Role**  
-- Ensure that **all responses** conform to the mentioned JSON structure **without exception**.
 - **Prefer to use Vietnamese** for responses.  
 - Your **only duty** is to **help me learn English**—stay 100% focused on this task.  
 - Provide **accurate, engaging, and structured** explanations tailored to my learning needs.  
@@ -177,7 +182,11 @@ Below are the basic information of the user for you to adapt your tone and manne
                     })
                     .ToList())
                 .DisableAllSafetySettings()
-                .WithDefaultGenerationConfig();
+                .WithGenerationConfig(new Models.Request.GenerationConfig
+                {
+                    MaxOutputTokens = MaxOutputTokens,
+                    ResponseMimeType = EnumHelper.GetDescription(ResponseMimeType.PlainText),
+                });
 
             if (conversation.ImagesAsBase64 != null)
             {
@@ -186,7 +195,7 @@ Below are the basic information of the user for you to adapt your tone and manne
 
             if (enableReasoning)
             {
-                var responseWithReasoning = await generator.GenerateContentAsync(apiRequest.Build(), ModelVersion.Gemini_20_Flash_Thinking);
+                var responseWithReasoning = await generator.GenerateContentAsync(apiRequest.WithDefaultGenerationConfig().Build(), ModelVersion.Gemini_20_Flash_Thinking);
                 
                 return new ChatResponse
                 {
@@ -247,7 +256,15 @@ Below are the basic information of the user for you to adapt your tone and manne
                 };
             }
 
-            var response = await generator.GenerateContentAsync(apiRequest.WithDefaultGenerationConfig(0.7F, ResponseMimeType.Json).Build(), ModelVersion.Gemini_20_Flash_Lite);
+            var response = await generator.GenerateContentAsync(apiRequest
+                .WithGenerationConfig(new Models.Request.GenerationConfig
+                {
+                    MaxOutputTokens = (int)(MaxOutputTokens * 1.5),
+                    ResponseMimeType = EnumHelper.GetDescription(ResponseMimeType.Json),
+                    Temperature = 0.7F
+                })
+                .Build(), ModelVersion.Gemini_20_Flash_Lite);
+
             var dto = JsonHelper.AsObject<ChatResponse>(response.Result);
 
             return new ChatResponse
