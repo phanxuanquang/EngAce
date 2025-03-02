@@ -14,7 +14,7 @@ namespace EngAce.Api.Controllers
 
         [HttpPost("Generate")]
         [ResponseCache(Duration = ReviewScope.OneHourAsCachingAge, Location = ResponseCacheLocation.Client, NoStore = false)]
-        public async Task<ActionResult<string>> Generate([FromBody] GenerateComment request, EnglishLevel englishLevel = EnglishLevel.Intermediate)
+        public async Task<ActionResult<string>> Generate([FromBody] GenerateComment request)
         {
             if (string.IsNullOrEmpty(_accessKey))
             {

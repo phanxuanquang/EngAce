@@ -28,7 +28,7 @@ namespace Events
 - **Luôn viết bằng tiếng Việt**.  
 - **Dịch tự nhiên, không dịch từng từ một**.  
 - **Ưu tiên nghĩa phù hợp nhất với ngữ cảnh** (nếu có).  
-- **Trình bày khoa học, dễ đọc** (gạch đầu dòng, in đậm, ví dụ minh họa).  
+- **Trình bày nội dung một cách khoa học, dễ đọc (gạch đầu dòng, in đậm, ví dụ minh họa), ngắn gọn, đi thẳng vào trọng tâm của từng phần.  
 - **Nếu cần, thêm bảng so sánh để phân biệt các từ tương tự**.  
 
 ---
@@ -161,20 +161,14 @@ namespace Events
 ---
 
 #  **NGUYÊN TẮC CHUNG**
-✅ **Chỉ dùng ngôn ngữ chính thống, tránh ngôn ngữ lóng, từ lóng**.
-✅ **Trình bày kết quả dưới hình thức trang trọng (tương tự như từ điển, văn bản hành chính, bài báo khoa học,...)**.
-✅ **Không thêm bất kỳ comment hay ý kiến chủ quan**.  
-✅ **Luôn giải thích theo ngữ cảnh nếu có**.
-✅ **Không dùng từ ngữ quá phức tạp, khó hiểu**.
-✅ **Không dùng từ ngữ mang tính chất chính trị, tôn giáo, kích động**.
-✅ **Không dùng từ ngữ mang tính chất phân biệt chủng tộc, giới tính, địa lý**.
-✅ **Không được viết tắt**.
-✅ **Sử dụng định dạng rõ ràng, dễ đọc**.  
-✅ **Tập trung vào thông tin quan trọng nhất**.
-✅ **Chỉ lập cheat sheet khi có nhiều từ dễ gây nhầm lẫn**.  
-✅ **Không liệt kê tràn lan, chỉ chọn những từ thông dụng và cần thiết**.  
-✅ **Ưu tiên giải thích sự khác nhau giữa các từ để giúp người học sử dụng đúng ngữ cảnh**.
-✅ **Kiểm tra chính tả & ngữ pháp trước khi gửi**.";
+✅ **Tự kiểm tra lại tính chính xác và xác thực của thông tin trước khi gửi cho người dùng**.
+✅ **Chỉ dùng ngôn ngữ chính thống, tránh ngôn ngữ lóng, từ lóng, không được viết tắt, và không thêm bất kỳ comment hay ý kiến chủ quan**.
+✅ **Trình bày kết quả dưới hình thức trang trọng (tương tự như từ điển, văn bản hành chính, bài báo khoa học,...), sử dụng định dạng rõ ràng và dễ đọc**.
+✅ **Trình bày nội dung ngắn gọn dễ hiểu, đi thẳng vào trọng tâm của từng phần, không viết lòng vòng, tập trung vào những thông tin quan trọng nhất**.
+✅ **Luôn giải thích nghĩa theo ngữ cảnh nếu có**.
+✅ **Không dùng từ ngữ quá phức tạp hoặc gây khó hiểu hoặc dễ gây hiểu nhầm, không dùng từ ngữ mang tính chất phân biệt chủng tộc, giới tính, địa lý**.
+✅ **Chỉ lập cheat sheet khi có thông tin dễ gây nhầm lẫn**.   
+✅ **Ưu tiên giải thích sự khác nhau giữa các từ để giúp người học sử dụng đúng ngữ cảnh**.";
         public static async Task<SearchResult> Search(string apiKey, string keyword, string context)
         {
             var promptBuilder = new StringBuilder();
@@ -214,7 +208,7 @@ namespace Events
             return new SearchResult
             {
                 Content = response.Result,
-                IpaAudioUrls = internetSearchResult?.IpaAudioUrls?.Distinct().ToList(),
+                IpaAudioUrls = internetSearchResult?.IpaAudioUrls,
             };
         }
 
@@ -294,9 +288,13 @@ namespace Events
                 return new SearchResult
                 {
                     IpaAudioUrls = results
-                        .SelectMany(r => r.Phonetics)?
-                        .Select(p => p.AudioUrl)?
+                        .Where(r => r.Phonetics != null 
+                            && r.Phonetics.Count > 0 
+                            && r.Phonetics.Any(p => !string.IsNullOrEmpty(p.AudioUrl)))
+                        .SelectMany(r => r.Phonetics)
+                        .Select(p => p.AudioUrl)
                         .Where(url => !string.IsNullOrEmpty(url))
+                        .Distinct()
                         .ToList(),
                     Content = stringBuilder.ToString()
                 };

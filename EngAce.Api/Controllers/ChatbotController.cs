@@ -14,7 +14,7 @@ namespace EngAce.Api.Controllers
         private readonly string _accessKey = HttpContextHelper.GetAccessKey();
 
         [HttpPost("GenerateAnswer")]
-        public async Task<ActionResult<string>> GenerateAnswer([FromBody] Conversation request, string username, string gender, sbyte age, EnglishLevel englishLevel, bool enableReasoning = false, bool enableSearching = false)
+        public async Task<ActionResult<ChatResponse>> GenerateAnswer([FromBody] Conversation request, string username, string gender, sbyte age, EnglishLevel englishLevel, bool enableReasoning = false, bool enableSearching = false)
         {
             if (string.IsNullOrWhiteSpace(request.Question))
             {

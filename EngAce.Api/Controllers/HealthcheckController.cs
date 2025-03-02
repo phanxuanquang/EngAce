@@ -91,7 +91,7 @@ namespace EngAce.Api.Controllers
                 return Ok(new CommitInfo
                 {
                     ShaCode = root.GetProperty("sha").GetString(),
-                    Message = root.GetProperty("commit").GetProperty("message").GetString(),
+                    Message = root.GetProperty("commit").GetProperty("message").GetString().Replace("`","**"),
                     Date = root.GetProperty("commit").GetProperty("author").GetProperty("date").GetDateTime()
                 });
             }
