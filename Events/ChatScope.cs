@@ -10,11 +10,11 @@ namespace Events
 {
     public static class ChatScope
     {
-        private const int MaxOutputTokens = 500;
+        private const int MaxOutputTokens = 1000;
         public static async Task<ChatResponse> GenerateAnswer(string apiKey, Conversation conversation, string username, string gender, sbyte age, EnglishLevel englishLevel, bool enableReasoning, bool enableSearching)
         {
-            var jsonOutputInstruction = enableReasoning || enableSearching 
-                ? string.Empty 
+            var jsonOutputInstruction = enableReasoning || enableSearching
+                ? string.Empty
                 : @"
 
 ---
@@ -34,7 +34,7 @@ namespace Events
 ```
 
 - `MessageInMarkdown`: Contains the main response well-formatted in **Markdown**. Maintain a **clear, consice, and structured format** for better readability.
-- `Suggestions`: A list of **up-to 3 very short and concise suggested questions with less than 10 words** based on the current context and the conversation history (if any). Act as the user, asking one of these questions can help to continue the conversation.
+- `Suggestions`: A list of **up-to 3 very short and concise suggested questions with less than 10 words** based on the current context and the personal information of user. You **must stand in the viewpoint of the user** to think about what they need and how to help them effectively. Ensure that these suggestions are **relevant, engaging, and encourage further conversation**. If no suggestions are available, you can return an empty list `[]` or omit this field entirely.
 ";
 
             var instruction = $@"Your name is **EngAce**, you are an AI developed by **Phan Xuân Quang** and **Bùi Minh Tuấn**. Your **sole purpose** is to assist the user in learning English. You **must not** engage in any other tasks beyond English language learning.  
@@ -174,14 +174,9 @@ Below are the basic information of the user for you to adapt your tone and manne
             var apiRequest = new ApiRequestBuilder()
                 .WithSystemInstruction(instruction)
                 .WithPrompt(conversation.Question.Trim())
-                .DisableAllSafetySettings()
-                .WithGenerationConfig(new Models.Request.GenerationConfig
-                {
-                    MaxOutputTokens = MaxOutputTokens,
-                    ResponseMimeType = EnumHelper.GetDescription(ResponseMimeType.PlainText),
-                });
+                .DisableAllSafetySettings();
 
-            if(conversation.ChatHistory.Count > 0)
+            if (conversation.ChatHistory.Count > 0)
             {
                 apiRequest.WithChatHistory(conversation.ChatHistory
                     .Select(message => new ChatMessage
@@ -199,8 +194,8 @@ Below are the basic information of the user for you to adapt your tone and manne
 
             if (enableReasoning)
             {
-                var responseWithReasoning = await generator.GenerateContentAsync(apiRequest.WithDefaultGenerationConfig().Build(), ModelVersion.Gemini_20_Flash_Thinking);
-                
+                var responseWithReasoning = await generator.GenerateContentAsync(apiRequest.WithDefaultGenerationConfig(0.5F, MaxOutputTokens * 2).Build(), ModelVersion.Gemini_20_Flash_Thinking);
+
                 return new ChatResponse
                 {
                     MessageInMarkdown = responseWithReasoning.Result,
@@ -209,16 +204,22 @@ Below are the basic information of the user for you to adapt your tone and manne
 
             if (enableSearching)
             {
-                apiRequest.EnableGrounding();
+                apiRequest.EnableGrounding().WithDefaultGenerationConfig(0.3F, MaxOutputTokens / 2);
 
                 var responseWithSearching = await generator
                     .IncludesGroundingDetailInResponse()
                     .IncludesSearchEntryPointInResponse()
                     .GenerateContentAsync(apiRequest.Build(), ModelVersion.Gemini_20_Flash);
 
-                if (responseWithSearching.GroundingDetail?.Sources?.Count == 0
-                    && responseWithSearching.GroundingDetail?.SearchSuggestions?.Count == 0
-                    && responseWithSearching.GroundingDetail?.ReliableInformation?.Count == 0)
+                if (responseWithSearching.GroundingDetail?.Sources == null && responseWithSearching.GroundingDetail?.SearchSuggestions == null)
+                {
+                    return new ChatResponse
+                    {
+                        MessageInMarkdown = responseWithSearching.Result,
+                    };
+                }
+
+                if (responseWithSearching.GroundingDetail?.Sources?.Count == 0 && responseWithSearching.GroundingDetail?.SearchSuggestions?.Count == 0)
                 {
                     return new ChatResponse
                     {
@@ -231,7 +232,7 @@ Below are the basic information of the user for you to adapt your tone and manne
                 stringBuilder.AppendLine();
                 stringBuilder.AppendLine("---");
 
-                if (responseWithSearching.GroundingDetail?.Sources?.Count != 0)
+                if (responseWithSearching.GroundingDetail?.Sources != null && responseWithSearching.GroundingDetail?.Sources?.Count != 0)
                 {
                     stringBuilder.AppendLine();
                     stringBuilder.AppendLine("#### **Nguồn tham khảo**");
@@ -242,7 +243,7 @@ Below are the basic information of the user for you to adapt your tone and manne
                     }
                 }
 
-                if (responseWithSearching.GroundingDetail?.SearchSuggestions?.Count != 0)
+                if (responseWithSearching.GroundingDetail?.SearchSuggestions != null && responseWithSearching.GroundingDetail?.SearchSuggestions?.Count != 0)
                 {
                     stringBuilder.AppendLine();
                     stringBuilder.AppendLine("#### **Gợi ý tra cứu**");
@@ -260,22 +261,7 @@ Below are the basic information of the user for you to adapt your tone and manne
                 };
             }
 
-            var response = await generator.GenerateContentAsync(apiRequest
-                .WithGenerationConfig(new Models.Request.GenerationConfig
-                {
-                    MaxOutputTokens = (int)(MaxOutputTokens * 1.5),
-                    ResponseMimeType = EnumHelper.GetDescription(ResponseMimeType.Json),
-                    Temperature = 0.7F
-                })
-                .Build(), ModelVersion.Gemini_20_Flash_Lite);
-
-            var dto = JsonHelper.AsObject<ChatResponse>(response.Result);
-
-            return new ChatResponse
-            {
-                MessageInMarkdown = dto.MessageInMarkdown,
-                Suggestions = dto.Suggestions
-            };
+            return await generator.GenerateContentAsync<ChatResponse>(apiRequest.WithDefaultGenerationConfig(1, MaxOutputTokens).Build(), ModelVersion.Gemini_20_Flash_Lite);
         }
     }
 }

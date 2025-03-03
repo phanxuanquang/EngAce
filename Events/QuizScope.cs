@@ -175,7 +175,11 @@ You are an expert English teacher with over 20 years of teaching experience, and
                 var apiRequest = new ApiRequestBuilder()
                     .WithSystemInstruction(Instruction)
                     .WithPrompt(promptBuilder.ToString())
-                    .WithDefaultGenerationConfig(0.5F, ResponseMimeType.Json)
+                     .WithGenerationConfig(new Models.Request.GenerationConfig
+                     {
+                         Temperature = 0.5F,
+                         ResponseMimeType = EnumHelper.GetDescription(ResponseMimeType.Json),
+                     })
                     .DisableAllSafetySettings()
                     .Build();
 
@@ -212,7 +216,11 @@ You are an expert English teacher with over 20 years of teaching experience, and
                 var apiRequest = new ApiRequestBuilder()
                     .WithSystemInstruction(Instruction)
                     .WithPrompt(promptBuilder.ToString())
-                    .WithDefaultGenerationConfig(0.5F, ResponseMimeType.Json)
+                    .WithGenerationConfig(new Models.Request.GenerationConfig
+                    {
+                        Temperature = 0.5F,
+                        ResponseMimeType = EnumHelper.GetDescription(ResponseMimeType.Json),
+                    })
                     .DisableAllSafetySettings()
                     .Build();
 
@@ -266,7 +274,11 @@ You are an expert English teacher with over 20 years of teaching experience, and
             var apiRequest = new ApiRequestBuilder()
                 .WithSystemInstruction(instruction)
                 .WithPrompt(promptBuilder.ToString())
-                .WithDefaultGenerationConfig(0.5F, ResponseMimeType.Json)
+                 .WithGenerationConfig(new Models.Request.GenerationConfig
+                 {
+                     Temperature = 0.3F,
+                     ResponseMimeType = EnumHelper.GetDescription(ResponseMimeType.Json),
+                 })
                 .DisableAllSafetySettings()
                 .Build();
 

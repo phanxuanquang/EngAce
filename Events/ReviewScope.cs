@@ -121,7 +121,7 @@ Your response must be presented firmly in the following structured format:
             var apiRequest = new ApiRequestBuilder()
                 .WithSystemInstruction(Instruction)
                 .WithPrompt(promptBuilder.ToString())
-                .WithDefaultGenerationConfig(0.5F, ResponseMimeType.PlainText)
+                .WithDefaultGenerationConfig(0.5F)
                 .DisableAllSafetySettings()
                 .Build();
 

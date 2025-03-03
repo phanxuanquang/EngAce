@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="EngDict.NET" Version="1.0.1" />
-    <PackageReference Include="Gemini.NET" Version="2.2.2" />
+    <PackageReference Include="Gemini.NET" Version="3.0.0" />
   </ItemGroup>
 
   <ItemGroup>

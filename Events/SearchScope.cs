@@ -197,13 +197,13 @@ namespace Events
             var apiRequest = new ApiRequestBuilder()
                 .WithSystemInstruction(_instruction)
                 .WithPrompt(promptBuilder.ToString())
-                .WithDefaultGenerationConfig()
+                .WithDefaultGenerationConfig(0.3F)
                 .DisableAllSafetySettings()
                 .Build();
 
             var generator = new Generator(apiKey);
 
-            var response = await generator.GenerateContentAsync(apiRequest, ModelVersion.Gemini_15_Flash);
+            var response = await generator.GenerateContentAsync(apiRequest, ModelVersion.Gemini_20_Flash);
 
             return new SearchResult
             {
@@ -288,14 +288,15 @@ namespace Events
                 return new SearchResult
                 {
                     IpaAudioUrls = results
-                        .Where(r => r.Phonetics != null 
-                            && r.Phonetics.Count > 0 
+                        .Where(r => r.Phonetics != null
+                            && r.Phonetics.Count > 0
                             && r.Phonetics.Any(p => !string.IsNullOrEmpty(p.AudioUrl)))
                         .SelectMany(r => r.Phonetics)
                         .Select(p => p.AudioUrl)
                         .Where(url => !string.IsNullOrEmpty(url))
                         .Distinct()
                         .ToList(),
+
                     Content = stringBuilder.ToString()
                 };
             }
