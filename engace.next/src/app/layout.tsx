@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import "./globals.css"
 import { Lexend } from "next/font/google"
 import { ThemeProvider } from "@/contexts/ThemeContext"
+import { Toaster } from "@/components/ui/sonner"
 
 const lexend = Lexend({ subsets: ["latin"] })
 
@@ -22,6 +23,7 @@ export default function RootLayout({
           <div className="min-h-screen transition-colors duration-150 dark:bg-gray-900 bg-gray-50">
             {children}
           </div>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

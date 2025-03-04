@@ -21,6 +21,7 @@ import Image from "next/image";
 import { SparklesText } from "./system/text/sparkles-text";
 import { Ripple } from "./system/background/ripple-background";
 import { useTheme } from "@/contexts/ThemeContext";
+import {  toast } from "sonner";
 
 const formSchema = z.object({
   fullName: z.string().min(2, "Tên không hợp lệ"),
@@ -44,9 +45,8 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
-export default function OnboardingForm() {
+export default function WelcomeScreen() {
   const { isDark, toggleTheme } = useTheme();
-  const [error, setError] = useState<string>("");
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<FormData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -70,7 +70,6 @@ export default function OnboardingForm() {
   const onSubmit = async (data: FormData) => {
     try {
       setIsLoading(true);
-      setError("");
 
       // Health check API call
       const response = await fetch(`${API_DOMAIN}/api/Healthcheck`, {
@@ -90,11 +89,10 @@ export default function OnboardingForm() {
       setFormData(data);
       setCurrentStep(2);
     } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "API key validation failed. Please check your key and try again."
-      );
+      const errorMessage = err instanceof Error
+        ? err.message
+        : "API key validation failed. Please check your key and try again.";
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -123,7 +121,7 @@ export default function OnboardingForm() {
         {/* Left side - Hero section */}
         <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex overflow-hidden">
           <Image
-            src="https://images.unsplash.com/photo-1539632346654-dd4c3cffad8c?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            src="/images/start.jpeg"
             alt="English learning background"
             fill
             className="absolute inset-0 object-cover brightness-[0.7] opacity-90"
@@ -289,12 +287,6 @@ export default function OnboardingForm() {
                   </a>
                 </div>
               </div>
-
-              {error && (
-                <div className="rounded-lg bg-destructive/10 border border-destructive/20 p-3">
-                  <p className="text-sm text-destructive text-center">{error}</p>
-                </div>
-              )}
 
               <AiButton loading={isLoading} type="submit"
                 disabled={isLoading} className="w-full" icon={ArrowRight}>
