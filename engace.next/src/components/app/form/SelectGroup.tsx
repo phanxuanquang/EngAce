@@ -48,15 +48,14 @@ export default function SelectGroup({
           value={value}
           {...(register ? register : {})}
         >
-          <SelectTrigger className="pl-10 focus-visible:ring-0">
+          <SelectTrigger className="pl-10  bg-slate-100 dark:bg-slate-700">
             <SelectValue placeholder={placeholder} />
           </SelectTrigger>
-          <SelectContent className="focus-visible:ring-0">
+          <SelectContent >
             {options.map((option) => (
               <SelectItem
                 key={option.value}
                 value={option.value}
-                className="focus-visible:ring-0"
               >
                 {option.label}
               </SelectItem>

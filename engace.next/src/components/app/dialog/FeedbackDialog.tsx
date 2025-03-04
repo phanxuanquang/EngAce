@@ -104,7 +104,7 @@ export default function FeedbackDialog({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="w-full max-w-xl transform rounded-2xl bg-white dark:bg-slate-800 shadow-2xl overflow-hidden">
         <DialogHeader>
-          <DialogTitle className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
+          <DialogTitle className="text-lg sm:text-xl font-bold bg-gradient-to-r from-blue-300 via-blue-500 via-40% to-purple-500 bg-clip-text text-transparent">
             Phản hồi của bạn về EngAce
           </DialogTitle>
         </DialogHeader>
@@ -139,7 +139,7 @@ export default function FeedbackDialog({
               variant="outline"
               onClick={onClose}
               disabled={isSubmitting}
-              className="w-full sm:w-auto"
+                  className="bg-slate-500/20 backdrop-blur-sm border border-slate-200/50 text-slate-700 hover:bg-slate-500/40 dark:bg-slate-700/50 dark:border-slate-600/50 dark:text-slate-300 dark:hover:bg-slate-600/80 cursor-pointer"
             >
               Hủy
             </Button>
@@ -151,7 +151,7 @@ export default function FeedbackDialog({
                   ? "bg-slate-300 cursor-not-allowed dark:bg-slate-700"
                   : showSuccess
                   ? "bg-gradient-to-r from-green-700 to-green-600"
-                  : "bg-gradient-to-r from-violet-500 to-blue-500 hover:from-violet-600 hover:to-blue-600"
+                  : "bg-gradient-to-r from-blue-300 via-blue-500 via-40% to-purple-500 hover:from-blue-600 hover:to-purple-600"
               } text-white transition-colors disabled:opacity-70`}
             >
               {isSubmitting ? (
@@ -165,7 +165,7 @@ export default function FeedbackDialog({
                   <span>Đã gửi</span>
                 </>
               ) : (
-                <span>Gửi</span>
+                <span>Gửi phản hồi</span>
               )}
             </Button>
           </div>

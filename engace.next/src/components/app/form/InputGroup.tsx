@@ -44,7 +44,7 @@ export default function InputGroup({
           id={id}
           type={type}
           placeholder={placeholder}
-          className={`pl-10 ${rightElement ? "pr-10" : ""} focus-visible:ring-0 w-full`}
+          className={`pl-10 ${rightElement ? "pr-10" : ""} w-full bg-slate-100 dark:bg-slate-700`}
           disabled={disabled}
           {...(register ? register(id, registerOptions) : {})}
           onChange={onChange}

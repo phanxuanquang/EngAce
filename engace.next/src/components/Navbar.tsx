@@ -3,38 +3,105 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
-  Moon,
-  Sun,
-  LogOut,
   Menu,
   X,
+  Moon,
+  Sun,
   UserCircle,
   MessageCircleHeart,
   Info,
+  LogOut,
+  Trophy,
 } from "lucide-react";
-import { getUserPreferences } from "@/lib/localStorage";
+import Link from "next/link";
+import { NavUser } from "./NavUser";
+import { NavMenu } from "./NavMenu";
 import { useTheme } from "@/contexts/ThemeContext";
 import InfoDialog from "./app/dialog/InfoDialog";
 import FeedbackDialog from "./app/dialog/FeedbackDialog";
 import UserProfileDialog from "./app/dialog/UserProfileDialog";
 import ConfirmDialog from "@/components/app/dialog/ConfirmDialog";
-import type { UserPreferences } from "@/lib/localStorage";
-import Link from "next/link";
+import { getUserPreferences, UserPreferences } from "@/lib/localStorage";
+import { Separator } from "./ui/separator";
+
+// Hàm tính toán lời chào dựa trên thời gian trong ngày
+const getGreeting = (): string => {
+  const hour = new Date().getHours();
+  
+  if (hour >= 5 && hour < 12) {
+    return "Chào buổi sáng";
+  } else if (hour >= 12 && hour < 18) {
+    return "Chào buổi chiều";
+  } else {
+    return "Chào buổi tối";
+  }
+};
+
+// Hàm chuyển đổi proficiencyLevel thành text
+const getProficiencyText = (level: number): string => {
+  switch(level) {
+    case 1:
+      return "Beginner";
+    case 2:
+      return "Elementary";
+    case 3:
+      return "Intermediate";
+    case 4:
+      return "Upper Intermediate";
+    case 5:
+      return "Advanced";
+    case 6:
+      return "Proficient";
+    default:
+      return "Not Set";
+  }
+};
 
 export default function Navbar() {
   const router = useRouter();
   const { isDark, toggleTheme } = useTheme();
   const [showMobileMenu, setShowMobileMenu] = useState(false);
-  const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+  const [showProfileDialog, setShowProfileDialog] = useState(false);
   const [showFeedbackDialog, setShowFeedbackDialog] = useState(false);
   const [showInfoDialog, setShowInfoDialog] = useState(false);
-  const [showProfileDialog, setShowProfileDialog] = useState(false);
+  const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const [preferences, setPreferences] = useState<Partial<UserPreferences>>({ fullName: '' });
+  const [greeting, setGreeting] = useState(getGreeting());
+  const [proficiencyText, setProficiencyText] = useState<string>("Not Set");
 
   useEffect(() => {
     const userPrefs = getUserPreferences();
     setPreferences(userPrefs);
+    
+    // Cập nhật text cho proficiency level
+    if (userPrefs.proficiencyLevel !== undefined) {
+      setProficiencyText(getProficiencyText(userPrefs.proficiencyLevel));
+    }
+    
+    // Cập nhật lời chào mỗi phút
+    const intervalId = setInterval(() => {
+      setGreeting(getGreeting());
+    }, 60000);
+    
+    return () => clearInterval(intervalId);
   }, []);
+
+  // Các hàm xử lý sự kiện cho mobile menu
+  const handleProfileClick = () => {
+    setShowProfileDialog(true);
+  };
+
+  const handleFeedbackClick = () => {
+    setShowFeedbackDialog(true);
+  };
+
+  const handleInfoClick = () => {
+    setShowInfoDialog(true);
+  };
+
+  const handleLogoutClick = () => {
+    setShowLogoutDialog(true);
+  };
 
   const handleLogout = () => {
     localStorage.clear();
@@ -45,12 +112,36 @@ export default function Navbar() {
     <>
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-sm border-b border-slate-200/50 dark:bg-slate-900/80 dark:border-slate-700/50 transition-colors duration-150">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between h-8">
+
+            
+
+            <NavUser 
+              showMobileMenu={showMobileMenu} 
+              setShowProfileDialog={setShowProfileDialog}
+              setShowFeedbackDialog={setShowFeedbackDialog}
+              setShowInfoDialog={setShowInfoDialog}
+              setShowLogoutDialog={setShowLogoutDialog}
+            />
+            {/* Navigation Menu */}
+            <div className="hidden md:flex flex-1 justify-center">
+                <NavMenu />
+            </div>
+
             {/* Logo and Name - Desktop */}
             <div className="hidden md:flex">
                 <Link href="/dashboard" className="text-3xl font-black bg-gradient-to-r from-blue-300 via-blue-500 via-40% to-purple-500 bg-clip-text text-transparent">ENGACE</Link>
             </div>
-
+            
+            {/* Logo - Mobile */}
+            <div className="md:hidden">
+              <button
+                onClick={() => router.push("/dashboard")}
+                className="text-xl font-black bg-gradient-to-r from-blue-300 via-blue-500 via-40% to-purple-500 bg-clip-text text-transparent uppercase"
+              >
+                EngAce
+              </button>
+            </div>
             {/* Mobile Menu Button */}
             <div className="md:hidden flex items-center">
               <button
@@ -65,127 +156,28 @@ export default function Navbar() {
               </button>
             </div>
 
-            {/* Logo - Mobile */}
-            <div className="md:hidden">
-              <button
-                onClick={() => router.push("/dashboard")}
-                className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent dark:from-blue-400 dark:to-purple-400"
-              >
-                EngAce
-              </button>
-            </div>
-
-            {/* Desktop Actions */}
-            <div className="hidden md:flex items-center space-x-2">
-              <button
-                onClick={() => setShowProfileDialog(true)}
-                className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-              >
-                <UserCircle className="h-5 w-5 text-slate-600 dark:text-slate-400" />
-              </button>
-
-              <button
-                onClick={toggleTheme}
-                className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                aria-label="Toggle theme"
-              >
-                {isDark ? (
-                  <Sun className="h-5 w-5 text-slate-600 dark:text-slate-400" />
-                ) : (
-                  <Moon className="h-5 w-5 text-slate-600 dark:text-slate-400" />
-                )}
-              </button>
-
-              <button
-                onClick={() => setShowFeedbackDialog(true)}
-                className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                aria-label="Submit feedback"
-              >
-                <MessageCircleHeart className="h-5 w-5 text-slate-600 dark:text-slate-400" />
-              </button>
-
-              <button
-                onClick={() => setShowInfoDialog(true)}
-                className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                aria-label="Project information"
-              >
-                <Info className="h-5 w-5 text-slate-600 dark:text-slate-400" />
-              </button>
-
-              <button
-                onClick={() => setShowLogoutDialog(true)}
-                className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors"
-              >
-                <LogOut className="h-4 w-4" />
-                <span className="text-sm font-medium">Đăng xuất</span>
-              </button>
-            </div>
           </div>
 
           {/* Mobile Menu */}
           {showMobileMenu && (
             <div className="md:hidden pt-4 pb-2 border-t border-slate-200 dark:border-slate-700 mt-4">
-              <div className="flex flex-col space-y-4">
-                <button
-                  onClick={() => setShowProfileDialog(true)}
-                  className="flex items-center space-x-2 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                >
-                  <UserCircle className="h-5 w-5 text-slate-600 dark:text-slate-400" />
+              {/* Hiển thị lời chào và tên người dùng */}
+              <div className="flex flex-col gap-2 px-2 py-2 mb-4">
+                <div className="text-left text-sm leading-tight">
                   <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
-                    Cập nhật thông tin
+                    {greeting}, {preferences?.fullName}!
                   </span>
-                </button>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="text-xs text-slate-600 dark:text-slate-400">
+                    {proficiencyText}
+                  </span>
+                </div>
+              </div>
 
-                <button
-                  onClick={toggleTheme}
-                  className="flex items-center space-x-2 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                  aria-label="Theme switch"
-                >
-                  <div className="flex items-center space-x-2">
-                    {isDark ? (
-                      <Sun className="h-5 w-5 text-slate-600 dark:text-slate-400" />
-                    ) : (
-                      <Moon className="h-5 w-5 text-slate-600 dark:text-slate-400" />
-                    )}
-                    <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
-                      {isDark ? "Bật chế độ sáng" : "Bật chế độ tối"}
-                    </span>
-                  </div>
-                </button>
-
-                <button
-                  onClick={() => setShowFeedbackDialog(true)}
-                  className="flex items-center space-x-2 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                  aria-label="Submit feedback"
-                >
-                  <div className="flex items-center space-x-2">
-                    <MessageCircleHeart className="h-5 w-5 text-slate-600 dark:text-slate-400" />
-                    <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
-                      Phản hồi từ người dùng
-                    </span>
-                  </div>
-                </button>
-
-                <button
-                  onClick={() => setShowInfoDialog(true)}
-                  className="flex items-center space-x-2 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                  aria-label="Project information"
-                >
-                  <div className="flex items-center space-x-2">
-                    <Info className="h-5 w-5 text-slate-600 dark:text-slate-400" />
-                    <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
-                      Thông tin về EngAce
-                    </span>
-                  </div>
-                </button>
-
-                <button
-                  onClick={() => setShowLogoutDialog(true)}
-                  className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors"
-                >
-                  <LogOut className="h-4 w-4" />
-                  <span className="text-sm font-medium">Đăng xuất</span>
-                </button>
+              {/* Navigation Menu - Mobile */}
+              <div className="mb-4">
+                <NavMenu showMobileMenu={showMobileMenu} />
               </div>
             </div>
           )}

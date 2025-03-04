@@ -11,7 +11,7 @@ import { API_DOMAIN } from "@/lib/config"
 import { toast } from "sonner"
 import WelcomeHeader from "./WelcomeHeader"
 import TermsAndConditions from "./TermsAndConditions"
-import { InputGroup, SelectGroup } from "@/components/form"
+import { InputGroup, SelectGroup } from "@/components/app/form"
 
 const formSchema = z.object({
   fullName: z.string().min(2, "Tên không hợp lệ"),

@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { InputGroup, SelectGroup } from "@/components/form";
+import { InputGroup, SelectGroup } from "@/components/app/form";
 import { useForm } from "react-hook-form";
 
 interface UserProfileDialogProps {
@@ -116,7 +116,7 @@ export default function UserProfileDialog({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="w-full max-w-xl transform rounded-2xl bg-white dark:bg-slate-800 shadow-2xl overflow-hidden">
         <DialogHeader>
-          <DialogTitle className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
+          <DialogTitle className="text-lg sm:text-xl font-bold bg-gradient-to-r from-blue-300 via-blue-500 via-40% to-purple-500 bg-clip-text text-transparent">
             Cập nhật thông tin
           </DialogTitle>
         </DialogHeader>
@@ -242,7 +242,7 @@ export default function UserProfileDialog({
                 variant="outline"
                 onClick={onClose}
                 disabled={loading}
-                className="w-full sm:w-auto"
+                    className="bg-slate-500/20 backdrop-blur-sm border border-slate-200/50 text-slate-700 hover:bg-slate-500/40 dark:bg-slate-700/50 dark:border-slate-600/50 dark:text-slate-300 dark:hover:bg-slate-600/80 cursor-pointer"
               >
                 Hủy
               </Button>

@@ -47,7 +47,7 @@ EngAce được tạo ra bởi nhóm tác giả:
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="w-full max-w-2xl transform rounded-2xl bg-white dark:bg-slate-800 shadow-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-blue-600 dark:from-purple-400 dark:to-blue-400">
+          <DialogTitle className="text-lg sm:text-xl font-bold bg-gradient-to-r from-blue-300 via-blue-500 via-40% to-purple-500 bg-clip-text text-transparent">
             {title}
           </DialogTitle>
         </DialogHeader>
@@ -66,7 +66,7 @@ EngAce được tạo ra bởi nhóm tác giả:
             <div className="flex justify-center items-center m-auto">
               <Button
                 asChild
-                className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white transition-all duration-200"
+                className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-300 via-blue-500 via-40% to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white transition-all duration-200"
               >
                 <a
                   href="https://github.com/phanxuanquang/EngAce"

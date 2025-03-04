@@ -7,7 +7,7 @@ import { PROFICIENCY_LEVELS } from "@/lib/constants"
 import { GraduationCap, ArrowRight, Sparkles } from "lucide-react"
 import AiButton from "@/components/system/button/ai-button"
 import { toast } from "sonner"
-import { SelectGroup } from "@/components/form"
+import { SelectGroup } from "@/components/app/form"
 
 type ProficiencyFormProps = {
   formData: {
