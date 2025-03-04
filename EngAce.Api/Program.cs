@@ -5,7 +5,7 @@ using Microsoft.OpenApi.Models;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
-var frontendDomain = "https://engace.vercel.app";
+var allowedOrigin = "https://engace.vercel.app";
 
 if (builder.Environment.IsDevelopment())
 {
@@ -89,7 +89,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowOnlyEngace",
         policy =>
         {
-            policy.WithOrigins(frontendDomain) 
+            policy.WithOrigins(allowedOrigin) 
                   .AllowAnyMethod()
                   .AllowAnyHeader();
         });
@@ -117,9 +117,12 @@ if(!app.Environment.IsDevelopment())
 {
     app.Use(async (context, next) =>
     {
-        var origin = context.Request.Headers.Origin.ToString();
+        var allowedIP = "117.1.167.81";
 
-        if (string.IsNullOrEmpty(origin) || origin != frontendDomain)
+        var origin = context.Request.Headers.Origin.ToString();
+        var remoteIp = context.Connection.RemoteIpAddress?.ToString();
+
+        if ((string.IsNullOrEmpty(origin) || origin != allowedOrigin) && remoteIp != allowedIP)
         {
             context.Response.StatusCode = StatusCodes.Status403Forbidden;
             await context.Response.WriteAsync("Access Denied.");
