@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { UserRound, Key, Loader2, AlertCircle, Eye, EyeOff, GraduationCap, UserCircle, CalendarRange, VenusAndMars } from "lucide-react";
+import { UserRound, Key, Loader2, AlertCircle, Eye, EyeOff, GraduationCap, UserCircle, CalendarRange, VenusAndMars, HelpCircle, ExternalLink, Link } from "lucide-react";
 import { PROFICIENCY_LEVELS } from "@/lib/constants";
 import { getUserPreferences, saveUserPreferences } from "@/lib/localStorage";
 import { API_DOMAIN } from "@/lib/config";
@@ -208,7 +208,7 @@ export default function UserProfileDialog({
               <button
                 type="button"
                 onClick={() => setShowApiKey(!showApiKey)}
-                className="text-gray-400 hover:text-gray-600 focus:outline-none"
+                className="flex items-center justify-center text-gray-400 hover:text-gray-600 focus:outline-none"
                 disabled={loading}
               >
                 {showApiKey ? (
@@ -217,6 +217,21 @@ export default function UserProfileDialog({
                   <Eye className="h-4 w-4" />
                 )}
               </button>
+            }
+            extraComponent={
+              <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                <HelpCircle className="h-3 w-3" />
+                <span>Bạn có thể lấy API Key từ </span>
+                <a
+                  href="https://aistudio.google.com/app/apikey"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-500 underline font-semibold hover:text-blue-600 inline-flex items-center gap-1"
+                >
+                  Google AI Studio
+                  <Link className="h-3 w-3" />
+                </a>
+              </div>
             }
           />
 

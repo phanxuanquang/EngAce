@@ -169,20 +169,22 @@ export default function OnboardingForm({ onSuccess }: OnboardingFormProps) {
             )}
           </button>
         }
+        extraComponent={
+          <div className="flex items-center gap-1 text-xs text-muted-foreground">
+            <HelpCircle className="h-3 w-3" />
+            <span>Bạn có thể lấy API Key từ </span>
+            <a
+              href="https://aistudio.google.com/app/apikey"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 underline font-semibold hover:text-blue-600 inline-flex items-center gap-1"
+            >
+              Google AI Studio
+              <Link className="h-3 w-3" />
+            </a>
+          </div>
+        }
       />
-      <div className="text-xs text-muted-foreground flex items-center gap-1">
-        <HelpCircle className="h-3 w-3" />
-        Bạn có thể lấy API Key từ{" "}
-        <a
-          href="https://aistudio.google.com/app/apikey"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-blue-500 underline font-semibold hover:text-blue-600 inline-flex items-center gap-1"
-        >
-          Google AI Studio
-          <Link className="h-3 w-3" />
-        </a>
-      </div>
 
       <AiButton loading={isLoading} type="submit"
         disabled={isLoading} className="w-full" icon={ChevronsRight}>
