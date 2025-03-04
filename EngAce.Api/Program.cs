@@ -95,6 +95,17 @@ builder.Services.Configure<BrotliCompressionProviderOptions>(options =>
 //        });
 //}); 
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowOnlyEngace",
+        policy =>
+        {
+            policy.AllowAnyOrigin()
+                  .AllowAnyMethod()
+                  .AllowAnyHeader();
+        });
+});
+
 builder.Services.AddResponseCaching();
 
 var app = builder.Build();
@@ -102,6 +113,7 @@ var app = builder.Build();
 app.UseDeveloperExceptionPage();
 app.UseHttpsRedirection();
 app.UseRouting();
+app.UseCors();
 
 //if (app.Environment.IsDevelopment())
 //{
