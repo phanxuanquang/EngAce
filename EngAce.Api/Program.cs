@@ -5,7 +5,7 @@ using Microsoft.OpenApi.Models;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
-var frontendDomain = "https://engace.vercel.app";
+var allowedOrigin = "https://engace.vercel.app";
 
 if (builder.Environment.IsDevelopment())
 {
@@ -84,53 +84,65 @@ builder.Services.Configure<BrotliCompressionProviderOptions>(options =>
     options.Level = System.IO.Compression.CompressionLevel.Fastest;
 });
 
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("AllowOnlyEngace",
+//        policy =>
+//        {
+//            policy.WithOrigins(allowedOrigin, "117.1.167.81") 
+//                  .AllowAnyMethod()
+//                  .AllowAnyHeader();
+//        });
+//}); 
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowOnlyEngace",
-        policy =>
-        {
-            policy.WithOrigins(frontendDomain) 
-                  .AllowAnyMethod()
-                  .AllowAnyHeader();
-        });
-}); ;
+    options.AddPolicy("AllowAll",
+        policy => policy.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader());
+});
 
 builder.Services.AddResponseCaching();
 
 var app = builder.Build();
 
 app.UseDeveloperExceptionPage();
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Backend APIs");
-    });
-}
-
 app.UseHttpsRedirection();
 app.UseRouting();
+app.UseCors("AllowAll");
 
-if(!app.Environment.IsDevelopment())
-{
-    app.Use(async (context, next) =>
-    {
-        var origin = context.Request.Headers.Origin.ToString();
+//if (app.Environment.IsDevelopment())
+//{
+//    app.UseSwagger();
+//    app.UseSwaggerUI(c =>
+//    {
+//        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Backend APIs");
+//    });
+//}
 
-        if (string.IsNullOrEmpty(origin) || origin != frontendDomain)
-        {
-            context.Response.StatusCode = StatusCodes.Status403Forbidden;
-            await context.Response.WriteAsync("Access Denied.");
-            return;
-        }
 
-        await next();
-    });
+//if(!app.Environment.IsDevelopment())
+//{
+//    app.Use(async (context, next) =>
+//    {
+//        var allowedIP = "117.1.167.81";
 
-    app.UseCors("AllowOnlyEngace");
-}
+//        var origin = context.Request.Headers.Origin.ToString();
+//        var remoteIp = context.Connection.RemoteIpAddress?.ToString();
+
+//        if ((string.IsNullOrEmpty(origin) || origin != allowedOrigin) && remoteIp != allowedIP)
+//        {
+//            context.Response.StatusCode = StatusCodes.Status403Forbidden;
+//            await context.Response.WriteAsync("Access Denied.");
+//            return;
+//        }
+
+//        await next();
+//    });
+
+//    app.UseCors("AllowOnlyEngace");
+//}
 
 app.UseResponseCompression();
 
