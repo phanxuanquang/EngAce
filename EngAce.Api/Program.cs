@@ -84,56 +84,56 @@ builder.Services.Configure<BrotliCompressionProviderOptions>(options =>
     options.Level = System.IO.Compression.CompressionLevel.Fastest;
 });
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowOnlyEngace",
-        policy =>
-        {
-            policy.WithOrigins(allowedOrigin, "117.1.167.81") 
-                  .AllowAnyMethod()
-                  .AllowAnyHeader();
-        });
-}); ;
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("AllowOnlyEngace",
+//        policy =>
+//        {
+//            policy.WithOrigins(allowedOrigin, "117.1.167.81") 
+//                  .AllowAnyMethod()
+//                  .AllowAnyHeader();
+//        });
+//}); 
 
 builder.Services.AddResponseCaching();
 
 var app = builder.Build();
 
 app.UseDeveloperExceptionPage();
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Backend APIs");
-    });
-}
-
 app.UseHttpsRedirection();
 app.UseRouting();
 
-if(!app.Environment.IsDevelopment())
-{
-    app.Use(async (context, next) =>
-    {
-        var allowedIP = "117.1.167.81";
+//if (app.Environment.IsDevelopment())
+//{
+//    app.UseSwagger();
+//    app.UseSwaggerUI(c =>
+//    {
+//        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Backend APIs");
+//    });
+//}
 
-        var origin = context.Request.Headers.Origin.ToString();
-        var remoteIp = context.Connection.RemoteIpAddress?.ToString();
 
-        if ((string.IsNullOrEmpty(origin) || origin != allowedOrigin) && remoteIp != allowedIP)
-        {
-            context.Response.StatusCode = StatusCodes.Status403Forbidden;
-            await context.Response.WriteAsync("Access Denied.");
-            return;
-        }
+//if(!app.Environment.IsDevelopment())
+//{
+//    app.Use(async (context, next) =>
+//    {
+//        var allowedIP = "117.1.167.81";
 
-        await next();
-    });
+//        var origin = context.Request.Headers.Origin.ToString();
+//        var remoteIp = context.Connection.RemoteIpAddress?.ToString();
 
-    app.UseCors("AllowOnlyEngace");
-}
+//        if ((string.IsNullOrEmpty(origin) || origin != allowedOrigin) && remoteIp != allowedIP)
+//        {
+//            context.Response.StatusCode = StatusCodes.Status403Forbidden;
+//            await context.Response.WriteAsync("Access Denied.");
+//            return;
+//        }
+
+//        await next();
+//    });
+
+//    app.UseCors("AllowOnlyEngace");
+//}
 
 app.UseResponseCompression();
 
