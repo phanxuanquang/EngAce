@@ -1,0 +1,31 @@
+import type { Metadata } from "next"
+import "./globals.css"
+import { Lexend } from "next/font/google"
+import { ThemeProvider } from "@/contexts/ThemeContext"
+import { Toaster } from "@/components/ui/sonner"
+
+const lexend = Lexend({ subsets: ["latin"] })
+
+export const metadata: Metadata = {
+  title: "EngAce - Học tiếng Anh theo cách của bạn",
+  description: "Nền tảng miễn phí sử dụng AI để nâng tầm trải nghiệm học tiếng Anh dành riêng cho người Việt",
+}
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${lexend.className} antialiased`}>
+        <ThemeProvider>
+          <div className="min-h-screen transition-colors duration-150 dark:bg-gray-900 bg-gray-50">
+            {children}
+          </div>
+          <Toaster />
+        </ThemeProvider>
+      </body>
+    </html>
+  )
+}

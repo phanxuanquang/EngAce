@@ -2,12 +2,10 @@
 module.exports = {
   darkMode: ["class"],
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
+    "./src/**/*.{js,jsx,ts,tsx}",
+    "./pages/**/*.{js,jsx,ts,tsx}",
+    "./components/**/*.{js,jsx,ts,tsx}",
   ],
-  prefix: "",
   theme: {
     container: {
       center: true,
@@ -78,14 +76,28 @@ module.exports = {
           "100%": {
             transform: "translateX(100%)",
           },
-        }
+        },
+        sparkle: {
+          "0%, 100%": { opacity: "0.75", scale: "0.9" },
+          "50%": { opacity: "1", scale: "1" },
+        },
+        ripple: {
+          "0%, 100%": {
+            transform: "translate(-50%, -50%) scale(1)",
+          },
+          "50%": {
+            transform: "translate(-50%, -50%) scale(0.9)",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "fadeIn": "fadeIn 0.3s ease-out",
         "slideIn": "slideIn 0.3s ease-out",
-        "shimmer": "shimmer 2s infinite"
+        "shimmer": "shimmer 2s infinite",
+        "sparkle": "sparkle 2s ease-in-out infinite",
+        "ripple": "ripple var(--duration,2s) ease calc(var(--i, 0)*.2s) infinite",
       },
       typography: {
         DEFAULT: {
@@ -119,6 +131,7 @@ module.exports = {
     },
   },
   plugins: [
+    require("tailwindcss-animate"),
     require("@tailwindcss/typography"),
   ],
 }
