@@ -18,6 +18,9 @@ import { API_DOMAIN } from "@/lib/config";
 import ProficiencyForm from "@/components/ProficiencyForm";
 import AiButton from "./system/button/ai-button";
 import Image from "next/image";
+import { TextShimmer } from "./system/text/shimmer-text";
+import { SparklesText } from "./system/text/sparkles-text";
+import { Ripple } from "./system/background/ripple-background";
 
 const formSchema = z.object({
   fullName: z.string().min(2, "Tên không hợp lệ"),
@@ -103,7 +106,7 @@ export default function OnboardingForm() {
       {/* Left side - Hero section */}
       <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex overflow-hidden">
         <Image
-          src="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?q=80&w=1920&auto=format&fit=crop"
+          src="https://images.unsplash.com/photo-1539632346654-dd4c3cffad8c?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
           alt="English learning background"
           fill
           className="absolute inset-0 object-cover brightness-[0.7] opacity-90"
@@ -111,23 +114,17 @@ export default function OnboardingForm() {
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
         
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/30 via-purple-500/30 to-background/80" />
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-700/80 via-purple-500/60 to-blue-500/10" />
         
-        <div className="relative z-20 flex items-center text-lg font-medium">
-          <ConciergeBell className="mr-2 h-6 w-6" />
-          <span className="bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent font-bold">
-            EngAce
-          </span>
+        <div className="relative z-20 h-full flex flex-col items-center justify-center text-center">
+          <SparklesText firstColor="#F8E7F6" secondColor="#A1E3F9">
+            <span className="text-6xl font-black bg-gradient-to-r from-white via-purple-300 to-blue-300 bg-clip-text text-transparent">ENGACE</span>
+          </SparklesText>
+          <p className="text-md text-white/90 max-w-md">
+            Học tiếng Anh thông minh cùng AI
+          </p>
         </div>
-        
-        <div className="relative z-20 mt-auto">
-          <blockquote className="space-y-2">
-            <p className="text-lg font-medium">
-              "EngAce đã giúp tôi cải thiện kỹ năng tiếng Anh một cách đáng kể. Trợ lý AI thông minh và thân thiện giúp tôi học tập hiệu quả hơn."
-            </p>
-            <footer className="text-sm font-semibold text-white/80">ENGACE</footer>
-          </blockquote>
-        </div>
+        <Ripple />
       </div>
 
       {/* Right side - Form section */}

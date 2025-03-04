@@ -81,6 +81,14 @@ module.exports = {
           "0%, 100%": { opacity: "0.75", scale: "0.9" },
           "50%": { opacity: "1", scale: "1" },
         },
+        ripple: {
+          "0%, 100%": {
+            transform: "translate(-50%, -50%) scale(1)",
+          },
+          "50%": {
+            transform: "translate(-50%, -50%) scale(0.9)",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -89,6 +97,7 @@ module.exports = {
         "slideIn": "slideIn 0.3s ease-out",
         "shimmer": "shimmer 2s infinite",
         "sparkle": "sparkle 2s ease-in-out infinite",
+        "ripple": "ripple var(--duration,2s) ease calc(var(--i, 0)*.2s) infinite",
       },
       typography: {
         DEFAULT: {
