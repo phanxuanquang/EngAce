@@ -78,14 +78,19 @@ module.exports = {
           "100%": {
             transform: "translateX(100%)",
           },
-        }
+        },
+        spinSlow: {
+          from: { transform: 'rotate(0deg)' },
+          to: { transform: 'rotate(360deg)' },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "fadeIn": "fadeIn 0.3s ease-out",
         "slideIn": "slideIn 0.3s ease-out",
-        "shimmer": "shimmer 2s infinite"
+        "shimmer": "shimmer 2s infinite",
+        "spinSlow": "spinSlow 6s linear infinite",
       },
       typography: {
         DEFAULT: {

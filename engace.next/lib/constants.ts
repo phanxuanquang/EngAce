@@ -31,7 +31,7 @@ export const PROFICIENCY_LEVELS = [
   },
   {
     id: 6,
-    name: "Proficient)",
+    name: "Proficient",
     description:
       "Bạn có thể hiểu và phân tích gần như bất kỳ loại văn bản hoặc cuộc hội thoại nào, kể cả các tài liệu chuyên môn, bài báo học thuật, tác phẩm văn học hoặc diễn thuyết chính trị. Bạn có thể giao tiếp với độ chính xác cao, diễn đạt tư duy phức tạp mà không gặp bất kỳ trở ngại nào. Bạn có thể điều chỉnh phong cách ngôn ngữ của mình phù hợp với từng ngữ cảnh, từ giao tiếp hàng ngày đến các bài phát biểu chính thức. Khi viết, bạn có thể soạn thảo văn bản với độ tinh tế cao, sử dụng cấu trúc câu đa dạng, ngôn ngữ giàu hình ảnh và thể hiện được sắc thái ý nghĩa tinh tế. Bạn có thể xử lý những tình huống giao tiếp phức tạp nhất, bao gồm tranh luận chuyên sâu, thuyết trình cấp cao hoặc sáng tác văn bản nghệ thuật với chất lượng cao.",
   },

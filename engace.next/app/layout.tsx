@@ -1,10 +1,9 @@
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import { Lexend } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/contexts/ThemeContext"
 
-const inter = Inter({ subsets: ["latin"] })
-
+const lexend = Lexend({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "EngAce - Học tiếng Anh theo cách của bạn",
   description: "Nền tảng miễn phí sử dụng AI để nâng tầm trải nghiệm học tiếng Anh dành riêng cho người Việt",
@@ -23,7 +22,7 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/favicon.ico" />
       </head>
-      <body className={`${inter.className} antialiased`}>
+      <body className={`${lexend.className} antialiased`}>
         <ThemeProvider>
           <div className="min-h-screen bg-slate-50 dark:bg-slate-900 transition-colors duration-150">
             {children}
