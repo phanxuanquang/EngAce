@@ -76,14 +76,19 @@ module.exports = {
           "100%": {
             transform: "translateX(100%)",
           },
-        }
+        },
+        sparkle: {
+          "0%, 100%": { opacity: "0.75", scale: "0.9" },
+          "50%": { opacity: "1", scale: "1" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "fadeIn": "fadeIn 0.3s ease-out",
         "slideIn": "slideIn 0.3s ease-out",
-        "shimmer": "shimmer 2s infinite"
+        "shimmer": "shimmer 2s infinite",
+        "sparkle": "sparkle 2s ease-in-out infinite",
       },
       typography: {
         DEFAULT: {

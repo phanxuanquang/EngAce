@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Loader2 } from "lucide-react";
+import { Loader2, User2, Users, Calendar, Key, Eye, EyeOff, ExternalLink, HelpCircle, Search, ConciergeBell, ArrowRight } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/select";
 import { API_DOMAIN } from "@/lib/config";
 import ProficiencyForm from "@/components/ProficiencyForm";
+import AiButton from "./system/button/ai-button";
 
 const formSchema = z.object({
   fullName: z.string().min(2, "Tên không hợp lệ"),
@@ -37,6 +38,7 @@ export default function OnboardingForm() {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<FormData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [showApiKey, setShowApiKey] = useState(false);
 
   const {
     register,
@@ -113,53 +115,63 @@ export default function OnboardingForm() {
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             {/* Name Input */}
             <div className="space-y-4">
-              <Label htmlFor="email">Tên của bạn là</Label>
-              <Input
-                {...register("fullName")}
-                autoComplete="off"
-                placeholder="Quang đẹp trai"
-                disabled={isLoading}
-              />
+              <Label htmlFor="fullName">Tên của bạn là</Label>
+              <div className="relative">
+                <User2 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <Input
+                  {...register("fullName")}
+                  id="fullName"
+                  autoComplete="off"
+                  placeholder="Nhập họ và tên của bạn"
+                  className="pl-10 disabled:cursor-not-allowed"
+                  disabled={isLoading}
+                />
+              </div>
               {errors.fullName && (
-                <p className="text-sm text-red-300">
-                  {errors.fullName.message}
-                </p>
+                <p className="text-sm text-red-300">{errors.fullName.message}</p>
               )}
             </div>
 
             {/* Gender Select */}
             <div className="space-y-4">
               <Label>Giới tính của bạn là</Label>
-              <Select
-                onValueChange={(value) =>
-                  setValue("gender", value as "male" | "female" | "other")
-                }
-                defaultValue="male"
-                disabled={isLoading}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Nam" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="male">Nam</SelectItem>
-                  <SelectItem value="female">Nữ</SelectItem>
-                  <SelectItem value="other">Khác</SelectItem>
-                </SelectContent>
-              </Select>
+              <div className="relative">
+                <Users className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 z-10" />
+                <Select
+                  onValueChange={(value) =>
+                    setValue("gender", value as "male" | "female" | "other")
+                  }
+                  defaultValue="male"
+                  disabled={isLoading}
+                >
+                  <SelectTrigger className="pl-10 cursor-pointer disabled:cursor-not-allowed">
+                    <SelectValue placeholder="Chọn giới tính" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="male">Nam</SelectItem>
+                    <SelectItem value="female">Nữ</SelectItem>
+                    <SelectItem value="other">Khác</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
 
             {/* Age Input */}
             <div className="space-y-1">
               <Label>Tuổi của bạn là</Label>
-              <Input
-                {...register("age", { valueAsNumber: true })}
-                autoComplete="off"
-                type="number"
-                placeholder="16"
-                min={7}
-                max={60}
-                disabled={isLoading}
-              />
+              <div className="relative">
+                <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <Input
+                  {...register("age", { valueAsNumber: true })}
+                  autoComplete="off"
+                  type="number"
+                  placeholder="Nhập tuổi của bạn"
+                  className="pl-10 disabled:cursor-not-allowed"
+                  min={7}
+                  max={60}
+                  disabled={isLoading}
+                />
+              </div>
               {errors.age && (
                 <p className="text-sm text-red-300">{errors.age.message}</p>
               )}
@@ -168,29 +180,47 @@ export default function OnboardingForm() {
             {/* API Key Input */}
             <div className="space-y-1">
               <Label>Gemini API Key</Label>
-              <Input
-                {...register("geminiApiKey")}
-                autoComplete="off"
-                type="password"
-                placeholder="Enter your Gemini API key"
-                disabled={isLoading}
-              />
+              <div className="relative">
+                <Key className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <Input
+                  {...register("geminiApiKey")}
+                  autoComplete="off"
+                  type={showApiKey ? "text" : "password"}
+                  placeholder="Nhập Gemini API key của bạn"
+                  className="pl-10 pr-10 disabled:cursor-not-allowed"
+                  disabled={isLoading}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowApiKey(!showApiKey)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none cursor-pointer disabled:cursor-not-allowed"
+                  disabled={isLoading}
+                >
+                  {showApiKey ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
+                </button>
+              </div>
               {errors.geminiApiKey && (
                 <p className="text-sm text-red-300 mb-2">
                   {errors.geminiApiKey.message}
                 </p>
               )}
-              <p className="text-xs opacity-80 mt-3">
-                Bạn có thể lấy API Key từ{" "}
+              <div className="text-xs opacity-80 mt-3 flex items-center gap-1">
+                <HelpCircle className="h-3 w-3" />
+                  Bạn có thể lấy API Key từ{" "}
                 <a
                   href="https://aistudio.google.com/app/apikey"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 underline font-semibold dark:text-blue-400"
+                  className="text-blue-600 underline font-semibold dark:text-blue-400 cursor-pointer hover:text-blue-800 dark:hover:text-blue-300 inline-flex items-center gap-1"
                 >
                   Google AI Studio
+                  <ExternalLink className="h-3 w-3" />
                 </a>
-              </p>
+              </div>
             </div>
 
             {error && (
@@ -198,24 +228,11 @@ export default function OnboardingForm() {
                 <p className="text-sm text-red-300 text-center">{error}</p>
               </div>
             )}
-
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full px-6 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-[1.02] focus:scale-[0.98] active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed relative overflow-hidden group"
-            >
-              <div className="relative z-10 flex items-center justify-center space-x-2">
-                {isLoading ? (
-                  <>
-                    <Loader2 className="h-5 w-5 animate-spin" />
-                    <span>Đang xác thực...</span>
-                  </>
-                ) : (
-                  <span>Tiếp tục</span>
-                )}
-              </div>
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 transition-transform duration-200 group-hover:translate-x-0 -translate-x-full"></div>
-            </button>
+      
+            <AiButton loading={isLoading} type="submit"
+              disabled={isLoading} className="w-full" icon={ArrowRight}>
+             Tiếp tục
+            </AiButton>
           </form>
         </div>
       </div>

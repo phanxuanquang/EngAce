@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import OnboardingForm from "@/components/OnboardingForm"
+import Loading from "@/components/Loading"
 import { hasCompletedOnboarding } from "@/lib/localStorage"
 
 export default function Home() {
@@ -19,14 +20,7 @@ export default function Home() {
   }, [router])
 
   if (isLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="text-center">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-slate-300 border-t-slate-900"></div>
-          <p className="mt-4 text-slate-600">Loading...</p>
-        </div>
-      </div>
-    )
+    return <Loading message="Vui lòng đợi..." />
   }
 
   return <OnboardingForm />
