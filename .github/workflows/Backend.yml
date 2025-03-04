@@ -4,7 +4,7 @@ on:
     branches:
       - master
 env:
-  AZURE_WEBAPP_NAME: EngAce
+  AZURE_WEBAPP_NAME: engace-api
   AZURE_WEBAPP_PACKAGE_PATH: EngAce.Api/publish
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 8.x
@@ -62,5 +62,5 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        publish-profile: ${{ secrets.EngAce_3BA2 }}
+        publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D3BC207A73B54BC6BE6846EA4D76F619 }}
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
