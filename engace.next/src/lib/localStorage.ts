@@ -6,7 +6,7 @@ type AssignmentData = {
   timestamp?: number;
 };
 
-type UserPreferences = {
+export type UserPreferences = {
   fullName: string;
   gender: string;
   age: number;

@@ -12,8 +12,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { GraduationCap, ArrowRight } from "lucide-react"
+import { GraduationCap, ArrowRight, Sparkles } from "lucide-react"
 import AiButton from "@/components/system/button/ai-button"
+import { toast } from "sonner"
 
 type ProficiencyFormProps = {
   formData: {
@@ -28,12 +29,11 @@ type ProficiencyFormProps = {
 export default function ProficiencyForm({ formData, onBack }: ProficiencyFormProps) {
   const router = useRouter()
   const [selectedLevel, setSelectedLevel] = useState<number | null>(null)
-  const [error, setError] = useState("")
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!selectedLevel) {
-      setError("Vui lòng chọn trình độ của bạn")
+      toast.error("Vui lòng chọn trình độ của bạn")
       return
     }
 
@@ -43,16 +43,16 @@ export default function ProficiencyForm({ formData, onBack }: ProficiencyFormPro
         proficiencyLevel: selectedLevel,
         hasCompletedOnboarding: true,
       })
+      toast.success("Đã lưu thông tin thành công!")
       router.push("/dashboard")
     } catch {
-      setError("Đã có lỗi xảy ra. Vui lòng thử lại.")
+      toast.error("Đã có lỗi xảy ra. Vui lòng thử lại.")
     }
   }
 
   const handleLevelChange = (value: string) => {
     const level = parseInt(value, 10)
     setSelectedLevel(level)
-    setError("")
   }
 
   return (
@@ -95,21 +95,15 @@ export default function ProficiencyForm({ formData, onBack }: ProficiencyFormPro
 
         {/* Description */}
         {selectedLevel && (
-          <div className="animate-fadeIn rounded-lg bg-slate-50 dark:bg-slate-900 p-4">
+          <div className="animate-fadeIn rounded-lg bg-slate-100 dark:bg-slate-800 p-4">
             <p className="text-sm text-muted-foreground">
               {PROFICIENCY_LEVELS.find((l) => l.id === selectedLevel)?.description}
             </p>
           </div>
         )}
 
-        {error && (
-          <div className="animate-fadeIn rounded-lg bg-destructive/10 border border-destructive/20 p-3">
-            <p className="text-sm text-destructive text-center">{error}</p>
-          </div>
-        )}
-
         {/* Submit Button */}
-        <AiButton type="submit" className="w-full" icon={ArrowRight}>
+        <AiButton type="submit" className="w-full" icon={Sparkles}>
           Xác nhận và bắt đầu
         </AiButton>
       </form>

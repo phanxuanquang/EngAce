@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
   Moon,
@@ -18,6 +18,7 @@ import InfoDialog from "./InfoDialog";
 import FeedbackDialog from "./FeedbackDialog";
 import UserProfileDialog from "./UserProfileDialog";
 import ConfirmDialog from "@/components/ConfirmDialog";
+import type { UserPreferences } from "@/lib/localStorage";
 
 export default function Navbar() {
   const router = useRouter();
@@ -27,7 +28,12 @@ export default function Navbar() {
   const [showFeedbackDialog, setShowFeedbackDialog] = useState(false);
   const [showInfoDialog, setShowInfoDialog] = useState(false);
   const [showProfileDialog, setShowProfileDialog] = useState(false);
-  const preferences = getUserPreferences();
+  const [preferences, setPreferences] = useState<Partial<UserPreferences>>({ fullName: '' });
+
+  useEffect(() => {
+    const userPrefs = getUserPreferences();
+    setPreferences(userPrefs);
+  }, []);
 
   const handleLogout = () => {
     localStorage.clear();

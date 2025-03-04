@@ -13,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { UserCircle2, VenusAndMars, CalendarRange, Key, Eye, EyeOff, ExternalLink, HelpCircle } from "lucide-react"
+import { UserCircle2, VenusAndMars, CalendarRange, Key, Eye, EyeOff, ExternalLink, HelpCircle, Link, ChevronRight, ChevronsRight } from "lucide-react"
 import { ArrowRight } from "lucide-react"
 import AiButton from "@/components/system/button/ai-button"
 import { API_DOMAIN } from "@/lib/config"
@@ -219,13 +219,13 @@ export default function OnboardingForm({ onSuccess }: OnboardingFormProps) {
             className="text-blue-500 underline font-semibold hover:text-blue-600 inline-flex items-center gap-1"
           >
             Google AI Studio
-            <ExternalLink className="h-3 w-3" />
+            <Link className="h-3 w-3" />
           </a>
         </div>
       </div>
 
       <AiButton loading={isLoading} type="submit"
-        disabled={isLoading} className="w-full" icon={ArrowRight}>
+        disabled={isLoading} className="w-full" icon={ChevronsRight}>
         Tiếp tục
       </AiButton>
     </form>
