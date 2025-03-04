@@ -19,7 +19,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${lexend.className} antialiased`}>
         <ThemeProvider>
-          <div className="min-h-screen transition-colors duration-150">
+          <div className="min-h-screen transition-colors duration-150 dark:bg-gray-900 bg-gray-50">
             {children}
           </div>
         </ThemeProvider>
