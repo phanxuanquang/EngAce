@@ -93,7 +93,7 @@ builder.Services.AddCors(options =>
                   .AllowAnyMethod()
                   .AllowAnyHeader();
         });
-}); ;
+}); 
 
 builder.Services.AddResponseCaching();
 
@@ -112,21 +112,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
-
-app.Use(async (context, next) =>
-{
-    var allowedOrigin = "https://engace.vercel.app";
-    var origin = context.Request.Headers.Origin.ToString();
-
-    if (string.IsNullOrEmpty(origin) || origin != allowedOrigin)
-    {
-        context.Response.StatusCode = StatusCodes.Status403Forbidden;
-        await context.Response.WriteAsync("Access Denied.");
-        return;
-    }
-
-    await next();
-});
 
 app.UseCors(frontendDomain);
 
