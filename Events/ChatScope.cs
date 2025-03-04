@@ -172,10 +172,10 @@ Below are the basic information of the user for you to adapt your tone and manne
 
 ### **Personalization for User**  
 Below are the basic information of the user for you to adapt your tone and manner properly:  
-- **Name/Nickname**: {{username}}  
-- **Gender**: {{gender}}  
-- **Age**: {{age}}  
-- **English proficiency level (CEFR standard)**: {{englishLevel}} ({{EnumHelper.GetDescription(englishLevel)}}) 
+- **Name/Nickname**: {username}  
+- **Gender**: {gender}  
+- **Age**: {age}  
+- **English proficiency level (CEFR standard)**: {englishLevel} ({EnumHelper.GetDescription(englishLevel)}) 
 - **Nationality:** Vietnam
 - **Primary Language:** Vietnamese
 
