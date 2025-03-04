@@ -5,6 +5,7 @@ using Microsoft.OpenApi.Models;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
+var frontendDomain = "https://engace.vercel.app";
 
 if (builder.Environment.IsDevelopment())
 {
@@ -85,11 +86,14 @@ builder.Services.Configure<BrotliCompressionProviderOptions>(options =>
 
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(policyBuilder =>
-    {
-        policyBuilder.WithOrigins("https://engace.vercel.app").AllowAnyHeader().AllowAnyMethod();
-    });
-});
+    options.AddPolicy("AllowOnlyEngace",
+        policy =>
+        {
+            policy.WithOrigins(frontendDomain) 
+                  .AllowAnyMethod()
+                  .AllowAnyHeader();
+        });
+}); ;
 
 builder.Services.AddResponseCaching();
 
@@ -109,15 +113,28 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
-app.UseCors();
+app.Use(async (context, next) =>
+{
+    var allowedOrigin = "https://engace.vercel.app";
+    var origin = context.Request.Headers.Origin.ToString();
+
+    if (string.IsNullOrEmpty(origin) || origin != allowedOrigin)
+    {
+        context.Response.StatusCode = StatusCodes.Status403Forbidden;
+        await context.Response.WriteAsync("Access Denied.");
+        return;
+    }
+
+    await next();
+});
+
+app.UseCors(frontendDomain);
+
 app.UseResponseCompression();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllers();
-});
+app.MapControllers();
 
 app.Run();
