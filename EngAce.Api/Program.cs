@@ -89,7 +89,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowOnlyEngace",
         policy =>
         {
-            policy.WithOrigins(allowedOrigin) 
+            policy.WithOrigins(allowedOrigin, "117.1.167.81") 
                   .AllowAnyMethod()
                   .AllowAnyHeader();
         });
