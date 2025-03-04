@@ -43,13 +43,13 @@ export default function ConfirmDialog({
         </AlertDialogHeader>
         <AlertDialogFooter className="flex justify-end">
           <AlertDialogCancel
-            className="bg-slate-500/20 backdrop-blur-sm border border-slate-200/50 text-slate-700 hover:bg-slate-500/40 dark:bg-slate-700/50 dark:border-slate-600/50 dark:text-slate-300 dark:hover:bg-slate-600/80"
+            className="bg-slate-500/20 backdrop-blur-sm border border-slate-200/50 text-slate-700 hover:bg-slate-500/40 dark:bg-slate-700/50 dark:border-slate-600/50 dark:text-slate-300 dark:hover:bg-slate-600/80 cursor-pointer"
             onClick={onClose}
           >
             {cancelText}
           </AlertDialogCancel>
           <AlertDialogAction
-            className="bg-gradient-to-r from-red-500/90 to-red-400/90 backdrop-blur-sm text-white hover:from-red-600/90 hover:to-red-500/90"
+            className="bg-gradient-to-r from-red-500/90 to-red-400/90 backdrop-blur-sm text-white hover:from-red-600/90 hover:to-red-500/90 cursor-pointer"
             onClick={() => {
               onConfirm();
               onClose();

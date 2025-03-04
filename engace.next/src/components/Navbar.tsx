@@ -14,11 +14,12 @@ import {
 } from "lucide-react";
 import { getUserPreferences } from "@/lib/localStorage";
 import { useTheme } from "@/contexts/ThemeContext";
-import InfoDialog from "./InfoDialog";
-import FeedbackDialog from "./FeedbackDialog";
-import UserProfileDialog from "./UserProfileDialog";
-import ConfirmDialog from "@/components/ConfirmDialog";
+import InfoDialog from "./app/dialog/InfoDialog";
+import FeedbackDialog from "./app/dialog/FeedbackDialog";
+import UserProfileDialog from "./app/dialog/UserProfileDialog";
+import ConfirmDialog from "@/components/app/dialog/ConfirmDialog";
 import type { UserPreferences } from "@/lib/localStorage";
+import Link from "next/link";
 
 export default function Navbar() {
   const router = useRouter();
@@ -46,19 +47,8 @@ export default function Navbar() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             {/* Logo and Name - Desktop */}
-            <div className="hidden md:flex items-center space-x-4">
-              <button
-                onClick={() => router.push("/dashboard")}
-                className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent dark:from-blue-400 dark:to-purple-400 hover:opacity-80 transition-opacity"
-              >
-                EngAce
-              </button>
-              <span className="text-sm text-slate-600 dark:text-slate-400">
-                |
-              </span>
-              <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
-                {preferences.fullName}
-              </span>
+            <div className="hidden md:flex">
+                <Link href="/dashboard" className="text-3xl font-black bg-gradient-to-r from-blue-300 via-blue-500 via-40% to-purple-500 bg-clip-text text-transparent">ENGACE</Link>
             </div>
 
             {/* Mobile Menu Button */}

@@ -6,7 +6,7 @@ import { getUserPreferences } from "@/lib/localStorage";
 import { API_DOMAIN } from "@/lib/config";
 import { Message, ChatResponse } from "./types";
 import Navbar from "@/components/Navbar";
-import ConfirmDialog from "@/components/ConfirmDialog";
+import ConfirmDialog from "@/components/app/dialog/ConfirmDialog";
 import ChatMessages from "./components/ChatMessages";
 import ChatInput from "./components/ChatInput";
 import ChatControls from "./components/ChatControls";

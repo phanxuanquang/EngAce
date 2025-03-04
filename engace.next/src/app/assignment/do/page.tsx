@@ -4,10 +4,10 @@ import { useState, useEffect, Suspense, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Clock } from "lucide-react";
 import Navbar from "@/components/Navbar";
-import ErrorDialog from "@/components/ErrorDialog";
+import ErrorDialog from "@/components/app/dialog/ErrorDialog";
 import AssignmentResult from "@/components/AssignmentResult";
 import { getAssignmentData, clearAssignmentData } from "@/lib/localStorage";
-import ConfirmDialog from "@/components/ConfirmDialog";
+import ConfirmDialog from "@/components/app/dialog/ConfirmDialog";
 
 type Question = {
   Question: string;

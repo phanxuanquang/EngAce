@@ -6,8 +6,8 @@ import { Book, PenLine, GraduationCap, MessageCircle } from "lucide-react";
 import { getUserPreferences } from "@/lib/localStorage";
 import { API_DOMAIN } from "@/lib/config";
 import Navbar from "@/components/Navbar";
-import FeedbackDialog from "@/components/FeedbackDialog";
-import InfoDialog from "@/components/InfoDialog";
+import FeedbackDialog from "@/components/app/dialog/FeedbackDialog";
+import InfoDialog from "@/components/app/dialog/InfoDialog";
 import { FEEDBACK_DIALOG_INTERVAL_DAYS } from "@/lib/constants";
 
 interface GitHubCommit {

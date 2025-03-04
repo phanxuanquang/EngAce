@@ -26,7 +26,7 @@ export default function ErrorDialog({
 }: ErrorDialogProps) {
   return (
     <AlertDialog open={isOpen} onOpenChange={onClose}>
-      <AlertDialogContent>
+      <AlertDialogContent className="bg-white backdrop-blur-md border border-white/20 shadow-xl dark:bg-slate-800/70 dark:border-slate-700/20">
         <AlertDialogHeader>
           <AlertDialogTitle>
             <div className="flex items-center space-x-2 text-red-500">
@@ -40,7 +40,7 @@ export default function ErrorDialog({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogAction
-            className="bg-gradient-to-r from-red-500 to-red-400 text-white hover:from-red-600 hover:to-red-500"
+            className="bg-gradient-to-r from-red-500 to-red-400 text-white hover:from-red-600 hover:to-red-500 cursor-pointer"
             onClick={onClose}
           >
             Đóng

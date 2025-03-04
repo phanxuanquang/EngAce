@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { GraduationCap, Sparkles, Loader2 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import { getUserPreferences, setAssignmentData } from "@/lib/localStorage";
-import ErrorDialog from "@/components/ErrorDialog";
+import ErrorDialog from "@/components/app/dialog/ErrorDialog";
 import { API_DOMAIN } from "@/lib/config";
 
 type AssignmentType = {
