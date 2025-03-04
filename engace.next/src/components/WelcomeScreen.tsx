@@ -24,7 +24,9 @@ import { useTheme } from "@/contexts/ThemeContext";
 
 const formSchema = z.object({
   fullName: z.string().min(2, "Tên không hợp lệ"),
-  gender: z.enum(["male", "female", "other"]),
+  gender: z.enum(["male", "female", "other"], {
+    required_error: "Vui lòng chọn giới tính",
+  }),
   age: z
     .number({
       required_error: "Vui lòng nhập tuổi",
@@ -59,7 +61,7 @@ export default function OnboardingForm() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       fullName: "",
-      gender: "male",
+      gender: undefined,
       age: undefined,
       geminiApiKey: "",
     },
@@ -192,9 +194,8 @@ export default function OnboardingForm() {
                     onValueChange={(value) =>
                       setValue("gender", value as "male" | "female" | "other")
                     }
-                    defaultValue=""
                     disabled={isLoading}
-                    
+                    {...register("gender")}
                   >
                     <SelectTrigger className="pl-10 focus-visible:ring-0">
                       <SelectValue placeholder="Chọn giới tính của bạn" />
@@ -206,6 +207,9 @@ export default function OnboardingForm() {
                     </SelectContent>
                   </Select>
                 </div>
+                {errors.gender && (
+                  <p className="text-sm text-destructive">{errors.gender.message}</p>
+                )}
               </div>
 
               {/* Age Input */}
