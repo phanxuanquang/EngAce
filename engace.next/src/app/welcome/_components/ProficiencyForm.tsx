@@ -4,17 +4,10 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { saveUserPreferences } from "@/lib/localStorage"
 import { PROFICIENCY_LEVELS } from "@/lib/constants"
-import { Label } from "@/components/ui/label"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import { GraduationCap, ArrowRight, Sparkles } from "lucide-react"
 import AiButton from "@/components/system/button/ai-button"
 import { toast } from "sonner"
+import { SelectGroup } from "@/components/form"
 
 type ProficiencyFormProps = {
   formData: {
@@ -68,30 +61,16 @@ export default function ProficiencyForm({ formData, onBack }: ProficiencyFormPro
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Level Selection */}
-        <div className="space-y-2">
-          <Label>
-            Trình độ của bạn
-          </Label>
-          <div className="relative">
-            <GraduationCap className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 z-10" />
-            <Select onValueChange={handleLevelChange}>
-              <SelectTrigger className="pl-10 focus-visible:ring-0">
-                <SelectValue placeholder="Chọn trình độ của bạn" />
-              </SelectTrigger>
-              <SelectContent className="focus-visible:ring-0">
-                {PROFICIENCY_LEVELS.map((level) => (
-                  <SelectItem
-                    key={level.id}
-                    value={String(level.id)}
-                    className="focus-visible:ring-0"
-                  >
-                    {level.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
+        <SelectGroup
+          label="Trình độ của bạn"
+          placeholder="Chọn trình độ của bạn"
+          icon={GraduationCap}
+          options={PROFICIENCY_LEVELS.map(level => ({
+            value: String(level.id),
+            label: level.name
+          }))}
+          onValueChange={handleLevelChange}
+        />
 
         {/* Description */}
         {selectedLevel && (

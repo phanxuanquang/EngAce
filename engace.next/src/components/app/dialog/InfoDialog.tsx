@@ -6,6 +6,7 @@ import LoadingSpinner from "../../LoadingSpinner";
 import {
   Dialog,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -58,24 +59,27 @@ EngAce được tạo ra bởi nhóm tác giả:
             <MarkdownRenderer>{content || defaultContent}</MarkdownRenderer>
           )}
 
-          {showGithubButton && (
-            <div className="flex justify-center mt-8">
+         
+        </div>
+        <DialogFooter>
+        {showGithubButton && (
+            <div className="flex justify-center items-center m-auto">
               <Button
                 asChild
-                className="inline-flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white transition-all duration-200"
+                className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white transition-all duration-200"
               >
                 <a
                   href="https://github.com/phanxuanquang/EngAce"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <Github className="mr-2" />
+                  <Github />
                   <span className="font-semibold">Dự án trên GitHub</span>
                 </a>
               </Button>
             </div>
           )}
-        </div>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

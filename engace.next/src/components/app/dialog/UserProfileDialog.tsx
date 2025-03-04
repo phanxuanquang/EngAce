@@ -1,15 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { UserRound, Key, Loader2, AlertCircle } from "lucide-react";
+import { useState, useEffect } from "react";
+import { UserRound, Key, Loader2, AlertCircle, Eye, EyeOff, GraduationCap, UserCircle, CalendarRange, VenusAndMars } from "lucide-react";
 import { PROFICIENCY_LEVELS } from "@/lib/constants";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { getUserPreferences, saveUserPreferences } from "@/lib/localStorage";
 import { API_DOMAIN } from "@/lib/config";
 import {
@@ -20,18 +13,21 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { InputGroup, SelectGroup } from "@/components/form";
+import { useForm } from "react-hook-form";
 
 interface UserProfileDialogProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-interface FormErrors {
-  fullName?: string;
-  age?: string;
-  gender?: string;
-  geminiApiKey?: string;
-  proficiencyLevel?: string;
+interface FormData {
+  fullName: string;
+  age: string;
+  gender: string;
+  geminiApiKey: string;
+  proficiencyLevel: string;
 }
 
 export default function UserProfileDialog({
@@ -41,63 +37,40 @@ export default function UserProfileDialog({
   const preferences = getUserPreferences();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [formErrors, setFormErrors] = useState<FormErrors>({});
-  const [selectedLevelDescription, setSelectedLevelDescription] = useState<
-    string
-  >("");
-  const [formData, setFormData] = useState({
-    fullName: preferences.fullName || "",
-    age: preferences.age?.toString() || "",
-    gender: preferences.gender || "",
-    geminiApiKey: preferences.geminiApiKey || "",
-    proficiencyLevel: preferences.proficiencyLevel?.toString() || "",
+  const [showApiKey, setShowApiKey] = useState(false);
+  const [selectedLevelDescription, setSelectedLevelDescription] = useState<string>(
+    preferences.proficiencyLevel 
+      ? PROFICIENCY_LEVELS.find(level => level.id === preferences.proficiencyLevel)?.description || ""
+      : ""
+  );
+  
+  const { register, handleSubmit: handleFormSubmit, setValue, formState: { errors }, watch } = useForm<FormData>({
+    defaultValues: {
+      fullName: preferences.fullName || "",
+      age: preferences.age?.toString() || "",
+      gender: preferences.gender || "",
+      geminiApiKey: preferences.geminiApiKey || "",
+      proficiencyLevel: preferences.proficiencyLevel?.toString() || "",
+    }
   });
 
+  const formValues = watch();
+
   // Update description when proficiency level changes
-  const handleProficiencyChange = (value: string) => {
-    setFormData({ ...formData, proficiencyLevel: value });
+  useEffect(() => {
     const level = PROFICIENCY_LEVELS.find(
-      (level) => level.id.toString() === value
+      (level) => level.id.toString() === formValues.proficiencyLevel
     );
-    setSelectedLevelDescription(level?.description || "");
+    if (level) {
+      setSelectedLevelDescription(level.description || "");
+    }
+  }, [formValues.proficiencyLevel]);
+
+  const handleProficiencyChange = (value: string) => {
+    setValue("proficiencyLevel", value);
   };
 
-  const validateForm = (): boolean => {
-    const errors: FormErrors = {};
-    let isValid = true;
-
-    if (!formData.fullName.trim()) {
-      errors.fullName = "Vui lòng nhập họ và tên";
-      isValid = false;
-    }
-
-    if (!formData.age) {
-      errors.age = "Vui lòng nhập tuổi";
-      isValid = false;
-    }
-
-    if (!formData.gender) {
-      errors.gender = "Vui lòng chọn giới tính";
-      isValid = false;
-    }
-
-    if (!formData.geminiApiKey.trim()) {
-      errors.geminiApiKey = "Vui lòng nhập API Key";
-      isValid = false;
-    }
-
-    if (!formData.proficiencyLevel) {
-      errors.proficiencyLevel = "Vui lòng chọn trình độ";
-      isValid = false;
-    }
-
-    setFormErrors(errors);
-    return isValid;
-  };
-
-  const handleSubmit = async () => {
-    if (!validateForm()) return;
-
+  const onSubmit = async (data: FormData) => {
     setLoading(true);
     setError(null);
 
@@ -106,7 +79,7 @@ export default function UserProfileDialog({
         method: "GET",
         headers: {
           accept: "text/plain",
-          Authentication: formData.geminiApiKey,
+          Authentication: data.geminiApiKey,
         },
       });
 
@@ -117,18 +90,23 @@ export default function UserProfileDialog({
       // Save to localStorage with proper type conversion
       saveUserPreferences({
         ...preferences,
-        fullName: formData.fullName,
-        age: formData.age ? parseInt(formData.age, 10) : undefined,
-        gender: formData.gender,
-        geminiApiKey: formData.geminiApiKey,
-        proficiencyLevel: formData.proficiencyLevel
-          ? parseInt(formData.proficiencyLevel, 10)
+        fullName: data.fullName,
+        age: data.age ? parseInt(data.age, 10) : undefined,
+        gender: data.gender,
+        geminiApiKey: data.geminiApiKey,
+        proficiencyLevel: data.proficiencyLevel
+          ? parseInt(data.proficiencyLevel, 10)
           : undefined,
       });
 
+      toast.success("Thông tin đã được cập nhật thành công!");
       onClose();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
+      const errorMessage = err instanceof Error 
+        ? err.message 
+        : "API key validation failed. Please check your key and try again.";
+      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -143,210 +121,133 @@ export default function UserProfileDialog({
           </DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-4">
-          <div>
-            <label
-              htmlFor="fullName"
-              className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1"
-            >
-              Họ và tên
-            </label>
-            <div className="relative">
-              <input
-                id="fullName"
-                type="text"
-                placeholder="Nhập họ và tên"
-                value={formData.fullName}
-                onChange={(e) =>
-                  setFormData({ ...formData, fullName: e.target.value })
-                }
-                className={`w-full pl-10 pr-4 py-2 rounded-lg border ${
-                  formErrors.fullName
-                    ? "border-red-500 focus:ring-red-500"
-                    : "border-slate-200 dark:border-slate-700 focus:ring-blue-500"
-                } bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 transition-all text-sm sm:text-base`}
-              />
-              <UserRound className="absolute left-3 top-2.5 h-5 w-5 text-slate-400" />
-            </div>
-            {formErrors.fullName && (
-              <div className="flex items-center mt-1 text-xs sm:text-sm text-red-500">
-                <AlertCircle className="w-4 h-4 mr-1" />
-                {formErrors.fullName}
-              </div>
-            )}
-          </div>
+        <form onSubmit={handleFormSubmit(onSubmit)} className="space-y-4">
+          <InputGroup
+            id="fullName"
+            label="Họ và tên"
+            placeholder="Nhập họ và tên"
+            icon={UserCircle}
+            error={errors.fullName?.message}
+            disabled={loading}
+            register={register}
+            registerOptions={{ 
+              required: "Vui lòng nhập họ và tên" 
+            }}
+          />
 
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label
-                htmlFor="age"
-                className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1"
-              >
-                Tuổi
-              </label>
-              <input
-                id="age"
-                type="number"
-                placeholder="Nhập tuổi"
-                value={formData.age}
-                onChange={(e) =>
-                  setFormData({ ...formData, age: e.target.value })
-                }
-                min={1}
-                max={100}
-                className={`w-full px-4 py-2 rounded-lg border ${
-                  formErrors.age
-                    ? "border-red-500 focus:ring-red-500"
-                    : "border-slate-200 dark:border-slate-700 focus:ring-blue-500"
-                } bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 transition-all text-sm sm:text-base`}
-              />
-              {formErrors.age && (
-                <div className="flex items-center mt-1 text-xs sm:text-sm text-red-500">
-                  <AlertCircle className="w-4 h-4 mr-1" />
-                  {formErrors.age}
-                </div>
-              )}
-            </div>
-
-            <div>
-              <label
-                htmlFor="gender"
-                className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1"
-              >
-                Giới tính
-              </label>
-              <Select
-                value={formData.gender}
-                onValueChange={(value) =>
-                  setFormData({ ...formData, gender: value })
-                }
-              >
-                <SelectTrigger
-                  id="gender"
-                  className={
-                    formErrors.gender
-                      ? "border-red-500 focus:ring-red-500"
-                      : ""
-                  }
-                >
-                  <SelectValue placeholder="Chọn giới tính" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="male">Nam</SelectItem>
-                  <SelectItem value="female">Nữ</SelectItem>
-                  <SelectItem value="other">Khác</SelectItem>
-                </SelectContent>
-              </Select>
-              {formErrors.gender && (
-                <div className="flex items-center mt-1 text-xs sm:text-sm text-red-500">
-                  <AlertCircle className="w-4 h-4 mr-1" />
-                  {formErrors.gender}
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div>
-            <label
-              htmlFor="proficiencyLevel"
-              className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1"
-            >
-              Trình độ tiếng Anh của bạn
-            </label>
-            <Select
-              value={formData.proficiencyLevel}
-              onValueChange={handleProficiencyChange}
-            >
-              <SelectTrigger
-                id="proficiencyLevel"
-                className={
-                  formErrors.proficiencyLevel
-                    ? "border-red-500 focus:ring-red-500"
-                    : ""
-                }
-              >
-                <SelectValue placeholder="Chọn trình độ" />
-              </SelectTrigger>
-              <SelectContent>
-                {PROFICIENCY_LEVELS.map((level) => (
-                  <SelectItem key={level.id} value={level.id.toString()}>
-                    {level.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {formErrors.proficiencyLevel && (
-              <div className="flex items-center mt-1 text-xs sm:text-sm text-red-500">
-                <AlertCircle className="w-4 h-4 mr-1" />
-                {formErrors.proficiencyLevel}
-              </div>
-            )}
-            {selectedLevelDescription && (
-              <div className="mt-2 text-sm text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-900 p-3 rounded-lg border border-slate-200 dark:border-slate-700">
-                {selectedLevelDescription}
-              </div>
-            )}
-          </div>
-
-          <div>
-            <label
-              htmlFor="geminiApiKey"
-              className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1"
-            >
-              Gemini API Key
-            </label>
-            <div className="relative">
-              <input
-                id="geminiApiKey"
-                type="password"
-                placeholder="Nhập API Key"
-                value={formData.geminiApiKey}
-                onChange={(e) =>
-                  setFormData({ ...formData, geminiApiKey: e.target.value })
-                }
-                className={`w-full pl-10 pr-4 py-2 rounded-lg border ${
-                  formErrors.geminiApiKey || error
-                    ? "border-red-500 focus:ring-red-500"
-                    : "border-slate-200 dark:border-slate-700 focus:ring-blue-500"
-                } bg-white dark:bg-slate-900 text-slate-900 dark:text-white focus:outline-none focus:ring-2 transition-all text-sm sm:text-base`}
-              />
-              <Key className="absolute left-3 top-2.5 h-5 w-5 text-slate-400" />
-            </div>
-            {(formErrors.geminiApiKey || error) && (
-              <div className="flex items-center mt-1 text-xs sm:text-sm text-red-500">
-                <AlertCircle className="w-4 h-4 mr-1" />
-                {formErrors.geminiApiKey || error}
-              </div>
-            )}
-          </div>
-        </div>
-
-        <DialogFooter>
-          <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2 sm:gap-2">
-            <Button
-              variant="outline"
-              onClick={onClose}
+            <InputGroup
+              id="age"
+              label="Tuổi"
+              placeholder="Nhập tuổi"
+              icon={CalendarRange}
+              type="number"
+              error={errors.age?.message}
               disabled={loading}
-              className="w-full sm:w-auto"
-            >
-              Hủy
-            </Button>
-            <Button
-              onClick={handleSubmit}
+              register={register}
+              registerOptions={{ 
+                required: "Vui lòng nhập tuổi",
+                min: { value: 1, message: "Tuổi phải lớn hơn 0" },
+                max: { value: 100, message: "Tuổi phải nhỏ hơn 100" }
+              }}
+            />
+
+            <SelectGroup
+              label="Giới tính"
+              placeholder="Chọn giới tính"
+              icon={VenusAndMars}
+              options={[
+                { value: "male", label: "Nam" },
+                { value: "female", label: "Nữ" },
+                { value: "other", label: "Khác" },
+              ]}
+              value={formValues.gender}
+              error={errors.gender?.message}
               disabled={loading}
-              className="w-full sm:w-auto bg-gradient-to-r from-blue-300 via-blue-500 via-40% to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white transition-colors disabled:opacity-70"
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  <span>Đang xử lý...</span>
-                </>
-              ) : (
-                <span>Cập nhật</span>
-              )}
-            </Button>
+              onValueChange={(value) => setValue("gender", value)}
+              register={register("gender", { required: "Vui lòng chọn giới tính" })}
+            />
           </div>
-        </DialogFooter>
+
+          <SelectGroup
+            label="Trình độ tiếng Anh của bạn"
+            placeholder="Chọn trình độ"
+            icon={GraduationCap}
+            options={PROFICIENCY_LEVELS.map(level => ({
+              value: String(level.id),
+              label: level.name
+            }))}
+            value={formValues.proficiencyLevel}
+            error={errors.proficiencyLevel?.message}
+            disabled={loading}
+            onValueChange={handleProficiencyChange}
+            register={register("proficiencyLevel", { required: "Vui lòng chọn trình độ" })}
+          />
+
+          {selectedLevelDescription && (
+            <div className="mt-2 text-sm text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-900 p-3 rounded-lg border border-slate-200 dark:border-slate-700">
+              {selectedLevelDescription}
+            </div>
+          )}
+
+          <InputGroup
+            id="geminiApiKey"
+            label="Gemini API Key"
+            placeholder="Nhập API Key"
+            icon={Key}
+            type={showApiKey ? "text" : "password"}
+            error={errors.geminiApiKey?.message || error || ""}
+            disabled={loading}
+            register={register}
+            registerOptions={{ 
+              required: "Vui lòng nhập API Key",
+              minLength: { value: 39, message: "API key không hợp lệ" },
+              pattern: { value: /^AIza/, message: "API key phải bắt đầu bằng 'AIza'" }
+            }}
+            rightElement={
+              <button
+                type="button"
+                onClick={() => setShowApiKey(!showApiKey)}
+                className="text-gray-400 hover:text-gray-600 focus:outline-none"
+                disabled={loading}
+              >
+                {showApiKey ? (
+                  <EyeOff className="h-4 w-4" />
+                ) : (
+                  <Eye className="h-4 w-4" />
+                )}
+              </button>
+            }
+          />
+
+          <DialogFooter>
+            <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2 sm:gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={onClose}
+                disabled={loading}
+                className="w-full sm:w-auto"
+              >
+                Hủy
+              </Button>
+              <Button
+                type="submit"
+                disabled={loading}
+                className="w-full sm:w-auto bg-gradient-to-r from-blue-300 via-blue-500 via-40% to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white transition-colors disabled:opacity-70"
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                    <span>Đang xử lý...</span>
+                  </>
+                ) : (
+                  <span>Cập nhật</span>
+                )}
+              </Button>
+            </div>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   );
