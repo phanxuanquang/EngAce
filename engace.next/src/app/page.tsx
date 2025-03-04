@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import OnboardingForm from "@/components/OnboardingForm"
+import WelcomeScreen from "@/components/WelcomeScreen"
 import Loading from "@/components/Loading"
 import { hasCompletedOnboarding } from "@/lib/localStorage"
 
@@ -23,5 +23,5 @@ export default function Home() {
     return <Loading message="Vui lòng đợi..." />
   }
 
-  return <OnboardingForm />
+  return <WelcomeScreen />
 }
