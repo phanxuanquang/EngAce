@@ -93,7 +93,7 @@ builder.Services.AddCors(options =>
                   .AllowAnyMethod()
                   .AllowAnyHeader();
         });
-}); 
+}); ;
 
 builder.Services.AddResponseCaching();
 
@@ -113,7 +113,24 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
-app.UseCors(frontendDomain);
+if(!app.Environment.IsDevelopment())
+{
+    app.Use(async (context, next) =>
+    {
+        var origin = context.Request.Headers.Origin.ToString();
+
+        if (string.IsNullOrEmpty(origin) || origin != frontendDomain)
+        {
+            context.Response.StatusCode = StatusCodes.Status403Forbidden;
+            await context.Response.WriteAsync("Access Denied.");
+            return;
+        }
+
+        await next();
+    });
+
+    app.UseCors("AllowOnlyEngace");
+}
 
 app.UseResponseCompression();
 
