@@ -161,21 +161,7 @@ export default function Navbar() {
           {/* Mobile Menu */}
           {showMobileMenu && (
             <div className="md:hidden pt-4 pb-2 border-t border-slate-200 dark:border-slate-700 mt-4">
-              {/* Hiển thị lời chào và tên người dùng */}
-              <div className="flex flex-col gap-2 px-2 py-2 mb-4">
-                <div className="text-left text-sm leading-tight">
-                  <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
-                    {greeting}, {preferences?.fullName}!
-                  </span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <span className="text-xs text-slate-600 dark:text-slate-400">
-                    {proficiencyText}
-                  </span>
-                </div>
-              </div>
-
-              {/* Navigation Menu - Mobile */}
+                          {/* Navigation Menu - Mobile */}
               <div className="mb-4">
                 <NavMenu showMobileMenu={showMobileMenu} />
               </div>

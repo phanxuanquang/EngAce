@@ -9,6 +9,7 @@ import Navbar from "@/components/Navbar";
 import FeedbackDialog from "@/components/app/dialog/FeedbackDialog";
 import InfoDialog from "@/components/app/dialog/InfoDialog";
 import { FEEDBACK_DIALOG_INTERVAL_DAYS } from "@/lib/constants";
+import Threads from "@/components/system/background/threads-background";
 
 interface GitHubCommit {
   ShaCode: string;
@@ -143,6 +144,13 @@ export default function Dashboard() {
       <div className="absolute top-0 left-0 w-[40rem] h-[40rem] bg-gradient-to-br from-purple-400/20 to-blue-400/20 blur-[160px] animate-pulse-slow"></div>
       <div className="absolute bottom-0 right-0 w-[40rem] h-[40rem] bg-gradient-to-br from-blue-400/20 to-purple-400/20 blur-[160px] animate-pulse-slow delay-1000"></div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.05),rgba(255,255,255,0))]"></div>
+      <div className="absolute inset-0 opacity-20">
+      <Threads
+    amplitude={3}
+    distance={1.2}
+    enableMouseInteraction={false}
+  />
+  </div>
       <Navbar />
 
       {/* Info Dialog */}
