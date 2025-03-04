@@ -31,12 +31,17 @@ namespace EngAce.Api.Controllers
                 var result = await ChatScope.GenerateAnswer(_accessKey, request, username, gender, age, englishLevel, enableReasoning, enableSearching);
 
                 _logger.LogInformation($"{_accessKey[..10]} ({username}) asked (Reasoning: {enableReasoning} - Grounding: {enableSearching}): {request.Question}");
+
                 return Ok(result);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Cannot generate answer");
-                return Ok("Nhắn từ từ thôi bé yêu, bộ mắc đi đẻ quá hay gì 💢\nNgồi đợi 1 phút cho anh đi uống ly cà phê đã.");
+
+                return Ok(new ChatResponse
+                {
+                    MessageInMarkdown = "Nhắn từ từ thôi bé yêu, bộ mắc đi đẻ quá hay gì 💢\nNgồi đợi 1 phút cho anh đi uống ly cà phê đã. Sau 1 phút mà vẫn lỗi thì xóa lịch sử trò chuyện rồi thử lại nha!"
+                });
             }
         }
     }
