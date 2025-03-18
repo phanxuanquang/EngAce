@@ -1,5 +1,4 @@
 ﻿using Gemini.NET;
-using Gemini.NET.Helpers;
 using Models.Enums;
 using System.Text;
 using SearchResult = Entities.SearchResult;
@@ -172,26 +171,15 @@ namespace Events
         public static async Task<SearchResult> Search(string apiKey, string keyword, string context)
         {
             var promptBuilder = new StringBuilder();
-            var internetSearchResult = await SearchForEnglishInforAsync(keyword);
 
             promptBuilder.AppendLine("## Từ khóa cần tra cứu:");
-            promptBuilder.AppendLine($"- {keyword.Trim()}");
+            promptBuilder.AppendLine($"- **{keyword.Trim()}**");
 
             if (!string.IsNullOrEmpty(context))
             {
                 promptBuilder.AppendLine();
                 promptBuilder.AppendLine("## Ngữ cảnh chứa từ khóa cần tra cứu:");
-                promptBuilder.AppendLine($"- {context.Trim()}");
-            }
-
-            if (internetSearchResult != null && !string.IsNullOrEmpty(internetSearchResult.Content))
-            {
-                promptBuilder.AppendLine();
-                promptBuilder.AppendLine("---");
-                promptBuilder.AppendLine();
-                promptBuilder.AppendLine($"> *Dưới đây là một số thông tin mà tôi tra cứu được trên mạng liên quan đến nghĩa của `{keyword}` để bạn tham khảo.*");
-                promptBuilder.AppendLine();
-                promptBuilder.AppendLine(internetSearchResult.Content);
+                promptBuilder.AppendLine($"- **{context.Trim()}**");
             }
 
             var apiRequest = new ApiRequestBuilder()
@@ -203,107 +191,40 @@ namespace Events
 
             var generator = new Generator(apiKey);
 
-            var response = await generator.GenerateContentAsync(apiRequest, ModelVersion.Gemini_20_Flash);
+            var responseTask = generator.GenerateContentAsync(apiRequest, ModelVersion.Gemini_20_Flash);
+            var internetSearchResultTask = EngDict.NET.EngDict.SearchAsync(keyword);
+
+            await Task.WhenAll(responseTask, internetSearchResultTask);
+
+            var response = responseTask.Result;
+            var internetSearchResult = internetSearchResultTask.Result;
+
+            var audioUrls = new List<string>
+            {
+               $"https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q={keyword}&tl=en"
+            };
+
+            try
+            {
+                var ipaUrls = internetSearchResult
+                    .Select(r => r.Phonetics)
+                    .SelectMany(p => p)
+                    .Select(p => p.AudioUrl)
+                    .Where(url => !string.IsNullOrEmpty(url))
+                    .Distinct();
+
+                audioUrls.AddRange(ipaUrls);
+            }
+            catch
+            {
+                // Skip
+            }
 
             return new SearchResult
             {
                 Content = response.Result,
-                IpaAudioUrls = internetSearchResult?.IpaAudioUrls,
+                IpaAudioUrls = audioUrls,
             };
-        }
-
-        private static async Task<SearchResult?> SearchForEnglishInforAsync(string keyword)
-        {
-            try
-            {
-                var results = await EngDict.NET.EngDict.SearchAsync(keyword);
-                if (results == null || results.Count == 0)
-                {
-                    return null;
-                }
-
-                var stringBuilder = new StringBuilder();
-                foreach (var result in results)
-                {
-                    if (result.Phonetics != null)
-                    {
-                        var phonetics = result.Phonetics
-                            .Where(p => !string.IsNullOrEmpty(p.IpaTranscription))
-                            .DistinctBy(p => p.IpaTranscription)
-                            .ToList();
-
-                        if (phonetics.Count > 0)
-                        {
-                            stringBuilder.AppendLine("### **IPA Phonetics**");
-                            foreach (var phonetic in phonetics)
-                            {
-                                if (!string.IsNullOrEmpty(phonetic.AudioUrl))
-                                {
-                                    stringBuilder.AppendLine($"- [{phonetic.IpaTranscription}]({phonetic.AudioUrl})");
-                                }
-                                else
-                                {
-                                    stringBuilder.AppendLine($"- {phonetic.IpaTranscription}");
-                                }
-                            }
-                            stringBuilder.AppendLine();
-                        }
-                    }
-
-                    foreach (var meaning in result.Meanings)
-                    {
-                        stringBuilder.AppendLine($"### **Part of Speech: {EnumHelper.GetDescription(meaning.PartOfSpeech)}**");
-
-                        foreach (var definition in meaning.Definitions)
-                        {
-                            stringBuilder.AppendLine($"- **Definition:** {definition.Description}");
-                            if (definition.Synonyms != null)
-                            {
-                                stringBuilder.AppendLine($"    - **Synonyms:** {string.Join(", ", definition.Synonyms)}");
-                            }
-                            if (definition.Antonyms != null)
-                            {
-                                stringBuilder.AppendLine($"    - **Antonyms:** {string.Join(", ", definition.Antonyms)}");
-                            }
-                            if (!string.IsNullOrEmpty(definition.Example))
-                            {
-                                stringBuilder.AppendLine($"    - **Example:** {definition.Example}");
-                            }
-                            stringBuilder.AppendLine();
-                        }
-
-                        if (meaning.Synonyms != null)
-                        {
-                            stringBuilder.AppendLine($"- **Synonyms:** {string.Join(", ", meaning.Synonyms)}");
-                        }
-                        if (meaning.Antonyms != null)
-                        {
-                            stringBuilder.AppendLine($"- **Antonyms:** {string.Join(", ", meaning.Antonyms)}");
-                        }
-
-                        stringBuilder.AppendLine();
-                    }
-                }
-
-                return new SearchResult
-                {
-                    IpaAudioUrls = results
-                        .Where(r => r.Phonetics != null
-                            && r.Phonetics.Count > 0
-                            && r.Phonetics.Any(p => !string.IsNullOrEmpty(p.AudioUrl)))
-                        .SelectMany(r => r.Phonetics)
-                        .Select(p => p.AudioUrl)
-                        .Where(url => !string.IsNullOrEmpty(url))
-                        .Distinct()
-                        .ToList(),
-
-                    Content = stringBuilder.ToString()
-                };
-            }
-            catch (Exception)
-            {
-                return null;
-            }
         }
     }
 }
