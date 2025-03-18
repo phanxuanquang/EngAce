@@ -228,18 +228,7 @@ namespace Events
                 // Skip
             }
 
-            audioUrls.Add($"https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q={keyword}&tl=en");
-
-            if (responseWithSearching.GroundingDetail?.Sources == null && responseWithSearching.GroundingDetail?.SearchSuggestions == null)
-            {
-                return new SearchResult
-                {
-                    Content = responseWithSearching.Result,
-                    IpaAudioUrls = audioUrls,
-                };
-            }
-
-            if (responseWithSearching.GroundingDetail?.Sources?.Count == 0 && responseWithSearching.GroundingDetail?.SearchSuggestions?.Count == 0)
+            if (responseWithSearching.GroundingDetail?.Sources == null || responseWithSearching.GroundingDetail?.Sources?.Count == 0)
             {
                 return new SearchResult
                 {
@@ -256,23 +245,11 @@ namespace Events
             if (responseWithSearching.GroundingDetail?.Sources != null && responseWithSearching.GroundingDetail?.Sources?.Count != 0)
             {
                 stringBuilder.AppendLine();
-                stringBuilder.AppendLine("#### **Nguồn tham khảo**");
+                stringBuilder.AppendLine("## **Nguồn tham khảo**");
                 stringBuilder.AppendLine();
                 foreach (var source in responseWithSearching.GroundingDetail.Sources)
                 {
                     stringBuilder.AppendLine($"- [**{source.Domain}**]({source.Url})");
-                }
-            }
-
-            if (responseWithSearching.GroundingDetail?.SearchSuggestions != null && responseWithSearching.GroundingDetail?.SearchSuggestions?.Count != 0)
-            {
-                stringBuilder.AppendLine();
-                stringBuilder.AppendLine("#### **Gợi ý tra cứu**");
-                stringBuilder.AppendLine();
-
-                foreach (var suggestion in responseWithSearching.GroundingDetail.SearchSuggestions)
-                {
-                    stringBuilder.AppendLine($"- [{suggestion}](https://www.google.com/search?q={suggestion.Replace(" ", "+")})");
                 }
             }
 
