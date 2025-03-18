@@ -172,7 +172,7 @@ export default function OnboardingForm() {
                 {...register("geminiApiKey")}
                 autoComplete="off"
                 type="password"
-                placeholder="Enter your Gemini API key"
+                placeholder="AIzaSy..."
                 disabled={isLoading}
               />
               {errors.geminiApiKey && (

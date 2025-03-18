@@ -95,6 +95,17 @@ builder.Services.AddCors(options =>
         });
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        policy =>
+        {
+            policy.AllowAnyOrigin()
+                  .AllowAnyMethod()
+                  .AllowAnyHeader();
+        });
+});
+
 builder.Services.AddResponseCaching();
 
 var app = builder.Build();
@@ -130,6 +141,8 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "EngAce APIs Documentation v1.0.0");
         c.RoutePrefix = "swagger";
     });
+
+    app.UseCors("AllowAll");
 }
 
 app.UseResponseCompression();
