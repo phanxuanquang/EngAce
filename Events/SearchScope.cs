@@ -1,4 +1,5 @@
-﻿using Gemini.NET;
+﻿using Entities;
+using Gemini.NET;
 using Models.Enums;
 using System.Text;
 using SearchResult = Entities.SearchResult;
@@ -23,7 +24,8 @@ namespace Events
 
 ---
 
-#  **Lưu Ý Quan Trọng**  
+#  **Lưu Ý Quan Trọng** 
+- **Luôn thực hiện tra cứu thông tin trên internet trước khi đưa ra phản hồi để đảm bảo tính chính xác của thông tin**.
 - **Luôn viết bằng tiếng Việt**.  
 - **Dịch tự nhiên, không dịch từng từ một**.  
 - **Ưu tiên nghĩa phù hợp nhất với ngữ cảnh** (nếu có).  
@@ -160,6 +162,7 @@ namespace Events
 ---
 
 #  **NGUYÊN TẮC CHUNG**
+✅ Thực hiện **tra cứu thông tin trên Google trước khi đưa ra phản hồi** để đảm bảo thông tin là chính xác, mới nhất, và đầy đủ nhất.
 ✅ **Tự kiểm tra lại tính chính xác và xác thực của thông tin trước khi gửi cho người dùng**.
 ✅ **Chỉ dùng ngôn ngữ chính thống, tránh ngôn ngữ lóng, từ lóng, không được viết tắt, và không thêm bất kỳ comment hay ý kiến chủ quan**.
 ✅ **Trình bày kết quả dưới hình thức trang trọng (tương tự như từ điển, văn bản hành chính, bài báo khoa học,...), sử dụng định dạng rõ ràng và dễ đọc**.
@@ -183,6 +186,7 @@ namespace Events
             }
 
             var apiRequest = new ApiRequestBuilder()
+                .EnableGrounding()
                 .WithSystemInstruction(_instruction)
                 .WithPrompt(promptBuilder.ToString())
                 .WithDefaultGenerationConfig(0.3F)
@@ -191,38 +195,90 @@ namespace Events
 
             var generator = new Generator(apiKey);
 
-            var responseTask = generator.GenerateContentAsync(apiRequest, ModelVersion.Gemini_20_Flash);
+            var responseTask = generator
+                .IncludesGroundingDetailInResponse()
+                .ExcludesSearchEntryPointFromResponse()
+                .GenerateContentAsync(apiRequest, ModelVersion.Gemini_20_Flash);
+
             var internetSearchResultTask = EngDict.NET.EngDict.SearchAsync(keyword);
 
             await Task.WhenAll(responseTask, internetSearchResultTask);
 
-            var response = responseTask.Result;
+            var responseWithSearching = responseTask.Result;
             var internetSearchResult = internetSearchResultTask.Result;
 
-            var audioUrls = new List<string>
-            {
-               $"https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q={keyword}&tl=en"
-            };
+            var audioUrls = new List<string>();
 
             try
             {
-                var ipaUrls = internetSearchResult
-                    .Select(r => r.Phonetics)
-                    .SelectMany(p => p)
-                    .Select(p => p.AudioUrl)
-                    .Where(url => !string.IsNullOrEmpty(url))
-                    .Distinct();
+                if(internetSearchResult != null && internetSearchResult[0].Phonetics != null)
+                {
+                    var ipaUrls = internetSearchResult?
+                        .Select(r => r.Phonetics)?
+                        .SelectMany(p => p)?
+                        .Select(p => p.AudioUrl)?
+                        .Where(url => !string.IsNullOrEmpty(url))?
+                        .Distinct();
 
-                audioUrls.AddRange(ipaUrls);
+                    audioUrls.AddRange(ipaUrls);
+                }
             }
             catch
             {
                 // Skip
             }
 
+            audioUrls.Add($"https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q={keyword}&tl=en");
+
+            if (responseWithSearching.GroundingDetail?.Sources == null && responseWithSearching.GroundingDetail?.SearchSuggestions == null)
+            {
+                return new SearchResult
+                {
+                    Content = responseWithSearching.Result,
+                    IpaAudioUrls = audioUrls,
+                };
+            }
+
+            if (responseWithSearching.GroundingDetail?.Sources?.Count == 0 && responseWithSearching.GroundingDetail?.SearchSuggestions?.Count == 0)
+            {
+                return new SearchResult
+                {
+                    Content = responseWithSearching.Result,
+                    IpaAudioUrls = audioUrls,
+                };
+            }
+
+            var stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine(responseWithSearching.Result);
+            stringBuilder.AppendLine();
+            stringBuilder.AppendLine("---");
+
+            if (responseWithSearching.GroundingDetail?.Sources != null && responseWithSearching.GroundingDetail?.Sources?.Count != 0)
+            {
+                stringBuilder.AppendLine();
+                stringBuilder.AppendLine("#### **Nguồn tham khảo**");
+                stringBuilder.AppendLine();
+                foreach (var source in responseWithSearching.GroundingDetail.Sources)
+                {
+                    stringBuilder.AppendLine($"- [**{source.Domain}**]({source.Url})");
+                }
+            }
+
+            if (responseWithSearching.GroundingDetail?.SearchSuggestions != null && responseWithSearching.GroundingDetail?.SearchSuggestions?.Count != 0)
+            {
+                stringBuilder.AppendLine();
+                stringBuilder.AppendLine("#### **Gợi ý tra cứu**");
+                stringBuilder.AppendLine();
+
+                foreach (var suggestion in responseWithSearching.GroundingDetail.SearchSuggestions)
+                {
+                    stringBuilder.AppendLine($"- [{suggestion}](https://www.google.com/search?q={suggestion.Replace(" ", "+")})");
+                }
+            }
+
             return new SearchResult
             {
-                Content = response.Result,
+                Content = stringBuilder.ToString().Trim(),
                 IpaAudioUrls = audioUrls,
             };
         }
