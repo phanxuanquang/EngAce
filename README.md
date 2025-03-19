@@ -19,7 +19,7 @@ EngAce offers a suite of tools and functionalities aimed at making English learn
 ### 1. Intelligent Dictionary 
 
 ![Image](https://i.imgur.com/B6kahQS.png)
-
+ 
 ![Image](https://i.imgur.com/lwqjsVD.png)
 
 A comprehensive English dictionary tailored for Vietnamese learners, offering detailed explanations, idioms, phrasal verbs, and even more. It provides in-depth Vietnamese context when needed, eliminating the hassle of extensive research Key features include:
