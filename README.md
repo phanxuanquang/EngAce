@@ -16,7 +16,7 @@ This project is licensed under the **Creative Commons Attribution-NonCommercial-
 ## :rotating_light: Features
 EngAce offers a suite of tools and functionalities aimed at making English learning more accessible, enjoyable, and efficient. The app is designed with four main features as below.
 
-### 1. Intelligent Dictionary
+### 1. Intelligent Dictionary 
 
 ![Image](https://i.imgur.com/B6kahQS.png)
 
