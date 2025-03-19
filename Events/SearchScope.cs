@@ -34,7 +34,7 @@ namespace Events
 
 ---
 
-#  **CẤU TRÚC PHẢN HỒI**  
+#  **VÍ DỤ VỀ CẤU TRÚC PHẢN HỒI MÀ TÔI MONG MUỐN:**  
 
 # **Tiêu đề**: Là từ/cụm từ cần tra cứu viết ở dạng **in hoa và in đậm**
 
@@ -47,8 +47,6 @@ namespace Events
 - **IPA:** */ˈskedʒ.uːl/* (Mỹ) | */ˈʃed.juːl/* (Anh)  
 - **Trọng âm:** **SCHED-ule** (nhấn âm đầu tiên)  
 
----
-
 ## **2. GIẢI NGHĨA**  
 - **Nghĩa phổ biến nhất**, kèm **ví dụ thực tế**.  
 - **Các nghĩa khác (nếu có)**, sắp xếp từ phổ biến → ít phổ biến hơn.  
@@ -60,8 +58,6 @@ namespace Events
   - *Ví dụ:* *I went to the bank to withdraw money.* → **Tôi đến ngân hàng để rút tiền**.  
 - **Nghĩa 2 (danh từ, khác):** Bờ sông, bờ hồ.  
   - *Ví dụ:* *They had a picnic by the river bank.* → **Họ tổ chức dã ngoại bên bờ sông**.  
-
----
 
 ## **3. ỨNG DỤNG VÀO NGỮ PHÁP**  
 - **Loại từ**: Danh từ, động từ, tính từ...  
@@ -76,8 +72,6 @@ namespace Events
   - *✅ I recommend that you read this book.*  
   - *❌ I recommend you to read this book.* (*Sai! Không dùng ""recommend to"")*.  
 
----
-
 ## **4.  CỤM TỪ VÀ THÀNH NGỮ LIÊN QUAN**  
 - **Các cụm từ phổ biến có chứa từ đó**.  
 - **Giải thích nghĩa & cách sử dụng**.  
@@ -87,16 +81,6 @@ namespace Events
 **Từ:** **""piece""**  
 - **Thành ngữ:** *""A piece of cake""* → *Rất dễ dàng*.  
   - *Ví dụ:* *""The test was a piece of cake!""* → **Bài kiểm tra này dễ như ăn bánh!**  
-
-🔸 **Cheat sheet:**  
-
-| Từ | Nghĩa | Khác biệt |  
-|---|---|---|  
-| **piece** | Một mảnh, một phần | Dùng cho vật thể cụ thể (*a piece of paper*) hoặc trừu tượng (*a piece of advice*) |  
-| **part** | Phần, bộ phận | Dùng cho tổng thể lớn (*part of the system*) |  
-| **portion** | Một phần nhỏ | Dùng trong ẩm thực (*a portion of salad*) hoặc số lượng (*a portion of income*) |  
-
----
 
 ## **5. Từ đồng nghĩa và từ trái nghĩa**  
 
@@ -111,28 +95,10 @@ namespace Events
 
 📌 **Bảng So Sánh: ""Happy"" và các từ đồng nghĩa**  
 
-| **Từ vựng**   | **Sắc thái ý nghĩa** |
-|--------------|------------------|
-| **Happy**    | Trạng thái hạnh phúc chung chung. |
-| **Joyful**   | Niềm vui rạng rỡ, rõ ràng, thể hiện ra bên ngoài. |
-| **Content**  | Hài lòng với cuộc sống, không quá hạnh phúc nhưng đủ để cảm thấy ổn định. |
-| **Delighted** | Niềm vui khi nhận được điều gì đó tốt đẹp. |
-| **Ecstatic** | Cực kỳ hạnh phúc, phấn khích đến mức không kìm được cảm xúc. |
-
 🔹 **Ví dụ 2:**  
 **Từ:** **""strong""** (*mạnh mẽ*)  
 - **Từ đồng nghĩa:** *powerful, sturdy, robust, muscular, vigorous*.  
 - **Từ trái nghĩa:** *weak, fragile, feeble, frail*.  
-
-📌 **Bảng so sánh ""Strong"" và các từ đồng nghĩa**  
-
-| **Từ vựng**   | **Sắc thái ý nghĩa** |
-|--------------|------------------|
-| **Strong**   | Mạnh mẽ nói chung, có thể dùng cho thể chất, tinh thần hoặc quan điểm. |
-| **Powerful** | Có sức mạnh lớn, thường dùng cho người có quyền lực hoặc máy móc. |
-| **Sturdy**   | Vững chắc, khó bị phá vỡ (thường dùng cho vật thể). |
-| **Robust**   | Khỏe mạnh, cường tráng (thường dùng cho con người, hệ thống). |
-| **Vigorous** | Tràn đầy năng lượng, hoạt động mạnh mẽ. |
 
 ## **5. THÔNG TIN THÚ VỊ & MẸO GHI NHỚ**  
 - **Nguồn gốc từ vựng**.  
@@ -143,8 +109,6 @@ namespace Events
 🔹 *Ví dụ:*  
 **Từ:** **""salary""**  
 - **Nguồn gốc:** Từ *""salarium""* trong tiếng Latin, có nghĩa là **tiền trả cho lính La Mã để mua muối**.  
-
----
 
 ## **6. TỔNG KẾT**  
 - **Nghĩa chính & cách dùng phổ biến nhất**.  
