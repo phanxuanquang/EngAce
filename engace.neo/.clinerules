@@ -1,0 +1,62 @@
+### Code Style & Structure
+- Write **concise, modular, type-safe** TypeScript code using **functional components** and Hooks.
+- Follow **clean code principles**, avoid duplication and class components.
+- Use descriptive variable names (e.g., `isLoading`, `hasError`).
+- Directory structure:
+  ```
+  /components  → UI components
+  /app         → Next.js routes
+  /hooks       → custom hooks
+  /lib         → helpers
+  /types       → global types
+  /styles      → Tailwind CSS
+  /config      → app configs
+  /constants   → shared constants
+  /services    → API services (axios)
+  ```
+- Folder names: lowercase-dash (e.g., `components/auth-wizard`). Favor **named exports**.
+
+### UI Components
+- Use **shadcn/ui** and **Radix UI** exclusively for building UI.
+- Install shadcn/ui's components via:
+  ```bash
+  npx shadcn@latest add [component-name]
+  ```
+
+- Import from `@/components/ui` via aliases:
+  ```tsx
+  import { Button } from "@/components/ui/button"
+  import { Card, CardContent } from "@/components/ui/card"
+  ```
+
+### Styling Rules
+- Use **only Tailwind CSS** for styling and animations. Avoid inline styles and arbitrary values (unless preconfigured).
+- Use `motion` for animations — ensure they are smooth, minimal, and meaningful.
+- Apply **consistent theming**, **soft shadows**, **gradient borders**, **glass panels**, **depth effects**, etc... to elevate UI aesthetics.
+
+### UI Design Concept
+- Design **visually captivating UI** using modern effects:
+  - **Glassmorphism**: blurred background, transparency, soft borders.
+  - **Glowing effects**: subtle or dynamic glow on buttons, inputs, cards.
+  - **Animated gradients**: background transitions, text gradients, border animations.
+  - **Neumorphism**: soft shadows, 3D-like surfaces (where appropriate).
+  - **Frosted glass** + **blur overlays** for modals or cards.
+  - **Hover and focus transitions**: smooth, meaningful interactions.
+  - Add **microinteractions** using `motion` (e.g., hover bounce, fade-in, slide-up).
+  - Ensure all effects are **tasteful, performant, and accessible**.
+
+- Implement **dark mode by default**, fully styled with Tailwind + React state. Ensure theme switch capability with seamless UX.
+
+- Always use `https://placehold.co/{Width}x{Height}` as image placeholders; choose size contextually.
+
+### Performance Optimization
+- Optimize rendering, bundle size, and data fetching (ISR, SSR).
+- Use **SWR** or **React Query** for client-side data with caching.
+- Use **axios** only for API calls with robust error handling.
+- Manage state with React Context or scalable libs; support persistence.
+
+### Constraints
+- Use `Be Vietnam Pro` font for all the text.
+- Allowed libraries: `lucide-react`, `motion`, `clsx`, `tailwind-merge`, `axios`, `shadcn/ui`.
+- No image generation; use placeholders or SVGs.
+- Prioritize **clarity**, **UI quality**, and **user experience**. Avoid over-componentization unless justified.
