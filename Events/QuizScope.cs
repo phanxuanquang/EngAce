@@ -4,6 +4,7 @@ using Gemini.NET;
 using Gemini.NET.Helpers;
 using Helper;
 using Models.Enums;
+using Newtonsoft.Json;
 using System.Text;
 
 namespace Events
@@ -175,19 +176,67 @@ You are an expert English teacher with over 20 years of teaching experience, and
                 var apiRequest = new ApiRequestBuilder()
                     .WithSystemInstruction(Instruction)
                     .WithPrompt(promptBuilder.ToString())
-                     .WithGenerationConfig(new Models.Request.GenerationConfig
-                     {
-                         Temperature = 0.5F,
-                         ResponseMimeType = EnumHelper.GetDescription(ResponseMimeType.Json),
-                     })
+                    .WithDefaultGenerationConfig()
+                    .WithResponseSchema(new
+                    {
+                        type = "object",
+                        properties = new
+                        {
+                            Quizzes = new
+                            {
+                                type = "array",
+                                items = new
+                                {
+                                    type = "object",
+                                    properties = new
+                                    {
+                                        Question = new
+                                        {
+                                            type = "string"
+                                        },
+                                        Options = new
+                                        {
+                                            type = "array",
+                                            items = new
+                                            {
+                                                type = "string"
+                                            }
+                                        },
+                                        RightOptionIndex = new
+                                        {
+                                            type = "integer"
+                                        },
+                                        ExplanationInVietnamese = new
+                                        {
+                                            type = "string"
+                                        }
+                                    },
+                                    required = new[]
+                                    {
+                                       "Question",
+                                       "Options",
+                                       "RightOptionIndex",
+                                       "ExplanationInVietnamese"
+                                    }
+                                }
+                            }
+                        },
+                        required = new[]
+                        {
+                           "Quizzes"
+                        }
+                    })
                     .DisableAllSafetySettings()
                     .Build();
 
                 var response = await generator.GenerateContentAsync(apiRequest, ModelVersion.Gemini_20_Flash_Lite);
 
-                return [.. JsonHelper.AsObject<List<Quiz>>(response.Result)];
+                return JsonHelper.AsObject<QuizzGenerationResult>(response.Result).Quizzes
+                    .Take(questionsCount)
+                    .ToList();
+
             }
-            catch
+            catch 
             {
                 return [];
             }
@@ -214,19 +263,64 @@ You are an expert English teacher with over 20 years of teaching experience, and
                 var generator = new Generator(apiKey);
 
                 var apiRequest = new ApiRequestBuilder()
-                    .WithSystemInstruction(Instruction)
-                    .WithPrompt(promptBuilder.ToString())
-                    .WithGenerationConfig(new Models.Request.GenerationConfig
-                    {
-                        Temperature = 0.5F,
-                        ResponseMimeType = EnumHelper.GetDescription(ResponseMimeType.Json),
-                    })
-                    .DisableAllSafetySettings()
-                    .Build();
+                     .WithSystemInstruction(Instruction)
+                     .WithPrompt(promptBuilder.ToString())
+                     .WithDefaultGenerationConfig()
+                     .WithResponseSchema(new
+                     {
+                         type = "object",
+                         properties = new
+                         {
+                             Quizzes = new
+                             {
+                                 type = "array",
+                                 items = new
+                                 {
+                                     type = "object",
+                                     properties = new
+                                     {
+                                         Question = new
+                                         {
+                                             type = "string"
+                                         },
+                                         Options = new
+                                         {
+                                             type = "array",
+                                             items = new
+                                             {
+                                                 type = "string"
+                                             }
+                                         },
+                                         RightOptionIndex = new
+                                         {
+                                             type = "integer"
+                                         },
+                                         ExplanationInVietnamese = new
+                                         {
+                                             type = "string"
+                                         }
+                                     },
+                                     required = new[]
+                                     {
+                                       "Question",
+                                       "Options",
+                                       "RightOptionIndex",
+                                       "ExplanationInVietnamese"
+                                     }
+                                 }
+                             }
+                         },
+                         required = new[]
+                         {
+                               "Quizzes"
+                         }
+                     })
+                     .DisableAllSafetySettings()
+                     .Build();
 
                 var response = await generator.GenerateContentAsync(apiRequest, ModelVersion.Gemini_20_Flash_Lite);
 
-                return JsonHelper.AsObject<List<Quiz>>(response.Result)
+                return JsonHelper.AsObject<QuizzGenerationResult>(response.Result).Quizzes
                     .Take(questionsCount)
                     .Select(quiz =>
                     {
@@ -413,5 +507,10 @@ You are an expert English teacher with over 20 years of teaching experience, and
                 _ => string.Empty,
             };
         }
+    }
+
+    public class QuizzGenerationResult
+    {
+        public List<Quiz> Quizzes { get; set; } = new();
     }
 }

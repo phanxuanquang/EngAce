@@ -4,6 +4,7 @@ using Gemini.NET;
 using Gemini.NET.Client_Models;
 using Gemini.NET.Helpers;
 using Models.Enums;
+using Newtonsoft.Json;
 using System.Text;
 
 namespace Events
@@ -431,7 +432,7 @@ EngAce is an **AI assistant specialized in English learning**. Its primary task 
 
             if (enableReasoning)
             {
-                apiRequest.WithSystemInstruction(reasoningInstruction).WithDefaultGenerationConfig(0.5F, MaxOutputTokens * 2);
+                apiRequest.WithSystemInstruction(reasoningInstruction).WithDefaultGenerationConfig(1, 65536);
 
                 var responseWithReasoning = await generator.GenerateContentAsync(apiRequest.Build(), ModelVersion.Gemini_20_Flash_Thinking);
 
@@ -500,9 +501,37 @@ EngAce is an **AI assistant specialized in English learning**. Its primary task 
                 };
             }
 
-            apiRequest.WithSystemInstruction(basicConversationInstruction).WithDefaultGenerationConfig(1, MaxOutputTokens);
+            apiRequest
+                .WithSystemInstruction(basicConversationInstruction)
+                .WithDefaultGenerationConfig(1, MaxOutputTokens)
+                .WithResponseSchema(new
+                {
+                    type = "object",
+                    properties = new
+                    {
+                        MessageInMarkdown = new
+                        {
+                            type = "string"
+                        },
+                        Suggestions = new
+                        {
+                            type = "array",
+                            items = new
+                            {
+                                type = "string"
+                            }
+                        }
+                    },
+                    required = new[]
+                    {
+                        "MessageInMarkdown",
+                        "Suggestions"
+                    }
+                });
 
-            return await generator.GenerateContentAsync<ChatResponse>(apiRequest.Build(), ModelVersion.Gemini_20_Flash_Lite);
+            var result = await generator.GenerateContentAsync(apiRequest.Build(), ModelVersion.Gemini_20_Flash_Lite);
+
+            return JsonHelper.AsObject<ChatResponse>(result.Result);
         }
     }
 }
