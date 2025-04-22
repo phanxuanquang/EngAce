@@ -14,7 +14,7 @@ ____________________________
 This project is licensed under the **Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International** license. See the [LICENSE](./LICENSE) file for details.
 
 ## :rotating_light: Features
-EngAce offers a suite of tools and functionalities aimed at making English learning more accessible, enjoyable, and efficient. The app is designed with four main features as below.
+EngAce offers a suite of tools and functionalities aimed at making English learning more accessible, enjoyable, and efficient. The app is designed with four main features as below. 
 
 ### 1. Intelligent Dictionary 
 
