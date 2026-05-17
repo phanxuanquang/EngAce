@@ -17,7 +17,7 @@ public class HeathcheckController : ControllerBase
         _logger = logger;
     }
 
-    [HttpGet(Name = "heathcheck-ai-service")]
+    [HttpGet("heathcheck-ai-service")]
     public async Task<IActionResult> HealthcheckAiService()
     {
         var credential = await _credentialManagementService.GetCredentialAsync();

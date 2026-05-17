@@ -8,5 +8,5 @@ public sealed record AIServiceCredential
     [Required]
     public string ApiKey { get; init; } = string.Empty;
     public string ModelId { get; set; } = string.Empty;
-    public AiConnectorType ConnectorType { get; init; } = AiConnectorType.GoogleGemini;
+    public AiServiceProvider Provider { get; init; } = AiServiceProvider.Gemini;
 }

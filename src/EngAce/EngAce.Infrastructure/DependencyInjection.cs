@@ -1,5 +1,5 @@
-﻿#pragma warning disable SKEXP0070
-
+﻿using EngAce.Domain.Interfaces;
+using EngAce.Infrastructure.Implementations;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace EngAce.Infrastructure;
@@ -11,6 +11,7 @@ public static class DependencyInjection
     /// </summary>
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
+        services.AddScoped<IDictionaryService, DictionaryService>();
         return services;
     }
 }

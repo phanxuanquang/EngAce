@@ -2,17 +2,17 @@
 
 namespace EngAce.Domain.Models;
 
-public sealed class WordDefinition
+public sealed record WordDefinition
 {
     public string Pronunciation { get; init; } = string.Empty;
     public string Definition { get; init; } = string.Empty;
     public PartOfSpeech PartOfSpeech { get; init; }
     public string Etymology { get; init; } = string.Empty;
-    public IReadOnlyList<string> UseCases { get; init; } = [];
-    public IReadOnlyList<string> UsageNotes { get; init; } = [];
-    public IReadOnlyList<string> Examples { get; init; } = [];
-    public IReadOnlyList<string>? Synonyms { get; init; } = [];
-    public IReadOnlyList<string>? Antonyms { get; init; } = [];
-    public IReadOnlyList<string> QuickRememberTips { get; init; } = [];
-    public IReadOnlyList<string> RelatedWords { get; init; } = [];
+    public List<string> UseCases { get; init; } = [];
+    public List<string> UsageNotes { get; init; } = [];
+    public List<string> Examples { get; init; } = [];
+    public List<string>? Synonyms { get; init; } = [];
+    public List<string>? Antonyms { get; init; } = [];
+    public List<string> QuickRememberTips { get; init; } = [];
+    public List<string> RelatedWords { get; init; } = [];
 }

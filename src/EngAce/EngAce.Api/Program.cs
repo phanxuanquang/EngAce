@@ -16,11 +16,11 @@ public class Program
     public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+        builder.Logging.AddConsole();
 
         // Add services to the container.
 
         builder.Services.AddHttpContextAccessor();
-        builder.Services.AddInfrastructure();
 
         builder.Services.AddScoped<IChatCompletionService>(sp =>
         {
@@ -30,9 +30,9 @@ public class Program
             {
                 ApiKey = headers?[nameof(AIServiceCredential.ApiKey)].ToString() ?? string.Empty,
                 ModelId = headers?[nameof(AIServiceCredential.ModelId)].ToString() ?? string.Empty,
-                ConnectorType = Enum.TryParse<AiConnectorType>(headers?[nameof(AIServiceCredential.ConnectorType)].ToString(), out var connectorType)
+                Provider = Enum.TryParse<AiServiceProvider>(headers?[nameof(AIServiceCredential.Provider)].ToString(), out var connectorType)
                     ? connectorType
-                    : AiConnectorType.GoogleGemini
+                    : AiServiceProvider.Gemini
             };
             return Kernel
                 .CreateBuilder()
@@ -42,6 +42,7 @@ public class Program
         });
 
         builder.Services.AddScoped<IAiCredentialManagementService, AiCredentialManagementService>();
+        builder.Services.AddInfrastructure();
 
         builder.Services.AddControllers();
         builder.Services.AddOpenApi();

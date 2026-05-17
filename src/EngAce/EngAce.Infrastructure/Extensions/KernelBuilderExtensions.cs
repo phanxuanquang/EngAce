@@ -8,16 +8,16 @@ public static class KernelBuilderExtensions
 {
     public static IKernelBuilder AddChatCompletion(this IKernelBuilder builder, AIServiceCredential credential)
     {
-        switch (credential.ConnectorType)
+        switch (credential.Provider)
         {
-            case AiConnectorType.OpenAI:
+            case AiServiceProvider.OpenAI:
                 builder.AddOpenAIChatCompletion(credential.ModelId, credential.ApiKey);
                 break;
-            case AiConnectorType.GoogleGemini:
+            case AiServiceProvider.Gemini:
                 builder.AddGoogleAIGeminiChatCompletion(credential.ModelId, credential.ApiKey);
                 break;
             default:
-                throw new NotSupportedException($"Unsupported AI connector type: {credential.ConnectorType}");
+                throw new NotSupportedException($"Unsupported AI connector type: {credential.Provider}");
         }
         return builder;
     }

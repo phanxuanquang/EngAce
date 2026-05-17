@@ -21,9 +21,9 @@ public class AiCredentialManagementService(IHttpContextAccessor httpContextAcces
         {
             ApiKey = headers?[nameof(AIServiceCredential.ApiKey)].ToString() ?? string.Empty,
             ModelId = headers?[nameof(AIServiceCredential.ModelId)].ToString() ?? string.Empty,
-            ConnectorType = Enum.TryParse<AiConnectorType>(headers?[nameof(AIServiceCredential.ConnectorType)].ToString(), out var connectorType)
+            Provider = Enum.TryParse<AiServiceProvider>(headers?[nameof(AIServiceCredential.Provider)].ToString(), out var connectorType)
                 ? connectorType
-                : AiConnectorType.GoogleGemini
+                : AiServiceProvider.Gemini
         };
 
         return Task.FromResult(credential);

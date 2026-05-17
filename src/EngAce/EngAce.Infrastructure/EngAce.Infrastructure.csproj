@@ -15,8 +15,4 @@
     <ProjectReference Include="..\EngAce.Domain\EngAce.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Implementations\" />
-  </ItemGroup>
-
 </Project>
