@@ -14,7 +14,7 @@ public class ConversationController(IConversationService conversationService, IL
     [HttpPost("SendMessage")]
     public async Task<ActionResult<List<ConversationEntry>>> SendMessageAsync([FromBody] IEnumerable<ConversationEntry> conversationEntries)
     {
-        var responses = await _conversationService.GenerateResponsesAsync(conversationEntries);
+        var responses = await _conversationService.GenerateResponsesAsync(conversationEntries, HttpContext.RequestAborted);
         return Ok(responses);
     }
 }

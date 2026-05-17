@@ -6,8 +6,7 @@ using EngAce.Domain.Models;
 using EngAce.Domain.Models.Enums;
 using EngAce.Infrastructure;
 using EngAce.Infrastructure.Extensions;
-using Microsoft.AspNetCore.RateLimiting;
-using Microsoft.SemanticKernel;
+using Microsoft.Extensions.Options;
 using Microsoft.SemanticKernel.ChatCompletion;
 using Scalar.AspNetCore;
 using System.Threading.RateLimiting;
@@ -39,13 +38,10 @@ public class Program
             {
                 ApiKey = string.IsNullOrEmpty(apiKey) ? string.Empty : apiKey,
                 ModelId = string.IsNullOrEmpty(modelId) ? provider.GetDefaultConfigurations().DefaultModelId : modelId,
+                Provider = provider,
             };
 
-            return Kernel
-                .CreateBuilder()
-                .AddChatCompletion(credential)
-                .Build()
-                .GetRequiredService<IChatCompletionService>();
+            return KernelBuilderExtensions.CreateChatCompletionService(credential);
         });
 
         builder.Services.AddScoped<IAiCredentialManagementService, AiCredentialManagementService>();
@@ -78,22 +74,14 @@ public class Program
             .ValidateDataAnnotations()
             .ValidateOnStart();
 
-        var rateLimitingOptions = builder.Configuration
-            .GetSection(nameof(RateLimitingOptions))
-            .Get<RateLimitingOptions>() ?? new RateLimitingOptions();
-
         builder.Services.AddRateLimiter(options =>
         {
             options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
-            options.AddFixedWindowLimiter("FixedWindow", limiterOptions =>
-            {
-                limiterOptions.PermitLimit = rateLimitingOptions.MaxRequestsPerWindow;
-                limiterOptions.Window = TimeSpan.FromSeconds(rateLimitingOptions.WindowInSeconds);
-                limiterOptions.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
-                limiterOptions.QueueLimit = rateLimitingOptions.MaxQueuedRequests;
-            });
             options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(ctx =>
-                RateLimitPartition.GetFixedWindowLimiter(
+            {
+                var rateLimitingOptions = ctx.RequestServices
+                    .GetRequiredService<IOptions<RateLimitingOptions>>().Value;
+                return RateLimitPartition.GetFixedWindowLimiter(
                     ctx.Connection.RemoteIpAddress?.ToString() ?? ctx.Request.Headers.Host.ToString(),
                     _ => new FixedWindowRateLimiterOptions
                     {
@@ -101,7 +89,8 @@ public class Program
                         Window = TimeSpan.FromSeconds(rateLimitingOptions.WindowInSeconds),
                         QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
                         QueueLimit = rateLimitingOptions.MaxQueuedRequests,
-                    }));
+                    });
+            });
         });
 
         builder.Services.AddControllers();

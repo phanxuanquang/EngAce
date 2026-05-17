@@ -15,7 +15,7 @@ public sealed class ExerciseService(IAiCredentialManagementService aiCredentialM
     private readonly IAiCredentialManagementService _aiCredentialManagementService = aiCredentialManagementService;
     private readonly IChatCompletionService _chatCompletionService = chatCompletionService;
 
-    public async Task<IReadOnlyList<ExerciseEntry>> GenerateExercisesAsync(string topic, int totalEntries, IEnumerable<ExerciseType> types)
+    public async Task<IReadOnlyList<ExerciseEntry>> GenerateExercisesAsync(string topic, int totalEntries, IEnumerable<ExerciseType> types, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(topic))
             throw new ExerciseServiceException("Topic must not be empty.");
@@ -38,9 +38,11 @@ public sealed class ExerciseService(IAiCredentialManagementService aiCredentialM
 
             var response = await _chatCompletionService.GetChatMessageContentAsync(
                 prompt: $"Generate {totalEntries} English exercises for the topic '{topic}' covering the following exercise types: {typeNames}. Follow the defined JSON schema.",
-                executionSettings: credential.Provider.CreatePromptExecutionSettingsForJsonOutput<List<ExerciseEntry>>());
+                executionSettings: credential.Provider.CreatePromptExecutionSettingsForJsonOutput<List<ExerciseEntry>>(),
+                cancellationToken: cancellationToken);
 
-            return JsonSerializer.Deserialize<List<ExerciseEntry>>(response.ToString())!;
+            return JsonSerializer.Deserialize<List<ExerciseEntry>>(response.Content.AsSpan())
+                ?? throw new ExerciseServiceException($"AI returned an empty response for topic '{topic}'.");
         }
         catch (Exception ex)
         {

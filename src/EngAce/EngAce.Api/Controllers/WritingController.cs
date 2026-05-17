@@ -15,7 +15,7 @@ public class WritingController(IWritingService writingService, ILogger<WritingCo
     [HttpPost("Review")]
     public async Task<ActionResult<WritingReview>> GenerateWritingReviewAsync([FromBody] WritingReviewRequest request)
     {
-        var review = await _writingService.GenerateWritingReviewAsync(request.Requirement, request.CandidateWriting);
+        var review = await _writingService.GenerateWritingReviewAsync(request.Requirement, request.CandidateWriting, HttpContext.RequestAborted);
 
         return review is not null
             ? Ok(review)
@@ -25,7 +25,7 @@ public class WritingController(IWritingService writingService, ILogger<WritingCo
     [HttpPost("Improve")]
     public async Task<ActionResult<string>> ImproveWritingAsync([FromBody] WritingImprovementRequest request)
     {
-        var improved = await _writingService.ImproveWritingAsync(request.Requirement, request.CandidateWriting, request.Review);
+        var improved = await _writingService.ImproveWritingAsync(request.Requirement, request.CandidateWriting, request.Review, HttpContext.RequestAborted);
 
         return !string.IsNullOrWhiteSpace(improved)
             ? Ok(improved)

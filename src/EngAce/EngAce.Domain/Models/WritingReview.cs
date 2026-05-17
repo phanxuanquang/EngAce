@@ -1,6 +1,6 @@
 ﻿namespace EngAce.Domain.Models;
 
-public sealed class WritingReview
+public sealed record WritingReview
 {
     public string OverallFeedback { get; init; } = string.Empty;
     public IReadOnlyList<string> Strengths { get; init; } = [];

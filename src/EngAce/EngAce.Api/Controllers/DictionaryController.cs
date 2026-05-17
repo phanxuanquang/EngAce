@@ -20,7 +20,7 @@ public class DictionaryController : ControllerBase
     [HttpGet("WordDefinitions")]
     public async Task<ActionResult<List<WordDefinition>>> GetDefinitionsAsync(string word)
     {
-        return await _dictionaryService.GetVocabularyAsync(word) is List<WordDefinition> definitions
+        return await _dictionaryService.GetVocabularyAsync(word, HttpContext.RequestAborted) is IReadOnlyList<WordDefinition> definitions
             ? Ok(definitions)
             : NotFound(new { Message = $"No definitions found for '{word}'." });
     }

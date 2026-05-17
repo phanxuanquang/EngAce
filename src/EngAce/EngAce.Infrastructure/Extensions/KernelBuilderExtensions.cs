@@ -1,6 +1,7 @@
 ﻿using EngAce.Domain.Models;
 using EngAce.Domain.Models.Enums;
 using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.ChatCompletion;
 
 namespace EngAce.Infrastructure.Extensions;
 
@@ -22,4 +23,15 @@ public static class KernelBuilderExtensions
         return builder;
     }
 
+    /// <summary>
+    /// Creates an <see cref="IChatCompletionService"/> directly from the credential without
+    /// allocating a full <see cref="Kernel"/> and its internal service provider.
+    /// </summary>
+    public static IChatCompletionService CreateChatCompletionService(AIServiceCredential credential)
+    {
+        return Kernel.CreateBuilder()
+            .AddChatCompletion(credential)
+            .Build()
+            .GetRequiredService<IChatCompletionService>();
+    }
 }

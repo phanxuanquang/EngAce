@@ -2,7 +2,7 @@
 
 namespace EngAce.Domain.Models;
 
-public sealed class ExerciseEntry
+public sealed record ExerciseEntry
 {
     public string Question { get; init; } = string.Empty;
     public ExerciseType Type { get; init; }

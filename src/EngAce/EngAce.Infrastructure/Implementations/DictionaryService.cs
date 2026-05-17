@@ -14,7 +14,7 @@ public sealed class DictionaryService(IAiCredentialManagementService aiCredentia
     private readonly IAiCredentialManagementService _aiCredentialManagementService = aiCredentialManagementService;
     private readonly IChatCompletionService _chatCompletionService = chatCompletionService;
 
-    public async Task<IReadOnlyList<WordDefinition>> GetVocabularyAsync(string vocabulary)
+    public async Task<IReadOnlyList<WordDefinition>> GetVocabularyAsync(string vocabulary, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(vocabulary))
             throw new DictionaryServiceException("Vocabulary must not be empty.");
@@ -28,10 +28,11 @@ public sealed class DictionaryService(IAiCredentialManagementService aiCredentia
             _logger.LogInformation("Get definitions for '{Vocabulary}'", vocabulary);
             var response = await _chatCompletionService.GetChatMessageContentAsync(
                 prompt: $"Provide detailed definitions in Vietnamese for the English word '{vocabulary}' following the defined JSON schema.",
-                executionSettings: credential.Provider.CreatePromptExecutionSettingsForJsonOutput<List<WordDefinition>>());
+                executionSettings: credential.Provider.CreatePromptExecutionSettingsForJsonOutput<List<WordDefinition>>(),
+                cancellationToken: cancellationToken);
 
-            return JsonSerializer.Deserialize<List<WordDefinition>>(response.ToString())!;
-
+            return JsonSerializer.Deserialize<List<WordDefinition>>(response.Content.AsSpan())
+                ?? throw new DictionaryServiceException($"AI returned an empty response for '{vocabulary}'.");
         }
         catch (Exception ex)
         {

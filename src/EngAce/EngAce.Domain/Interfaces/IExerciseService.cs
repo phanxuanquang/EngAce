@@ -14,5 +14,5 @@ public interface IExerciseService
     /// <param name="types">The types of exercises to include in the generated list.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains a read-only list of ExerciseEntry objects.</returns>
     /// <exception cref="ExerciseServiceException">Thrown when the exercise generation process encounters an error.</exception>
-    Task<IReadOnlyList<ExerciseEntry>> GenerateExercisesAsync(string topic, int totalEntries, IEnumerable<ExerciseType> types);
+    Task<IReadOnlyList<ExerciseEntry>> GenerateExercisesAsync(string topic, int totalEntries, IEnumerable<ExerciseType> types, CancellationToken cancellationToken = default);
 }

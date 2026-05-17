@@ -17,7 +17,7 @@ public class ExerciseController(IExerciseService exerciseService, ILogger<Exerci
     public async Task<ActionResult<List<ExerciseEntry>>> GenerateExercisesAsync([FromBody] ExerciseGenerationRequest request)
     {
         var exerciseTypes = request.Types?.ToList() ?? Enum.GetValues<ExerciseType>().ToList();
-        var result = await _exerciseService.GenerateExercisesAsync(request.Topic, request.NumberOfExercises, exerciseTypes);
+        var result = await _exerciseService.GenerateExercisesAsync(request.Topic, request.NumberOfExercises, exerciseTypes, HttpContext.RequestAborted);
 
         return result is { Count: > 0 }
             ? Ok(result)

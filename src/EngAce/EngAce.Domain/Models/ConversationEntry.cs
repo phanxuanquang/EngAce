@@ -2,7 +2,7 @@
 
 namespace EngAce.Domain.Models;
 
-public sealed class ConversationEntry
+public sealed record ConversationEntry
 {
     public string? Content { get; init; }
     public ConversationRole Role { get; init; }

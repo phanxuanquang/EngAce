@@ -13,7 +13,7 @@ public class ConversationService(IAiCredentialManagementService credentialManage
     private readonly IChatCompletionService _chatCompletionService = chatCompletionService;
     private readonly ILogger<ConversationService> _logger = logger;
 
-    public async Task<IReadOnlyList<ConversationEntry>> GenerateResponsesAsync(IEnumerable<ConversationEntry> conversationHistory)
+    public async Task<IReadOnlyList<ConversationEntry>> GenerateResponsesAsync(IEnumerable<ConversationEntry> conversationHistory, CancellationToken cancellationToken = default)
     {
         var credential = await _credentialManagementService.GetCredentialAsync();
 
@@ -21,7 +21,7 @@ public class ConversationService(IAiCredentialManagementService credentialManage
             .OrderBy(entry => entry.Timestamp)
             .Select(entry => credential.Provider.CreateChatMessageContent(entry)));
 
-        var responseMessages = await _chatCompletionService.GetChatMessageContentsAsync(chatHistory);
+        var responseMessages = await _chatCompletionService.GetChatMessageContentsAsync(chatHistory, cancellationToken: cancellationToken);
 
         chatHistory.AddRange(responseMessages);
 

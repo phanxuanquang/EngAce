@@ -15,7 +15,7 @@ public sealed class WritingService(IAiCredentialManagementService aiCredentialMa
     private readonly IAiCredentialManagementService _aiCredentialManagementService = aiCredentialManagementService;
     private readonly IChatCompletionService _chatCompletionService = chatCompletionService;
 
-    public async Task<WritingReview> GenerateWritingReviewAsync(string requirement, string candidateWriting)
+    public async Task<WritingReview> GenerateWritingReviewAsync(string requirement, string candidateWriting, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(requirement))
             throw new WritingServiceException("Requirement must not be empty.");
@@ -34,9 +34,11 @@ public sealed class WritingService(IAiCredentialManagementService aiCredentialMa
 
             var response = await _chatCompletionService.GetChatMessageContentAsync(
                 prompt: $"Review the following English writing.\nRequirement: {requirement}\nCandidate writing: {candidateWriting}\nProvide a detailed review following the defined JSON schema.",
-                executionSettings: credential.Provider.CreatePromptExecutionSettingsForJsonOutput<WritingReview>());
+                executionSettings: credential.Provider.CreatePromptExecutionSettingsForJsonOutput<WritingReview>(),
+                cancellationToken: cancellationToken);
 
-            return JsonSerializer.Deserialize<WritingReview>(response.ToString())!;
+            return JsonSerializer.Deserialize<WritingReview>(response.Content.AsSpan())
+                ?? throw new WritingServiceException("AI returned an empty response for the writing review.");
         }
         catch (Exception ex)
         {
@@ -45,7 +47,7 @@ public sealed class WritingService(IAiCredentialManagementService aiCredentialMa
         }
     }
 
-    public async Task<string> ImproveWritingAsync(string requirement, string candidateWriting, WritingReview review)
+    public async Task<string> ImproveWritingAsync(string requirement, string candidateWriting, WritingReview review, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(requirement))
             throw new WritingServiceException("Requirement must not be empty.");
@@ -64,12 +66,19 @@ public sealed class WritingService(IAiCredentialManagementService aiCredentialMa
 
             _logger.LogInformation("Improving writing for requirement: '{Requirement}'", requirement);
 
-            var reviewJson = JsonSerializer.Serialize(review);
-            var response = await _chatCompletionService.GetChatMessageContentAsync(
-                prompt: $"Improve the following English writing based on the provided review.\nRequirement: {requirement}\nCandidate writing: {candidateWriting}\nReview: {reviewJson}\nReturn only the improved writing text.",
-                executionSettings: new PromptExecutionSettings());
+            var chatHistory = new ChatHistory();
+            chatHistory.AddUserMessage($"Requirement: {requirement}");
+            chatHistory.AddUserMessage($"Candidate writing: {candidateWriting}");
+            chatHistory.AddUserMessage($"Review — Overall: {review.OverallFeedback}. Task achievement: {review.TaskAchievement}. Coherence: {review.CoherenceAndCohesion}. Lexical resource: {review.LexicalResource}. Grammar: {review.GrammaticalRangeAndAccuracy}.");
+            chatHistory.AddUserMessage("Improve the candidate writing based on the requirement and the review above. Return only the improved writing text.");
 
-            return response.ToString();
+            var response = await _chatCompletionService.GetChatMessageContentsAsync(
+                chatHistory,
+                executionSettings: new PromptExecutionSettings(),
+                cancellationToken: cancellationToken);
+
+            return response.LastOrDefault()?.Content
+                ?? throw new WritingServiceException("AI returned an empty response for writing improvement.");
         }
         catch (Exception ex)
         {

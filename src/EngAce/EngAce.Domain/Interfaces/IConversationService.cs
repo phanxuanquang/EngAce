@@ -11,5 +11,5 @@ public interface IConversationService
     /// <param name="conversationHistory">The conversation history containing all previous messages.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains a read-only list of generated conversation entries.</returns>
     /// <exception cref="ConversationServiceException">Thrown when the response generation process encounters an error.</exception>
-    Task<IReadOnlyList<ConversationEntry>> GenerateResponsesAsync(IEnumerable<ConversationEntry> conversationHistory);
+    Task<IReadOnlyList<ConversationEntry>> GenerateResponsesAsync(IEnumerable<ConversationEntry> conversationHistory, CancellationToken cancellationToken = default);
 }
