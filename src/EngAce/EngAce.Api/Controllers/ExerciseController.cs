@@ -14,13 +14,11 @@ public class ExerciseController(IExerciseService exerciseService, ILogger<Exerci
     private readonly ILogger<ExerciseController> _logger = logger;
 
     [HttpPost("Generate")]
-    public async Task<ActionResult<List<ExerciseEntry>>> GenerateExercisesAsync([FromBody] ExerciseGenerationRequest request)
+    public async Task<ActionResult<IReadOnlyList<ExerciseEntry>>> GenerateExercisesAsync([FromBody] ExerciseGenerationRequest request)
     {
-        var exerciseTypes = request.Types?.ToList() ?? Enum.GetValues<ExerciseType>().ToList();
+        _logger.LogInformation("Received exercise generation request for topic: {Topic} with {NumberOfExercises} exercises.", request.Topic, request.NumberOfExercises);
+        var exerciseTypes = request.Types?.ToList() ?? [.. Enum.GetValues<ExerciseType>()];
         var result = await _exerciseService.GenerateExercisesAsync(request.Topic, request.NumberOfExercises, exerciseTypes, HttpContext.RequestAborted);
-
-        return result is { Count: > 0 }
-            ? Ok(result)
-            : NotFound(new { Message = $"No exercises could be generated for topic '{request.Topic}'." });
+        return Ok(result);
     }
 }

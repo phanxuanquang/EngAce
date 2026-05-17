@@ -1,4 +1,5 @@
 
+using EngAce.Api.Middleware;
 using EngAce.Api.Options;
 using EngAce.Api.Services;
 using EngAce.Domain.Interfaces;
@@ -101,8 +102,10 @@ public class Program
         app.MapOpenApi();
         app.MapScalarApiReference();
 
+        app.UseMiddleware<ExceptionHandlingMiddleware>();
         app.UseHttpsRedirection();
         app.UseCors(corsPolicy);
+        app.UseMiddleware<AiCredentialMiddleware>();
         app.UseRateLimiter();
         app.UseAuthorization();
 

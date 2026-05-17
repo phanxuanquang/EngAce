@@ -15,21 +15,10 @@ public class HeathcheckController(IAiCredentialManagementService credentialManag
     [HttpGet("AiServiceStatus")]
     public async Task<ActionResult<AiServiceHealthcheckResult>> HealthcheckAiService()
     {
-        var credential = await _credentialManagementService.GetCredentialAsync();
-
-        if (string.IsNullOrEmpty(credential.ApiKey))
-        {
-            _logger.LogError("API key is missing in the request headers.");
-            return BadRequest(new
-            {
-                Error = "API key is required in the request headers."
-            });
-        }
-
         var result = await _credentialManagementService.HealthcheckAiServiceAsync();
         if (result.StatusCode == HttpStatusCode.OK)
         {
-            _logger.LogInformation("AI service healthcheck successful for API key: {ApiKey}", credential.ApiKey);
+            _logger.LogInformation("AI service healthcheck successful: {Message}", result.Message);
             return Ok(result);
         }
 

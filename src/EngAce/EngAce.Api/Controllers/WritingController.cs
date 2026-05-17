@@ -15,20 +15,16 @@ public class WritingController(IWritingService writingService, ILogger<WritingCo
     [HttpPost("Review")]
     public async Task<ActionResult<WritingReview>> GenerateWritingReviewAsync([FromBody] WritingReviewRequest request)
     {
+        _logger.LogInformation("Received writing review request for requirement:{Requirement}", request.Requirement);
         var review = await _writingService.GenerateWritingReviewAsync(request.Requirement, request.CandidateWriting, HttpContext.RequestAborted);
-
-        return review is not null
-            ? Ok(review)
-            : NotFound(new { Message = "Could not generate a review for the provided writing." });
+        return Ok(review);
     }
 
     [HttpPost("Improve")]
     public async Task<ActionResult<string>> ImproveWritingAsync([FromBody] WritingImprovementRequest request)
     {
+        _logger.LogInformation("Received writing improvement request for requirement:{Requirement}", request.Requirement);
         var improved = await _writingService.ImproveWritingAsync(request.Requirement, request.CandidateWriting, request.Review, HttpContext.RequestAborted);
-
-        return !string.IsNullOrWhiteSpace(improved)
-            ? Ok(improved)
-            : NotFound(new { Message = "Could not generate an improved version of the provided writing." });
+        return Ok(improved);
     }
 }

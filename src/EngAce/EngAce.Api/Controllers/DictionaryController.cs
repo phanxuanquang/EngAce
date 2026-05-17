@@ -6,22 +6,16 @@ namespace EngAce.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class DictionaryController : ControllerBase
+public class DictionaryController(IDictionaryService dictionaryService, ILogger<DictionaryController> logger) : ControllerBase
 {
-    private readonly IDictionaryService _dictionaryService;
-    private readonly ILogger<DictionaryController> _logger;
-
-    public DictionaryController(IDictionaryService dictionaryService, ILogger<DictionaryController> logger)
-    {
-        _dictionaryService = dictionaryService;
-        _logger = logger;
-    }
+    private readonly IDictionaryService _dictionaryService = dictionaryService;
+    private readonly ILogger<DictionaryController> _logger = logger;
 
     [HttpGet("WordDefinitions")]
-    public async Task<ActionResult<List<WordDefinition>>> GetDefinitionsAsync(string word)
+    public async Task<ActionResult<IReadOnlyList<WordDefinition>>> GetDefinitionsAsync(string word)
     {
-        return await _dictionaryService.GetVocabularyAsync(word, HttpContext.RequestAborted) is IReadOnlyList<WordDefinition> definitions
-            ? Ok(definitions)
-            : NotFound(new { Message = $"No definitions found for '{word}'." });
+        _logger.LogInformation("Received request for definitions of word: {Word}", word);
+        var definitions = await _dictionaryService.GetVocabularyAsync(word, HttpContext.RequestAborted);
+        return Ok(definitions);
     }
 }
