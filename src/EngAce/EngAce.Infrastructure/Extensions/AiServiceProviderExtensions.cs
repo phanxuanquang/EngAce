@@ -63,4 +63,20 @@ public static class AiServiceProviderExtensions
     {
         throw new NotImplementedException();
     }
+
+    public static AiServiceProviderConfigurations GetDefaultConfigurations(this AiServiceProvider serviceProvider)
+    {
+        return serviceProvider switch
+        {
+            AiServiceProvider.OpenAI => new AiServiceProviderConfigurations
+            {
+                DefaultModelId = "gpt-4-0613"
+            },
+            AiServiceProvider.Gemini => new AiServiceProviderConfigurations
+            {
+                DefaultModelId = "gemini-3.1-flash-lite"
+            },
+            _ => throw new NotImplementedException($"The service provider {serviceProvider} does not have default configurations.")
+        };
+    }
 }
