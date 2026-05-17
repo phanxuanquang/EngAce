@@ -1,5 +1,4 @@
 using EngAce.Domain.Interfaces;
-using EngAce.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -9,25 +8,19 @@ namespace EngAce.Api.Controllers;
 [Route("[controller]")]
 public class HeathcheckController : ControllerBase
 {
-    private readonly IAIHealthcheckService _aIHealthcheckService;
-    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IAiCredentialManagementService _credentialManagementService;
     private readonly ILogger<HeathcheckController> _logger;
 
-    public HeathcheckController(IAIHealthcheckService aIHealthcheckService, IHttpContextAccessor httpContextAccessor, ILogger<HeathcheckController> logger)
+    public HeathcheckController(IAiCredentialManagementService credentialManagementService, ILogger<HeathcheckController> logger)
     {
-        _aIHealthcheckService = aIHealthcheckService;
-        _httpContextAccessor = httpContextAccessor;
+        _credentialManagementService = credentialManagementService;
         _logger = logger;
     }
 
     [HttpGet(Name = "heathcheck-ai-service")]
     public async Task<IActionResult> HealthcheckAiService()
     {
-        var headers = _httpContextAccessor.HttpContext?.Request.Headers;
-        var credential = new AIServiceCredential
-        {
-            ApiKey = headers?[nameof(AIServiceCredential.ApiKey)].ToString() ?? string.Empty
-        };
+        var credential = await _credentialManagementService.GetCredentialAsync();
 
         if (string.IsNullOrEmpty(credential.ApiKey))
         {
@@ -38,7 +31,7 @@ public class HeathcheckController : ControllerBase
             });
         }
 
-        var result = await _aIHealthcheckService.HealthcheckAiServiceAsync(credential);
+        var result = await _credentialManagementService.HealthcheckAiServiceAsync();
         if (result.StatusCode == HttpStatusCode.OK)
         {
             _logger.LogInformation("AI service healthcheck successful for API key: {ApiKey}", credential.ApiKey);

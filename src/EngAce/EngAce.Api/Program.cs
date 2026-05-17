@@ -1,4 +1,14 @@
 
+using EngAce.Api.Services;
+using EngAce.Domain.Interfaces;
+using EngAce.Domain.Models;
+using EngAce.Domain.Models.Enums;
+using EngAce.Infrastructure;
+using EngAce.Infrastructure.Extensions;
+using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.ChatCompletion;
+using Scalar.AspNetCore;
+
 namespace EngAce.Api;
 
 public class Program
@@ -10,6 +20,28 @@ public class Program
         // Add services to the container.
 
         builder.Services.AddHttpContextAccessor();
+        builder.Services.AddInfrastructure();
+
+        builder.Services.AddScoped<IChatCompletionService>(sp =>
+        {
+            var httpContextAccessor = sp.GetRequiredService<IHttpContextAccessor>();
+            var headers = httpContextAccessor.HttpContext?.Request.Headers;
+            var credential = new AIServiceCredential
+            {
+                ApiKey = headers?[nameof(AIServiceCredential.ApiKey)].ToString() ?? string.Empty,
+                ModelId = headers?[nameof(AIServiceCredential.ModelId)].ToString() ?? string.Empty,
+                ConnectorType = Enum.TryParse<AiConnectorType>(headers?[nameof(AIServiceCredential.ConnectorType)].ToString(), out var connectorType)
+                    ? connectorType
+                    : AiConnectorType.GoogleGemini
+            };
+            return Kernel
+                .CreateBuilder()
+                .AddChatCompletion(credential)
+                .Build()
+                .GetRequiredService<IChatCompletionService>();
+        });
+
+        builder.Services.AddScoped<IAiCredentialManagementService, AiCredentialManagementService>();
 
         builder.Services.AddControllers();
         builder.Services.AddOpenApi();
@@ -17,6 +49,7 @@ public class Program
         var app = builder.Build();
 
         app.MapOpenApi();
+        app.MapScalarApiReference();
 
         app.UseHttpsRedirection();
         app.UseAuthorization();
