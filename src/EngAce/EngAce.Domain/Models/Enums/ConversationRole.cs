@@ -5,8 +5,8 @@ namespace EngAce.Domain.Models.Enums;
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum ConversationRole : sbyte
 {
+    System = 0,
     User,
-    ToolCalling,
-    ToolResponse,
-    Bot
+    Tool,
+    Assistant
 }

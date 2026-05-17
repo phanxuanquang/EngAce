@@ -1,4 +1,5 @@
-﻿using EngAce.Domain.Models.Enums;
+﻿using EngAce.Domain.Models;
+using EngAce.Domain.Models.Enums;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Connectors.Google;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
@@ -56,5 +57,10 @@ public static class AiServiceProviderExtensions
             },
             _ => throw new NotImplementedException($"The service provider {serviceProvider} does not support JSON output format."),
         };
+    }
+
+    public static ChatMessageContent CreateChatMessageContent(this AiServiceProvider serviceProvider, ConversationEntry conversationEntry)
+    {
+        throw new NotImplementedException();
     }
 }

@@ -1,4 +1,5 @@
-﻿using EngAce.Domain.Interfaces;
+﻿using EngAce.Domain.Exceptions;
+using EngAce.Domain.Interfaces;
 using EngAce.Domain.Models;
 using EngAce.Infrastructure.Extensions;
 using Microsoft.Extensions.Logging;
@@ -15,6 +16,11 @@ public sealed class DictionaryService(IAiCredentialManagementService aiCredentia
 
     public async Task<IReadOnlyList<WordDefinition>> GetVocabularyAsync(string vocabulary)
     {
+        if (string.IsNullOrWhiteSpace(vocabulary))
+            throw new DictionaryServiceException("Vocabulary must not be empty.");
+
+        vocabulary = vocabulary.Trim();
+
         try
         {
             var credential = await _aiCredentialManagementService.GetCredentialAsync();

@@ -12,6 +12,10 @@ public static class DependencyInjection
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
         services.AddScoped<IDictionaryService, DictionaryService>();
+        services.AddScoped<IExerciseService, ExerciseService>();
+        services.AddScoped<IWritingService, WritingService>();
+        services.AddScoped<IConversationService, ConversationService>();
+
         return services;
     }
 }

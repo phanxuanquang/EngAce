@@ -4,7 +4,7 @@ namespace EngAce.Domain.Models;
 
 public sealed class ConversationEntry
 {
-    public string Content { get; init; } = string.Empty;
+    public string? Content { get; init; }
     public ConversationRole Role { get; init; }
     public DateTime Timestamp { get; init; } = DateTime.UtcNow;
 }

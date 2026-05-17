@@ -1,4 +1,5 @@
 using EngAce.Domain.Interfaces;
+using EngAce.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -6,19 +7,13 @@ namespace EngAce.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class HeathcheckController : ControllerBase
+public class HeathcheckController(IAiCredentialManagementService credentialManagementService, ILogger<HeathcheckController> logger) : ControllerBase
 {
-    private readonly IAiCredentialManagementService _credentialManagementService;
-    private readonly ILogger<HeathcheckController> _logger;
+    private readonly IAiCredentialManagementService _credentialManagementService = credentialManagementService;
+    private readonly ILogger<HeathcheckController> _logger = logger;
 
-    public HeathcheckController(IAiCredentialManagementService credentialManagementService, ILogger<HeathcheckController> logger)
-    {
-        _credentialManagementService = credentialManagementService;
-        _logger = logger;
-    }
-
-    [HttpGet("heathcheck-ai-service")]
-    public async Task<IActionResult> HealthcheckAiService()
+    [HttpGet("AiServiceStatus")]
+    public async Task<ActionResult<AiServiceHealthcheckResult>> HealthcheckAiService()
     {
         var credential = await _credentialManagementService.GetCredentialAsync();
 
@@ -35,13 +30,10 @@ public class HeathcheckController : ControllerBase
         if (result.StatusCode == HttpStatusCode.OK)
         {
             _logger.LogInformation("AI service healthcheck successful for API key: {ApiKey}", credential.ApiKey);
-            return Ok();
+            return Ok(result);
         }
 
         _logger.LogError(result.Error, result.Message);
-        return StatusCode((int)HttpStatusCode.BadRequest, new
-        {
-            Error = result.Error?.Message
-        });
+        return BadRequest(result);
     }
 }
