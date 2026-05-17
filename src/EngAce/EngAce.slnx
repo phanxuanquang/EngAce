@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="EngAce.Api/EngAce.Api.csproj" />
+  <Project Path="EngAce.Domain/EngAce.Domain.csproj" />
+  <Project Path="EngAce.Infrastructure/EngAce.Infrastructure.csproj" />
+</Solution>
