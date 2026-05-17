@@ -1,6 +1,7 @@
 ﻿using EngAce.Domain.Interfaces;
 using EngAce.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace EngAce.Api.Controllers;
 
@@ -12,7 +13,7 @@ public class ConversationController(IConversationService conversationService, IL
     private readonly IConversationService _conversationService = conversationService;
 
     [HttpPost("SendMessage")]
-    public async Task<ActionResult<List<ConversationEntry>>> SendMessageAsync([FromBody] IEnumerable<ConversationEntry> conversationEntries)
+    public async Task<ActionResult<IReadOnlyList<ConversationEntry>>> SendMessageAsync([FromBody][Required][MinLength(1, ErrorMessage = "At least one conversation entry is required.")] List<ConversationEntry> conversationEntries)
     {
         _logger.LogInformation("Received conversation entries: {Count}", conversationEntries.Count());
         var responses = await _conversationService.GenerateResponsesAsync(conversationEntries, HttpContext.RequestAborted);
