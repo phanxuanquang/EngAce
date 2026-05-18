@@ -21,4 +21,12 @@ public class ExerciseController(IExerciseService exerciseService, ILogger<Exerci
         var result = await _exerciseService.GenerateExercisesAsync(request.Topic, request.NumberOfExercises, exerciseTypes, HttpContext.RequestAborted);
         return Ok(result);
     }
+
+    [HttpGet("Types")]
+    [ResponseCache(Duration = 3600 * 6, Location = ResponseCacheLocation.Client, NoStore = false)]
+    public async Task<ActionResult<IReadOnlyDictionary<ExerciseType, string>>> GetAvailableExerciseTypesAsync()
+    {
+        var result = await _exerciseService.GetAvailableExerciseTypesAsync(HttpContext.RequestAborted);
+        return Ok(result);
+    }
 }

@@ -1,4 +1,5 @@
 using EngAce.Domain.Exceptions;
+using EngAce.Domain.Extensions;
 using EngAce.Domain.Interfaces;
 using EngAce.Domain.Models;
 using EngAce.Domain.Models.Enums;
@@ -49,5 +50,10 @@ public sealed class ExerciseService(IAiCredentialManagementService aiCredentialM
             _logger.LogError(ex, "Failed to generate exercises for topic '{Topic}'", topic);
             throw;
         }
+    }
+
+    public async Task<IReadOnlyDictionary<ExerciseType, string>> GetAvailableExerciseTypesAsync(CancellationToken cancellationToken = default)
+    {
+        return Enum.GetValues<ExerciseType>().ToDictionary(type => type, type => type.GetDisplayName()!);
     }
 }

@@ -14,7 +14,7 @@ public class AiCredentialManagementService(IHttpContextAccessor httpContextAcces
     private readonly ILogger<AiCredentialManagementService> _logger = logger;
 
     /// <inheritdoc/>
-    public Task<AIServiceCredential> GetCredentialAsync()
+    public Task<AIServiceCredential> GetCredentialAsync(CancellationToken cancellationToken = default)
     {
         var headers = _httpContextAccessor.HttpContext?.Request.Headers;
         var credential = new AIServiceCredential
@@ -30,11 +30,11 @@ public class AiCredentialManagementService(IHttpContextAccessor httpContextAcces
     }
 
     /// <inheritdoc/>
-    public async Task<AiServiceHealthcheckResult> HealthcheckAiServiceAsync()
+    public async Task<AiServiceHealthcheckResult> HealthcheckAiServiceAsync(CancellationToken cancellationToken = default)
     {
         try
         {
-            var response = await _chatCompletionService.GetChatMessageContentAsync("Please say *Hello world* without any thinking!");
+            var response = await _chatCompletionService.GetChatMessageContentAsync("Please say *Hello world* without any thinking!", cancellationToken: cancellationToken);
 
             return new AiServiceHealthcheckResult
             {

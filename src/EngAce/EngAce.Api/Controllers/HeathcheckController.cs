@@ -15,7 +15,7 @@ public class HeathcheckController(IAiCredentialManagementService credentialManag
     [HttpGet("AiServiceStatus")]
     public async Task<ActionResult<AiServiceHealthcheckResult>> HealthcheckAiService()
     {
-        var result = await _credentialManagementService.HealthcheckAiServiceAsync();
+        var result = await _credentialManagementService.HealthcheckAiServiceAsync(HttpContext.RequestAborted);
         if (result.StatusCode == HttpStatusCode.OK)
         {
             _logger.LogInformation("AI service healthcheck successful: {Message}", result.Message);

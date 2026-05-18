@@ -15,4 +15,11 @@ public interface IExerciseService
     /// <returns>A task that represents the asynchronous operation. The task result contains a read-only list of ExerciseEntry objects.</returns>
     /// <exception cref="ExerciseServiceException">Thrown when the exercise generation process encounters an error.</exception>
     Task<IReadOnlyList<ExerciseEntry>> GenerateExercisesAsync(string topic, int totalEntries, IEnumerable<ExerciseType> types, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Retrieves a dictionary of available exercise types, where the key is the ExerciseType enum value and the value is a user-friendly name or description of the exercise type.
+    /// </summary>
+    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains a read-only dictionary of available exercise types.</returns>
+    Task<IReadOnlyDictionary<ExerciseType, string>> GetAvailableExerciseTypesAsync(CancellationToken cancellationToken = default);
 }
