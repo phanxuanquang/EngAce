@@ -100,7 +100,16 @@ public class Program
         });
 
         builder.Services.AddControllers();
-        builder.Services.AddOpenApi();
+        builder.Services.AddOpenApi(options =>
+        {
+            options.AddDocumentTransformer((document, context, cancellationToken) =>
+            {
+                document.Info.Title = "EngAce API";
+                document.Info.Version = "v1";
+                document.Info.Description = "AI-powered English learning API providing conversation, dictionary lookup, writing review, writing improvement, and exercise generation features.";
+                return Task.CompletedTask;
+            });
+        });
 
         var app = builder.Build();
 
