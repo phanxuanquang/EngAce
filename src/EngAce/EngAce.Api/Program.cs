@@ -8,6 +8,7 @@ using EngAce.Domain.Models.Enums;
 using EngAce.Infrastructure;
 using EngAce.Infrastructure.Extensions;
 using Microsoft.Extensions.Options;
+using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 using Scalar.AspNetCore;
 using System.Threading.RateLimiting;
@@ -42,7 +43,11 @@ public class Program
                 Provider = provider,
             };
 
-            return KernelBuilderExtensions.CreateChatCompletionService(credential);
+            return Kernel
+                .CreateBuilder()
+                .AddCommonChatCompletionService(credential)
+                .Build()
+                .GetRequiredService<IChatCompletionService>();
         });
 
         builder.Services.AddScoped<IAiCredentialManagementService, AiCredentialManagementService>();

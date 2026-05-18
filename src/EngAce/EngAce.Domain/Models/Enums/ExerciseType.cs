@@ -7,7 +7,7 @@ namespace EngAce.Domain.Models.Enums;
 public enum ExerciseType : sbyte
 {
     [Display(Name = "Điền vào chỗ trống")]
-    FillInTheBlank,
+    FillInTheBlank = 1,
 
     [Display(Name = "Trắc nghiệm")]
     MultipleChoice,

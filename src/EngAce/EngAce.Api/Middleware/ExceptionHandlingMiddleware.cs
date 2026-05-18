@@ -33,12 +33,12 @@ public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<Exception
 
         var (statusCode, message) = ex switch
         {
-            DictionaryServiceException  => (StatusCodes.Status422UnprocessableEntity, ex.Message),
-            ExerciseServiceException    => (StatusCodes.Status422UnprocessableEntity, ex.Message),
-            WritingServiceException     => (StatusCodes.Status422UnprocessableEntity, ex.Message),
+            DictionaryServiceException => (StatusCodes.Status422UnprocessableEntity, ex.Message),
+            ExerciseServiceException => (StatusCodes.Status422UnprocessableEntity, ex.Message),
+            WritingServiceException => (StatusCodes.Status422UnprocessableEntity, ex.Message),
             ConversationServiceException => (StatusCodes.Status422UnprocessableEntity, ex.Message),
-            NotSupportedException       => (StatusCodes.Status400BadRequest, ex.Message),
-            _                           => (StatusCodes.Status500InternalServerError, "An unexpected error occurred. Please try again later."),
+            NotSupportedException => (StatusCodes.Status400BadRequest, ex.Message),
+            _ => (StatusCodes.Status500InternalServerError, "An unexpected error occurred. Please try again later."),
         };
 
         context.Response.StatusCode = statusCode;
